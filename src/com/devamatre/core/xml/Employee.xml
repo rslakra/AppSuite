@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Employee Id="1059">
+	<Name>Rohtash Singh</Name>
+	<Address>
+		<Street>228TH</Street>
+		<City>Bothell</City>
+		<State>Washington</State>
+		<PinCode>98021</PinCode>
+		<Country>United States of America</Country>
+	</Address>
+	<Sex>Male</Sex>
+	<JobTitle>Software Engineer</JobTitle>
+	<Employer>R Systems International Ltd.</Employer>
+    <DateOfJoin>04/18/2006</DateOfJoin>
+</Employee>
