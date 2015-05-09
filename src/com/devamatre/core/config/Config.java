@@ -1,23 +1,23 @@
 /******************************************************************************
  * Copyright (C) Devamatre Technologies 2009
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code or the 
- * snippet is not permitted without prior express written consent of Devamatre. 
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code or the
+ * snippet is not permitted without prior express written consent of Devamatre.
  * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the 
- * offenders will be liable for any damages. All rights, including  but not
- * limited to rights created by patent grant or registration of a utility model 
- * or design, are reserved. Technical specifications and features are binding 
- * only insofar as they are specifically and expressly agreed upon in a written 
+ * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the
+ * offenders will be liable for any damages. All rights, including but not
+ * limited to rights created by patent grant or registration of a utility model
+ * or design, are reserved. Technical specifications and features are binding
+ * only insofar as they are specifically and expressly agreed upon in a written
  * contract.
  * 
  * You may obtain a copy of the License for more details at:
- *      http://www.devamatre.com/licenses/license.txt.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * http://www.devamatre.com/licenses/license.txt.
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.devamatre.core.config;
@@ -67,7 +67,7 @@ public class Config {
 	 * the logger line must come after Config instance instantiation, b/c logger
 	 * initialization requires reading config parameter from config file.
 	 */
-	private static Config instance = new Config();
+	private static Config instance;
 
 	private Locale locale;
 	private Properties properties;
@@ -102,10 +102,26 @@ public class Config {
 		init(); // initialize the attributes of the class.
 	}
 
+	/**
+	 * Returns the singleton instance of this class.
+	 * 
+	 * @return
+	 */
 	public static Config getInstance() {
+		if (instance == null) {
+			synchronized (Config.class) {
+				if (instance == null) {
+					instance = new Config();
+				}
+			}
+		}
+
 		return instance;
 	}
 
+	/**
+	 * 
+	 */
 	private void load() {
 		properties = new Properties();
 		InputStream inStream = null;
@@ -129,8 +145,7 @@ public class Config {
 		// Initalized logger attributes
 		log4jOn = getBoolean(TAG_LOG4J_ON, true);
 		log4jLevel = properties.getProperty(TAG_LOG4J_LEVEL, TAG_DEFAULT_LEVEL);
-		log4jPattern = properties.getProperty(TAG_LOG4J_PATTERN,
-				TAG_DEFAULT_PATTERN);
+		log4jPattern = properties.getProperty(TAG_LOG4J_PATTERN, TAG_DEFAULT_PATTERN);
 		forceLogToConsole = getBoolean(TAG_FORCE_LOG_TO_CONSOLE, true);
 
 		// Initalized Locale attributes
@@ -154,8 +169,7 @@ public class Config {
 		// }
 
 		enableRMIServer = getBoolean(TAG_ENABLE_RMI_SERVER, false);
-		remoteLogHost = properties.getProperty(TAG_REMOTE_LOG_HOST,
-				TAG_DEFAULT_REMOTE_HOST);
+		remoteLogHost = properties.getProperty(TAG_REMOTE_LOG_HOST, TAG_DEFAULT_REMOTE_HOST);
 	} // end method initAfterLoad
 
 	/**
