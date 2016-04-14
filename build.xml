@@ -220,6 +220,9 @@
 			</manifest>
 		</jar>
 
+				<!-- copy dCore jar file into base directory -->
+		<copy file="${jar.file}" todir="${base.dir}" overwrite="true" />
+
 		<tstamp>
 			<format property="NOW" pattern="${nowPattern}" />
 		</tstamp>

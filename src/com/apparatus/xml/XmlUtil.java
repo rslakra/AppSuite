@@ -1,23 +1,23 @@
 /******************************************************************************
  * Copyright (C) Devamatre/Devmatre Inc. 2009
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code or the 
- * snippet is not permitted without prior express written consent of Devamatre. 
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code or the
+ * snippet is not permitted without prior express written consent of Devamatre.
  * 
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the 
- * offenders will be liable for any damages. All rights, including  but not
- * limited to rights created by patent grant or registration of a utility model 
- * or design, are reserved. Technical specifications and features are binding 
- * only insofar as they are specifically and expressly agreed upon in a written 
+ * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT
+ * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the
+ * offenders will be liable for any damages. All rights, including but not
+ * limited to rights created by patent grant or registration of a utility model
+ * or design, are reserved. Technical specifications and features are binding
+ * only insofar as they are specifically and expressly agreed upon in a written
  * contract.
  * 
  * You may obtain a copy of the License for more details at:
- *      http://www.devamatre.com/licenses/license.txt.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * http://www.devamatre.com/licenses/license.txt.
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.apparatus.xml;
@@ -34,8 +34,8 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+import com.devmatre.logger.LogManager;
+import com.devmatre.logger.Logger;
 
 /**
  * The <code>XmlUtils</code> class provides utility method which helps to
@@ -47,22 +47,22 @@ import com.devamatre.logger.Logger;
  * @since 1.0
  */
 public final class XmlUtil implements Serializable, DefaultXmlTags {
-
+	
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = -9050232236900594416L;
-
+	
 	/** logger */
 	private static final Logger logger = LogManager.getLogger(XmlUtil.class);
-
+	
 	/** singleton instance */
 	private static XmlUtil instance;
-
+	
 	private boolean parsing = false;
-
+	
 	/** don't allow to create instance outside. */
 	private XmlUtil() {
 	}
-
+	
 	/**
 	 * To make a singleton class serializable, it is not only sufficient to add
 	 * implements <code>Serializable</code> to its declaration. To maintain the
@@ -75,19 +75,19 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	private Object readResolve() throws ObjectStreamException {
 		return instance;
 	}
-
+	
 	/**
 	 * Single entry point.
 	 * 
 	 * @return
 	 */
 	public synchronized static XmlUtil getInstance() {
-		if (instance == null) {
+		if(instance == null) {
 			instance = new XmlUtil();
 		}
 		return instance;
 	}
-
+	
 	/**
 	 * Returns true if the parsing is going on otherwise false.
 	 * 
@@ -96,7 +96,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	public boolean isParsing() {
 		return parsing;
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as
 	 * <name>value</name>
@@ -109,7 +109,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	public String generateElement(String name, int value) {
 		return generateElement(name, String.valueOf(value));
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as
 	 * <name>value</name>
@@ -122,7 +122,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	public String generateElement(String name, boolean value) {
 		return generateElement(name, String.valueOf(value));
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as
 	 * <name>value</name>
@@ -135,7 +135,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	public String generateElement(String name, long value) {
 		return generateElement(name, String.valueOf(value));
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as
 	 * <name>value</name>
@@ -148,7 +148,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	public String generateElement(String name, double value) {
 		return generateElement(name, String.valueOf(value));
 	}
-
+	
 	/**
 	 * Returns the string representation of an XML element as
 	 * <name>value</name>.
@@ -159,7 +159,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * @return
 	 */
 	public String generateElement(String name, String value) {
-		if (value == null || value.trim().length() == 0) {
+		if(value == null || value.trim().length() == 0) {
 			return generateEmptyElement(name);
 		} else {
 			StringBuilder sBuilder = new StringBuilder();
@@ -173,7 +173,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 			return sBuilder.toString();
 		}
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element start tag
 	 * as <name>
@@ -184,14 +184,14 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 */
 	public String generateStartElement(String name) {
 		StringBuilder sBuilder = new StringBuilder();
-
+		
 		sBuilder.append("<");
 		sBuilder.append(name);
 		sBuilder.append(">\n");
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * This method returns the string representation of an xml element end tag
 	 * as </name>
@@ -202,14 +202,14 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 */
 	public String generateEndElement(String name) {
 		StringBuilder sBuilder = new StringBuilder();
-
+		
 		sBuilder.append("</");
 		sBuilder.append(name);
 		sBuilder.append(">\n");
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Returns the string representation of an empty XML element as <name />.
 	 * 
@@ -218,14 +218,14 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 */
 	public String generateEmptyElement(String name) {
 		StringBuilder sBuilder = new StringBuilder();
-
+		
 		sBuilder.append("<");
 		sBuilder.append(name);
 		sBuilder.append(" />\n");
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as <name
 	 * attNames[0]="attValues[0]" attNames[1]="attValues[1]" ... />
@@ -236,31 +236,30 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 * @return
 	 */
-	public String generateElement(String name, String[] attNames,
-			String[] attValues, boolean empty) {
+	public String generateElement(String name, String[] attNames, String[] attValues, boolean empty) {
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append("<");
 		sBuilder.append(name);
-
+		
 		/* add attributes */
-		for (int index = 0; index < attNames.length; index++) {
+		for(int index = 0; index < attNames.length; index++) {
 			sBuilder.append(" ");
 			sBuilder.append(attNames[index]);
 			sBuilder.append("=\"");
 			sBuilder.append(escapeXML(attValues[index]));
 			sBuilder.append("\"");
 		}
-
+		
 		/* check its an empty element or not */
-		if (empty) {
+		if(empty) {
 			sBuilder.append(" />\n");
 		} else {
 			sBuilder.append(">\n");
 		}
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * This method returns the string representation of an XML element as <name
 	 * attnames1="attvalues1" attnames2="attvalues2" ... >value</name>
@@ -272,13 +271,12 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 * @return
 	 */
-	public String generateElement(String name, String value, String[] attNames,
-			String[] attValues) {
+	public String generateElement(String name, String value, String[] attNames, String[] attValues) {
 		StringBuffer buf = new StringBuffer();
 		buf = buf.append("<");
 		buf = buf.append(name);
-
-		for (int index = 0; index < attNames.length; index++) {
+		
+		for(int index = 0; index < attNames.length; index++) {
 			buf.append(" ");
 			buf.append(attNames[index]);
 			buf.append("=\"");
@@ -290,10 +288,10 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 		buf = buf.append("</");
 		buf = buf.append(name);
 		buf = buf.append(">\n");
-
+		
 		return buf.toString();
 	}
-
+	
 /**
      * It takes a string and converts the special characters like '<', '>', 
      * '&', '"', ''' to their XML escape sequences, like "&lt;", "&lt;" etc.
@@ -309,85 +307,85 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 		// if (logger.isDebugEnabled()) {
 		// logger.debug("escapeXML(" + str + ")");
 		// }
-
+		
 		int index = 0;
 		int last = 0;
 		char[] chars = str.toCharArray();
 		StringBuilder sBuilder = new StringBuilder();
-		while (index < chars.length) {
+		while(index < chars.length) {
 			// if (logger.isDebugEnabled()) {
 			// logger.debug("chars[" + index + "] = " + chars[index]);
 			// }
-			switch (chars[index]) {
-			case '>':
-				if (index > last) {
-					sBuilder.append(chars, last, index - last);
-				}
-				last = index + 1;
-				sBuilder.append(TAG_ENCODE_GT);
-				break;
-			case '<':
-				if (index > last) {
-					sBuilder.append(chars, last, index - last);
-				}
-				last = index + 1;
-				sBuilder.append(TAG_ENCODE_LT);
-				break;
-			case '&':
-				if (index > last) {
-					sBuilder.append(chars, last, index - last);
-				}
-				last = index + 1;
-				sBuilder.append(TAG_ENCODE_AMP);
-				break;
-			case '"':
-				if (index > last) {
-					sBuilder.append(chars, last, index - last);
-				}
-				last = index + 1;
-				sBuilder.append(TAG_ENCODE_QUOTE);
-				break;
-			case '\'':
-				if (index > last) {
-					sBuilder.append(chars, last, index - last);
-				}
-				last = index + 1;
-				sBuilder.append(TAG_ENCODE_APOS);
-				break;
-			default:
-				if ((chars[index] < 0x20)
-						&& ((chars[index] != 0x09) && (chars[index] != 0x0A) && (chars[index] != 0x0D))) {
-					/*
-					 * Exclude ASCII control characters. For more information,
-					 * see XML specification (see
-					 * http://www.w3.org/TR/2000/REC-xml-20001006#charsets);
-					 */
-					if (index > last) {
+			switch(chars[index]) {
+				case '>':
+					if(index > last) {
 						sBuilder.append(chars, last, index - last);
 					}
 					last = index + 1;
-				}
-				break;
+					sBuilder.append(TAG_ENCODE_GT);
+					break;
+				case '<':
+					if(index > last) {
+						sBuilder.append(chars, last, index - last);
+					}
+					last = index + 1;
+					sBuilder.append(TAG_ENCODE_LT);
+					break;
+				case '&':
+					if(index > last) {
+						sBuilder.append(chars, last, index - last);
+					}
+					last = index + 1;
+					sBuilder.append(TAG_ENCODE_AMP);
+					break;
+				case '"':
+					if(index > last) {
+						sBuilder.append(chars, last, index - last);
+					}
+					last = index + 1;
+					sBuilder.append(TAG_ENCODE_QUOTE);
+					break;
+				case '\'':
+					if(index > last) {
+						sBuilder.append(chars, last, index - last);
+					}
+					last = index + 1;
+					sBuilder.append(TAG_ENCODE_APOS);
+					break;
+				default:
+					if((chars[index] < 0x20) && ((chars[index] != 0x09) && (chars[index] != 0x0A) && (chars[index] != 0x0D))) {
+						/*
+						 * Exclude ASCII control characters. For more
+						 * information,
+						 * see XML specification (see
+						 * http://www.w3.org/TR/2000/REC-xml-20001006#charsets);
+						 */
+						if(index > last) {
+							sBuilder.append(chars, last, index - last);
+						}
+						last = index + 1;
+					}
+					break;
 			}
 			// if (logger.isDebugEnabled()) {
 			// logger.debug("sBuilder: " + sBuilder.toString());
 			// }
 			index++;
 		}
-
-		if (last == 0) {
+		
+		if(last == 0) {
 			return str;
 		}
-		if (index > last) {
+		if(index > last) {
 			sBuilder.append(chars, last, index - last);
 		}
-
+		
 		// if (logger.isDebugEnabled()) {
 		// logger.debug("-escapeXML(), result: " + sBuilder.toString());
 		// }
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Replaces special chars with escape sequences. *
 	 * 
@@ -400,10 +398,10 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 		str.replaceAll("<", "&lt;");
 		str.replaceAll("\"", "&quot;");
 		str.replaceAll("\'", "&apos;");
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Returns the XML file path for the class.
 	 * 
@@ -412,10 +410,9 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * @return
 	 */
 	public String getFilePath(Class<?> klass, String xmlFileName) {
-		return klass.getResource(xmlFileName).toExternalForm().substring(
-				"file:\\".length());
+		return klass.getResource(xmlFileName).toExternalForm().substring("file:\\".length());
 	}
-
+	
 	/**
 	 * Returns the new parser object.
 	 * 
@@ -423,11 +420,10 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * @throws ParserConfigurationException
 	 * @throws SAXException
 	 */
-	public SAXParser createParser() throws ParserConfigurationException,
-			SAXException {
+	public SAXParser createParser() throws ParserConfigurationException, SAXException {
 		return SAXParserFactory.newInstance().newSAXParser();
 	}
-
+	
 	/**
 	 * It parses the specified XML file using the specified handler.
 	 * 
@@ -439,11 +435,10 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public void parse(String xmlFilePath, AbstractSAXHandler handler)
-			throws IOException, SAXException {
+	public void parse(String xmlFilePath, AbstractSAXHandler handler) throws IOException, SAXException {
 		parse(new InputSource(xmlFilePath), handler);
 	}
-
+	
 	/**
 	 * parse
 	 * 
@@ -454,11 +449,10 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 *            Parses the submitted input stream using the submitted handler.
 	 */
-	public void parse(InputStream stream, AbstractSAXHandler handler)
-			throws IOException, SAXException {
+	public void parse(InputStream stream, AbstractSAXHandler handler) throws IOException, SAXException {
 		parse(new InputSource(stream), handler);
 	}
-
+	
 	/**
 	 * parse
 	 * 
@@ -469,38 +463,36 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 *            Parses the submitted input stream using the submitted handler.
 	 */
-	public void parse(InputSource source, AbstractSAXHandler handler)
-			throws IOException, SAXException {
-		if (logger.isDebugEnabled()) {
+	public void parse(InputSource source, AbstractSAXHandler handler) throws IOException, SAXException {
+		if(logger.isDebugEnabled()) {
 			logger.debug("+parse(" + source + ", " + handler + ")");
 		}
-
+		
 		try {
 			/* block level synchronization. */
-			synchronized (this) {
-				SAXParser parser = SAXParserFactory.newInstance()
-						.newSAXParser();
+			synchronized(this) {
+				SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 				parsing = true;
 				parser.parse(source, handler);
 				parsing = false;
 				parser = null;
 			}
-		} catch (IOException ioe) {
+		} catch(IOException ioe) {
 			logger.error("SAX parser had an I/O error!", ioe);
 			throw ioe;
-		} catch (SAXException saxEx) {
+		} catch(SAXException saxEx) {
 			logger.error("SAX parsing failed!", saxEx);
 			throw saxEx;
-		} catch (ParserConfigurationException pcEx) {
+		} catch(ParserConfigurationException pcEx) {
 			logger.error("SAX parsing failed!", pcEx);
 			throw new SAXException("Parser Instantiate exception!", pcEx);
 		}
-
-		if (logger.isDebugEnabled()) {
+		
+		if(logger.isDebugEnabled()) {
 			logger.debug("-parse()");
 		}
 	}
-
+	
 	/**
 	 * DOCUMENT ME!
 	 * 
@@ -508,7 +500,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 */
 	public static void main(String[] args) {
 		XmlUtil xmlUtils = XmlUtil.getInstance();
-
+		
 		String original = "this is a simple & working test<>";
 		String modified = xmlUtils.escapeXML(original);
 		System.out.println("original: " + original);
@@ -516,15 +508,13 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 		original = xmlUtils.escapeXML(modified);
 		System.out.println("original: " + modified);
 		System.out.println();
-
+		
 		StringBuilder sBuilder = new StringBuilder();
 		String element = "Address";
 		sBuilder.append(xmlUtils.generateElement(element, "V & P. O. Kanheli"));
 		sBuilder.append(xmlUtils.generateStartElement(element));
-		sBuilder.append(xmlUtils.generateElement("City", new String[] { "CODE",
-				"ZIP" }, new String[] { "01262", "124001" }, true));
-		sBuilder.append(xmlUtils.generateElement("State", "Haryana",
-				new String[] { "Region" }, new String[] { "North" }));
+		sBuilder.append(xmlUtils.generateElement("City", new String[] { "CODE", "ZIP"}, new String[] { "01262", "124001"}, true));
+		sBuilder.append(xmlUtils.generateElement("State", "Haryana", new String[] { "Region"}, new String[] { "North"}));
 		sBuilder.append(xmlUtils.generateEndElement(element));
 		System.out.println(sBuilder.toString());
 	}

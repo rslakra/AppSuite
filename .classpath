@@ -5,6 +5,18 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="lib/log4j-1.2.17.jar"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.16-bin.jar"/>
-	<classpathentry kind="lib" path="lib/dLogger-v1.0.0.jar"/>
+	<classpathentry kind="lib" path="lib/vole-src/proxy-vole_20131209_bin.zip"/>
+	<classpathentry kind="lib" path="lib/vole-src/proxy-vole_20131209_src.zip"/>
+	<classpathentry kind="lib" path="lib/bcprov-jdk15-146.jar"/>
+	<classpathentry kind="lib" path="lib/commons-httpclient.jar"/>
+	<classpathentry kind="lib" path="lib/commons-io-2.1-redhat-2.jar"/>
+	<classpathentry kind="lib" path="lib/httpclient-4.3.4.jar"/>
+	<classpathentry kind="lib" path="lib/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/js.jar"/>
+	<classpathentry kind="lib" path="lib/junit_3.8.1.jar"/>
+	<classpathentry kind="lib" path="lib/proxy-vole_20131209.jar"/>
+	<classpathentry kind="lib" path="lib/servletapi-2.3.jar"/>
+	<classpathentry kind="lib" path="lib/yguard.jar"/>
+	<classpathentry kind="lib" path="lib/dLogger-v1.0.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

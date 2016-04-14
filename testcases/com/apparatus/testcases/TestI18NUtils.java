@@ -1,6 +1,6 @@
 package com.apparatus.testcases;
 
-import com.devamatre.logger.LogManager;
+import com.devmatre.logger.LogManager;
 
 /**
  * 

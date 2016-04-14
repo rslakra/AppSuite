@@ -7,8 +7,8 @@
 package com.apparatus.testcases.quartz;
 
 import com.apparatus.quartz.ThreadPool;
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+import com.devmatre.logger.LogManager;
+import com.devmatre.logger.Logger;
 
 /**
  * @author Rohtash Singh (rohtash.singh@gmail.com)
@@ -17,7 +17,7 @@ import com.devamatre.logger.Logger;
  * @since 1.0.0
  */
 public class ThreadPoolTest {
-
+	
 	/**
 	 * @param args
 	 */
@@ -26,31 +26,30 @@ public class ThreadPoolTest {
 		/* logger */
 		final Logger log = LogManager.getLogger(ThreadPoolTest.class);
 		ThreadPoolTest tPoolTest = new ThreadPoolTest();
-
+		
 		ThreadPool tPool = new ThreadPool(5);
 		log.debug("ThreadPool Test Started!");
 		Runnable one = tPoolTest.createRunnable(log, "One", 2500);
 		tPool.execute(one);
-
+		
 		Runnable two = tPoolTest.createRunnable(log, "Two", 1000);
 		tPool.execute(two);
-
+		
 		Runnable three = tPoolTest.createRunnable(log, "Three", 1500);
 		tPool.execute(three);
-
+		
 		Runnable four = tPoolTest.createRunnable(log, "Four", 3000);
 		tPool.execute(four);
-
+		
 		Runnable five = tPoolTest.createRunnable(log, "Five", 800);
 		tPool.execute(five);
-
+		
 		Runnable six = tPoolTest.createRunnable(log, "Six", 2000);
 		tPool.execute(six);
 		log.debug("ThreadPool Test Finished!");
 	}
-
-	public Runnable createRunnable(final Logger log, final String name,
-			final long delay) {
+	
+	public Runnable createRunnable(final Logger log, final String name, final long delay) {
 		return new Runnable() {
 			public void run() {
 				try {
@@ -59,13 +58,13 @@ public class ThreadPoolTest {
 					log.debug("[" + name + "] processsing ...");
 					Thread.sleep(2000);
 					log.debug("[" + name + "] leaving.");
-				} catch (InterruptedException ie) {
+				} catch(InterruptedException ie) {
 					log.error("[" + name + "] interrupted!");
-				} catch (Exception ex) {
+				} catch(Exception ex) {
 					ex.printStackTrace();
 				}
 			}
-
+			
 			public String toString() {
 				return name;
 			}

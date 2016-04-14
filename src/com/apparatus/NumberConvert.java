@@ -18,9 +18,9 @@
 
 package com.apparatus;
 
-import com.apparatus.utils.StringUtil;
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+import com.apparatus.utils.StringHelper;
+import com.devmatre.logger.LogManager;
+import com.devmatre.logger.Logger;
 
 /**
  * 999999999999999.999999999999
@@ -72,7 +72,7 @@ public final class NumberConvert {
 		if(isCapatilize()) {
 			return str.toUpperCase();
 		} else if(isTitleCase()) {
-			return StringUtil.toTitleCase(str);
+			return StringHelper.toTitleCase(str);
 		}
 		
 		return str;

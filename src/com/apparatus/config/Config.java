@@ -22,11 +22,13 @@
  *****************************************************************************/
 package com.apparatus.config;
 
-import java.util.Locale;
-import java.util.Properties;
-import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.util.Locale;
+import java.util.Properties;
+
+import com.apparatus.utils.StringHelper;
 
 /**
  * Loads the config.properties files.
@@ -37,30 +39,43 @@ import java.io.IOException;
  * @since 1.0.0
  */
 public class Config {
-
+	
 	// Common Properties
 	private final String ROOT_DIR = System.getProperty("user.dir");
-
+	
 	// Logger Properties
 	private static final String TAG_CONFIG_FILE = "Config.properties";
 	private static final String TAG_LOG4J_ON = "log4jOn";
 	private static final String TAG_LOG4J_LEVEL = "log4jLevel";
 	private static final String TAG_LOG4J_PATTERN = "log4jPattern";
 	private static final String TAG_FORCE_LOG_TO_CONSOLE = "forceLogToConsole";
-
+	
 	// Locale Properties
 	private static final String TAG_LANGUAGE = "Language";
 	private static final String TAG_COUNTRY = "Country";
 	private static final String TAG_VARIANT = "Variant";
-
+	
 	// Extra Attributes
 	private static final String TAG_ENABLE_RMI_SERVER = "EnableRMIServer";
 	private static final String TAG_REMOTE_LOG_HOST = "RemoteLogHost";
-
+	
 	private static final String TAG_DEFAULT_REMOTE_HOST = "localhost";
 	private static final String TAG_DEFAULT_LEVEL = "WARN";
 	private static final String TAG_DEFAULT_PATTERN = "%r [%t] %-5p [%-22.22c{1}:%L] - %m%n";
-
+	
+	public static final String DELIMITER = "=";
+	public static final String SERVER_SCHEME = "server.scheme";
+	public static final String SERVER_HOST = "server.host";
+	public static final String SERVER_PORT = "server.port";
+	public static final String ENABLE_CHARLES_PROXY = "enableCharlesProxy";
+	public static final String FORCE_OVERRIDE_FOLDERS = "forceOverrideFolders";
+	public static final String SERVER_CONNECTION_TIMEOUT = "server.connectionTimeout";
+	public static final String SERVER_READ_TIMEOUT = "server.readTimeout";
+	public static final String URL_INTERCEPTING_ENABLED = "urlInterceptingEnabled";
+	
+	/* configProperties */
+	private static Properties configProperties = new Properties();
+	
 	/**
 	 * note: the following instantiation should be the last in field block as we
 	 * may need values of fields defined above to be initialized first however,
@@ -68,16 +83,16 @@ public class Config {
 	 * initialization requires reading config parameter from config file.
 	 */
 	private static Config instance;
-
+	
 	private Locale locale;
 	private Properties properties;
-
+	
 	// Logger Attributes with default values
 	private boolean log4jOn;
 	private String log4jLevel;
 	private String log4jPattern;
 	private boolean forceLogToConsole;
-
+	
 	// Extra Attributes
 	/**
 	 * ATH Requirement: Do not remove --- This flag is used to distinguish
@@ -88,12 +103,12 @@ public class Config {
 	 */
 	private boolean enableRMIServer;
 	private String remoteLogHost;
-
+	
 	// Locale Attributes with default values
 	private String language;
 	private String country;
 	private String variant;
-
+	
 	/**
 	 * Creates a new Config object.
 	 */
@@ -101,24 +116,24 @@ public class Config {
 		load(); // load property file
 		init(); // initialize the attributes of the class.
 	}
-
+	
 	/**
 	 * Returns the singleton instance of this class.
 	 * 
 	 * @return
 	 */
 	public static Config getInstance() {
-		if (instance == null) {
-			synchronized (Config.class) {
-				if (instance == null) {
+		if(instance == null) {
+			synchronized(Config.class) {
+				if(instance == null) {
 					instance = new Config();
 				}
 			}
 		}
-
+		
 		return instance;
 	}
-
+	
 	/**
 	 * 
 	 */
@@ -128,26 +143,26 @@ public class Config {
 		try {
 			inStream = new FileInputStream(ROOT_DIR + "/" + TAG_CONFIG_FILE);
 			properties.load(inStream);
-		} catch (IOException e) {
+		} catch(IOException e) {
 			e.printStackTrace();
 		} finally {
-			if (inStream != null) {
+			if(inStream != null) {
 				try {
 					inStream.close();
-				} catch (Exception e) {
+				} catch(Exception e) {
 					// TODO: handle exception
 				}
 			}
 		}
 	}
-
+	
 	private void init() {
 		// Initalized logger attributes
 		log4jOn = getBoolean(TAG_LOG4J_ON, true);
 		log4jLevel = properties.getProperty(TAG_LOG4J_LEVEL, TAG_DEFAULT_LEVEL);
 		log4jPattern = properties.getProperty(TAG_LOG4J_PATTERN, TAG_DEFAULT_PATTERN);
 		forceLogToConsole = getBoolean(TAG_FORCE_LOG_TO_CONSOLE, true);
-
+		
 		// Initalized Locale attributes
 		// Figure out our locale. Note this is only for legacy purposes;
 		// supported
@@ -167,11 +182,11 @@ public class Config {
 		// }
 		// catch (ParserConfigurationException e) {
 		// }
-
+		
 		enableRMIServer = getBoolean(TAG_ENABLE_RMI_SERVER, false);
 		remoteLogHost = properties.getProperty(TAG_REMOTE_LOG_HOST, TAG_DEFAULT_REMOTE_HOST);
 	} // end method initAfterLoad
-
+	
 	/**
 	 * The method returns the boolean value for the property.
 	 * 
@@ -185,13 +200,13 @@ public class Config {
 	public boolean getBoolean(String propName, boolean bDefault) {
 		boolean result = bDefault;
 		String str = properties.getProperty(propName);
-		if (str != null) {
+		if(str != null) {
 			str = str.trim();
 			result = Boolean.valueOf(str).booleanValue();
 		}
 		return result;
 	}
-
+	
 	//
 	// /**
 	// * Returns $param.name$
@@ -233,7 +248,7 @@ public class Config {
 	//
 	// return result;
 	// }
-
+	
 	/**
 	 * Figure out our locale. Note this is only for legacy purposes; supported
 	 * language information is now supposed to come from global install
@@ -244,74 +259,225 @@ public class Config {
 	public Locale getLocale() {
 		return locale;
 	}
-
+	
 	/**
 	 * @return Returns the country.
 	 */
 	public String getCountry() {
 		return country;
 	}
-
+	
 	/**
 	 * @return Returns the language.
 	 */
 	public String getLanguage() {
 		return language;
 	}
-
+	
 	/**
 	 * @return Returns the log4jLevel.
 	 */
 	public String getLog4jLevel() {
 		return log4jLevel;
 	}
-
+	
 	/**
 	 * @return Returns the log4jOn.
 	 */
 	public boolean isLog4jOn() {
 		return log4jOn;
 	}
-
+	
 	/**
 	 * @return Returns the log4jPattern.
 	 */
 	public String getLog4jPattern() {
 		return log4jPattern;
 	}
-
+	
 	/**
 	 * @return Returns the variant.
 	 */
 	public String getVariant() {
 		return variant;
 	}
-
+	
 	/**
 	 * @return Returns the enableRMIServer.
 	 */
 	public boolean isEnableRMIServer() {
 		return enableRMIServer;
 	}
-
+	
 	/**
 	 * @return Returns the remoteLogHost.
 	 */
 	public String getRemoteLogHost() {
 		return remoteLogHost;
 	}
-
+	
 	/**
 	 * @return Returns the forceLogToConsole.
 	 */
 	public boolean isForceLogToConsole() {
 		return forceLogToConsole;
 	}
-
+	
 	/**
 	 * @return Returns the rOOT_DIR.
 	 */
 	public String getROOT_DIR() {
 		return ROOT_DIR;
+	}
+	
+	/**
+	 * Merges the specified properties into the configuration properties.
+	 * 
+	 * @param properties
+	 */
+	public static void mergeProperties(Properties properties) {
+		System.out.println("Merging properties");
+		Config.configProperties.putAll(properties);
+	}
+	
+	/**
+	 * Returns the string value for the specified key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static String getValue(String key) {
+		return Config.configProperties.getProperty(key);
+	}
+	
+	/**
+	 * Returns the string value for the specified key. If no value is available,
+	 * the default value is returned.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static String getValue(String key, String defaultValue) {
+		String value = Config.configProperties.getProperty(key);
+		if(StringHelper.isNullOrEmpty(value)) {
+			value = defaultValue;
+		}
+		
+		return value;
+	}
+	
+	/**
+	 * Returns an int value for the specified key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static int getIntValue(String key) {
+		return getIntValue(key, -1);
+	}
+	
+	/**
+	 * Returns an int value for the specified key. If no value is available, the
+	 * default value is returned.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static int getIntValue(String key, int defaultValue) {
+		String value = getValue(key);
+		return (StringHelper.isNullOrEmpty(value) ? defaultValue : Integer.parseInt(value));
+	}
+	
+	/**
+	 * Returns the boolean value for the specified key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static boolean getBooleanValue(String key) {
+		return getBooleanValue(key, false);
+	}
+	
+	/**
+	 * Returns the boolean value for the specified key. If no value is
+	 * available, the default value is returned.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static boolean getBooleanValue(String key, boolean defaultValue) {
+		String value = getValue(key);
+		return (StringHelper.isNullOrEmpty(value) ? defaultValue : Boolean.valueOf(value));
+	}
+	
+	/**
+	 * Returns the long value for the specified key.
+	 * 
+	 * @param key
+	 * @return
+	 */
+	public static long getLongValue(String key) {
+		return getLongValue(key, -1l);
+	}
+	
+	/**
+	 * Returns the long value for the specified key. If no value is available,
+	 * the default value is returned.
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return
+	 */
+	public static long getLongValue(String key, long defaultValue) {
+		String value = getValue(key);
+		return (StringHelper.isNullOrEmpty(value) ? defaultValue : Long.parseLong(value));
+	}
+	
+	/**
+	 * Returns true if the Charles proxy is enabled otherwise false.
+	 * 
+	 * @return
+	 */
+	public static boolean isCharlesProxyEnabled() {
+		return getBooleanValue(ENABLE_CHARLES_PROXY, false);
+	}
+	
+	/**
+	 * Returns the scheme name supported by the server.
+	 * 
+	 * @return
+	 */
+	public static String getServerScheme() {
+		return getValue(SERVER_SCHEME);
+	}
+	
+	/**
+	 * Returns the name of the server.
+	 * 
+	 * @return
+	 */
+	public static String getServerHost() {
+		return getValue(SERVER_HOST);
+	}
+	
+	/**
+	 * Returns the default server port.
+	 * 
+	 * @return
+	 */
+	public static String getServerPort() {
+		return getValue(SERVER_PORT);
+	}
+	
+	/**
+	 * Returns true if the URL Intercepting is enabled otherwise false.
+	 * 
+	 * @return
+	 */
+	public static boolean isUrlInterceptingEnabled() {
+		return getBooleanValue(URL_INTERCEPTING_ENABLED, false);
 	}
 }
