@@ -2,7 +2,7 @@
 <!--
 * =============================================================================
 * Module		: Ant Build Script of Core Module
-* Author		: Rohtash Singh (rohtash.singh@devamatre.com)
+* Author		: Rohtash Singh (rohtash.singh@gmail.com)
 * Created On	: 20/05/2011 (dd/mm/yyyy)
 * Updated On	: 20/05/2011 (dd/mm/yyyy)
 * Version		: 1.0.0
@@ -18,7 +18,7 @@
 * be updated as per the structure changes.
 * =============================================================================
 -->
-<project name="dCore" default="all" basedir=".">
+<project name="Apparatus" default="all" basedir=".">
 	<echo />
 	<echo message="Building '${ant.project.name}' Project ..." />
 
