@@ -22,8 +22,6 @@ import java.util.Enumeration;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.io.FileUtils;
-
 import sun.misc.BASE64Decoder;
 import sun.misc.BASE64Encoder;
 import sun.security.provider.X509Factory;
@@ -153,12 +151,11 @@ public class SecurityHelper {
 		Security.addProvider(new org.bouncycastle.jce.provider.BouncyCastleProvider());
 		String base64Certificate = null;
 		try {
-			File p12File = new File(filePath);
-			byte[] fileBytes = FileUtils.readFileToByteArray(p12File);
+			byte[] fileBytes = FileHelper.readFileBytes(filePath);
 			base64Certificate = encodedToBase64(fileBytes);
 			
 			File certFile = new File(filePath + "_" + dateString(DEFAULT_DATE_PATTERN) + ".cert");
-			FileUtils.writeStringToFile(certFile, base64Certificate, false);
+			FileHelper.saveFile(base64Certificate.getBytes(), certFile);
 			System.out.println("Certificate file generated at:" + certFile.getAbsolutePath());
 		} catch(Exception ex) {
 			ex.getMessage();
