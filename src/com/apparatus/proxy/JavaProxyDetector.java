@@ -12,6 +12,12 @@ import com.btr.proxy.search.ProxySearch.Strategy;
 import com.btr.proxy.util.PlatformUtil;
 import com.btr.proxy.util.PlatformUtil.Platform;
 
+/**
+ * 
+ * @author Rohtash Singh Lakra
+ * @created Apr 15, 2016 11:48:41 AM
+ *
+ */
 public class JavaProxyDetector {
 	
 	private static final String DEFAULT_URL = "https://unreachable/";

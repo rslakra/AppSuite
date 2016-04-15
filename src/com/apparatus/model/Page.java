@@ -15,17 +15,17 @@ public class Page {
 	private int currentPage;
 	private int previousPage;
 	private int nextPage;
-
+	
 	/** contents */
 	private List<String> contents;
-
+	
 	/**
 	 * 
 	 */
 	public Page() {
 		this(new ArrayList<String>());
 	}
-
+	
 	/**
 	 * 
 	 * @param contents
@@ -36,39 +36,81 @@ public class Page {
 		noOfPages = (contents.size() == 0 ? 1 : contents.size() / pageSize);
 		nextPage = previousPage = currentPage = 1;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getNoOfPages() {
 		return noOfPages;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getCurrentPage() {
 		return currentPage;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean hasPreviousPage() {
 		return (getCurrentPage() > 1);
 	}
-
-	public int getPreviousPage() {
-		if (hasPreviousPage()) {
-			previousPage = getCurrentPage() - 1;
+	
+	/**
+	 * 
+	 * @return
+	 */
+	private int previousPage() {
+		if(hasPreviousPage()) {
+			previousPage = (getCurrentPage() - 1);
 			currentPage--;
 		}
 		return previousPage;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getPreviousPage() {
+		return previousPage();
+	}
+	
+	/**
+	 * 
+	 * @return
+	 */
 	public boolean hasNextPage() {
 		return (getCurrentPage() < getNoOfPages());
 	}
-
-	public int getNextPage() {
-		if (hasNextPage()) {
+	
+	/**
+	 * Returns the next page, if any.
+	 * 
+	 * @return
+	 */
+	private int nextPage() {
+		if(hasNextPage()) {
 			nextPage = getCurrentPage() + 1;
 			currentPage++;
 		}
+		
 		return nextPage;
 	}
-
+	
+	/**
+	 * 
+	 * @return
+	 */
+	public int getNextPage() {
+		return nextPage();
+	}
+	
 	/**
 	 * Returns the current page contents.
 	 * 
@@ -76,10 +118,9 @@ public class Page {
 	 * @return
 	 */
 	public List<String> getContents(int page) {
-		return contents.subList(currentPage * pageSize - pageSize,
-				(currentPage * pageSize));
+		return contents.subList(currentPage * pageSize - pageSize, (currentPage * pageSize));
 	}
-
+	
 	/**
 	 * Represents the string representation of the object.
 	 * 
@@ -87,14 +128,14 @@ public class Page {
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();
-
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Prints the current page information.
 	 * 
-	 * -------------------------------------------------------------- <Previous>
+	 * --------------------------------------------------------------
+	 * <Previous>
 	 * xx/total <Next>
 	 * -------------------------------------------------------------- Contents
 	 * --------------------------------------------------------------
@@ -103,26 +144,26 @@ public class Page {
 	 */
 	public String printCurrentPage() {
 		StringBuilder sBuilder = new StringBuilder();
-
+		
 		sBuilder.append("-----------------------------------------------------------------\n");
 		sBuilder.append(getPreviousPage()).append("\t\t\t\t");
 		sBuilder.append(getCurrentPage()).append("/").append(getNoOfPages());
 		sBuilder.append("\t\t\t\t").append(getNextPage()).append("\n");
 		sBuilder.append("-----------------------------------------------------------------\n");
 		List<String> curPageContents = getContents(getCurrentPage());
-		for (String str : curPageContents) {
+		for(String str : curPageContents) {
 			sBuilder.append(str).append("\n");
 		}
 		sBuilder.append("-----------------------------------------------------------------\n");
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		List<String> lContents = new ArrayList<String>();
-		for (int i = 0; i < 50; i++) {
+		for(int i = 0; i < 50; i++) {
 			lContents.add("This is [ " + (i + 1) + " ] line.");
 		}
 		// System.out.println(lContents);

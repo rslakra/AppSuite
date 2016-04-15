@@ -1,5 +1,7 @@
 package com.apparatus.testcases;
 
+import com.apparatus.HashTable;
+
 /**
  * 
  * @author Rohtash Singh (rohtash.singh@gmail.com)
@@ -13,5 +15,10 @@ public class TestDateUtil {
 	 * @param args
 	 */
 	public static void main(String[] args) {
+		HashTable hashTable = new HashTable();
+		hashTable.put(null, 10);
+		hashTable.put("one", 12);
+		hashTable.put("two", 11);
+		System.out.println(hashTable);
 	}
 }

@@ -127,7 +127,7 @@ public class DefaultProxySelector extends ProxySelector {
 	/**
 	 * Child class that represents a Proxy and other required handling.
 	 * 
- * @author Rohtash Singh (rohtash.singh@gmail.com)
+	 * @author Rohtash Singh (rohtash.singh@gmail.com)
 	 * @version 1.0.0
 	 * @since May 27, 2015 1:22:23 PM
 	 */
