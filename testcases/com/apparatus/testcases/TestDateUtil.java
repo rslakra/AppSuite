@@ -16,9 +16,11 @@ public class TestDateUtil {
 	 */
 	public static void main(String[] args) {
 		HashTable hashTable = new HashTable();
-		hashTable.put(null, 10);
+		// hashTable.put(null, 10);
+		hashTable.put("zero", 10);
 		hashTable.put("one", 12);
 		hashTable.put("two", 11);
+		hashTable.put("three", 13);
 		System.out.println(hashTable);
 	}
 }

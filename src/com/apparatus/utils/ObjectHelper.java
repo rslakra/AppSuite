@@ -37,6 +37,15 @@ public class ObjectHelper {
 	}
 	
 	/**
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public static int hashCode(Object object) {
+		return (isNull(object) ? 0 : object.hashCode());
+	}
+	
+	/**
 	 * Returns the path of the testcases dir.
 	 * 
 	 * @return
