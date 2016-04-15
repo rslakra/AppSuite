@@ -16,25 +16,28 @@ import java.util.Set;
  * @version 1.0.0
  * @since Apr 29, 2015 3:12:38 PM
  */
-public class ObjectUtils {
+public class ObjectHelper {
 	
 	/**
+	 * Returns the user's home directory.
 	 * 
 	 * @return
 	 */
 	public static String getUserHome() {
-		return (System.getProperty("user.home"));
+		return System.getProperty("user.home");
 	}
 	
 	/**
+	 * Returns the user's application directory.
 	 * 
 	 * @return
 	 */
 	public static String getUserDir() {
-		return (System.getProperty("user.dir"));
+		return System.getProperty("user.dir");
 	}
 	
 	/**
+	 * Returns the path of the testcases dir.
 	 * 
 	 * @return
 	 */

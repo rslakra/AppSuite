@@ -5,7 +5,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 /**
  * 
@@ -13,7 +12,7 @@ import java.util.Locale;
  * @version 1.0.0
  * @since May 12, 2015 10:39:10 AM
  */
-public class DateTimeUtil {
+public class DateHelper {
 	
 	private static final String DEFAULT_DATE_PATTERN = "MMM dd, yyyy hh:mm:ss a";
 	private static final String DEFAULT_ONLY_DATE = "MMM dd, yyyy";
@@ -191,6 +190,6 @@ public class DateTimeUtil {
 		calendar.add(Calendar.MONTH, 1);
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 		String endDateString = getOnlyDate(calendar.getTime()) + " 11:59:59 PM";
-		return endDateString;		
+		return endDateString;
 	}
 }

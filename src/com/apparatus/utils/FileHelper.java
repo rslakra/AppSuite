@@ -103,7 +103,7 @@ public class FileHelper {
 			throw new NullPointerException("Path must be provided!");
 		}
 		
-		if(ObjectUtils.isNullOrEmpty(data)) {
+		if(ObjectHelper.isNullOrEmpty(data)) {
 			throw new NullPointerException("data must be provided!");
 		}
 		
@@ -372,7 +372,7 @@ public class FileHelper {
 	 */
 	public static boolean endsWith(String fileName, String... extensions) {
 		boolean result = false;
-		if(!StringHelper.isNullOrEmpty(fileName) && !ObjectUtils.isNullOrEmpty(extensions)) {
+		if(!StringHelper.isNullOrEmpty(fileName) && !ObjectHelper.isNullOrEmpty(extensions)) {
 			for(String ext : extensions) {
 				if(fileName.endsWith(ext)) {
 					result = true;

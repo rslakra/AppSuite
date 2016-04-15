@@ -1893,7 +1893,7 @@ public final class StringHelper implements Serializable {
 	 */
 	public static StringBuilder bytesAsStringBuilder(byte... bytes) {
 		StringBuilder strBuilder = new StringBuilder();
-		if(!ObjectUtils.isNullOrEmpty(bytes)) {
+		if(!ObjectHelper.isNullOrEmpty(bytes)) {
 			try {
 				strBuilder = new StringBuilder(new String(bytes, "UTF-8"));
 			} catch(UnsupportedEncodingException ex) {

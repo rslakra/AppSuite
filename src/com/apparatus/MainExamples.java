@@ -5,9 +5,9 @@ package com.apparatus;
 
 import com.apparatus.config.Config;
 import com.apparatus.utils.FileHelper;
-import com.apparatus.utils.ObjectUtils;
-import com.apparatus.utils.ServerUtil;
+import com.apparatus.utils.ObjectHelper;
 import com.apparatus.utils.StringHelper;
+import com.apparatus.utils.UrlHelper;
 
 /**
  * @author Rohtash Singh (rohtash.singh@gmail.com)
@@ -22,12 +22,12 @@ public class MainExamples {
 	public static void main(String[] args) {
 		Config.mergeProperties(FileHelper.loadProperties("Config.properties"));
 		String ROOT_CONTEXT = Constants.SLASH + "html";
-		ServerUtil.isNetworkAvailable(ROOT_CONTEXT);
+		UrlHelper.isNetworkAvailable(ROOT_CONTEXT);
 		
 		StringSplitter stringSplitter = new StringSplitter(',');
 		
-		System.out.println(ObjectUtils.isInstanceOf(null, ObjectUtils.class));
-		System.out.println(ObjectUtils.isInstanceOf(stringSplitter, StringSplitter.class));
+		System.out.println(ObjectHelper.isInstanceOf(null, ObjectHelper.class));
+		System.out.println(ObjectHelper.isInstanceOf(stringSplitter, StringSplitter.class));
 		
 		String urlString = "";
 		StringHelper.extractHostNameFromURLString(urlString);

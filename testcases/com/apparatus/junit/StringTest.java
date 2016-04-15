@@ -1,7 +1,7 @@
 package com.apparatus.junit;
 
 import com.apparatus.StringSplitter;
-import com.apparatus.utils.ObjectUtils;
+import com.apparatus.utils.ObjectHelper;
 import com.apparatus.utils.StringHelper;
 
 /**
@@ -40,7 +40,7 @@ public class StringTest {
 		String[] tokens = null;
 		StringSplitter stringSplitter = new StringSplitter(',');
 		tokens = stringSplitter.split();
-		ObjectUtils.print(tokens);
+		ObjectHelper.print(tokens);
 		
 		String string = ",,,one,two,three,,,,five,";
 		System.out.println();
@@ -48,13 +48,13 @@ public class StringTest {
 		// stringSplitter = new StringSplitter(string, ',');
 		// tokens = stringSplitter.split();
 		tokens = stringSplitter.split(string);
-		ObjectUtils.print(tokens);
+		ObjectHelper.print(tokens);
 		
 		System.out.println("Testing Valid string while excluding empty strings.");
 		stringSplitter = new StringSplitter(string, ',', true);
 		tokens = stringSplitter.split();
 		// tokens = stringSplitter.split(string, true);
-		ObjectUtils.print(tokens);
+		ObjectHelper.print(tokens);
 		
 	}
 	

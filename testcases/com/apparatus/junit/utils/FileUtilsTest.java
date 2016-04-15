@@ -3,13 +3,13 @@ package com.apparatus.junit.utils;
 import java.io.IOException;
 
 import com.apparatus.utils.FileHelper;
-import com.apparatus.utils.ObjectUtils;
+import com.apparatus.utils.ObjectHelper;
 
 public class FileUtilsTest {
 	
 	public static void testReadFileBytes() {
 		String filePath = "/Users/singhr/Downloads/ToBeDeleted/CompareTest/MeetX-11.0.20150528.101817/resources/assets/images/BVLiveryDocumentIconJPG_new.5f9341d7abfc7ea358be96f972667532.png";
-		String outputFilePath = FileHelper.pathString(ObjectUtils.getTestCasesTempDir(), "BVLiveryDocumentIconJPG_new.5f9341d7abfc7ea358be96f972667532.png");
+		String outputFilePath = FileHelper.pathString(ObjectHelper.getTestCasesTempDir(), "BVLiveryDocumentIconJPG_new.5f9341d7abfc7ea358be96f972667532.png");
 		byte[] fileBytes = null;
 		try {
 			fileBytes = FileHelper.readFileBytes(filePath);
@@ -26,7 +26,7 @@ public class FileUtilsTest {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		String testCasesTempDir = ObjectUtils.getTestCasesTempDir();
+		String testCasesTempDir = ObjectHelper.getTestCasesTempDir();
 		FileHelper.makeDirectory(testCasesTempDir);
 		testReadFileBytes();
 		

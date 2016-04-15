@@ -27,8 +27,14 @@ import org.apache.http.client.methods.HttpRequestBase;
 import org.apache.http.message.BasicNameValuePair;
 
 import com.apparatus.Constants;
+import com.apparatus.config.Config;
 
-public class HttpUtils {
+/**
+ * 
+ * @author Rohtash Singh Lakra
+ * @created Apr 15, 2016 11:09:52 AM
+ */
+public class UrlHelper {
 	
 	public static final String KEY_SET_COOKIE = "Set-Cookie";
 	public static final String KEY_COOKIE = "Cookie";
@@ -56,6 +62,52 @@ public class HttpUtils {
 	public static final String[] HEADERS_IGNORED = { "Host", "Accept", "Origin", "X-Requested-With", "User-Agent", "Content-Length", "Referer", "Accept-Encoding", "Accept-Language", "Cookie"};
 	
 	public static final String CONTENY_TYPE_JSON = "application/json";
+	
+	/**
+	 * 
+	 * @param suffixS
+	 * @return
+	 */
+	public static String getServerUrl(String suffix) {
+		StringBuilder urlServer = new StringBuilder();
+		urlServer.append(Config.getServerScheme()).append("://");
+		urlServer.append(Config.getServerHost());
+		if(!StringHelper.isNullOrEmpty(Config.getServerPort())) {
+			urlServer.append(":").append(Config.getServerPort());
+		}
+		
+		if(!StringHelper.isNullOrEmpty(suffix)) {
+			if(suffix.startsWith("/")) {
+				urlServer.append(suffix);
+			} else {
+				urlServer.append("/").append(suffix);
+			}
+		}
+		
+		return urlServer.toString();
+	}
+	
+	public static boolean isNetworkAvailable(String urlSuffix) {
+		boolean networkAvaialable = false;
+		HttpURLConnection urlConnection = null;
+		try {
+			String urlString = getServerUrl(urlSuffix);
+			System.out.println("urlString:" + urlString);
+			urlConnection = getHttpConnection(urlString, null);
+			if(urlConnection != null) {
+				urlConnection.setConnectTimeout(Config.getIntValue(Config.SERVER_CONNECTION_TIMEOUT, 10000));
+				urlConnection.setReadTimeout(Config.getIntValue(Config.SERVER_READ_TIMEOUT, 10000));
+				networkAvaialable = (urlConnection.getContent() != null);
+			}
+		} catch(Exception ex) {
+			networkAvaialable = false;
+		} finally {
+			close(urlConnection);
+		}
+		
+		System.out.println("isNetworkAvailable(), networkAvaialable:" + networkAvaialable);
+		return networkAvaialable;
+	}
 	
 	/**
 	 * Encodes the specified URL.
@@ -199,9 +251,9 @@ public class HttpUtils {
 	 */
 	public static String getHeader(Map<String, List<String>> headers, String key) {
 		String value = null;
-		if(!ObjectUtils.isNullOrEmpty(headers)) {
+		if(!ObjectHelper.isNullOrEmpty(headers)) {
 			List<String> headerValues = headers.get(key);
-			if(!ObjectUtils.isNullOrEmpty(headerValues)) {
+			if(!ObjectHelper.isNullOrEmpty(headerValues)) {
 				value = headerValues.get(0);
 			}
 		}
@@ -217,7 +269,7 @@ public class HttpUtils {
 	 */
 	public static String getValueForKey(Map<String, String> headers, String key) {
 		String value = null;
-		if(!ObjectUtils.isNullOrEmpty(headers)) {
+		if(!ObjectHelper.isNullOrEmpty(headers)) {
 			value = headers.get(key);
 		}
 		
@@ -232,7 +284,7 @@ public class HttpUtils {
 	 */
 	public static Map<String, String> headerValuesAsString(Map<String, List<String>> headers) {
 		Map<String, String> mapHeaders = new HashMap<String, String>();
-		if(!ObjectUtils.isNullOrEmpty(headers)) {
+		if(!ObjectHelper.isNullOrEmpty(headers)) {
 			Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
 			for(Map.Entry<String, List<String>> entry : entries) {
 				mapHeaders.put(entry.getKey(), entry.getValue().get(0));
@@ -267,7 +319,7 @@ public class HttpUtils {
 	 */
 	public static String getRequestMethodName(List<NameValuePair> requestParameters) {
 		String requestMethodName = null;
-		if(!ObjectUtils.isNullOrEmpty(requestParameters)) {
+		if(!ObjectHelper.isNullOrEmpty(requestParameters)) {
 			for(NameValuePair nameValuePair : requestParameters) {
 				if("methodname".equalsIgnoreCase(nameValuePair.getName())) {
 					requestMethodName = nameValuePair.getValue();
@@ -287,9 +339,9 @@ public class HttpUtils {
 	 */
 	public static String getRequestMethodName(HttpServletRequest request) {
 		String requestMethodName = null;
-		if(ObjectUtils.isNotNull(request)) {
+		if(ObjectHelper.isNotNull(request)) {
 			String[] paramValue = (String[]) request.getParameterMap().get("methodname");
-			if(!ObjectUtils.isNullOrEmpty(paramValue)) {
+			if(!ObjectHelper.isNullOrEmpty(paramValue)) {
 				requestMethodName = paramValue[0].toString();
 			}
 		}
@@ -307,7 +359,7 @@ public class HttpUtils {
 	public static List<NameValuePair> getRequestParameters(Map<String, String> parameters) {
 		List<NameValuePair> requestParameters = new LinkedList<NameValuePair>();
 		/* extract request parameters, if available. */
-		if(!ObjectUtils.isNullOrEmpty(parameters)) {
+		if(!ObjectHelper.isNullOrEmpty(parameters)) {
 			boolean pdfOrPortalLogoRequest = false;
 			for(String key : parameters.keySet()) {
 				String value = parameters.get(key);
@@ -322,13 +374,13 @@ public class HttpUtils {
 		
 		/* sort parameters to get the same hash code. */
 		// Collections.sort(requestParameters,
-		// ObjectUtils.NameValuePairNameComparator);
+		// ObjectHelper.NameValuePairNameComparator);
 		
 		return requestParameters;
 	}
 	
 	private static List<NameValuePair> filterRequestParameters(boolean pdfOrPortalLogoRequest, List<NameValuePair> requestParameters) {
-		if(pdfOrPortalLogoRequest && !ObjectUtils.isNullOrEmpty(requestParameters)) {
+		if(pdfOrPortalLogoRequest && !ObjectHelper.isNullOrEmpty(requestParameters)) {
 			List<NameValuePair> filteredRequestParameters = new ArrayList<NameValuePair>();
 			for(NameValuePair nameValuePair : requestParameters) {
 				if(!("rand".equals(nameValuePair.getName()) || "_".equals(nameValuePair.getName()))) {
@@ -371,7 +423,7 @@ public class HttpUtils {
 	 */
 	public static void addHeaders(final HttpRequestBase httpBase, Map<String, String> headers) {
 		/* Add parameters, if provided. */
-		if(!ObjectUtils.isNullOrEmpty(headers)) {
+		if(!ObjectHelper.isNullOrEmpty(headers)) {
 			Set<Map.Entry<String, String>> entries = headers.entrySet();
 			for(Map.Entry<String, String> entry : entries) {
 				addHeaders(httpBase, entry.getKey(), entry.getValue());
@@ -392,8 +444,8 @@ public class HttpUtils {
 		urlConnection.setUseCaches(false);
 		urlConnection.setDefaultUseCaches(false);
 		urlConnection.setRequestMethod(requestMethod);
-		urlConnection.setConnectTimeout(HttpUtils.CONNECT_TIMEOUT);
-		urlConnection.setReadTimeout(HttpUtils.READ_TIMEOUT);
+		urlConnection.setConnectTimeout(CONNECT_TIMEOUT);
+		urlConnection.setReadTimeout(READ_TIMEOUT);
 		
 		urlConnection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 		urlConnection.setRequestProperty("Content-Type", "application/x-java-serialized-object");

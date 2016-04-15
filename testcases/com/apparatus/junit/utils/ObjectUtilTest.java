@@ -3,7 +3,7 @@ package com.apparatus.junit.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.apparatus.utils.ObjectUtils;
+import com.apparatus.utils.ObjectHelper;
 
 public class ObjectUtilTest {
 	
@@ -14,10 +14,10 @@ public class ObjectUtilTest {
 		parameters.put("methodName", "testSorting");
 		
 		System.out.println("Unsorted Map");
-		ObjectUtils.print(parameters);
+		ObjectHelper.print(parameters);
 		
 		System.out.println("Sorted Map");
-//		ObjectUtils.print(ObjectUtils.sortByNaturalOrder(parameters));
+//		ObjectHelper.print(ObjectUtils.sortByNaturalOrder(parameters));
 	}
 	
 	public static void main(String[] args) {
