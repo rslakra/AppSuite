@@ -251,7 +251,8 @@ public class StringSplitter implements Iterator<String> {
 		}
 		
 		String nextString = getString().substring(getPosition(), end);
-		this.position = end + 1; // Skip the delimiter.
+		// Skip the delimiter.
+		this.position = end + 1;
 		return nextString;
 	}
 	

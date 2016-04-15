@@ -58,7 +58,9 @@ public interface Constants {
 	
 	public String EMPTY_STRING = "";
 	public String SLASH = "/";
-	
+	public String NEWLINE = "\n";
+	public String LOCAL_HOST = "localhost";
+	public String LOCAL_HOST_ADDRESS = "127.0.0.1";
 	public boolean enableDrawings = true;
 	public boolean enableRecentDocs = false;
 	public boolean enableThumbnails = false;
@@ -66,20 +68,13 @@ public interface Constants {
 	public boolean showHeadersInRepository = false;
 	public boolean enableDocumentOrientation = false;
 	
-	public String ALL_TS_OBJECTBASEUUID = "ALL_TS_OBJECTBASEUUID";
-	
-	/** DEFAULT_HOST_ADDRESS */
-	public String DEFAULT_HOST_ADDRESS = "127.0.0.1";
-	/** DEFAULT_HOST_NAME */
-	public String DEFAULT_HOST_NAME = "localhost";
-	
-	public interface Activities {
+	public interface Android {
 		public float BUTTON_ENABLED_OPACITY = 1f;
 		public float BUTTON_DISABLED_OPACITY = 0.5f;
 		public int NO_MENU = -1;
 	}
 	
-	public interface BVServices {
+	public interface Services {
 		/**
 		 * If {@link #SHOULD_PRINT_I_AM_ALIVE} is true, our services will print
 		 * an "I'm alive" message to the console every this-many seconds.
@@ -98,11 +93,6 @@ public interface Constants {
 		public int REPOSITORY_THUMBNAIL_CACHE_SIZE = 50;
 	}
 	
-	public interface Connections {
-		public int HTTP_CONNECTION_TIMEOUT_SECONDS = 45;
-		public int HTTP_READ_TIMEOUT_SECONDS = 45;
-	}
-	
 	/**
 	 * The names of the strings which tell our software, and the server's
 	 * software, that we're looking for the top level of a special folder
@@ -118,6 +108,8 @@ public interface Constants {
 	public interface Http {
 		
 		public String HTTP_VERSION = "HTTP/1.1";
+		public int HTTP_CONNECTION_TIMEOUT_SECONDS = 45;
+		public int HTTP_READ_TIMEOUT_SECONDS = 45;
 		
 		public interface Headers {
 			public String ACCEPT = "Accept";

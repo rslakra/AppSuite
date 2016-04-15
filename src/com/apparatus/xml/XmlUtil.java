@@ -430,13 +430,13 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 * @param xmlFilePath
 	 *            - complete path for a valid XML file.
-	 * @param handler
+	 * @param saxParser
 	 *            - which handles XML elements.
 	 * @throws IOException
 	 * @throws SAXException
 	 */
-	public void parse(String xmlFilePath, AbstractSAXHandler handler) throws IOException, SAXException {
-		parse(new InputSource(xmlFilePath), handler);
+	public void parse(String xmlFilePath, DefaultSAXParser saxParser) throws IOException, SAXException {
+		parse(new InputSource(xmlFilePath), saxParser);
 	}
 	
 	/**
@@ -449,8 +449,8 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 *            Parses the submitted input stream using the submitted handler.
 	 */
-	public void parse(InputStream stream, AbstractSAXHandler handler) throws IOException, SAXException {
-		parse(new InputSource(stream), handler);
+	public void parse(InputStream stream, DefaultSAXParser saxParser) throws IOException, SAXException {
+		parse(new InputSource(stream), saxParser);
 	}
 	
 	/**
@@ -463,17 +463,15 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 	 * 
 	 *            Parses the submitted input stream using the submitted handler.
 	 */
-	public void parse(InputSource source, AbstractSAXHandler handler) throws IOException, SAXException {
-		if(logger.isDebugEnabled()) {
-			logger.debug("+parse(" + source + ", " + handler + ")");
-		}
+	public void parse(InputSource source, DefaultSAXParser saxParser) throws IOException, SAXException {
+		logger.debug("+parse(" + source + ", " + saxParser + ")");
 		
 		try {
 			/* block level synchronization. */
 			synchronized(this) {
 				SAXParser parser = SAXParserFactory.newInstance().newSAXParser();
 				parsing = true;
-				parser.parse(source, handler);
+				parser.parse(source, saxParser);
 				parsing = false;
 				parser = null;
 			}
@@ -488,9 +486,7 @@ public final class XmlUtil implements Serializable, DefaultXmlTags {
 			throw new SAXException("Parser Instantiate exception!", pcEx);
 		}
 		
-		if(logger.isDebugEnabled()) {
-			logger.debug("-parse()");
-		}
+		logger.debug("-parse()");
 	}
 	
 	/**

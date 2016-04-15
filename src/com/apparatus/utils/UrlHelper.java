@@ -56,11 +56,9 @@ public class UrlHelper {
 	public static final String HASH_CODE_FILE_SIZE = "Hash-Code-File-Size";
 	public static final String USE_EXISTING_FILE = "Use-Existing-File";
 	
-	/** enable charles */
-	public static HttpHost CHARLES_PROXY = new HttpHost(Constants.DEFAULT_HOST_ADDRESS, 8888);
-	
+	/** CHARLES_PROXY - Enables CHARLES as PROXY. */
+	public static HttpHost CHARLES_PROXY = new HttpHost(Constants.LOCAL_HOST, 8888);
 	public static final String[] HEADERS_IGNORED = { "Host", "Accept", "Origin", "X-Requested-With", "User-Agent", "Content-Length", "Referer", "Accept-Encoding", "Accept-Language", "Cookie"};
-	
 	public static final String CONTENY_TYPE_JSON = "application/json";
 	
 	/**
