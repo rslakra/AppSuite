@@ -56,6 +56,9 @@ public class UrlHelper {
 	public static final String HASH_CODE_FILE_SIZE = "Hash-Code-File-Size";
 	public static final String USE_EXISTING_FILE = "Use-Existing-File";
 	
+	/** URL_PATTERN */
+	public static final String URL_REGEX = "^(http|https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+	
 	/** CHARLES_PROXY - Enables CHARLES as PROXY. */
 	public static HttpHost CHARLES_PROXY = new HttpHost(Constants.LOCAL_HOST, 8888);
 	public static final String[] HEADERS_IGNORED = { "Host", "Accept", "Origin", "X-Requested-With", "User-Agent", "Content-Length", "Referer", "Accept-Encoding", "Accept-Language", "Cookie"};
@@ -447,5 +450,27 @@ public class UrlHelper {
 		
 		urlConnection.setRequestProperty("Accept-Language", "en-US,en;q=0.5");
 		urlConnection.setRequestProperty("Content-Type", "application/x-java-serialized-object");
+	}
+	
+	/**
+	 * 
+	 * @param urlString
+	 * @return
+	 */
+	public static boolean isValidURL(String urlString) {
+		return (!StringHelper.isNullOrEmpty(urlString) && urlString.matches(URL_REGEX));
+	}
+	
+	public static void main(String[] args) {
+		String urlString = "https://mbp-rohtash";
+		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		urlString = "www.mbp-rohtash.com";
+		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		urlString = "ftp://mbp-rohtash";
+		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		urlString = "mbp-rohtash.com";
+		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		urlString = "mbp-rohtash";
+		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
 	}
 }
