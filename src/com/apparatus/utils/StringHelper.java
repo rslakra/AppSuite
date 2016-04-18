@@ -265,13 +265,31 @@ public final class StringHelper implements Serializable {
 	}
 	
 	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNull(String str) {
+		return (str == null);
+	}
+	
+	/**
 	 * Checks whether the given string is null or empty.
 	 * 
 	 * @param str
 	 * @return
 	 */
 	public static boolean isNullOrEmpty(String str) {
-		return str == null || str.isEmpty();
+		return (isNull(str) || str.isEmpty());
+	}
+	
+	/**
+	 * 
+	 * @param str
+	 * @return
+	 */
+	public static boolean isNotNullOrEmpty(String str) {
+		return (!isNullOrEmpty(str));
 	}
 	
 	/**
@@ -486,6 +504,10 @@ public final class StringHelper implements Serializable {
 		if(!isNullOrEmpty(source)) {
 			if(isNullOrEmpty(delimiter)) {
 				delimiter = STR_SPACE;
+			}
+			
+			if(".$|()[{^?*+\\".contains(delimiter)) {
+				delimiter = "\\" + delimiter;
 			}
 			elements = source.split(delimiter);
 		}
@@ -1631,6 +1653,11 @@ public final class StringHelper implements Serializable {
 		return sbResult.toString();
 	}
 	
+	/**
+	 * 
+	 * @param uuid
+	 * @return
+	 */
 	public static boolean isValidUuid(String uuid) {
 		return (!isNullOrEmpty(uuid) && uuid.contains(":") && uuid.contains("-"));
 	}
@@ -1640,7 +1667,7 @@ public final class StringHelper implements Serializable {
 	 * @param args
 	 * @return
 	 */
-	public static <T> String concat(T... args) {
+	public static String concat(String... args) {
 		if(args != null) {
 			StringBuilder sBuilder = new StringBuilder();
 			for(int i = 0; i < args.length; i++) {
@@ -1702,10 +1729,6 @@ public final class StringHelper implements Serializable {
 		}
 		
 		return fileName;
-	}
-	
-	public static boolean isNull(String str) {
-		return (str == null);
 	}
 	
 	public static String toString(Throwable th) {
