@@ -398,4 +398,168 @@ public class ObjectHelper {
 		return (classType.isInstance(object));
 	}
 	
+	/**
+	 * Bubble sort, sometimes referred to as sinking sort, is a simple sorting
+	 * algorithm that repeatedly steps through the list to be sorted, compares
+	 * each pair of adjacent items and swaps them if they are in the wrong
+	 * order. The pass through the list is repeated until no swaps are needed,
+	 * which indicates that the list is sorted.
+	 * 
+	 * Bubble sort has worst-case and average complexity both О(n2), where n is
+	 * the number of items being sorted. There exist many sorting algorithms
+	 * with substantially better worst-case or average complexity of O(n log n).
+	 * Even other О(n2) sorting algorithms, such as insertion sort, tend to have
+	 * better performance than bubble sort. Therefore, bubble sort is not a
+	 * practical sorting algorithm when n is large.
+	 * 
+	 * @param sortArray
+	 */
+	public static void bubbleSort(int[] sortArray) {
+		if(!isNullOrEmpty(sortArray)) {
+			for(int i = 0; i < sortArray.length - 1; i++) {
+				for(int j = 0; j < sortArray.length - 1 - i; j++) {
+					if(sortArray[j] > sortArray[j + 1]) {
+						int temp = sortArray[j];
+						sortArray[j] = sortArray[j + 1];
+						sortArray[j + 1] = temp;
+					}
+				}
+			}
+		}
+	}
+	
+	/**
+	 * Insertion sort is a simple sorting algorithm that builds the final sorted
+	 * array (or list) one item at a time. It is much less efficient on large
+	 * lists than more advanced algorithms such as quicksort, heapsort, or merge
+	 * sort.
+	 * 
+	 * However, insertion sort provides several advantages:
+	 * - Efficient for (quite) small data sets, much like other quadratic
+	 * sorting algorithms.
+	 * - More efficient in practice than most other simple quadratic (i.e.,
+	 * O(n2)) algorithms such as selection sort or bubble sort
+	 * 
+	 * Insertion sort iterates, consuming one input element each repetition, and
+	 * growing a sorted output list. Each iteration, insertion sort removes one
+	 * element from the input data, finds the location it belongs within the
+	 * sorted list, and inserts it there. It repeats until no input elements
+	 * remain.
+	 * 
+	 * @param sortArray
+	 */
+	public static void insertionSort(int[] sortArray) {
+		if(!isNullOrEmpty(sortArray)) {
+			int j, temp;
+			for(int i = 1; i < sortArray.length; i++) {
+				temp = sortArray[i];
+				for(j = i; j > 0 && temp < sortArray[j - 1]; j--) {
+					sortArray[j] = sortArray[j - 1];
+				}
+				sortArray[j] = temp;
+			}
+		}
+	}
+	
+	/**
+	 * 
+	 * @param sortArray
+	 * @param lowIndex
+	 * @param micIndex
+	 * @param highIndex
+	 * @param tempArray
+	 */
+	private static void mergeSort(int[] sortArray, int lowIndex, int midIndex, int highIndex, int[] tempArray) {
+		int i = lowIndex;
+		int j = midIndex + 1;
+		int k = lowIndex;
+		
+		// populate tempArray
+		System.arraycopy(sortArray, 0, tempArray, 0, sortArray.length);
+		
+		// merge sets
+		while(i <= midIndex && j <= highIndex) {
+			if(tempArray[i] < tempArray[j]) {
+				sortArray[k] = tempArray[i];
+				k++;
+				i++;
+			} else {
+				sortArray[k] = tempArray[j];
+				k++;
+				j++;
+			}
+		}
+		
+		// merge left set
+		while(i <= midIndex) {
+			sortArray[k] = tempArray[i];
+			k++;
+			i++;
+		}
+		
+		// merge right set.
+		while(j <= highIndex) {
+			sortArray[k] = tempArray[j];
+			k++;
+			j++;
+		}
+	}
+	
+	/**
+	 * Splits the list and merge.
+	 * 
+	 * @param sortArray
+	 * @param lowIndex
+	 * @param highIndex
+	 * @param tempArray
+	 */
+	private static void mergeSort(int[] sortArray, int lowIndex, int highIndex, int[] tempArray) {
+		if(highIndex > lowIndex) {
+			int midIndex = (highIndex + lowIndex) / 2;
+			mergeSort(sortArray, lowIndex, midIndex, tempArray);
+			mergeSort(sortArray, midIndex + 1, highIndex, tempArray);
+			mergeSort(sortArray, lowIndex, midIndex, highIndex, tempArray);
+		}
+	}
+	
+	/**
+	 * Merge sort (also commonly spelled mergesort) is an efficient,
+	 * general-purpose, comparison-based sorting algorithm. Most implementations
+	 * produce a stable sort, which means that the implementation preserves the
+	 * input order of equal elements in the sorted output. Mergesort is a divide
+	 * and conquer algorithm
+	 * 
+	 * Conceptually, a merge sort works as follows:
+	 * 
+	 * 1. Divide the unsorted list into n sublists, each containing 1 element (a
+	 * list of 1 element is considered sorted).
+	 * 2. Repeatedly merge sublists to produce new sorted sublists until there
+	 * is only 1 sublist remaining. This will be the sorted list.
+	 * 
+	 * In top down merge sort algorithm that recursively splits the list (called
+	 * runs in this example) into sublists until sublist size is 1, then merges
+	 * those sublists to produce a sorted list. The copy back step could be
+	 * avoided if the recursion alternated between two functions so that the
+	 * direction of the merge corresponds with the level of recursion.
+	 * 
+	 * In sorting n objects, merge sort has an average and worst-case
+	 * performance of O(n log n). If the running time of merge sort for a list
+	 * of length n is T(n), then the recurrence T(n) = 2T(n/2) + n follows from
+	 * the definition of the algorithm (apply the algorithm to two lists of half
+	 * the size of the original list, and add the n steps taken to merge the
+	 * resulting two lists). The closed form follows from the master theorem.
+	 * 
+	 * In the worst case, the number of comparisons merge sort makes is equal to
+	 * or slightly smaller than (n ⌈lg n⌉ - 2⌈lg n⌉ + 1), which is between (n lg
+	 * n - n + 1) and (n lg n + n + O(lg n)).
+	 * 
+	 * @param sortArray
+	 */
+	public static void mergeSort(int[] sortArray) {
+		if(!isNullOrEmpty(sortArray)) {
+			int[] tempArray = new int[sortArray.length];
+			mergeSort(sortArray, 0, sortArray.length - 1, tempArray);
+		}
+	}
+	
 }
