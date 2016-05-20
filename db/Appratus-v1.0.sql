@@ -22,6 +22,9 @@
  */
 DROP DATABASE IF EXISTS Apparatus;
 CREATE DATABASE IF NOT EXISTS Apparatus;
+/*
+ * Note: - These commands must execute by root user.
+ */
 GRANT ALL ON Thristle.* to 'singhr'@'localhost' IDENTIFIED by 'Singhr!16';
 GRANT ALL PRIVILEGES ON *.* TO 'singhr'@'localhost' IDENTIFIED BY 'Singhr!16' WITH GRANT OPTION;
 GRANT ALL PRIVILEGES ON *.* TO 'singhr'@'%' IDENTIFIED BY 'Singhr!16' WITH GRANT OPTION;
