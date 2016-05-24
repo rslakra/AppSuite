@@ -1,0 +1,122 @@
+<Table>
+	<Name>roles</Name>
+	<Records>
+		<Record>
+			<Column>
+				<Name>Id</Name>
+				<Value>1</Value>
+			</Column>
+			<Column>
+				<Name>RoleName</Name>
+				<Value>Administrator</Value>
+			</Column>
+			<Column>
+				<Name>Description</Name>
+				<Value>The Administrator who has unrestricted access to the
+					application.</Value>
+			</Column>
+			<Column>
+				<Name>CreatedOn</Name>
+				<Value>2011-07-05 14:47:48.0</Value>
+			</Column>
+			<Column>
+				<Name>CreatedBy</Name>
+				<Value>Rohtash Singh</Value>
+			</Column>
+			<Column>
+				<Name>UpdatedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>UpdatedBy</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedBy</Name>
+				<Value />
+			</Column>
+		</Record>
+		<Record>
+			<Column>
+				<Name>Id</Name>
+				<Value>2</Value>
+			</Column>
+			<Column>
+				<Name>RoleName</Name>
+				<Value>Supervisor</Value>
+			</Column>
+			<Column>
+				<Name>Description</Name>
+				<Value>The Supervisor who has restricted access to the application.
+				</Value>
+			</Column>
+			<Column>
+				<Name>CreatedOn</Name>
+				<Value>2011-07-05 14:47:48.0</Value>
+			</Column>
+			<Column>
+				<Name>CreatedBy</Name>
+				<Value>Rohtash Singh</Value>
+			</Column>
+			<Column>
+				<Name>UpdatedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>UpdatedBy</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedBy</Name>
+				<Value />
+			</Column>
+		</Record>
+		<Record>
+			<Column>
+				<Name>Id</Name>
+				<Value>3</Value>
+			</Column>
+			<Column>
+				<Name>RoleName</Name>
+				<Value>Users</Value>
+			</Column>
+			<Column>
+				<Name>Description</Name>
+				<Value>The Users who have restricted access to the application.
+				</Value>
+			</Column>
+			<Column>
+				<Name>CreatedOn</Name>
+				<Value>2011-07-05 14:47:48.0</Value>
+			</Column>
+			<Column>
+				<Name>CreatedBy</Name>
+				<Value>Rohtash Singh</Value>
+			</Column>
+			<Column>
+				<Name>UpdatedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>UpdatedBy</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedOn</Name>
+				<Value />
+			</Column>
+			<Column>
+				<Name>DeletedBy</Name>
+				<Value />
+			</Column>
+		</Record>
+	</Records>
+</Table>

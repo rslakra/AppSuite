@@ -1,0 +1,317 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<project name="Thristle" default="all" basedir=".">
+	<echo message="Building ${ant.project.name}" />
+
+	<!-- build.properties settings -->
+	<property file="build.properties" prefix="PROPFILE" />
+
+	<!-- General Settings -->
+	<property name="debug" value="on" />
+	<property name="javac.source" value="1.8" />
+
+	<!-- Folder Settings -->
+	<property name="cert.dir" value="Certificates" />
+	<property name="conf.dir" value="${basedir}/conf" />
+	<property name="db.dir" value="${basedir}/db" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="releaseNotes.dir" value="${basedir}/ReleaseNotes" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="webContent.dir" value="${basedir}/WebContent" />
+	<property name="htmlClient" value="HtmlClient" />
+	<property name="webapp.admin" value="webapp-admin" />
+	<property name="webapp.login" value="webapp-login" />
+	<property name="webapp.services" value="webapp-services" />
+
+	<!-- Environment Settings -->
+	<!-- The following environment variable needs to set Eclipse build settings, 
+		i.e. External Tools->Open External Tools Dialog, on the "Environment" tab. -->
+	<!-- JBOSS_HOME, SVN_REVISION etc. -->
+	<!-- -Xms512m -Xmx1024m -XX:MaxPermSize=512m -->
+	<property environment="env" />
+	<property name="jboss.deployments.dir" value="${env.JBOSS_HOME}/standalone/deployments" />
+	<property name="jboss.modules.dir" value="${env.JBOSS_HOME}/modules" />
+
+	<!-- SVN Version Settings -->
+	<property name="svn.revision" value="0" />
+
+	<!-- Build Settings -->
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="dist.dir" value="${build.dir}/dist" />
+	<property name="jar.file" value="${ant.project.name}.jar" />
+	<property name="sar.file" value="${ant.project.name}.sar" />
+	<property name="ejbJARFile" value="${ant.project.name}-ejb.jar" />
+	<property name="ear.dir" value="${ant.project.name}.ear" />
+	<property name="ear.dir" value="${ant.project.name}.ear" />
+	<property name="htmlClientWARdir" value="${htmlClient}.war" />
+	<property name="ear.build.dir" value="${build.dir}/${ear.dir}" />
+	<property name="buildVersion.file" value="${build.dir}/build.version.properties" />
+
+	<!-- Task Definations -->
+	<!--taskdef resource="net/sf/antcontrib/antlib.xml" /> <taskdef classpath="${lib.dir}/aspectjtools.jar" 
+		resource="org/aspectj/tools/ant/taskdefs/aspectjTaskdefs.properties" / -->
+
+	<!-- Classpath Settings -->
+	<path id="project.classpath">
+		<path refid="local.lib.classpath" />
+		<path refid="jboss.lib.classpath" />
+		<!-- The following is different from local.lib because they aren't needed 
+			at runtime; just build time. Runtime uses equivalent code packaged in a war. -->
+		<pathelement location="." />
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<!-- lib classpath -->
+	<path id="local.lib.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="**/*.jar" />
+			<include name="**/*.sar" />
+		</fileset>
+	</path>
+
+	<!-- JBOSS lib classpath -->
+	<path id="jboss.lib.classpath">
+		<fileset dir="${jboss.modules.dir}" includes="**/*.jar" />
+	</path>
+
+
+	<!-- Default Target -->
+	<target name="all" depends="init, compile, build, deploy-build, end-build">
+	</target>
+
+	<target name="clean">
+		<delete dir="${build.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<!--mkdir dir="${build.dir}" /-->
+		<mkdir dir="${dist.dir}" />
+	</target>
+
+	<target name="compile">
+		<echo message="Compiling ..., debug:${debug}" />
+		<javac deprecation="on" debug="${debug}" srcdir="${src.dir}"
+			destdir="${build.dir}" includes="**/*.java" includeantruntime="false">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<!-- Generate Build Version -->
+	<target name="GenerateBuildVersionPropertyFile">
+		<echo message="Generating Build Version File ..." />
+		<delete file="${buildVersion.file}" failonerror="false" />
+		<tstamp>
+			<format property="touch.time" pattern="yyyyMMdd.HHmmss" />
+		</tstamp>
+		<touch file="${buildVersion.file}" />
+		<echo file="${buildVersion.file}" append="true"
+			message="build.number=${touch.time}${line.separator}" />
+		<echo file="${buildVersion.file}" append="true"
+			message="release=${ant.project.name}${line.separator}" />
+		<echo file="${buildVersion.file}" append="true"
+			message="major.version=${PROPFILE.major.version}${line.separator}" />
+		<echo file="${buildVersion.file}" append="true"
+			message="minor.version=${PROPFILE.minor.version}${line.separator}" />
+		<echo file="${buildVersion.file}" append="true"
+			message="revision=${svn.revision}${line.separator}" />
+	</target>
+
+
+	<target name="build" depends="GenerateBuildVersionPropertyFile">
+		<echo message="Generating '${jar.file}' file ..." />
+		<jar jarfile="${dist.dir}/${jar.file}" manifest="${conf.dir}/META-INF/MANIFEST.MF">
+			<fileset dir="${build.dir}" includes="com/, build.version.properties" />
+			<fileset dir="${webContent.dir}" includes="**/*.hbm.xml , **/*.cfg.xml, **/*.properties" />
+		</jar>
+	</target>
+
+	<target name="clean-jboss">
+		<delete dir="${jboss.deployments.dir}/${htmlClientWARdir}" failonerror="false" />
+		<delete dir="${jboss.deployments.dir}/${ear.dir}" failonerror="false" />
+	</target>
+
+	<!-- Deploys the build on JBoss Server 
+	URL:http://192.168.3.102:8080/thristle/helloWorldServlet
+	-->
+	<target name="deploy-build" depends="clean-jboss">
+		<echo message="Deploying Build ..." />
+		
+		<!-- Copy HtmlClient module under build/HtmlClient.war folder. -->
+		<copy todir="${build.dir}/${htmlClientWARdir}" preservelastmodified="yes">
+			<fileset dir="${webContent.dir}/${htmlClient}" />
+			<fileset dir="${conf.dir}" includes="META-INF/MANIFEST.MF" />
+		</copy>
+		
+		<copy file="${dist.dir}/${jar.file}" todir="${build.dir}/${htmlClientWARdir}/WEB-INF/lib" preservelastmodified="yes" />
+				
+		<!-- Copy HtmlClient .war on server. -->
+		<copy todir="${jboss.deployments.dir}/${htmlClientWARdir}" preservelastmodified="yes">
+			<fileset dir="${build.dir}/${htmlClientWARdir}" />
+		</copy>
+		
+		<!-- Copy library files to .ear/Certificates folder. -->
+		<copy todir="${ear.build.dir}/${cert.dir}" preservelastmodified="yes">
+			<fileset dir="${basedir}/${cert.dir}" />
+		</copy>
+
+		<!-- Copy All files (excluding web modules) to .ear/ folder. -->
+		<copy todir="${ear.build.dir}/META-INF" preservelastmodified="yes">
+		    <fileset dir="${conf.dir}/META-INF" includes="MANIFEST.MF" />
+		    <fileset dir="${conf.dir}/jboss" includes="application.xml" />
+		</copy>
+
+		<!-- Copy library files to .ear/lib folder. -->
+		<copy todir="${ear.build.dir}/lib" preservelastmodified="yes">
+			<fileset dir="lib" includes="**/*.jar" />
+			<fileset dir="${dist.dir}" includes="*.jar, *.sar, *.aop" />
+		</copy>
+		
+		<!-- Create EJB .jar file. -->
+		<!--jar jarfile="${ear.build.dir}/${ejbJARFile}" manifest="${conf.dir}/META-INF/MANIFEST.MF">
+			<fileset dir="${conf.dir}" excludes="META-INF/MANIFEST.MF" />
+		</jar-->
+
+		<!-- Copy webapp-admin module under .ear/webapp-admin.war folder. -->
+		<copy todir="${ear.build.dir}/${webapp.admin}.war" preservelastmodified="yes">
+			<fileset dir="${webContent.dir}/${webapp.admin}" />
+			<fileset dir="${conf.dir}" includes="META-INF/MANIFEST.MF" />
+		</copy>
+
+		<!-- Copy webapp-admin module under .ear/webapp-login.war folder. -->
+		<copy todir="${ear.build.dir}/${webapp.login}.war" preservelastmodified="yes">
+			<fileset dir="${webContent.dir}/${webapp.login}" />
+			<fileset dir="${conf.dir}" includes="META-INF/MANIFEST.MF" />
+		</copy>
+
+		<!-- Copy webapp-admin module under .ear/webapp-services.war folder. -->
+		<copy todir="${ear.build.dir}/${webapp.services}.war" preservelastmodified="yes">
+			<fileset dir="${webContent.dir}/${webapp.services}" />
+			<fileset dir="${conf.dir}" includes="META-INF/MANIFEST.MF" />
+		</copy>
+
+		<copy todir="${jboss.deployments.dir}/${ear.dir}" preservelastmodified="yes">
+			<fileset dir="${ear.build.dir}" />
+		</copy>
+	</target>
+
+	<target name="end-build">
+		<tstamp>
+			<format property="build.time" pattern="MM/dd/yyyy hh:mm:ss aa" />
+		</tstamp>
+		<echo message="Build Completed Successfully at:${build.time}" />
+	</target>
+
+
+	<!-- Extra Targets -->
+
+	<target name="copy.DVantage.ear">
+		<echo
+			message="Coping build on server:${env.REMOTE_HOSTNAME}:${env.REMOTE_JBOSSHOME}/standalone/deployments/DVantage.ear" />
+		<scp
+			todir="${env.REMOTE_USERNAME}:${env.REMOTE_PASSWORD}@${env.REMOTE_HOSTNAME}:${env.REMOTE_JBOSSHOME}/standalone/deployments/DVantage.ear">
+			<fileset dir="${ear.build.dir}" />
+		</scp>
+	</target>
+
+
+	<target name="gen.proxy.jenkins.windows">
+		<echo> ======= Generating Proxyclasses =========== </echo>
+		<java classname="com.rslakra.aquila.engine.compiler.CodeManager"
+			fork="yes" failonerror="true">
+			<classpath refid="jenkins.windows.classpath" />
+			<classpath location="${src.dir}" />
+			<classpath path="${basedir}/conf/" />
+			<sysproperty key="build.dir" value="${build.dir}" />
+		</java>
+		<echo>done</echo>
+	</target>
+
+	<target name="zipEar">
+		<mkdir dir="${basedir}/OUTPUT" />
+		<zip destfile="${basedir}/OUTPUT/JenkinsServer-${build.label}.zip"
+			basedir="${build.dir}/DVantage.ear" />
+	</target>
+
+	<target name="copy.services.js">
+		<copy todir="${ear.build.dir}/services-webapp.war"
+			preservelastmodified="yes">
+			<fileset dir="${src.dir}/services-webapp" />
+			<fileset dir="${settings.dir}/ear/dev" includes="META-INF/MANIFEST.MF" />
+		</copy>
+		<copy todir="${ear.build.dir}/portlet-webapp.war"
+			preservelastmodified="yes">
+			<fileset dir="${src.dir}/portlet-webapp" />
+			<fileset dir="${settings.dir}/ear/dev" includes="META-INF/MANIFEST.MF" />
+		</copy>
+		<copy todir="${jboss.deployments.dir}" preservelastmodified="yes">
+			<fileset dir="${ear.build.dir}" />
+		</copy>
+	</target>
+
+	<property name="test.lib.dir" value="${basedir}/testlib" />
+	<path id="junit.lib.classpath">
+		<fileset dir="${test.lib.dir}/junit">
+			<include name="*.jar" />
+		</fileset>
+		<fileset dir="${test.lib.dir}/apache_http">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<path id="build.classpath">
+		<pathelement location="${build.dir}/test" />
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<target name="sec.test">
+		<echo> ======= Executing Security JUnit Tests =========== </echo>
+		<property name="test.dir" value="${basedir}/test" />
+		<property name="reports.tests" value="${build.dir}/testReports" />
+
+		<copy file="test.properties" todir="${build.dir}" overwrite="true" />
+
+		<echo>compile debug : ${debug}</echo>
+		<delete dir="${build.dir}/test" />
+		<mkdir dir="${build.dir}/test" />
+		<javac deprecation="on" debug="${debug}" srcdir="${test.dir}"
+			destdir="${build.dir}/test" includes="**/*.java">
+			<classpath refid="local.lib.classpath" />
+			<classpath refid="junit.lib.classpath" />
+			<classpath path="${build.dir}" />
+		</javac>
+
+		<delete dir="${reports.tests}" />
+		<mkdir dir="${reports.tests}" />
+
+		<if>
+			<equals arg1="${JUnitDebug}" arg2="true" />
+			<then>
+				<property name="Xdebug"
+					value="-Xdebug -Xrunjdwp:transport=dt_socket,address=127.0.0.1:5532,suspend=y" />
+			</then>
+			<else>
+				<property name="Xdebug" value="-Xdebug:false" />
+			</else>
+		</if>
+
+		<junit printsummary="yes" haltonerror="false" haltonfailure="false"
+			fork="yes" forkmode="once">
+			<jvmarg line="${Xdebug}" />
+
+			<classpath refid="local.lib.classpath" />
+			<classpath refid="junit.lib.classpath" />
+			<classpath refid="build.classpath" />
+
+			<sysproperty key="test.properties.file" value="test.properties" />
+			<sysproperty key="test.profile" value="${Profile}" />
+			<sysproperty key="test.protocol" value="${Protocol}" />
+
+			<test name="com.rslakra.aquila.services.SecTestSuite"
+				haltonfailure="no" outfile="build/testReports/result">
+				<formatter type="xml" />
+			</test>
+		</junit>
+		<echo> ======= Executing Security JUnit Tests - Done ===========
+		</echo>
+	</target>
+
+</project>
