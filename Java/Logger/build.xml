@@ -1,0 +1,228 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<project name="Logger" default="all" basedir=".">
+	<!-- 
+		Set environment variable JBOSS_HOME. If using Eclipse, do this in
+		Run->External Tools->Open External Tools Dialog,
+		on the "Environment" tab.
+	  -->
+	<echo message="Building [${ant.project.name}] under [${build.dir}] folder ..." />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="build.dir" value="${basedir}/build" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="dest.dir" value="${basedir}/dest" />
+	<property name="jar.file" value="${dest.dir}/${ant.project.name}.jar" />
+	<property file="build.pr operties" prefix="PROPFILE" />
+				
+	<path id="project.classpath">
+		<path refid="local.lib.classpath" />
+		<pathelement location="." />
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<path id="local.lib.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+			<include name="*.sar" />
+		</fileset>
+	</path>
+
+	<!-- create a property containing all .jar files, prefix lib/, and seperated 
+		with a space -->
+	<pathconvert property="lib.classpath" pathsep=" ">
+		<mapper>
+			<chainedmapper>
+				<!-- remove absolute path -->
+				<flattenmapper />
+				<globmapper from="*" to="lib/*" />
+			</chainedmapper>
+		</mapper>
+		<path>
+			<fileset dir="${lib.dir}" includes="**/*.jar" />
+		</path>
+	</pathconvert>
+	
+	<!-- Main Task. -->
+	<target name="all" depends="clean, revision-number, compile.classes, make.jar, make.war, timestamp" />
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete file="${jar.file}" />
+		<delete file="${war.file}" />
+	</target>
+
+	<target name="init">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+
+	<target name="check-svn-entries">
+		<available file=".svn/entries" property="svn.entries.present" />
+	</target>
+
+	<target name="revision-number" depends="check-svn-entries" if="svn.entries.present">
+		<loadfile srcfile="${basedir}/.svn/entries" property="revision">
+			<filterchain>
+				<headfilter lines="1" skip="3" />
+			</filterchain>
+		</loadfile>
+		<echo>revision : ${revision}</echo>
+	</target>
+
+	<target name="compile.classes" depends="init">
+		<echo>compile debug : ${java.debug}</echo>
+		<javac deprecation="on"
+		       debug="${java.debug}"
+		       debuglevel="lines,vars,source"
+		       srcdir="${src.dir}"
+		       destdir="${classes.dir}"
+		       includes="**/*.java"
+		       source="${jvm.target}"
+		       target="${jvm.target}"
+		       includeantruntime="${jvm.includeantruntime}">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="make.jar" depends="build.version.file.target">
+	    <tstamp>
+			<format property="TODAY" pattern="yyyyMMdd.HHmmss" />
+		</tstamp>
+		
+	   	<copy todir="${dest.dir}" overwrite="true">
+		    <fileset dir="${basedir}" includes="lib/**"/>
+		    <fileset dir="${basedir}" includes="log4j.xml Config.properties"/>
+		</copy>
+		
+	    <copy file="${basedir}/log4j.xml" todir="${classes.dir}" overwrite="true" />
+		<jar jarfile="${jar.file}">
+			<fileset dir="${classes.dir}" includes="**"/>
+			<fileset dir="${build.dir}" includes="version.properties"/>		    
+		    <fileset dir="${basedir}" includes="Config.properties"/>
+			<manifest>
+				<attribute name="Built-By" value="Rohtash Singh" />
+				<section name="Vendor Details">
+					<attribute name="Implementation-Title" value="${impl.title}" />
+					<attribute name="Implementation-Vendor" value="${impl.vendor}" />
+					<attribute name="Implementation-Vendor-Id" value="${impl.vendor}" />
+					<attribute name="Implementation-Version" value="v1.0.0.${TODAY}" />
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="${impl.vendor}" />
+					<attribute name="Specification-Version" value="v1.0.0.${TODAY}" />
+				</section>
+		
+				<!-- set magically generated library path -->
+				<attribute name="Class-Path" value="${lib.classpath}" />
+				<!-- defines whether this JAR file is sealed or not 
+				<attribute name="Sealed" value="true" />-->
+				<!-- defines the relative path of the main application class which the 
+					launcher will load at startup time -->
+				<attribute name="Main-Class" value="${mainClassName}" />
+			</manifest>
+		</jar>
+		
+		<!-- create .bat and .sh files to run application. -->
+		<antcall target="make.files"/>
+	</target>
+
+    <!-- create .bat and .sh files to run application. -->
+	<target name="make.files">
+		<delete file="${run.file}.bat" failonerror="false"/>
+		<touch file="${run.file}.bat" datetime="now" />
+		<echo file="${run.file}.bat" append="true" message="java -cp . -jar ShareXDesktop.jar ${line.separator}" />
+		
+		<delete file="${run.file}.sh" failonerror="false"/>
+		<touch file="${run.file}.sh" datetime="now" />
+		<echo file="${run.file}.sh" append="true" message="java -cp . -jar ShareXDesktop.jar ${line.separator}" />
+		<chmod file="${run.file}.sh" perm="555"/>
+	</target>
+	
+	<!-- Creates .war file for deployment. -->
+	<target name="make.war">
+		<echo message="Building deployable component(s) ..." />
+		<tstamp>
+			<format property="TODAY" pattern="yyyyMMdd.HHmmss" />
+		</tstamp>
+		
+		<!-- Prepare .war file structure. -->
+		<copy todir="${client-war.dir}">
+		    <fileset dir="${webContents}" includes="**"/>
+		</copy>
+		<copy file="${configFile}" todir="${client-war.dir}" overwrite="true" />
+		<copy file="${build.version.file}" todir="${client-war.dir}" overwrite="true" />
+		<copy todir="${client-war.dir}/WEB-INF/classes">
+			<fileset dir="${classes.dir}" includes="**"/>
+		</copy>
+		<copy todir="${client-war.dir}/WEB-INF/lib">
+		    <fileset dir="${lib.dir}" includes="**" />
+		</copy>
+				
+		<echo message="Creating '${client-war.file}' ..." />
+		<!-- war file -->
+		<jar jarfile="${client-war.file}">
+			<fileset dir="${client-war.dir}" includes="**" />
+			<manifest>
+				<attribute name="Built-By" value="Rohtash Singh" />
+				<section name="Vendor Details">
+					<attribute name="Implementation-Title" value="ShareXDesktop" />
+					<attribute name="Implementation-Vendor" value="BoardVantage Inc." />
+					<attribute name="Implementation-Vendor-Id" value="BoardVantage Inc." />
+					<attribute name="Implementation-Version" value="v1.0.0.${TODAY}" />
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="BoardVantage Inc." />
+					<attribute name="Specification-Version" value="v1.0.0.${TODAY}" />
+				</section>
+				<!-- set magically generated library path -->
+				<attribute name="Class-Path" value="${lib.classpath}" />
+			</manifest>
+		</jar>
+		
+		<!-- creates dummy war file used for testing. -->
+		<!-- DON'T NEED TO GENERATE DUMMY .WAR FILE AS ACTUAL FILE IS USED NOW.
+		<echo message="Creating '${dummy-war.file}' ..." />
+		<jar jarfile="${dummy-war.file}">
+			<fileset dir="${staticContents}" includes="**" />
+			<manifest>
+				<attribute name="Built-By" value="Rohtash Singh" />
+				<section name="Vendor Details">
+					<attribute name="Implementation-Title" value="ShareX" />
+					<attribute name="Implementation-Vendor" value="BoardVantage Inc." />
+					<attribute name="Implementation-Vendor-Id" value="BoardVantage Inc." />
+					<attribute name="Implementation-Version" value="v1.0.0.${TODAY}" />
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="BoardVantage Inc." />
+					<attribute name="Specification-Version" value="v1.0.0.${TODAY}" />
+				</section>
+				<attribute name="Class-Path" value="${lib.classpath}" />
+			</manifest>
+		</jar>
+		-->
+
+		<tstamp>
+			<format property="TODAY" pattern="yyyyMMdd.HHmmss" />
+		</tstamp>
+		<echo />
+		<echo message="Build created successfully at '${TODAY}'!" />
+	</target>	
+	
+	<target name="build.version.file.target">
+		<delete file="${build.version.file}" failonerror="false" />
+		<tstamp>
+			<format property="touch.time" pattern="yyyyMMdd.HHmmss" />
+		</tstamp>
+		<touch file="${build.version.file}" />
+		<echo message="sharex.build.number=${touch.time}${line.separator}" file="${build.version.file}" />
+		<echo message="sharex.release=${PROPFILE.sharex.release}${line.separator}" file="${build.version.file}" append="true" />
+		<echo message="sharex.major.version=${PROPFILE.sharex.major.version}${line.separator}" file="${build.version.file}" append="true" />
+		<echo message="sharex.minor.version=${PROPFILE.sharex.minor.version}${line.separator}" file="${build.version.file}" append="true" />
+		<echo message="sharex.revision=${revision}${line.separator}" file="${build.version.file}" append="true" />
+	</target>
+
+	<target name="timestamp">
+		<tstamp>
+			<format property="end.time" pattern="MM/dd/yyyy hh:mm:ss aa" />
+		</tstamp>
+		<echo  message="${end.time}" />
+	</target>
+
+</project>
