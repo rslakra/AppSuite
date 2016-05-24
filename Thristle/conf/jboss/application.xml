@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<application xmlns="http://java.sun.com/xml/ns/j2ee"
+	version="1.4" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com /xml/ns/j2ee 
+                             http://java.sun.com/xml/ns/j2ee/application_1_4.xsd">
+	<description>Thristle Application</description>
+	<display-name>Thristle Application</display-name>
+
+	<initialize-in-order>true</initialize-in-order>
+	<library-directory>lib</library-directory>
+
+	<!-- EJB Module -->
+	<!--module>
+		<ejb>Thristle-ejb.jar</ejb>
+	</module-->
+	
+	<!-- Web Module - Admin-->
+	<module>
+		<web>
+			<web-uri>webapp-admin.war</web-uri>
+			<context-root>webAppAdmin</context-root>
+		</web>
+	</module>
+
+	<!-- Web Module - Login -->
+	<module>
+		<web>
+			<web-uri>webapp-login.war</web-uri>
+			<context-root>webAppLogin</context-root>
+		</web>
+	</module>
+
+
+	<!-- Web Module - Services -->
+	<module>
+		<web>
+			<web-uri>webapp-services.war</web-uri>
+			<context-root>webAppServices</context-root>
+		</web>
+	</module>
+
+</application>

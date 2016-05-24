@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+	version="3.0" id="WebApp_ID">
+	<display-name>Thristle</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+	</welcome-file-list>
+
+	<!-- To save as <SERVER_HOME>\webapps\helloservlet\WEB-INF\web.xml -->
+	<servlet>
+		<servlet-name>HelloWorldServlet</servlet-name>
+		<servlet-class>com.rslakra.servers.thristle.HelloWorldServlet</servlet-class>
+	</servlet>
+
+	<!-- Note: All <servlet> elements MUST be grouped together and placed IN 
+		FRONT of the <servlet-mapping> elements -->
+	<servlet-mapping>
+		<servlet-name>HelloWorldServlet</servlet-name>
+		<url-pattern>/helloWorld</url-pattern>
+	</servlet-mapping>
+
+</web-app>
