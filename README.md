@@ -1,9 +1,6 @@
 Apparatus
 =========
 
-This repository contains the java Apparatus projects.
+This repository contains all the projects categorized based on the programming languages and usability.
 
-The Apparatus project should have the basic and core implementations which can be used by other projects. 
-It is an independent project and should not depend on any other library already available for reuse.
-
-The source code available in this repository will be available for AS IT IS usage.
+These projects should have the basic and core implementations which can be used by other projects. It might be some of them use any third party library, so the source code available in this repository will be available for AS IT IS usage.
