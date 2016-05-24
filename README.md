@@ -1,4 +1,4 @@
-Apparatus
+Projects
 =========
 
 This repository contains all the projects categorized based on the programming languages and usability.
