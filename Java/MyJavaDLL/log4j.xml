@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" debug="false">
+
+	<appender name="CONSOLE" class="org.apache.log4j.ConsoleAppender">
+		<param name="Threshold" value="INFO" />
+		<param name="Target" value="System.out"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{MM-dd-yyyy hh:mm:ss a}] %5p [%c{1}(%L)] - %m%n" />
+		</layout>
+	</appender>
+
+	<!--appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO" />
+		<param name="File" value="${custom.logging.root}/.log"/>
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{MM-dd-yyyy hh:mm:ss a}] %5p [%c{1}(%L)] - %m%n" />
+		</layout>
+	</appender-->
+	
+	<!-- <appender name="FILE" class="org.apache.log4j.RollingFileAppender">
+		<param name="Threshold" value="INFO" />
+		<param name="File" value="MeetXDesktop.log" />
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern" value="[%d{MM-dd-yyyy hh:mm:ss a}] %5p [%c{1}(%L)] - %m%n" />
+		</layout>
+	</appender> -->
+	
+	<!-- <logger name="org.apache.commons.httpclient">
+	    <level value="fatal"/>
+	</logger> -->
+	
+	<logger name="httpclient.wire">
+		<level value="ERROR"/>
+	</logger>
+
+	<!-- <logger name="httpclient.wire.header">
+	    <level value="fatal"/>
+	</logger>
+	
+	<logger name="httpclient.wire.content">
+	    <level value="fatal"/>
+	</logger> -->
+	<!-- ======================= -->
+   	<!-- Setup the Root category -->
+   	<!-- ======================= -->
+   <root>
+   	  <appender-ref ref="CONSOLE"/>
+      <appender-ref ref="FILE"/>
+   </root>
+   
+   <!-- ================ -->
+   <!-- Limit categories -->
+   <!-- ================ -->
+
+   <!-- Limit the org.apache category to INFO as its DEBUG is verbose -->
+<!--   <category name="org.apache">
+      <priority value="INFO"/>
+   </category> --> 
+
+	
+	
+</log4j:configuration>
