@@ -46,6 +46,7 @@ DROP TABLE IF EXISTS `Addresses`;
 DROP TABLE IF EXISTS `Cities`;
 DROP TABLE IF EXISTS `States`;
 DROP TABLE IF EXISTS `Countries`;
+DROP TABLE IF EXISTS `Continents`;
 DROP TABLE IF EXISTS `UnitDesignators`;
 DROP TABLE IF EXISTS `RolesModules`;
 DROP TABLE IF EXISTS `Users`;
@@ -56,16 +57,20 @@ DROP TABLE IF EXISTS `Feedbacks`;
 DROP TABLE IF EXISTS `Comments`;
 DROP TABLE IF EXISTS `Blogs`;
 
+
 /*
- * Countries Table
+ * Continents Table
+ * 
+ * Name: Name of the continent
+ * Area: Total area of the continent
  */
-CREATE TABLE IF NOT EXISTS `Countries` (
+CREATE TABLE IF NOT EXISTS `Continents` (
 	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	`Name` VARCHAR(50) NOT NULL,
-  	`Code` VARCHAR(5) NOT NULL,
+  	`Area` VARCHAR(5) NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -74,11 +79,54 @@ CREATE TABLE IF NOT EXISTS `Countries` (
 
 /*
  * Insert default records
+ * 
+ * SELECT * FROM Continents;
  */
-INSERT INTO Countries (Name, Code, CreatedBy)
-VALUES('India', 'IN', 'Rohtash Singh');
-INSERT INTO Countries(Name, Code, CreatedBy)
-VALUES('United State of America', 'USA', 'Rohtash Singh');
+INSERT INTO Continents (Name, Area) VALUES('Asia', '0');
+INSERT INTO Continents (Name, Area) VALUES('Africa', '0');
+INSERT INTO Continents (Name, Area) VALUES('North America', '0');
+INSERT INTO Continents (Name, Area) VALUES('South America', '0');
+INSERT INTO Continents (Name, Area) VALUES('Antarctica', '0');
+INSERT INTO Continents (Name, Area) VALUES('Europe', '0');
+INSERT INTO Continents (Name, Area) VALUES('Australia', '0');
+/*
+ * INSERT INTO Continents (Name, Area) VALUES('Eurasia', '0');
+ */
+
+/*
+ * Countries Table
+ */
+CREATE TABLE IF NOT EXISTS `Countries` (
+	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  	`Name` VARCHAR(50) NOT NULL,
+  	`Code` VARCHAR(5) NOT NULL,
+ 	`ContinentId` BIGINT NOT NULL,
+  	`Active` BIT NOT NULL DEFAULT 1,
+  	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
+  	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
+  	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
+  	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
+  	`DeletedBy` VARCHAR(50) DEFAULT NULL
+);
+
+/*
+ * Add Foreign Key Constraints/Relations
+ */
+ALTER TABLE `Countries`
+ADD CONSTRAINT `FK_Countries_Continents`
+FOREIGN KEY (`ContinentId`)
+REFERENCES `Continents` (`Id`);
+
+/*
+ * Insert default records
+ * 
+ * SELECT * FROM Countries;
+ */
+INSERT INTO Countries (Name, Code, ContinentId)
+VALUES('India', 'IN', 1);
+INSERT INTO Countries(Name, Code, ContinentId)
+VALUES('United State of America', 'USA', 3);
 
 
 /*
@@ -91,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `States` (
   	`CountryId` BIGINT NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-	`CreatedBy` VARCHAR(50) NOT NULL,
+	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -108,6 +156,8 @@ REFERENCES `Countries` (`Id`);
 
 /*
  * Insert default records for India
+ * 
+ * SELECT * FROM States;
  */
 INSERT INTO States (Name, Code, CountryId, CreatedBy)
 VALUES('Andaman and Nicobar Islands', 'AN', 1, 'Rohtash Singh');
@@ -182,6 +232,8 @@ VALUES('West Bengal', 'WB', 1, 'Rohtash Singh');
 
 /*
  * Insert default records for USA
+ * 
+ * SELECT * FROM States;
  */
 INSERT INTO States (Name, Code, CountryId, CreatedBy)
 VALUES('Alabama', 'AL', 2, 'Rohtash Singh');
@@ -307,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `Cities` (
   	`StateId` BIGINT NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -324,6 +376,8 @@ REFERENCES `States` (`Id`);
 
 /*
  * Insert default records for Haryana
+ * 
+ * SELECT * FROM Cities;
  */
 INSERT INTO Cities (Name, ZipCode, StateId, CreatedBy)
 VALUES('Ambala', '133001', '13', 'Rohtash Singh');
@@ -379,7 +433,7 @@ CREATE TABLE IF NOT EXISTS `UnitDesignators` (
   	`Abbreviation` VARCHAR(10) NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -388,6 +442,8 @@ CREATE TABLE IF NOT EXISTS `UnitDesignators` (
 
 /*
  * Insert default records for Organization's Address
+ * 
+ * SELECT * FROM UnitDesignators;
  */
 INSERT INTO UnitDesignators (Description, Abbreviation, CreatedBy)
 VALUES('Apartment', 'APT', 'Rohtash Singh');
@@ -461,7 +517,7 @@ CREATE TABLE IF NOT EXISTS `Addresses` (
   	`WebSite` VARCHAR(50) DEFAULT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -493,12 +549,42 @@ REFERENCES `Countries` (`Id`);
 
 /*
  * Insert default records for Organization's Address
+ * 
+ * SELECT * FROM Addresses;
  */
 INSERT INTO Addresses (UnitDesignatorId, Street, Province, CityId, StateId, ZipCode, CountryId, TelPhone, MobilePhone, Email, WebSite, CreatedBy)
 VALUES(26, 'Talyar Lake', 'Asthal Bohar', 16, 13, '124001', 1, '+91-01262-251792', '+91-9416864189', 'info@vnmpsrohtak.com', 'www.vnmpsrohtak.com', 'Rohtash Singh');
 
 INSERT INTO Addresses (UnitDesignatorId, Street, CityId, StateId, ZipCode, CountryId, TelPhone, MobilePhone, Email, WebSite, CreatedBy)
-VALUES(24, '34593 Pueblo Ter', 16, 40, '94555, 2, '+1-201-238-6938', '+1-201-238-6938', 'rohtash.singh@gmail.com', 'www.devamatre.com', 'Rohtash Singh Lakra');
+VALUES(24, '34593 Pueblo Ter', 16, 40, '94555', 2, '+1-201-238-6938', '+1-201-238-6938', 'rohtash.singh@gmail.com', 'www.devamatre.com', 'Rohtash Singh Lakra');
+
+
+/*
+ * OrganizationTypes Table
+ */
+CREATE TABLE IF NOT EXISTS `OrganizationTypes` (
+  	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  	`Type` VARCHAR(50) NOT NULL,
+  	`Active` BIT NOT NULL DEFAULT 1,
+  	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
+  	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
+  	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
+  	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
+  	`DeletedBy` VARCHAR(50) DEFAULT NULL
+);
+
+/*
+ * Insert default records for OrganizationTypes
+ * 
+ * SELECT * FROM OrganizationTypes;
+ */
+INSERT INTO OrganizationTypes (Type) VALUES ('Information Technology');
+INSERT INTO OrganizationTypes (Type) VALUES ('Real Estate');
+INSERT INTO OrganizationTypes (Type) VALUES ('Education');
+INSERT INTO OrganizationTypes (Type) VALUES ('Communication');
+INSERT INTO OrganizationTypes (Type) VALUES ('Finance');
+INSERT INTO OrganizationTypes (Type) VALUES ('Transportation');
 
 
 /*
@@ -507,13 +593,17 @@ VALUES(24, '34593 Pueblo Ter', 16, 40, '94555, 2, '+1-201-238-6938', '+1-201-238
 CREATE TABLE IF NOT EXISTS `Organizations` (
   	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	`Name` VARCHAR(50) NOT NULL,
+  	`OrganizationTypeId` BIGINT NOT NULL,
+  	`ShortName` VARCHAR(50) DEFAULT NULL,
   	`ExtraDetails` VARCHAR(100) DEFAULT NULL,
   	`Description` VARCHAR(255) DEFAULT NULL,
   	`AddressId` BIGINT NOT NULL,
   	`ParentId` BIGINT DEFAULT NULL,
+ 	`EmployerIdNumber` VARCHAR(50) NOT NULL DEFAULT 'XXX-XX-XXXX',
+  	`EstablishedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -527,17 +617,24 @@ ALTER TABLE `Organizations`
 ADD CONSTRAINT `FK_Organizations_Organizations`
 FOREIGN KEY (`ParentId`)
 REFERENCES `Organizations` (`Id`);
-
+--Address Foreign Key
 ALTER TABLE `Organizations`
 ADD CONSTRAINT `FK_Organizations_Addresses`
 FOREIGN KEY (`AddressId`)
 REFERENCES `Addresses` (`Id`);
+--Address Foreign Key
+ALTER TABLE `Organizations`
+ADD CONSTRAINT `FK_Organizations_OrganizationTypes`
+FOREIGN KEY (`OrganizationTypeId`)
+REFERENCES `OrganizationTypes` (`Id`);
 
 /*
- * Insert default records for Organization Details
+ * Insert default records for Organizations
+ * 
+ * SELECT * FROM Organizations;
  */
-INSERT INTO Organizations (Name, ExtraDetails, Description, AddressId, CreatedBy)
-VALUES('V. N. Memorial Public School', '(Affiliated to C.B.S.E. Delhi Code No 530345)', 'The Education Institute', 1, 'Rohtash Singh');
+INSERT INTO Organizations (Name, OrganizationTypeId, ExtraDetails, Description, AddressId)
+VALUES('V. N. Memorial Public School', 3, '(Affiliated to C.B.S.E. Delhi Code No 530345)', 'The Education Institute', 1);
 
 
 /*
@@ -547,8 +644,9 @@ CREATE TABLE IF NOT EXISTS `Roles` (
   	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	`Name` VARCHAR(50) NOT NULL,
   	`Description` VARCHAR(255) DEFAULT NULL,
+  	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -557,6 +655,8 @@ CREATE TABLE IF NOT EXISTS `Roles` (
 
 /*
  * Insert default records for Roles
+ * 
+ * SELECT * FROM Roles;
  */
 INSERT INTO Roles(Name, Description, CreatedBy)
 VALUES('ADMINISTRATOR','The Administrator who has unrestricted access to the application.', 'Rohtash Singh');
@@ -577,7 +677,7 @@ CREATE TABLE IF NOT EXISTS `Modules` (
   	`ParentId` BIGINT DEFAULT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -594,6 +694,8 @@ REFERENCES `Modules` (`Id`);
 
 /*
  * Insert default records for Modules
+ * 
+ * SELECT * FROM Modules;
  */
 INSERT INTO Modules(Name, Description, CreatedBy)
 VALUES('Modules','The root (parent) module of all other modules of an application.', 'Rohtash Singh');
@@ -716,7 +818,7 @@ CREATE TABLE IF NOT EXISTS `Users` (
   	`RoleId` BIGINT NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -766,7 +868,7 @@ CREATE TABLE IF NOT EXISTS `Feedbacks` (
   	`ContactDetail` VARCHAR(100) DEFAULT NULL,
   	`Message` VARCHAR(1000) DEFAULT NULL,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -784,7 +886,7 @@ CREATE TABLE IF NOT EXISTS `Categories` (
   	`Active` BIT NOT NULL DEFAULT 1,  	
   	`ParentId` BIGINT NULL,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -807,7 +909,7 @@ CREATE TABLE IF NOT EXISTS `Blogs` (
   	`Title` VARCHAR(255) NOT NULL,
   	`Message` VARCHAR(1000) DEFAULT NULL,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`Updatable` BIT NOT NULL DEFAULT 1,
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
@@ -824,7 +926,7 @@ CREATE TABLE IF NOT EXISTS `Comments` (
   	`Comment` VARCHAR(1000) DEFAULT NULL,
   	`BlogId` BIGINT NOT NULL,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`Updatable` BIT NOT NULL DEFAULT 0,
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
@@ -854,7 +956,7 @@ CREATE TABLE IF NOT EXISTS `Status` (
   	`Description` VARCHAR(255) NOT NULL,
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -887,10 +989,10 @@ CREATE TABLE IF NOT EXISTS `Media` (
   	`Id` BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
   	`Type` VARCHAR(10) NOT NULL,
   	`Description` VARCHAR(255) NOT NULL,
-        `StatusId` BIGINT NOT NULL,  	
+	`StatusId` BIGINT NOT NULL,  	
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL DEFAULT NULL,
   	`UpdatedBy` VARCHAR(50) DEFAULT NULL,
   	`DeletedOn` TIMESTAMP NULL DEFAULT NULL,
@@ -1016,7 +1118,7 @@ CREATE TABLE IF NOT EXISTS `Books` (
   	`CurrencyType` VARCHAR(3) NOT NULL DEFAULT 'USD',
   	`Active` BIT NOT NULL DEFAULT 1,
   	`CreatedOn` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  	`CreatedBy` VARCHAR(50) NOT NULL,
+  	`CreatedBy` VARCHAR(50) NOT NULL DEFAULT 'Rohtash Singh',
   	`UpdatedOn` TIMESTAMP NULL,
   	`UpdatedBy` VARCHAR(50),
   	`DeletedOn` TIMESTAMP NULL,
