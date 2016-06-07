@@ -168,6 +168,27 @@ public final class StringHelper implements Serializable {
 	}
 	
 	/**
+	 * Removes the duplicates of the specified string and keeps the position of
+	 * the characters.
+	 * 
+	 * @param string
+	 * @return
+	 */
+	public static String removeDuplidates(String string) {
+		StringBuilder uniqueString = new StringBuilder();
+		boolean[] checked = new boolean[256];
+		for(int i = 0; i < string.length(); i++) {
+			char nextChar = string.charAt(i);
+			if(!checked[nextChar]) {
+				checked[nextChar] = true;
+				uniqueString.append(nextChar);
+			}
+		}
+		
+		return uniqueString.toString();
+	}
+	
+	/**
 	 * Returns true if the string contains a space, otherwise false.
 	 * 
 	 * @param str
@@ -844,9 +865,39 @@ public final class StringHelper implements Serializable {
 	 * @return
 	 */
 	public static String onesConverter(int num) {
-		String[] Units = { " ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
-		String[] Tens = { " ", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
-		String[] Hundreds = { " ", "Ten", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
+		String[] Units = {
+				" ",
+				"One",
+				"Two",
+				"Three",
+				"Four",
+				"Five",
+				"Six",
+				"Seven",
+				"Eight",
+				"Nine" };
+		String[] Tens = {
+				" ",
+				"Eleven",
+				"Twelve",
+				"Thirteen",
+				"Fourteen",
+				"Fifteen",
+				"Sixteen",
+				"Seventeen",
+				"Eighteen",
+				"Nineteen" };
+		String[] Hundreds = {
+				" ",
+				"Ten",
+				"Twenty",
+				"Thirty",
+				"Fourty",
+				"Fifty",
+				"Sixty",
+				"Seventy",
+				"Eighty",
+				"Ninety" };
 		System.out.println("onesConverter Num : " + num);
 		String str = " ";
 		if(num < 10) {
@@ -918,7 +969,11 @@ public final class StringHelper implements Serializable {
 		return str;
 	}
 	
-	static String[] Prefixes = { " ", "Thousand", "Lakhs", "Million"};
+	static String[] Prefixes = {
+			" ",
+			"Thousand",
+			"Lakhs",
+			"Million" };
 	
 	/**
 	 * Returns the reversed string using recursion.
@@ -926,11 +981,8 @@ public final class StringHelper implements Serializable {
 	 * @param str
 	 * @return
 	 */
-	public String reverse(String str) {
-		if(null == str || str.isEmpty()) {
-			return "";
-		}
-		return reverse(str.substring(1)) + str.substring(0, 1);
+	public static String reverse(String str) {
+		return (isNullOrEmpty(str) ? "" : reverse(str.substring(1)) + str.substring(0, 1));
 	}
 	
 	/** HEX_DIGIT_CHARS */
