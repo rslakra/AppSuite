@@ -441,7 +441,7 @@ CREATE TABLE IF NOT EXISTS `UnitDesignators` (
 );
 
 /*
- * Insert default records for Organization's Address
+ * Insert default records for UnitDesignators
  * 
  * SELECT * FROM UnitDesignators;
  */
@@ -511,7 +511,7 @@ CREATE TABLE IF NOT EXISTS `Addresses` (
   	`StateId` BIGINT NOT NULL,
   	`ZipCode` VARCHAR(10) DEFAULT NULL,
   	`CountryId` BIGINT NOT NULL,
-  	`TelPhone` VARCHAR(16) DEFAULT NULL,
+  	`Telephone` VARCHAR(16) DEFAULT NULL,
   	`MobilePhone` VARCHAR(16) DEFAULT NULL,
   	`Email` VARCHAR(50) DEFAULT NULL,
   	`WebSite` VARCHAR(50) DEFAULT NULL,
@@ -552,10 +552,10 @@ REFERENCES `Countries` (`Id`);
  * 
  * SELECT * FROM Addresses;
  */
-INSERT INTO Addresses (UnitDesignatorId, Street, Province, CityId, StateId, ZipCode, CountryId, TelPhone, MobilePhone, Email, WebSite, CreatedBy)
+INSERT INTO Addresses (UnitDesignatorId, Street, Province, CityId, StateId, ZipCode, CountryId, Telephone, MobilePhone, Email, WebSite, CreatedBy)
 VALUES(26, 'Talyar Lake', 'Asthal Bohar', 16, 13, '124001', 1, '+91-01262-251792', '+91-9416864189', 'info@vnmpsrohtak.com', 'www.vnmpsrohtak.com', 'Rohtash Singh');
 
-INSERT INTO Addresses (UnitDesignatorId, Street, CityId, StateId, ZipCode, CountryId, TelPhone, MobilePhone, Email, WebSite, CreatedBy)
+INSERT INTO Addresses (UnitDesignatorId, Street, CityId, StateId, ZipCode, CountryId, Telephone, MobilePhone, Email, WebSite, CreatedBy)
 VALUES(24, '34593 Pueblo Ter', 16, 40, '94555', 2, '+1-201-238-6938', '+1-201-238-6938', 'rohtash.singh@gmail.com', 'www.devamatre.com', 'Rohtash Singh Lakra');
 
 
@@ -743,7 +743,7 @@ INSERT INTO Modules(Name, Description, TargetPath, ParentId, CreatedBy)
 VALUES('Contact Us', 'The website''s home page.', 'ContactUs.php', 12, 'Rohtash Singh');
 INSERT INTO Modules(Name, Description, TargetPath, ParentId, CreatedBy) 
 VALUES('Customer Support', 'The website''s home page.', 'CustomerSupport.php', 12, 'Rohtash Singh');
-SELECT * FROM  Modules;
+--SELECT * FROM  Modules;
 
 /*
  * RolesModules Table
@@ -839,8 +839,15 @@ REFERENCES `Roles` (`Id`);
  * MD5 Passord Rsingh=10336C13F4F6828A0E2609FB8D8C1745
  */
 INSERT INTO Users(UserName, FirstName, LastName, Email, Password, RoleId, CreatedBy)
-VALUES('rsingh','Rohtash', 'Singh', 'rohtash.singh@devamatre.com', '10336C13F4F6828A0E2609FB8D8C1745', 1, 'Rohtash Singh');
+VALUES('rsingh','Rohtash', 'Singh', 'rslakra.work@gmail.com', 'Testing', 1, 'Rohtash Singh');
 
+
+/****************************************************************************
+ * Blog - create the physical database.
+ * 
+ * Some table have good schema but not required now and will be updated later 
+ * when required.
+ ****************************************************************************/
 
 /*
  * Contents Table
@@ -1107,7 +1114,7 @@ CREATE TABLE IF NOT EXISTS `Books` (
   	`Title` VARCHAR(255) NOT NULL,
   	`Description` VARCHAR(255) NULL,
   	`Author` VARCHAR(255) NOT NULL,
-  	`Languate` VARCHAR(255) NULL,
+  	`Language` VARCHAR(255) NULL,
   	`PublishedOn` TIMESTAMP NULL,
   	`Publisher` VARCHAR(255) NULL,
   	`PublishingRights` VARCHAR(255) NULL,

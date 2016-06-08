@@ -1,0 +1,47 @@
+<div class="bv-login-form">
+<div>
+		<div id="title" class="bv-login-title">
+				<span>{{ ui.label.challengeQuestion }}</span>
+		</div>
+		<div class="bv-top-block bv-top-challange-block">
+			<div class="bv-welcome-text">
+				<!-- SHOW ERROR/SUCCESS MESSAGES -->
+				<div id="messages" class="bv-login-error-text" ng-show="error.authError">{{error.authError}}</div>
+				<span>{{ questionText }}</span>
+			</div>
+		</div>
+		
+		<input
+			type="password"
+			name="challenge_answer"
+			class="bv-login-input-text"
+			autocomplete="off"
+			placeholder="{{ui.label.answer}}"
+			ng-model="user.answer"
+			bv-focus
+			bv-key-enter="loginSecurityQuestion()"
+			/>
+	<form name="form" novalidate autocomplete="off">		
+		<div class="bv-buttons-block">
+			<div class="bv-login-skip-challenge" ng-if="getShowSecondTierRememberMe() == 'true'">
+				<img src="resources/assets/images/checkbox-empty.png" id="skipChallenge" ng-click="skipChallengeQuestion()" ng-if="getShowSecondTierRememberMe()">
+				<span class="bv-login-skip-challenge-question-text">{{ ui.label.skipChallengeQuestions }}</span>
+			</div>
+			<div class="bv-buttons">
+				<!-- SUBMIT BUTTON -->
+				<div class="bv-login-div">
+				<button type="submit" class="bv-login-button"
+					ng-click="loginSecurityQuestion()" ng-disabled='form.$invalid'>{{ui.label.logIn}}</button>
+				</div>
+				<div class="bv-login-div">
+				<!-- CANCEL BUTTON -->
+				<button type="submit"
+					class="bv-challenge-question-button-cancel bv-login-button"
+					ng-click="cancelChallengeQuestion()" ng-disabled='form.$invalid'>{{ui.label.cancel}}</button>
+				</div>
+			</div>
+		</div>
+		
+	</form>
+</div>
+</div>

@@ -12,222 +12,298 @@ public class Address extends BusinessObject implements Serializable {
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = 1L;
 	
-	// /** id */
-	// private String id;
-	
-	/* address line1 */
-	private String line1;
-	
-	/* address line2 */
-	private String line2;
-	
-	/* city of the address */
+	/** unitDesignator */
+	private UnitDesignator unitDesignator;
+	/** street */
+	private String street;
+	/** province */
+	private String province;
+	/** city */
 	private City city;
+	/** state */
+	private State state;
+	/** zipCode */
+	private String zipCode;
+	/** country */
+	private Country country;
 	
-	/* the landline number of the address */
-	private Phone landline;
+	/** phoneNuber */
+	private String phoneNumber;
 	
-	/* the mobile number of the address */
-	private Phone mobile;
+	/** mobileNuber */
+	private String mobileNumber;
 	
-	/* the pager number of the address */
-	private String pager;
-	
-	/* the email of the address */
+	/** email */
 	private String email;
 	
-	// /**
-	// * Returns the id.
-	// *
-	// * @return
-	// */
-	// public String getId() {
-	// return id;
-	// }
-	//
-	// /**
-	// * The id to be set.
-	// *
-	// * @param id
-	// */
-	// public void setId(String id) {
-	// if(this.id != id) {
-	// String oldValue = this.id;
-	// this.id = id;
-	// firePropertyChange("id", oldValue, id);
-	// }
-	// }
+	/** webSite */
+	private String webSite;
 	
-	/**
-	 * @return the first line of address.
-	 */
-	public String getLine1() {
-		return line1;
+	public Address() {
 	}
 	
 	/**
-	 * The address line1 of the address to be set.
-	 * 
-	 * @param line1
-	 *            the first line to set.
+	 * Returns the unitDesignator.
+	 *
+	 * @return
 	 */
-	public void setLine1(String line1) {
-		if(this.line1 != line1) {
-			String oldLine1 = line1;
-			this.line1 = line1;
-			firePropertyChange("line1", oldLine1, line1);
+	public UnitDesignator getUnitDesignator() {
+		return unitDesignator;
+	}
+	
+	/**
+	 * The unitDesignator to be set.
+	 * 
+	 * @param unitDesignator
+	 */
+	public void setUnitDesignator(UnitDesignator unitDesignator) {
+		if(this.unitDesignator != unitDesignator) {
+			UnitDesignator oldValue = this.unitDesignator;
+			this.unitDesignator = unitDesignator;
+			firePropertyChange("unitDesignator", oldValue, unitDesignator);
 		}
 	}
 	
 	/**
-	 * @return the second line of the address.
+	 * Returns the street.
+	 *
+	 * @return
 	 */
-	public String getLine2() {
-		return line2;
+	public String getStreet() {
+		return street;
 	}
 	
 	/**
-	 * The address line2 of the address to be set.
+	 * The street to be set.
 	 * 
-	 * @param line2
-	 *            the second line to set.
+	 * @param street
 	 */
-	public void setLine2(String line2) {
-		if(this.line2 == line2) {
-			String oldLine2 = line2;
-			this.line2 = line2;
-			firePropertyChange("line2", oldLine2, line2);
+	public void setStreet(String street) {
+		if(this.street != street) {
+			String oldValue = this.street;
+			this.street = street;
+			firePropertyChange("street", oldValue, street);
 		}
 	}
 	
 	/**
-	 * @return the city of the address
+	 * Returns the province.
+	 *
+	 * @return
+	 */
+	public String getProvince() {
+		return province;
+	}
+	
+	/**
+	 * The province to be set.
+	 * 
+	 * @param province
+	 */
+	public void setProvince(String province) {
+		if(this.province != province) {
+			String oldValue = this.province;
+			this.province = province;
+			firePropertyChange("province", oldValue, province);
+		}
+	}
+	
+	/**
+	 * Returns the city.
+	 *
+	 * @return
 	 */
 	public City getCity() {
 		return city;
 	}
 	
 	/**
-	 * The city of the address to be set.
+	 * The city to be set.
 	 * 
 	 * @param city
-	 *            the city of the address to set.
 	 */
 	public void setCity(City city) {
-		if(this.city == city) {
-			City oldCity = this.city;
+		if(this.city != city) {
+			City oldValue = this.city;
 			this.city = city;
-			firePropertyChange("city", oldCity, city);
+			firePropertyChange("city", oldValue, city);
 		}
 	}
 	
 	/**
-	 * Returns the landline.
-	 * 
+	 * Returns the state.
+	 *
 	 * @return
 	 */
-	public Phone getLandline() {
-		return landline;
+	public State getState() {
+		return state;
 	}
 	
 	/**
-	 * The landline to be set.
+	 * The state to be set.
 	 * 
-	 * @param landline
+	 * @param state
 	 */
-	public void setLandline(Phone landline) {
-		if(this.landline != landline) {
-			Phone oldLandline = this.landline;
-			this.landline = landline;
-			firePropertyChange("landline", oldLandline, landline);
+	public void setState(State state) {
+		if(this.state != state) {
+			State oldValue = this.state;
+			this.state = state;
+			firePropertyChange("state", oldValue, state);
 		}
 	}
 	
 	/**
-	 * @return the mobile number of the address.
+	 * Returns the zipCode.
+	 *
+	 * @return
 	 */
-	public Phone getMobile() {
-		return mobile;
+	public String getZipCode() {
+		return zipCode;
 	}
 	
 	/**
-	 * The mobile number of the address to be set.
+	 * The zipCode to be set.
 	 * 
-	 * @param mobile
+	 * @param zipCode
 	 */
-	public void setMobile(Phone mobile) {
-		if(this.mobile == mobile) {
-			Phone oldMobile = this.mobile;
-			this.mobile = mobile;
-			firePropertyChange("mobile", oldMobile, mobile);
+	public void setZipCode(String zipCode) {
+		if(this.zipCode != zipCode) {
+			String oldValue = this.zipCode;
+			this.zipCode = zipCode;
+			firePropertyChange("zipCode", oldValue, zipCode);
 		}
 	}
 	
 	/**
-	 * @return the pager
+	 * Returns the country.
+	 *
+	 * @return
 	 */
-	public String getPager() {
-		return pager;
+	public Country getCountry() {
+		return country;
 	}
 	
 	/**
-	 * The pager number of the address to be set.
+	 * The country to be set.
 	 * 
-	 * @param pager
-	 *            the pager to set
+	 * @param country
 	 */
-	public void setPager(String pager) {
-		if(this.pager == pager) {
-			return;
+	public void setCountry(Country country) {
+		if(this.country != country) {
+			Country oldValue = this.country;
+			this.country = country;
+			firePropertyChange("country", oldValue, country);
 		}
-		
-		String oldPager = this.pager;
-		this.pager = pager;
-		firePropertyChange("pager", oldPager, pager);
 	}
 	
 	/**
-	 * @return the email
+	 * Returns the phoneNumber.
+	 *
+	 * @return
+	 */
+	public String getPhoneNumber() {
+		return phoneNumber;
+	}
+	
+	/**
+	 * The phoneNumber to be set.
+	 * 
+	 * @param phoneNumber
+	 */
+	public void setPhoneNumber(String phoneNumber) {
+		if(this.phoneNumber != phoneNumber) {
+			String oldValue = this.phoneNumber;
+			this.phoneNumber = phoneNumber;
+			firePropertyChange("phoneNumber", oldValue, phoneNumber);
+		}
+	}
+	
+	/**
+	 * Returns the mobileNumber.
+	 *
+	 * @return
+	 */
+	public String getMobileNumber() {
+		return mobileNumber;
+	}
+	
+	/**
+	 * The mobileNumber to be set.
+	 * 
+	 * @param mobileNumber
+	 */
+	public void setMobileNumber(String mobileNumber) {
+		if(this.mobileNumber != mobileNumber) {
+			String oldValue = this.mobileNumber;
+			this.mobileNumber = mobileNumber;
+			firePropertyChange("mobileNumber", oldValue, mobileNumber);
+		}
+	}
+	
+	/**
+	 * Returns the email.
+	 *
+	 * @return
 	 */
 	public String getEmail() {
 		return email;
 	}
 	
 	/**
-	 * The email of the address to be set.
+	 * The email to be set.
 	 * 
 	 * @param email
-	 *            the email to set
 	 */
 	public void setEmail(String email) {
-		if(this.email == email) {
-			return;
+		if(this.email != email) {
+			String oldValue = this.email;
+			this.email = email;
+			firePropertyChange("email", oldValue, email);
 		}
-		
-		String oldEmail = this.email;
-		this.email = email;
-		firePropertyChange("email", oldEmail, email);
 	}
 	
 	/**
-	 * Returns a string representation of this object. The string representation
-	 * consists of the properties in the order <address line1, line2, landline,
-	 * mobile, pager, email and city>, enclosed in angular brackets (
-	 * <tt>"<>"</tt>). Adjacent properties are separated by the characters
-	 * <tt>", "</tt> (comma and space).
+	 * Returns the webSite.
+	 *
+	 * @return
+	 */
+	public String getWebSite() {
+		return webSite;
+	}
+	
+	/**
+	 * The webSite to be set.
 	 * 
-	 * @return a string representation of this object.
+	 * @param webSite
+	 */
+	public void setWebSite(String webSite) {
+		if(this.webSite != webSite) {
+			String oldValue = this.webSite;
+			this.webSite = webSite;
+			firePropertyChange("webSite", oldValue, webSite);
+		}
+	}
+	
+	/**
+	 * Returns a string representation of this object.
+	 * 
+	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();
 		sBuilder.append("Address<id=").append(getId());
-		sBuilder.append(", line1:").append(getLine1());
-		sBuilder.append(", line2:").append(getLine2());
-		sBuilder.append(", landline:").append(getLandline());
-		sBuilder.append(", mobile:").append(getMobile());
-		sBuilder.append(", pager:").append(getPager());
-		sBuilder.append(", email:").append(getEmail());
-		sBuilder.append(", ").append(getCity());
+		sBuilder.append(", UnitDesignator:").append(getUnitDesignator());
+		sBuilder.append(", Street:").append(getStreet());
+		sBuilder.append(", Province:").append(getProvince());
+		sBuilder.append(", City:").append(getCity());
+		sBuilder.append(", State:").append(getState());
+		sBuilder.append(", ZipCode:").append(getZipCode());
+		sBuilder.append(", Country:").append(getCountry());
+		sBuilder.append(", PhoneNumber:").append(getPhoneNumber());
+		sBuilder.append(", MobileNumber:").append(getMobileNumber());
+		sBuilder.append(", Email:").append(getEmail());
+		sBuilder.append(", WebSite:").append(getWebSite());
 		sBuilder.append(">");
 		return sBuilder.toString();
 	}

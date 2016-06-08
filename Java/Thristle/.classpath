@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="TestCases"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.web.container"/>
 	<classpathentry kind="con" path="org.eclipse.jst.j2ee.internal.module.container"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
@@ -9,5 +10,8 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="lib" path="/Applications/JBoss/JBoss-EAP-6.4/lib/jboss-servlet-api_3.0_spec-1.0.2.Final-redhat-2.jar"/>
+	<classpathentry kind="lib" path="lib/dCore-v1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/dLogger-v1.0.1.jar"/>
+	<classpathentry kind="lib" path="lib/spring.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

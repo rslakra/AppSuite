@@ -1,0 +1,56 @@
+<div class="bv-login-form">
+<form novalidate autocomplete="off">
+	<div ng-switch on="form">
+		<div id="title" class="bv-login-title">
+				<span>{{ ui.label.forgotUserId }}</span>
+		</div>
+		<div name="form" ng-switch-default>
+			<div class="bv-top-block">
+				<div class="bv-welcome-text">
+					<!-- SHOW ERROR/SUCCESS MESSAGES -->
+					<div id="messages" class="bv-login-error-text" ng-show="error.authError">{{error.authError}}</div>
+					<span>{{ ui.label.confirm }}</span>
+				</div>
+			</div>
+			
+			<!-- Last Name -->
+			<input
+				type="text"
+				name="last_name"
+				class="bv-login-input-text"
+				autocomplete="off"
+				placeholder="{{ui.label.lastname}}"
+				ng-model="user.lastname"
+				autofocus>
+	
+			<!-- Email -->
+			<input
+				type="text"
+				name="email_code"
+				class="bv-login-input-text"
+				autocomplete="off"
+				placeholder="{{ui.label.email}}"
+				ng-model="user.email">
+	
+			<div class="bv-buttons-block">
+				<button type="submit" class="bv-login-button bv-float-right"
+					ng-click="submitForgotUserId()" ng-disabled='form.$invalid'>{{ui.label.cont}}</button>
+				<button type="submit"
+					class="bv-login-button-cancel bv-login-button bv-float-right"
+					ng-click="cancelLogin()" ng-disabled='form.$invalid'>{{ui.label.cancel}}</button>
+			</div>
+		</div>
+		<div class="bv-login-return-form" ng-switch-when="second">
+			<div class="bv-top-block bv-login-return">
+				<div class="bv-welcome-text">
+					<span>{{ ui.label.yourUserIdHasBeenEmailed }}</span>
+				</div>
+			</div>
+			
+			<div class="bv-buttons-block-center bv-buttons-block">
+				<button class="bv-return-button bv-float-center" ng-click="cancelLogin()">{{ ui.label.returnLogin }}</button>
+			</div>
+		</div>
+	</div>
+</form>
+</div>

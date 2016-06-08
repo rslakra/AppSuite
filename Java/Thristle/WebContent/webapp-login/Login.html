@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login Page</title>
+</head>
+<body>
+	<!-- http://localhost:8080/webAppLogin/login.html -->
+	<form name="frmLogin" autocomplete="off" action="login" method="post">
+		<div id="divLoginForm" class="login-form">
+			<div id="divLogo">
+				<img class="login-logo" src="images/logo.png" alt="Thristle">
+			</div>
+			<div class="divMessage">
+				<!-- Show Success/Error Messages, if any -->
+				<div id="message" class="login-message"></div>
+			</div>
+			<!-- UserName -->
+			<input type="text" name="txtUserName" class="login-input-text"
+				autocomplete="off" placeholder="{{lblUserName}}" />
+			<!-- Password -->
+			<input type="password" name="txtPassword" class="login-input-text"
+				autocomplete="off" placeholder="{{lblPassword}}" onClick="login()" />
+			<div class="buttons-block">
+				<span class="login-rememberme"> <img ng-if="!checked"
+					src="images/checkbox-empty.png" ng-click="rememberMe()" /> <img
+					ng-if="checked" src="images/checkbox-marked.png"
+					ng-click="rememberMe()" /> <span class="login-rememberme-text">{{ui.label.rememberMe}}</span>
+				</span>
+				<!-- Submit Button -->
+				<div class="divLogin">
+					<button type="submit" class="login-button" onClick="login()"
+						feedback-type="2">{{lblLogin}}</button>
+				</div>
+			</div>
+		</div>
+	</form>
+
+	<!-- Forgot UserID or Password -->
+	<span class="bv-forgot">
+		<div class="forgot-text"
+			ng-class="{ 'bv-forgot-text-offline' : !showRememberMeForFirstTier }">
+			{{ui.label.forgot}} : <a href
+				ui-sref="{{ MobileUtil.isMobileClient() ? 'login.auth' : 'login.forgotuser' }}"
+				ng-tap="mobileClick('forgotuser')" class="bv-login-bold-text">{{ui.label.username}}</a>
+			{{ui.label.or}} <a href
+				ui-sref="{{ MobileUtil.isMobileClient() ? 'login.auth' : 'login.forgotpassword' }}"
+				ng-tap="mobileClick('forgotpassword')" class="bv-login-bold-text">{{ui.label.password}}</a>
+		</div>
+	</span>
+	</div>
+	<!-- ng-style="{ 'background-color' : currentState.value == item.state ? SVGColors.modulesIcons : ''}" -->
+	<!-- <div ng-if="showSystemMsg" class="bv-sys-msg-div-main-div" style="{{ showComment == true ? 'opacity:1' : null}}"> -->
+	<div ng-if="showSystemMsg" class="bv-sys-msg-div-main-div"
+		ng-style="{ 'opacity' : announcementsHelper.showComment == true ? 1 : 0}">
+		<div class="bv-sys-msg-div-child1">
+			<!-- <div class="bv-sys-msg-bubble1 bv-sys-msg-div-child1-div" style="{{showMsgDiv1 == true ? 'opacity:1':null}}"></div> -->
+			<div class="bv-sys-msg-bubble1 bv-sys-msg-div-child1-div"
+				ng-style="{'opacity' : announcementsHelper.showMsgDiv1 == true ? 1 : 0 }"></div>
+		</div>
+		<div class="bv-sys-msg-div-child2">
+			<!-- <div class="bv-sys-msg-div-child2-div" style="{{showMsgDiv2 == true ? 'opacity:1':null}}"></div> -->
+			<div class="bv-sys-msg-div-child2-div"
+				ng-style="{'opacity' : announcementsHelper.showMsgDiv2 == true ? 1 : 0}"></div>
+		</div>
+		<!-- <div class="bv-sys-msg-div-child3" style="{{showMsgDiv3_1 == true ? 'opacity:0.5':null}};{{showMsgDiv3_2 == true ? 'opacity:1':null}}"> -->
+		<div class="bv-sys-msg-div-child3"
+			ng-style="{'opacity' : announcementsHelper.showMsgDiv3_2 == true ? 1 : 0}">
+			<div class="bv-height-100 bv-sys-msg-div-child3-div">
+				<ul class="bv-sys-msg-div-child3-ul">
+					<li ng-repeat="MSG in SYS_MSGS">
+						<div class="bv-sys-msg-container-div">
+							<div class="bv-width-100 bv-sys-msg-header-div">
+								<span class="bv-sys-msg-header">{{MSG.localizations.null.title}}<span>
+							</div>
+							<div class="bv-sys-msg-content-div" style="">
+								<span class="bv-sys-msg-content">
+									{{MSG.localizations.null.message}} </span>
+							</div>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

@@ -13,9 +13,6 @@ public class Country extends BusinessObject implements Serializable {
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = 1L;
 	
-	// /** id */
-	// private String id;
-	
 	/* the name of the country */
 	private String name;
 	
@@ -27,28 +24,6 @@ public class Country extends BusinessObject implements Serializable {
 	
 	public Country() {
 	}
-	
-	// /**
-	// * Returns the id.
-	// *
-	// * @return
-	// */
-	// public String getId() {
-	// return id;
-	// }
-	//
-	// /**
-	// * The id to be set.
-	// *
-	// * @param id
-	// */
-	// public void setId(String id) {
-	// if(this.id != id) {
-	// String oldId = this.id;
-	// this.id = id;
-	// firePropertyChange("id", oldId, id);
-	// }
-	// }
 	
 	/**
 	 * @return the name of the country.
@@ -113,12 +88,8 @@ public class Country extends BusinessObject implements Serializable {
 	/**
 	 * Returns a string representation of this object.
 	 * 
-	 * The string representation consists of the properties in the order
-	 * <country name, country code, continent>, enclosed in angular brackets
-	 * (<tt>"<>"</tt>). Adjacent properties are separated by the characters
-	 * <tt>", "</tt> (comma and space).
-	 * 
 	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();

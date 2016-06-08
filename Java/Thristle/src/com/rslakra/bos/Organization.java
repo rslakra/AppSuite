@@ -2,6 +2,12 @@ package com.rslakra.bos;
 
 import java.io.Serializable;
 
+/**
+ * The <code>Organization</code> class defines the Organization structure.
+ * 
+ * @author Rohtash Singh
+ * @date Aug 2, 2010 7:35:11 PM
+ */
 public class Organization extends BusinessObject implements Serializable {
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = 1L;
@@ -208,6 +214,7 @@ public class Organization extends BusinessObject implements Serializable {
 	 * Returns a string representation of this object.
 	 * 
 	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();

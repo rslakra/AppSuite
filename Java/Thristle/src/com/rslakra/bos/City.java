@@ -3,10 +3,7 @@ package com.rslakra.bos;
 import java.io.Serializable;
 
 /**
- * City.java
- * 
- * The <code>City</code> TODO Define Purpose here
- * 
+ * The <code>City</code>
  * 
  * @author Rohtash Singh (rohtash.singh@devmatre.com)
  * @date Aug 15, 2010 1:22:35 PM
@@ -134,13 +131,10 @@ public class City extends BusinessObject implements Serializable {
 	}
 	
 	/**
-	 * Returns a string representation of this object. The string representation
-	 * consists of the properties in the order <city name, city code, zip/pin
-	 * code, state>, enclosed in angular brackets (<tt>"<>"</tt>). Adjacent
-	 * properties are separated by the characters <tt>", "</tt> (comma and
-	 * space).
+	 * Returns a string representation of this object.
 	 * 
-	 * @return a string representation of this object.
+	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();

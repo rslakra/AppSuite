@@ -2,6 +2,7 @@
     <wb-module deploy-name="Thristle">
         <wb-resource deploy-path="/" source-path="/WebContent" tag="defaultRootSource"/>
         <wb-resource deploy-path="/WEB-INF/classes" source-path="/src"/>
+        <wb-resource deploy-path="/WEB-INF/classes" source-path="/TestCases"/>
         <property name="context-root" value="Thristle"/>
         <property name="java-output-path" value="/Thristle/build/classes"/>
     </wb-module>

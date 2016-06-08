@@ -207,11 +207,10 @@ public abstract class BusinessObject implements Serializable {
 	}
 	
 	/**
-	 * Overridden method of java.lang.Object and returns a string, which
-	 * describes this object. Its overridden with hashCode so that the printing
-	 * of PersistenceCapable objects and debugging of application is made easy.
+	 * Returns a string representation of this object.
 	 * 
-	 * @see java.lang.Object#toString()
+	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		return super.toString();

@@ -3,11 +3,7 @@ package com.rslakra.bos;
 import java.io.Serializable;
 
 /**
- * State.java
- * 
- * The <code>State</code> class defines the state properties. TODO Define
- * Purpose here
- * 
+ * The <code>State</code> class defines the state properties.
  * 
  * @author Rohtash Singh (rohtash.singh@devmatre.com)
  * @date Aug 2, 2010 7:35:11 PM
@@ -112,13 +108,10 @@ public class State extends BusinessObject implements Serializable {
 	}
 	
 	/**
-	 * Returns a string representation of this object. The string representation
-	 * consists of the properties in the order <state name, state code,
-	 * country>, enclosed in angular brackets (<tt>"<>"</tt>). Adjacent
-	 * properties are separated by the characters <tt>", "</tt> (comma and
-	 * space).
+	 * Returns a string representation of this object.
 	 * 
-	 * @return a string representation of this object.
+	 * @return
+	 * @see com.rslakra.bos.BusinessObject#toString()
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();

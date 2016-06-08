@@ -3,34 +3,33 @@ package com.rslakra.bos;
 import java.io.Serializable;
 
 /**
- * The <code>Country</code> TODO Define Purpose here
+ * The <code>Role</code> class defines the Roles.
  * 
  * @author Rohtash Singh (rohtash.singh@devmatre.com)
- * @date Aug 2, 2010 7:45:49 PM
+ * @date Aug 2, 2010 7:35:11 PM
  */
-public class Continent extends BusinessObject implements Serializable {
+public class Role extends BusinessObject implements Serializable {
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = 1L;
 	
 	/** name */
-	private String name;
-	
-	/** area */
-	private String area;
-	
-	public Continent() {
-	}
+	public String name;
+	/** description */
+	public String description;
 	
 	/**
-	 * @return the name of the country.
+	 * Return the name of role.
+	 * 
+	 * @return String
 	 */
 	public String getName() {
 		return name;
 	}
 	
 	/**
+	 * The name to be set.
+	 * 
 	 * @param name
-	 *            the country name to set.
 	 */
 	public void setName(String name) {
 		if(this.name != name) {
@@ -41,20 +40,24 @@ public class Continent extends BusinessObject implements Serializable {
 	}
 	
 	/**
-	 * @return
+	 * Return the description of role.
+	 * 
+	 * @return String
 	 */
-	public String getArea() {
-		return area;
+	public String getDescription() {
+		return description;
 	}
 	
 	/**
-	 * @param area
+	 * The description to be set.
+	 * 
+	 * @param description
 	 */
-	public void setArea(String area) {
-		if(this.area != area) {
-			String oldValue = this.area;
-			this.area = area;
-			firePropertyChange("area", oldValue, area);
+	public void setDescription(String description) {
+		if(this.description != description) {
+			String oldValue = this.description;
+			this.description = description;
+			firePropertyChange("description", oldValue, description);
 		}
 	}
 	
@@ -66,10 +69,11 @@ public class Continent extends BusinessObject implements Serializable {
 	 */
 	public String toString() {
 		StringBuilder sBuilder = new StringBuilder();
-		sBuilder.append("Continent<id=").append(getId());
+		sBuilder.append("Role<id=").append(getId());
 		sBuilder.append(", Name:").append(getName());
-		sBuilder.append(", Area:").append(getArea());
+		sBuilder.append(", Description:").append(getDescription());
 		sBuilder.append(">");
+		
 		return sBuilder.toString();
 	}
 	
