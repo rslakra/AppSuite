@@ -11,29 +11,26 @@ hr {
 }
 
 div.container {
-	width: 960px;
-	height: 610px;
+	width: 800px;
+	height: 600px;
 	margin: 50px auto;
 	font-family: 'Droid Serif', serif;
 	position: relative;
 }
 
 div.main {
-	width: 320px;
 	margin-top: 80px;
-	float: left;
 	padding: 10px 55px 40px;
-/*	background-color: rgba(187, 255, 184, 0.65);*/
 	background-color: #ffffff;
 	border: 15px solid white;
 	box-shadow: 0 0 10px;
-	border-radius: 2px;
-	font-size: 13px;
+	border-radius: 10px;
+	font-size: 16px;
 }
 
 input[type=text], [type=password] {
 	width: 97.7%;
-	height: 34px;
+	height: 35px;
 	padding-left: 5px;
 	margin-bottom: 20px;
 	margin-top: 8px;
