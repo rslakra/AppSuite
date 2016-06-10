@@ -1,62 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Login Page</title>
+<title>Login Form</title>
+<meta name="robots" content="noindex, nofollow">
+<!-- Include CSS File Here -->
+<link rel="stylesheet" href="css/style.css" />
+<!-- Include CSS File Here -->
+<script	src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 </head>
 <body>
-	<div style="text-align: center">
-		<!-- http://localhost:8080/webAppLogin/login.html -->
-		<form name="frmLogin" autocomplete="off" action="login" method="post">
-			<div id="divLoginForm" class="login-form">
-				<div id="divLogo">
-					<img class="login-logo" src="images/logo.png" width="200"
-						alt="Thristle">
-				</div>
-				<div class="forms-block">
-					<!-- Show Success/Error Messages, if any -->
-					<div id="message" class="login-message"></div>
-				</div>
-				<div class="forms-block">
-					<!-- UserName -->
-					<input type="text" name="txtUserName" class="login-input-text"
-						autocomplete="off" placeholder="Enter User Name" />
-				</div>
-				<div class="forms-block">
-					<!-- Password -->
-					<input type="password" name="txtPassword" class="login-input-text"
-						autocomplete="off" placeholder="Enter Password" onClick="login()" />
-				</div>
-				<div class="buttons-block">
-					<input type="checkbox" name="chkRememberMe" value="Remember Me" />Remember
-					Me<br>
-					<!-- Submit Button -->
-					<div class="divLogin">
-						<button type="submit" class="login-button" onClick="login()">Login</button>
-					</div>
-				</div>
-			</div>
-		</form>
-
-		<!-- Forgot UserID or Password -->
-		<form name="frmLogin" autocomplete="off"
-			action="forgotUserIdOrPassword" method="post">
-			<div id="divForgots" class="login-form">
-				Forgot <b><a href="">User Id</a></b> or <b><a href="">Password</a></b>
-			</div>
-		</form>
-
-		<!-- Usage Policy -->
-		<form name="frmUsagePolicy" autocomplete="off" action="usagePolicy"
-			method="post">
-			<div id="divForgots" class="login-form">
-				Click here to view <b><a href="">Usage Policy</a></b>
-			</div>
-		</form>
-
-		<div id="divForgots" class="login-form">Contact Us |
-			Version:1.0.0</div>
+	<div class="container">
+		<div class="main">
+			<form class="form" method="post" action="#">
+				<h2>Login</h2>
+				<label>Email:</label>
+				<input type="text" name="demail" id="email" /><br>
+				<label>Password:</label>
+				<input type="password" name="password" id="password"><br>
+				<input type="button" name="login" id="login" value="Login">
+			</form>
+		</div>
 	</div>
-
 </body>
 </html>
