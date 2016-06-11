@@ -7,12 +7,12 @@ $(document).ready(function() {
 			$('input[type="text"]').css("border","2px solid red");
 			$('input[type="text"]').css("box-shadow","0 0 3px red");
 			alert("Please provide username!");
-		}else if( userName =='' || password =='') {
+		}else if(password =='') {
 				$('input[type="password"]').css("border","2px solid red");
 				$('input[type="password"]').css("box-shadow","0 0 3px red");
 				alert("Please provide password!");
 		}else {
-			$.post('login',{ userName: userName, password:password},
+			$.post('/webAppLogin/login',{ userName: userName, password:password},
 			function(data) {
 				if(data=='Invalid Username.......') {
 					$('input[type="text"]').css({"border":"2px solid red","box-shadow":"0 0 3px red"});

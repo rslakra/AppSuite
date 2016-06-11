@@ -36,9 +36,9 @@ public class LoginServlet extends BaseServlet {
 			Cookie cookie = new Cookie(Keys.USER_NAME, userName);
 			cookie.setMaxAge(30 * 60);
 			servletResponse.addCookie(cookie);
-			servletResponse.sendRedirect("LoginSuccess.jsp");
+			servletResponse.sendRedirect("/thristle/LoginSuccess.jsp");
 		} else {
-			RequestDispatcher requestDispatcher = getRequestDispatcher("/Login.html");
+			RequestDispatcher requestDispatcher = getRequestDispatcher("/thristle/Login.html");
 			PrintWriter out = servletResponse.getWriter();
 			out.println("<font color=red>Either user name or password is wrong.</font>");
 			requestDispatcher.include(servletRequest, servletResponse);
