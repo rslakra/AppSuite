@@ -10,19 +10,23 @@
 	<%
 		//allow access only if session exists
 		String user = null;
-		if(session.getAttribute("user") == null) {
+		if(session.getAttribute("userName") == null) {
 			response.sendRedirect("Login.html");
-		} else
-			user = (String) session.getAttribute("user");
+		} else {
+			user = (String) session.getAttribute("userName");
+		}
+		
 		String userName = null;
 		String sessionID = null;
 		Cookie[] cookies = request.getCookies();
 		if(cookies != null) {
 			for(Cookie cookie : cookies) {
-				if(cookie.getName().equals("user"))
+				if(cookie.getName().equals("userName")) {
 					userName = cookie.getValue();
-				if(cookie.getName().equals("JSESSIONID"))
+				}
+				if(cookie.getName().equals("JSESSIONID")) {
 					sessionID = cookie.getValue();
+				}
 			}
 		}
 	%>

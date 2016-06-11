@@ -8,7 +8,7 @@
 		<welcome-file>index.html</welcome-file>
 	</welcome-file-list>
 
-	<!-- To save as <SERVER_HOME>\webapps\helloservlet\WEB-INF\web.xml -->
+	<!-- Call as <SERVER_HOME>/thristle/helloWorld -->
 	<servlet>
 		<servlet-name>HelloWorldServlet</servlet-name>
 		<servlet-class>com.rslakra.servers.thristle.HelloWorldServlet</servlet-class>

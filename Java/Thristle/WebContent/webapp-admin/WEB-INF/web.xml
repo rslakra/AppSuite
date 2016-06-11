@@ -11,7 +11,7 @@
 			<welcome-file>default.htm</welcome-file> <welcome-file>default.jsp</welcome-file> -->
 	</welcome-file-list>
 
-	<!-- To save as <SERVER_HOME>\webapps\helloservlet\WEB-INF\web.xml -->
+	<!-- Call as <SERVER_HOME>/webAppAdmin/admin -->
 	<servlet>
 		<servlet-name>AdminServlet</servlet-name>
 		<servlet-class>com.rslakra.servers.thristle.AdminServlet</servlet-class>
