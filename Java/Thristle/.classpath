@@ -13,5 +13,6 @@
 	<classpathentry kind="lib" path="lib/dCore-v1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/dLogger-v1.0.1.jar"/>
 	<classpathentry kind="lib" path="lib/spring.jar"/>
+	<classpathentry kind="lib" path="lib/gson-2.1.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>
