@@ -8,22 +8,32 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.devmatre.logger.LogManager;
+import com.devmatre.logger.Logger;
 import com.rslakra.servers.Constants.Keys;
 
 /**
  * Servlet implementation class LogoutServlet
  */
 public class LogoutServlet extends BaseServlet {
+	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;
 	
+	/** logger */
+	private static final Logger logger = LogManager.getLogger(LogoutServlet.class);
+	
 	/**
-	 * 
+	 * @param servletRequest
+	 * @param servletResponse
+	 * @throws ServletException
+	 * @throws IOException
 	 * @see com.rslakra.servers.thristle.BaseServlet#processRequest(javax.servlet.http.HttpServletRequest,
 	 *      javax.servlet.http.HttpServletResponse)
 	 */
 	protected void processRequest(HttpServletRequest servletRequest, HttpServletResponse servletResponse) throws ServletException, IOException {
+		logger.debug("+processRequest(" + servletRequest + ", " + servletResponse + ")");
 		super.processRequest(servletRequest, servletResponse);
-		// setDefaultContentType(servletResponse);
+		
 		Cookie[] cookies = servletRequest.getCookies();
 		if(cookies != null) {
 			for(Cookie cookie : cookies) {

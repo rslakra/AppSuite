@@ -8,6 +8,10 @@ public interface Constants {
 		String PRAGMA = "Pragma";
 		String EXPIRES = "Expires";
 		
+		/* Service Request Parameters. */
+		String SERVICE_NAME = "serviceName";
+		String METHOD_NAME = "methodName";
+		
 		String USER_NAME = "userName";
 		String PASSWORD = "password";
 		
