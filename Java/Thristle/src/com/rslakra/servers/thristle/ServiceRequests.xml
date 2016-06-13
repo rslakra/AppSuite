@@ -1,0 +1,9 @@
+<?xml version = "1.0" encoding = "UTF-8" ?>
+<ServiceRequests>
+	<ServiceRequest requestHandler="LoginServlet">
+		<ServiceName></ServiceName>
+		<MethodName></MethodName>
+		<Params></Params>
+		<ResponseType></ResponseType>
+	</ServiceRequest>
+</ServiceRequests>

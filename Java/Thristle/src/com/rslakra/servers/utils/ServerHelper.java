@@ -26,6 +26,23 @@ public class ServerHelper {
 	}
 	
 	/**
+	 * 
+	 * @param servletResponse
+	 * @param paramStatus
+	 * @throws IOException
+	 */
+	public static void setDefaultHeaders(HttpServletResponse servletResponse, int paramStatus) throws IOException {
+		// HTTP 1.1.
+		servletResponse.setHeader(Keys.CACHE_CONTROL, Values.CACHE_CONTROL);
+		// HTTP 1.0.
+		servletResponse.setHeader(Keys.PRAGMA, Values.NO_CACHE);
+		// Proxies.
+		servletResponse.setDateHeader(Keys.EXPIRES, 0);
+		// Status
+		servletResponse.setStatus(paramStatus);
+	}
+	
+	/**
 	 * Sends the specified <code>dataBytes</code> to the
 	 * <code>servletResponse</code>.
 	 * 
@@ -35,11 +52,7 @@ public class ServerHelper {
 	 * @throws IOException
 	 */
 	public static void sendResponse(HttpServletResponse servletResponse, byte[] dataBytes, String contentType) throws IOException {
-		servletResponse.setStatus(HttpServletResponse.SC_OK);
-		servletResponse.setDateHeader(Keys.EXPIRES, -1);
-		servletResponse.setHeader(Keys.PRAGMA, Values.NO_CACHE);
-		servletResponse.setHeader(Keys.CACHE_CONTROL, Values.CACHE_CONTROL);
-		
+		setDefaultHeaders(servletResponse, HttpServletResponse.SC_OK);
 		if(!StringUtil.isNullOrEmpty(contentType)) {
 			servletResponse.setContentType(contentType);
 		}
