@@ -42,7 +42,7 @@
 	<property name="ejbJARFile" value="${ant.project.name}-ejb.jar" />
 	<property name="ear.dir" value="${ant.project.name}.ear" />
 	<property name="ear.dir" value="${ant.project.name}.ear" />
-	<property name="htmlClientWARdir" value="${htmlClient}.war" />
+	<property name="htmlClientWARdir" value="${ant.project.name}${htmlClient}.war" />
 	<property name="ear.build.dir" value="${build.dir}/${ear.dir}" />
 	<property name="buildVersion.file" value="${build.dir}/build.version.properties" />
 
@@ -141,7 +141,13 @@
 			<fileset dir="${conf.dir}" includes="META-INF/MANIFEST.MF" />
 		</copy>
 		
-		<copy file="${dist.dir}/${jar.file}" todir="${build.dir}/${htmlClientWARdir}/WEB-INF/lib" preservelastmodified="yes" />
+		<!--copy file="${dist.dir}/${jar.file}" todir="${build.dir}/${htmlClientWARdir}/WEB-INF/lib" preservelastmodified="yes" /-->
+		<!-- Copy libraries under build/HtmlClient.war//WEB-INF/lib folder. -->
+		<copy todir="${build.dir}/${htmlClientWARdir}/WEB-INF/lib" preservelastmodified="yes">
+			<fileset dir="${dist.dir}" includes="**/*.jar" />
+			<fileset dir="lib" includes="**/*.jar" />
+		</copy>
+		
 				
 		<!-- Copy HtmlClient .war on server. -->
 		<copy todir="${jboss.deployments.dir}/${htmlClientWARdir}" preservelastmodified="yes">
