@@ -2,6 +2,9 @@ package com.rslakra.servers;
 
 public interface Constants {
 	
+	String EMPTY_STRING = " ";
+	String EMPTY_ARRAY = "[]";
+	
 	interface Keys {
 		/* Headers */
 		String CACHE_CONTROL = "Cache-Control";
