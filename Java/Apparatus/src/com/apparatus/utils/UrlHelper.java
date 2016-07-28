@@ -57,7 +57,8 @@ public class UrlHelper {
 	public static final String USE_EXISTING_FILE = "Use-Existing-File";
 	
 	/** URL_PATTERN */
-	public static final String URL_REGEX = "^(http|https?|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]";
+	public static final String URL_REGEX = "^(http|https|ftp|file)://[-a-zA-Z0-9+&@#/%?=~_|!:,.;]*[-a-zA-Z0-9+&@#/%=~_|]/i";
+	public static final String REGEX_URL_SCHEME = "\\(?\\b((https?|HTTPS?|FTP|ftp|file|FILE])://|www[.])[-A-Za-z0-9+&amp;@#/%?=~_()|!:,.;]*[-A-Za-z0-9+&amp;@#/%=~_()|]";
 	
 	/** CHARLES_PROXY - Enables CHARLES as PROXY. */
 	public static HttpHost CHARLES_PROXY = new HttpHost(Constants.LOCAL_HOST, 8888);
@@ -458,19 +459,31 @@ public class UrlHelper {
 	 * @return
 	 */
 	public static boolean isValidURL(String urlString) {
-		return (!StringHelper.isNullOrEmpty(urlString) && urlString.matches(URL_REGEX));
+		return (!StringHelper.isNullOrEmpty(urlString) && urlString.matches(REGEX_URL_SCHEME));
 	}
 	
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		String urlString = "https://mbp-rohtash";
-		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
+		urlString = "https://mbp-rohtash/";
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
+		urlString = "http://mbp-rohtash/";
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
 		urlString = "www.mbp-rohtash.com";
-		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
 		urlString = "ftp://mbp-rohtash";
-		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
 		urlString = "mbp-rohtash.com";
-		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
 		urlString = "mbp-rohtash";
-		System.out.println("Valid URL:" + UrlHelper.isValidURL(urlString));
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
+		urlString = "mbp-rohtash";
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
+		urlString = "HTTPS://mbp-rohtash/";
+		System.out.println(urlString + " is valid:" + UrlHelper.isValidURL(urlString));
 	}
 }
