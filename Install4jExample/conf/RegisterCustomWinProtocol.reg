@@ -1,0 +1,12 @@
+REGEDIT4
+
+[HKEY_CLASSES_ROOT\rsingh]
+@="URL:rsingh Protocol"
+"URL Protocol"=""
+
+[HKEY_CLASSES_ROOT\rsingh\shell]
+
+[HKEY_CLASSES_ROOT\rsingh\shell\open]
+
+[HKEY_CLASSES_ROOT\rsingh\shell\open\command]
+@="\"C:\\Program Files\\Application\\rsingh.exe\" \"%1\"" 

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Pin Setup</title>
+</head>
+<body>
+	<h2>Pin Setup</h2>
+	<form name="frmPinSetup" id="frmPinSetup" method="post"
+		action="DesktopServlet">
+		<h4>Enter/Select you pin:</h4>
+		<select name="pins" id="pins" onchange="setPin(this);">
+		</select> &nbsp; <input id="txtUserPin" name="txtUserPin"
+			placeholder="User Pin" value="" type="password" />&nbsp; <br /> <input
+			value="Set Pin" type="submit" />
+	</form>
+	<script>
+		var offLinePins = {
+	        "Pins" : []
+        }
+        var optPins = document.getElementById("pins");
+        for(i = 0; i < offLinePins.Pins.length; i++)
+        {
+	        option = document.createElement("option");
+	        option.value = offLinePins.Pins[i].pin;
+	        option.innerHTML = offLinePins.Pins[i].email;
+	        optPins.appendChild(option);
+        }
+        function setPin(opt)
+        {
+	        document.getElementById('txtUserPin').value = opt.options[opt.selectedIndex].value;
+        }
+	</script>
+</body>
+</html>

@@ -1,0 +1,111 @@
+<?xml version = "1.0" encoding = "UTF-8"?>
+<project name="MyJava" default="all" basedir=".">
+	<property name="build.dir" value="${basedir}/build" />
+	<!-- 
+		Set environment variable JBOSS_HOME. If using Eclipse, do this in
+		Run->External Tools->Open External Tools Dialog,
+		on the "Environment" tab.
+	  -->
+	<echo message="Building [${ant.project.name}] under [${build.dir}] folder ..." />
+	
+	<property file="build.properties" prefix="PROPFILE" />
+	<property name="src.dir" value="${basedir}/src" />
+	<property name="lib.dir" value="${basedir}/lib" />
+	<property name="dest.dir" value="${basedir}/dest" />
+	<property name="jar.file" value="${dest.dir}/${ant.project.name}.jar" />
+	<property name="classes.dir" value="${build.dir}/classes" />
+	<property name="debug" value="on" />
+	<property name="includeantruntime" value="false" />
+	<property name="jvm-target" value="1.6" />
+		
+	<path id="project.classpath">
+		<path refid="local.lib.classpath" />
+		<pathelement location="." />
+		<pathelement location="${build.dir}" />
+	</path>
+
+	<path id="local.lib.classpath">
+		<fileset dir="${lib.dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+
+	<!-- create a property containing all .jar files, prefix lib/, and seperated 
+		with a space -->
+	<pathconvert property="lib.classpath" pathsep=" ">
+		<mapper>
+			<chainedmapper>
+				<!-- remove absolute path -->
+				<flattenmapper />
+				<globmapper from="*" to="lib/*" />
+			</chainedmapper>
+		</mapper>
+		<path>
+			<fileset dir="${lib.dir}" includes="**/*.jar" />
+		</path>
+	</pathconvert>
+	
+	<tstamp>
+		<format property="TODAY" pattern="yyyyMMdd.HHmmss" />
+	</tstamp>
+	
+	<!-- Main Task. -->
+	<target name="all" depends="init, compile.classes, make.jar" />
+	
+	<target name="clean">
+		<delete dir="${build.dir}" />
+		<delete dir="${dest.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<mkdir dir="${build.dir}" />
+		<mkdir dir="${classes.dir}" />
+	</target>
+	
+	<target name="compile.classes" depends="init">
+		<echo>compile debug : ${debug}</echo>
+		<javac deprecation="on"
+		       debug="${debug}"
+		       debuglevel="lines,vars,source"
+		       srcdir="${src.dir}"
+		       destdir="${classes.dir}"
+		       includes="**/*.java"
+		       source="${jvm-target}"
+		       target="${jvm-target}"
+		       includeantruntime="${includeantruntime}">
+			<classpath refid="project.classpath" />
+		</javac>
+	</target>
+
+	<target name="make.jar">
+	   <copy todir="${dest.dir}" overwrite="true">
+		    <fileset dir="${basedir}" includes="lib/**"/>
+		    <fileset dir="${basedir}" includes="log4j.xml"/>
+		</copy>
+		<copy file="${basedir}/log4j.xml" todir="${classes.dir}" overwrite="true" />
+		<jar jarfile="${jar.file}">
+			<fileset dir="${dest.dir}" includes="**"/>
+			<fileset dir="${classes.dir}" includes="**"/>
+			<manifest>
+				<attribute name="Built-By" value="Rohtash Singh" />
+				<section name="Vendor Details">
+					<attribute name="Implementation-Title" value="${ant.project.name}" />
+					<attribute name="Implementation-Vendor" value="${ant.project.name}" />
+					<attribute name="Implementation-Vendor-Id" value="${ant.project.name}" />
+					<attribute name="Implementation-Version" value="v1.0.0.${TODAY}" />
+					<attribute name="Specification-Title" value="${ant.project.name}" />
+					<attribute name="Specification-Vendor" value="${ant.project.name}" />
+					<attribute name="Specification-Version" value="v1.0.0.${TODAY}" />
+				</section>
+				<!-- set magically generated library path -->
+				<attribute name="Class-Path" value="${lib.classpath}" />
+				<!-- defines whether this JAR file is sealed or not 
+				<attribute name="Sealed" value="true" />-->
+				<!-- defines the relative path of the main application class which the 
+					launcher will load at startup time -->
+				<attribute name="Main-Class" value="com.rslakra.jni.HelloWorld" />
+			</manifest>
+		</jar>
+	</target>
+
+</project>

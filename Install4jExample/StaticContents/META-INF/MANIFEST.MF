@@ -1,0 +1,19 @@
+Manifest-Version: 1.0
+Ant-Version: Apache Ant 1.8.4
+Created-By: 1.6.0_65-b14-462-11M4609 (Apple Inc.)
+Built-By: Rohtash Singh
+Class-Path: lib/BVLogger.jar lib/bcmail-jdk15-146.jar lib/bcprov-jdk15
+ -146.jar lib/commons-logging-1.0.4.jar lib/derby.jar lib/gson-2.1.jar
+  lib/httpclient-4.2.1.jar lib/httpclient-cache-4.2.1.jar lib/httpcore
+ -4.2.1.jar lib/ocutil-2.4.2.jar lib/plugin.jar lib/servlet-2-3.jar li
+ b/servlet.jar lib/war.jar lib/webserver.jar
+
+Name: Vendor Details
+Implementation-Title: ShareXDesktop
+Implementation-Vendor: BoardVantage Inc.
+Implementation-Vendor-Id: BoardVantage Inc.
+Implementation-Version: v1.0.0.May 29 2014
+Specification-Title: ShareXDesktop
+Specification-Vendor: BoardVantage Inc.
+Specification-Version: v1.0.0.May 29 2014
+
