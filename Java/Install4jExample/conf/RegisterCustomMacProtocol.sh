@@ -1,1 +1,0 @@
-http://kb.mozillazine.org/Register_protocol
