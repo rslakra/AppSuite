@@ -16,7 +16,7 @@ import java.util.SortedMap;
 import java.util.TreeMap;
 
 /**
- * @author Rohtash Singh (rsingh@boardvantage.com)
+ * @author Rohtash Singh (rohtash.singh@gmail.com)
  * @version 1.0.0
  * @since Apr 29, 2015 3:12:38 PM
  */

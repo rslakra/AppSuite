@@ -14,7 +14,7 @@ import com.install4j.api.launcher.StartupNotification;
  * For multiple files, files are surrounded by double-quotes and separated by
  * spaces.
  * 
- * @author Rohtash Singh (rsingh@boardvantage.com)
+ * @author Rohtash Singh (rohtash.singh@gmail.com)
  * @version 1.0
  * @reference: http://resources.ej-technologies.com/install4j/help/api/com/
  *             install4j /api/launcher/StartupNotification.html

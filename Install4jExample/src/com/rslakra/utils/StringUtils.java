@@ -19,7 +19,7 @@ import java.util.regex.Pattern;
 import com.install4j.runtime.installer.platform.win32.Win32Services.ServiceException;
 
 /**
- * @author Rohtash Singh (rsingh@boardvantage.com)
+ * @author Rohtash Singh (rohtash.singh@gmail.com)
  * @version 1.0.0
  * @since Apr 29, 2015 9:39:13 PM
  */

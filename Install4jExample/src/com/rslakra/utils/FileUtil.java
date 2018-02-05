@@ -33,7 +33,7 @@ import java.util.zip.GZIPOutputStream;
 
 /**
  * 
- * @author Rohtash Singh (rsingh@boardvantage.com)
+ * @author Rohtash Singh (rohtash.singh@gmail.com)
  * @version 1.0.0
  * @since Apr 22, 2015 4:52:15 PM
  */
@@ -1508,7 +1508,7 @@ public class FileUtil {
 
 /**
  * 
- * @author Rohtash Singh (rsingh@boardvantage.com)
+ * @author Rohtash Singh (rohtash.singh@gmail.com)
  * @version 1.0.0
  * @since Dec 9, 2015 4:42:16 PM
  */
