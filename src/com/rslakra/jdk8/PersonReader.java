@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Technologies 2018
+ * Copyright (C) Devamatre Inc. 2009-2018.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code or the 
