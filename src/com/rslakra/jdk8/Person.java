@@ -22,6 +22,9 @@
  *****************************************************************************/
 package com.rslakra.jdk8;
 
+import java.time.LocalDate;
+import java.time.Period;
+
 /**
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
@@ -31,59 +34,113 @@ package com.rslakra.jdk8;
  */
 public class Person {
 	private String name;
+	private String ageString;
+	private LocalDate birthDate;
 	private int age;
-
-	public Person(String name, int age) {
-		this.name = name;
-		this.age = age;
-	}
-
+	private char sex;
+	
 	/**
-	 * Returns the value of name.
+	 * 
+	 * @param name
+	 */
+	public Person(String name) {
+		this.name = name;
+	}
+	
+	/**
+	 * Returns the name
 	 *
-	 * @return the name
+	 * @return name
 	 */
 	public String getName() {
 		return name;
 	}
-
+	
 	/**
 	 * The name to be set.
-	 *
+	 * 
 	 * @param name
-	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
 	}
-
+	
 	/**
-	 * Returns the value of age.
+	 * Returns the birthDate
 	 *
-	 * @return the age
+	 * @return birthDate
+	 */
+	public LocalDate getBirthDate() {
+		return birthDate;
+	}
+	
+	/**
+	 * The birthDate to be set.
+	 * 
+	 * @param birthDate
+	 */
+	public void setBirthDate(LocalDate birthDate) {
+		this.birthDate = birthDate;
+		if(this.birthDate != null) {
+			Period period = Period.between(this.birthDate, LocalDate.now());
+			this.ageString = period.toString();
+			this.age = period.getYears();
+		}
+	}
+	
+	/**
+	 * Returns the full age as string.
+	 *
+	 * @return age
+	 */
+	public String getAgeString() {
+		return ageString;
+	}
+	
+	/**
+	 * Returns the age.
+	 *
+	 * @return age
 	 */
 	public int getAge() {
 		return age;
 	}
-
+	
 	/**
-	 * The age to be set.
+	 * Returns the sex.
 	 *
-	 * @param age
-	 *            the age to set
+	 * @return sex
 	 */
-	public void setAge(int age) {
-		this.age = age;
+	public char getSex() {
+		return sex;
 	}
-
+	
+	/**
+	 * The sex to be set.
+	 * 
+	 * @param sex
+	 */
+	public void setSex(char sex) {
+		this.sex = sex;
+	}
+	
+	/**
+	 * Returns true if the age is >= 18 years.
+	 * 
+	 * @return
+	 */
+	public boolean isAdult() {
+		return getAge() >= 18;
+	}
+	
 	/**
 	 * Returns the string representation of this object.
 	 * 
-	 * @return
 	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		return ("Person[" + getName() + ", " + getAge() + "]");
+		return ("[" + getName() + ", " + getAgeString() + " (" + getAge() + ") Years, Sex:" + getSex() + "]");
 	}
+	
 
 }

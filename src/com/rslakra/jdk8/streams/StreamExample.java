@@ -44,10 +44,10 @@ public class StreamExample {
 	 */
 	public static void main(String[] args) {
 		List<Person> persons = new ArrayList<>();
-		Person lakra = new Person("Lakra", 33);
-		Person java = new Person("Java", 21);
-		persons.add(new Person("Rohtash", 43));
-		persons.add(new Person("Singh", 41));
+		Person lakra = new Person("Lakra");
+		Person java = new Person("Java");
+		persons.add(new Person("Rohtash"));
+		persons.add(new Person("Singh"));
 		persons.add(lakra);
 		persons.add(java);
 

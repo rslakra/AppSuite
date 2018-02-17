@@ -56,7 +56,7 @@ public class CollectorsExample {
 			// fill persons list and print
 			sPersons.map(line -> {
 				String[] tokens = line.split(" ");
-				Person person = new Person(tokens[0], Integer.parseInt(tokens[1]));
+				Person person = new Person(tokens[0]);
 				persons.add(person);
 				return person;
 			}).forEach(System.out::println);

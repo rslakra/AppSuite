@@ -20,11 +20,12 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.lamdaexpr;
+package com.rslakra.jdk8.lambdaexpr;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.IntStream;
 
 /**
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
@@ -34,6 +35,35 @@ import java.util.List;
  * @since 1.0.0
  */
 public class LambdaExpression {
+
+	/**
+	 * Traditional Approach. Return true if the number is prime otherwise false.
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private static boolean isPrimeTraditional(int number) {
+		if (number < 2) {
+			return false;
+		}
+
+		for (int i = 2; i < number; i++) {
+			if (number % i == 0) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * 
+	 * @param number
+	 * @return
+	 */
+	private static boolean isPrimeDeclarative(int number) {
+		return (number > 1 && IntStream.range(2, number).noneMatch(index -> number % index == 0));
+	}
 
 	/**
 	 * @param args
@@ -57,7 +87,17 @@ public class LambdaExpression {
 		System.out.println("After Sorting with stringComparator.");
 		names.sort(stringComparator);
 		System.out.println(names);
-		
+
+		int number = 1;
+		System.out.println(number + " is isPrimeTraditional:" + LambdaExpression.isPrimeTraditional(number));
+		System.out.println(number + " is isPrimeDeclarative:" + LambdaExpression.isPrimeDeclarative(number));
+		number = 7;
+		System.out.println(number + " is isPrimeTraditional:" + LambdaExpression.isPrimeTraditional(number));
+		System.out.println(number + " is isPrimeDeclarative:" + LambdaExpression.isPrimeDeclarative(number));
+		number = 9;
+		System.out.println(number + " is isPrimeTraditional:" + LambdaExpression.isPrimeTraditional(number));
+		System.out.println(number + " is isPrimeDeclarative:" + LambdaExpression.isPrimeDeclarative(number));
+
 	}
 
 }
