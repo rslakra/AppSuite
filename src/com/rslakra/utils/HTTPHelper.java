@@ -2526,8 +2526,7 @@ public final class HTTPHelper {
 	 * Returns the host name extracted from the urlString.
 	 * 
 	 * @param urlString
-	 *            (http://emea.boardvantage.com)
-	 * @return boardvantage.com
+	 * @return
 	 */
 	public static String getHostNameFromUrlWithoutSubdomain(String urlString) {
 		String hostName = null;
