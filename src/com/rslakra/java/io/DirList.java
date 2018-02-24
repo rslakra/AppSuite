@@ -31,8 +31,8 @@ package com.rslakra.java.io;
 import java.io.File;
 import java.io.FilenameFilter;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 /**
  * 

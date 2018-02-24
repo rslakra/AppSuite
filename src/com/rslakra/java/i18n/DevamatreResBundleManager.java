@@ -34,8 +34,8 @@ import java.util.Map;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 public final class DevamatreResBundleManager {
 	private static final String RESOURCE_NAME = "resources";

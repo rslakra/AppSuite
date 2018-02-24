@@ -34,8 +34,8 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 import com.rslakra.utils.CoreHelper;
 
 /**

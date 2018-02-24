@@ -32,8 +32,8 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 public final class ResourceManager {
 

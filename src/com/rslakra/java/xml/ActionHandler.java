@@ -42,9 +42,9 @@ import javax.xml.parsers.SAXParserFactory;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 import com.rslakra.java.xml.sax.BaseSAXParser;
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
 
 /**
  * 

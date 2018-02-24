@@ -32,8 +32,8 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 /**
  * BaseSAXParser.java

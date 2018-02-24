@@ -30,8 +30,8 @@ package com.rslakra.java.profiling;
 
 import java.io.Serializable;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 public class ProfilingUtil implements Serializable {
 

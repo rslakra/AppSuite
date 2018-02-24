@@ -28,8 +28,8 @@
  *****************************************************************************/
 package com.rslakra.java.timers;
 
-import com.rslakra.logger.LogManager;
-import com.rslakra.logger.Logger;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 
 public class ThreadPoolTest {
 
