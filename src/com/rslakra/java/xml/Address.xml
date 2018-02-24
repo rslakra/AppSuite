@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<Addresses>
+	<Address>
+		<Street>228TH</Street>
+		<City>Bothell</City>
+		<State>Washington</State>
+		<PinCode>98021</PinCode>
+		<Country>United States of America</Country>
+	</Address>
+	<Address>
+		<Street>128</Street>
+		<City>Rohtak</City>
+		<State>Haryana</State>
+		<PinCode>124001</PinCode>
+		<Country>India</Country>
+	</Address>
+</Addresses>

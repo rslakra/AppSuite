@@ -1,0 +1,180 @@
+<?xml version="1.0"?>
+<!-- ==================================================== -->
+<!-- Build file, to compile Logger and create it's jar file. -->
+<!-- build.xml -->
+<!-- Author: Rohtash Singh  -->
+<!-- Email : rohtash.singh@gmail.com -->
+<!-- Url : http:// -->
+<!-- ==================================================== -->
+<!-- This simple ant build file is intended to support compiling the java portion of thick client using ant. -->
+
+<project name="Logger" default="all" basedir=".">
+	<!-- Base Structure -->
+	<property name="base.dir" value="${basedir}"/>
+	<property name="src.dir" value="${base.dir}/src"/>
+	<property name="src.test" value="${base.dir}/test"/>
+
+	<!-- Libraries -->
+	<property name="libs.dir" value="${base.dir}/Libs"/>
+	<property name="path.junit.jar" value="${libs.dir}/junit3.8.1"/>
+
+	<!-- Build Paths -->
+	<property name="build.dir" value="${base.dir}/build"/>
+	<property name="classes.dir" value="${build.dir}/classes"/>
+	<property name="jars.dir" value="${build.dir}/jars"/>
+	<property name="unittest.classes.dir" value="${build.dir}/unittest.classes"/>
+	<property name="unittest.results.dir" value="${build.dir}/unittest.results"/>
+
+	<!-- Jar File Name -->
+	<property name="jarFile" value="${ant.project.name}.jar"/>
+	<property name="client.main" value="org.lakra.mock.logger.TestLogger"/>
+
+	<!--Show Messages as Required.-->
+	<echo message="-------------------------------------------------------------"/>
+	<echo message="Compliling Project : ${ant.project.name} ${line.separator}"/>
+	<echo message="-------------------------------------------------------------"/>
+
+	<!-- Create Targets -->
+
+	<!-- class path -->
+	<path id="third.party.jars">
+		<fileset dir="${libs.dir}" includes="**/*.jar"/>
+		<fileset dir="${libs.dir}/junit3.8.1" includes="**/*.jar"/>
+	</path>
+
+	<!-- Default Target -->
+	<target name="all" description="Default Target" depends="clean, build" />
+
+	<!-- Remove /build Directory and its sub-directories... -->
+	<target name="clean" description="Removing Directories...">
+		<delete dir="${build.dir}"/>
+		<delete file="${base.dir}/${jarFile}"/>
+	</target>
+
+	<!-- Creates Directories.... -->
+	<target name="init">
+		<mkdir dir="${classes.dir}"/>
+		<mkdir dir="${jars.dir}"/>
+	</target>
+
+	<!-- Compile Java Files and store in /build/classes directory -->
+	<target name="compile" depends="init">
+		<!--javac srcdir="${src}" destdir="${classdir}" debug="true" includes="**/*.java" /-->
+		<!--javac srcdir="${src.dir}" destdir="${classes.dir}" debug="true" includes="**/*.java">
+			<classpath>
+				<pathelement location="${libs.dir}/log4j.jar"/>
+			</classpath>
+		</javac-->
+		<javac fork="${javac.fork}"
+			srcdir="${src.dir}"
+			destdir="${classes.dir}"
+            debug="true"
+			listfiles="true"
+			failonerror="true"
+			includeantruntime="false"
+			classpathref="third.party.jars" />
+
+
+		<!-- Create logger jar file and put in /build/jars directory -->
+		<!--jar jarfile="${jars.dir}/${jarFile}" basedir="${classes.dir}"/ -->
+		<jar destfile="${jars.dir}/${jarFile}">
+			<fileset dir="${classes.dir}" includes="**" />
+			<fileset dir="${base.dir}" includes="Log4j.properties, LakraLog4j.properties" />
+			<!--fileset dir="${base.dir}" includes="Libs/*" /-->
+			<!-- MANIFEST.MF Properties -->
+			<manifest>
+				<attribute name="Built-By" value="Rohtash Singh" />
+				<section name="Vendor Details">
+					<attribute name="Specification-Title" value="Logger" />
+					<attribute name="Specification-Vendor" value="Devamatre Inc." />
+					<attribute name="Implementation-Title" value="Logger" />
+					<attribute name="Implementation-Vendor" value="www.lakra.com" />
+				</section>
+			</manifest>
+		</jar>
+
+		<!--antcall target=""/-->
+	</target>
+
+	<!-- Copies Logger.jar file into /../Libs Directory. -->
+	<target name="build" depends="compile">
+		<!-- Overwrite existing files even if the destination files are newer. -->
+		<copy todir="${base.dir}" overwrite="true">
+			<fileset dir="${jars.dir}" includes="${jarFile}" />
+		</copy>
+	</target>
+
+	<!-- the target that runs the client/test -->
+	<target name="client-run">
+		<java fork="true" classname="${client.main}">
+			<classpath>
+				<pathelement location="${libs.dir}/log4j.jar"/>
+				<pathelement location="${base.dir}/${jarFile}"/>
+			</classpath>
+		</java>
+		<!--java fork="true" classname="${client.main}">
+	    	<jvmarg value="${client.http.dump.do}"/>
+	        	<classpath>
+					<path refid="wsit.classpath"/>
+	               	<pathelement location="${build.classes.home}"/>
+	               	<pathelement location="${etc.dir}"/>
+				</classpath>
+			<arg value="${client.main.arg1}"/>
+	        <arg value="${client.main.arg2}"/>
+		</java-->
+	</target>
+
+	<!-- Unit Test Cases Targets -->
+	<!--target name="run.unittest" depends="compile.unittest" description="Runs JUnit Test Cases"-->
+	<target name="run.unittest" depends="build" description="Runs JUnit Test Cases">
+	    <!-- Ensure that the 'junit.jar' file is in the ${ant.home}/lib directory
+	    prior to forking in order for it to be found within same classloader
+	    as ANT task -->
+	    <!-- There MUST be a better way to do this! -->
+	    <copy file="${path.junit.jar}/junit.jar" tofile="${ant.home}/lib/junit.jar"/>
+		<mkdir dir="${unittest.results.dir}"/>
+		<junit fork="yes" printsummary="yes" haltonfailure="no">
+	      	<classpath>
+	        	<pathelement path="${libs.dir}/junit3.8.1/junit.jar"/>
+	        	<pathelement path="${classes.dir}"/>
+	        	<pathelement path="${base.dir}/${jarFile}"/>
+	      	</classpath>
+			<formatter type="plain"/>
+
+			<test name="org.lakra.junit.logger.LoggerTestCase" haltonfailure="no" outfile="result">
+				<formatter type="xml"/>
+			</test>
+
+	      	<batchtest haltonfailure="false" todir="${unittest.results.dir}">
+	        	<fileset dir="${classes.dir}">
+					<include name="mclient/**/*TestCase.class"/>
+					<!--exclude name="**/AllTests.java"/-->
+	        	</fileset>
+	      	</batchtest>
+		</junit>
+	</target>
+
+	<!-- Compile Java Files and store in /build/classes directory -->
+	<target name="compile.unittest">
+		<mkdir dir="${unittest.classes.dir}"/>
+		<javac srcdir="${src.test}" destdir="${unittest.classes.dir}" debug="true" includes="**/*.java">
+			<classpath>
+				<fileset dir="${unittest.classes.dir}">
+					<include name="mclient/**/*TestCase.class"/>
+	        	</fileset>
+				<fileset dir="${libs.dir}" includes="**/*.jar"/>
+				<pathelement location="${libs.dir}/log4j.jar"/>
+				<pathelement location="${base.dir}/${jarFile}"/>
+			</classpath>
+		</javac>
+
+		<!--antcall target=""/-->
+	</target>
+
+	<!-- Create Source Jar File in base directory -->
+	<target name="source.jar">
+		<echo message="Creating Source Jar file ..." />
+		<delete file="${basedir}/src.jar"/>
+		<jar jarfile="${basedir}/src.jar" basedir="${basedir}/src" manifest="${basedir}/src/META-INF/MANIFEST.MF" update="true" />
+	</target>
+</project>

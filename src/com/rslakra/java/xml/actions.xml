@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<Actions>
+	<Action Id="getConfigDetails">
+		<Name>userAction</Name>
+		<Class>User</Class>
+		<Method>getConfig</Method>
+	</Action>
+
+	<Action Id="getDashboardHtmlView">
+		<Name>homeAction</Name>
+		<Class>HomeAction</Class>
+		<Method>getDashboardHtmlView</Method>
+	</Action>
+</Actions>
