@@ -1,3 +1,0 @@
-File1 30
-File2 50
-File3 25
