@@ -850,14 +850,36 @@ public final class StringHelper {
 	}
 
 	/**
-	 * Returns the string representation of the specified <code>object</code>;
+	 * Returns the string representation of the specified <code>object</code>.
 	 * 
 	 * @param object
-	 * @param useReflection
+	 * @param excludePackageName
+	 * @param includeClassName
 	 * @return
 	 */
-	public static String toString(Object object, boolean useReflection) {
-		return (useReflection ? getInstance().newToString().toString(object) : object.toString());
+	public static String toString(Object object, boolean excludePackageName, boolean includeClassName) {
+		return getInstance().newToString(excludePackageName, includeClassName).toString(object);
+	}
+
+	/**
+	 * Returns the string representation of the specified <code>object</code>.
+	 * 
+	 * @param object
+	 * @param includeClassName
+	 * @return
+	 */
+	public static String toString(Object object, boolean includeClassName) {
+		return getInstance().newToString(includeClassName).toString(object);
+	}
+
+	/**
+	 * Returns the string representation of the specified <code>object</code>.
+	 * 
+	 * @param object
+	 * @return
+	 */
+	public static String toString(Object object) {
+		return getInstance().newToString().toString(object);
 	}
 
 	/**
@@ -866,7 +888,7 @@ public final class StringHelper {
 	 * @param elements
 	 * @return
 	 */
-	public static String[] toString(Object... elements) {
+	public static String[] toStringArray(Object... elements) {
 		String[] strElements = null;
 		if (elements != null) {
 			strElements = new String[elements.length];
@@ -1150,6 +1172,24 @@ public final class StringHelper {
 	 */
 	public ToString newToString() {
 		return new ToString();
+	}
+
+	/**
+	 * Returns the ToString object.
+	 * 
+	 * @return
+	 */
+	public ToString newToString(boolean excludePackageName, boolean includeClassName) {
+		return new ToString(excludePackageName, includeClassName);
+	}
+
+	/**
+	 * Returns the ToString object.
+	 * 
+	 * @return
+	 */
+	public ToString newToString(boolean includeClassName) {
+		return new ToString(includeClassName);
 	}
 
 	/**
