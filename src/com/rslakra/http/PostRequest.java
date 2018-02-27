@@ -26,22 +26,38 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.http;
+package com.rslakra.http;
 
 import java.io.IOException;
 
 /**
  *
  * @author Rohtash Singh Lakra
- * @date 09/07/2017 09:59:01 AM
+ * @date 09/07/2017 10:33:42 AM
  */
-public interface ResponseHandler {
+public class PostRequest extends BaseHttpRequest {
 	
 	/**
-	 * 
-	 * @param httpResponse
-	 * @throws IOException
+	 * @see com.rslakra.http.HttpRequest#execute(com.rslakra.http.ResponseHandler)
 	 */
-	public void onResponse(HttpResponse httpResponse) throws IOException;
+	@Override
+	public void execute(ResponseHandler responseHandler) {
+		HttpResponse httpResponse = super.executePostRequest(null, null, true);
+		if(responseHandler != null) {
+			try {
+				responseHandler.onResponse(httpResponse);
+			} catch(IOException ex) {
+				ex.printStackTrace();
+			}
+		}
+	}
+	
+	/**
+	 * @see com.rslakra.http.HttpRequest#execute()
+	 */
+	@Override
+	public void execute() {
+		execute(null);
+	}
 	
 }

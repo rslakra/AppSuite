@@ -32,6 +32,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * 
+ * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @created 2010-02-26 09:23:41 PM
+ * @version 1.0.0
+ * @since 1.0.0
+ */
 public class MyClassLoader extends ClassLoader {
 
 	private static final int BUFFER_SIZE = 8192;
@@ -40,13 +48,21 @@ public class MyClassLoader extends ClassLoader {
 		super(MyClassLoader.class.getClassLoader());
 	}
 
-	protected synchronized Class loadClass(String className, boolean resolve) throws ClassNotFoundException {
+	/**
+	 * 
+	 * @param className
+	 * @param resolve
+	 * @return
+	 * @throws ClassNotFoundException
+	 * @see java.lang.ClassLoader#loadClass(java.lang.String, boolean)
+	 */
+	protected synchronized Class<?> loadClass(String className, boolean resolve) throws ClassNotFoundException {
 		log("Loading class: " + className + ", resolve: " + resolve);
 
 		// 1. is this class already loaded?
-		Class klass = findLoadedClass(className);
-		if (klass != null) {
-			return klass;
+		Class<?> _Class = findLoadedClass(className);
+		if (_Class != null) {
+			return _Class;
 		}
 
 		// 2. get class file name from class name
@@ -73,18 +89,18 @@ public class MyClassLoader extends ClassLoader {
 
 		// 4. turn the byte array into a Class
 		try {
-			klass = defineClass(className, classBytes, 0, classBytes.length);
+			_Class = defineClass(className, classBytes, 0, classBytes.length);
 			if (resolve) {
-				resolveClass(klass);
+				resolveClass(_Class);
 			}
 		} catch (SecurityException e) {
 			// loading core java classes such as java.lang.String
 			// is prohibited, throws java.lang.SecurityException.
 			// delegate to parent if not allowed to load class
-			klass = super.loadClass(className, resolve);
+			_Class = super.loadClass(className, resolve);
 		}
 
-		return klass;
+		return _Class;
 	}
 
 	private static void log(String s) {

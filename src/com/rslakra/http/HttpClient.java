@@ -26,38 +26,94 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.http;
-
-import java.io.IOException;
+package com.rslakra.http;
 
 /**
  *
  * @author Rohtash Singh Lakra
- * @date 09/07/2017 10:33:42 AM
+ * @date 09/07/2017 10:00:53 AM
  */
-public class GetRequest extends BaseHttpRequest {
-
+public final class HttpClient {
+	
+	private boolean asynchronous;
+	private HttpRequest httpRequest;
+	
 	/**
-	 * @see com.rslakra.http.HttpRequest#execute(com.rslakra.http.ResponseHandler)
+	 * 
+	 * @param asynchronous
 	 */
-	@Override
-	public void execute(ResponseHandler responseHandler) {
-		HttpResponse httpResponse = super.executeGetRequest(null, null, true);
-		if (responseHandler != null) {
-			try {
-				responseHandler.onResponse(httpResponse);
-			} catch (IOException ex) {
-				ex.printStackTrace();
-			}
-		}
+	public HttpClient(final boolean asynchronous) {
+		this.asynchronous = asynchronous;
 	}
-
+	
 	/**
-	 * @see com.rslakra.http.HttpRequest#execute()
+	 * 
 	 */
-	@Override
-	public void execute() {
-		execute(null);
+	public HttpClient() {
+		this(false);
 	}
-
+	
+	/**
+	 * Returns the asynchronous.
+	 * 
+	 * @return
+	 */
+	public boolean isAsynchronous() {
+		return asynchronous;
+	}
+	
+	/**
+	 * The asynchronous to be set.
+	 * 
+	 * @param asynchronous
+	 */
+	public void setAsynchronous(boolean asynchronous) {
+		this.asynchronous = asynchronous;
+	}
+	
+	/**
+	 * Returns the httpRequest.
+	 * 
+	 * @return
+	 */
+	public HttpRequest getHttpRequest() {
+		return httpRequest;
+	}
+	
+	/**
+	 * The httpRequest to be set.
+	 * 
+	 * @param httpRequest
+	 */
+	public void setHttpRequest(HttpRequest httpRequest) {
+		this.httpRequest = httpRequest;
+	}
+	
+	/**
+	 * 
+	 * @param httpMethod
+	 * @param urlString
+	 */
+	public void execute(String httpMethod, String urlString) {
+//		if(getHttpRequest() != null) {
+//			getHttpRequest().execute();
+//		}
+	}
+	
+	/**
+	 * 
+	 * @param urlString
+	 */
+	public void execute(String urlString) {
+		execute(null, urlString);
+	}
+	
+	/**
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		
+	}
+	
 }

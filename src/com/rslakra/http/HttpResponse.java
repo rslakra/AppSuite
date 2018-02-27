@@ -26,10 +26,14 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.http;
+package com.rslakra.http;
 
 import java.util.List;
 import java.util.Map;
+
+import com.rslakra.utils.CoreHelper;
+import com.rslakra.utils.HTTPHelper;
+import com.rslakra.utils.IOHelper;
 
 /**
  *
@@ -37,30 +41,30 @@ import java.util.Map;
  * @date 09/07/2017 10:00:19 AM
  */
 public class HttpResponse implements Cloneable {
-	
+
 	/** The response headers */
 	private Map<String, List<String>> requestHeaders;
-	
+
 	/* responseCode */
 	private int responseCode;
-	
+
 	/** responseHeaders */
 	private Map<String, List<String>> responseHeaders;
 	private String jsonResponseHeaders;
-	
+
 	/* dataBytes */
 	private byte[] dataBytes;
-	
+
 	/* error */
 	private Throwable error;
-	
+
 	/**
 	 * 
 	 */
 	public HttpResponse() {
 		reset();
 	}
-	
+
 	/**
 	 * Returns the requestHeaders.
 	 * 
@@ -69,7 +73,7 @@ public class HttpResponse implements Cloneable {
 	public Map<String, List<String>> getRequestHeaders() {
 		return requestHeaders;
 	}
-	
+
 	/**
 	 * The requestHeaders to be set.
 	 * 
@@ -78,7 +82,7 @@ public class HttpResponse implements Cloneable {
 	public void setRequestHeaders(Map<String, List<String>> requestHeaders) {
 		this.requestHeaders = requestHeaders;
 	}
-	
+
 	/**
 	 * Returns the responseCode.
 	 * 
@@ -87,7 +91,7 @@ public class HttpResponse implements Cloneable {
 	public int getResponseCode() {
 		return responseCode;
 	}
-	
+
 	/**
 	 * The responseCode to be set.
 	 * 
@@ -96,7 +100,7 @@ public class HttpResponse implements Cloneable {
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
-	
+
 	/**
 	 * Returns the responseHeaders.
 	 * 
@@ -105,19 +109,20 @@ public class HttpResponse implements Cloneable {
 	public Map<String, List<String>> getResponseHeaders() {
 		return responseHeaders;
 	}
-	
+
 	/**
 	 * The responseHeaders to be set.
 	 * 
-	 * @param responseHeaders the responseHeaders to set
+	 * @param responseHeaders
+	 *            the responseHeaders to set
 	 */
 	public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
 		this.responseHeaders = responseHeaders;
-		if(!HttpUtils.isNullOrEmpty(responseHeaders)) {
-			jsonResponseHeaders = HttpUtils.toJson(responseHeaders);
+		if (!CoreHelper.isNullOrEmpty(responseHeaders)) {
+			jsonResponseHeaders = HTTPHelper.toJson(responseHeaders);
 		}
 	}
-	
+
 	/**
 	 * 
 	 * @return
@@ -125,19 +130,20 @@ public class HttpResponse implements Cloneable {
 	public String getJsonResponseHeaders() {
 		return jsonResponseHeaders;
 	}
-	
+
 	/**
 	 * The responseHeaders to be set.
 	 * 
-	 * @param responseHeaders the responseHeaders to set
+	 * @param responseHeaders
+	 *            the responseHeaders to set
 	 */
 	public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
-		if(!HttpUtils.isNullOrEmpty(jsonResponseHeaders)) {
-			String jsonResponseHeader = HttpUtils.toUTF8String(jsonResponseHeaders);
-			this.responseHeaders = HttpUtils.jsonHeadersAsMap(jsonResponseHeader);
+		if (!CoreHelper.isNullOrEmpty(jsonResponseHeaders)) {
+			String jsonResponseHeader = IOHelper.toUTF8String(jsonResponseHeaders);
+			this.responseHeaders = HTTPHelper.jsonHeadersAsMap(jsonResponseHeader);
 		}
 	}
-	
+
 	/**
 	 * Returns the dataBytes.
 	 * 
@@ -146,7 +152,7 @@ public class HttpResponse implements Cloneable {
 	public byte[] getDataBytes() {
 		return dataBytes;
 	}
-	
+
 	/**
 	 * The dataBytes to be set.
 	 * 
@@ -155,38 +161,37 @@ public class HttpResponse implements Cloneable {
 	public void setDataBytes(byte[] dataBytes) {
 		this.dataBytes = dataBytes;
 	}
-	
+
 	/**
 	 * @return the error
 	 */
 	public Throwable getError() {
 		return error;
 	}
-	
+
 	/**
-	 * @param error the error to set
+	 * @param error
+	 *            the error to set
 	 */
 	public void setError(Throwable error) {
 		this.error = error;
 	}
-	
+
 	/**
-	 * Returns success if my {@link #status} is any of my SUCCESS
-	 * states.
+	 * Returns success if my {@link #status} is any of my SUCCESS states.
 	 */
 	public boolean isSuccess() {
 		return (responseCode == 200);
 	}
-	
+
 	/**
-	 * Returns true if my {@link #status} is any of my ERROR
-	 * states, or if my {@link #error} or {@link #failureBO} fields
-	 * have anything in them.
+	 * Returns true if my {@link #status} is any of my ERROR states, or if my
+	 * {@link #error} or {@link #failureBO} fields have anything in them.
 	 */
 	public boolean isError() {
 		return (this.error != null);
 	}
-	
+
 	/**
 	 * Returns the response type.
 	 * 
@@ -194,17 +199,17 @@ public class HttpResponse implements Cloneable {
 	 */
 	public String getMimeType() {
 		String mimeType = null;
-		
-		if(responseHeaders != null) {
+
+		if (responseHeaders != null) {
 			mimeType = responseHeaders.get("Content-Type").get(0);
-			if(mimeType.indexOf(";") != -1) {
+			if (mimeType.indexOf(";") != -1) {
 				mimeType = mimeType.substring(0, mimeType.indexOf(";")).trim();
 			}
 		}
-		
+
 		return mimeType;
 	}
-	
+
 	/**
 	 * Resets this object.
 	 */
@@ -215,7 +220,7 @@ public class HttpResponse implements Cloneable {
 		dataBytes = null;
 		error = null;
 	}
-	
+
 	/**
 	 * Creates exact copy of an object.
 	 * 
@@ -231,14 +236,14 @@ public class HttpResponse implements Cloneable {
 			cloneResponse.jsonResponseHeaders = this.jsonResponseHeaders;
 			cloneResponse.dataBytes = this.dataBytes;
 			cloneResponse.error = this.error;
-		} catch(CloneNotSupportedException ex) {
+		} catch (CloneNotSupportedException ex) {
 			// This should never happen
 			throw new InternalError(ex.toString());
 		}
-		
+
 		return cloneResponse;
 	}
-	
+
 	/**
 	 * Returns the string representation of this object.
 	 * 
@@ -251,15 +256,15 @@ public class HttpResponse implements Cloneable {
 		sBuilder.append("requestHeaders:").append(getRequestHeaders()).append("\n");
 		sBuilder.append("ResponseCode:").append(getResponseCode()).append("\n");
 		sBuilder.append("ResponseHeaders:").append(getResponseHeaders()).append("\n");
-		sBuilder.append("dataBytes:").append(HttpUtils.toUTF8String(getDataBytes())).append("\n");
-		
-		if(this.error != null) {
-			sBuilder.append("\n\n").append(HttpUtils.toString(getError())).append("\n\n");
+		sBuilder.append("dataBytes:").append(IOHelper.toUTF8String(getDataBytes())).append("\n");
+
+		if (this.error != null) {
+			sBuilder.append("\n\n").append(HTTPHelper.toString(getError())).append("\n\n");
 		}
-		
+
 		sBuilder.append("================ HTTP Response (End) ================\n");
-		
+
 		return sBuilder.toString();
 	}
-	
+
 }

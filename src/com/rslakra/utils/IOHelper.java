@@ -90,6 +90,8 @@ public final class IOHelper {
 	public static final String ISO_8859_1 = "ISO-8859-1".intern();
 	/** HEX_DIGIT_CHARS */
 	public static final String HEX_DIGITS = "0123456789abcdef".intern();
+	/** EMPTY_STRING */
+	public static final String EMPTY_STRING = "".intern();
 
 	/** imageTypes */
 	private static List<String> imageTypes;

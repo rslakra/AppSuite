@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.http;
+package com.rslakra.http;
 
 import java.util.Map;
 

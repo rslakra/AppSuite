@@ -37,7 +37,12 @@ import java.net.URL;
 /**
  * @author rohtash.singh Created on May 25, 2005
  */
-public class TestHttpClient {
+public class HTTPClient {
+
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			// // Check the arguments

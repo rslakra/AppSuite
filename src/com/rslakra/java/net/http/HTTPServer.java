@@ -40,7 +40,7 @@ import java.net.Socket;
  * @author rohtash.singh Created on May 24, 2005
  */
 
-public class HttpServer {
+public class HTTPServer {
 	// The port number which the server will be listening on
 	public static final int HTTP_PORT = 8080;
 
@@ -64,7 +64,7 @@ public class HttpServer {
 
 	// main program
 	public static void main(String argv[]) throws Exception {
-		HttpServer httpserver = new HttpServer();
+		HTTPServer httpserver = new HTTPServer();
 		httpserver.run();
 	}
 }

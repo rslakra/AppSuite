@@ -49,10 +49,9 @@ import com.rslakra.java.net.ssl.SSLConnection;
  * a different port number, the url should be: https://localhost:portnumber but
  * if you run it on 443 then the URL is: https://localhost.
  * 
- * @author rohtash.sing
- * Created on May 24, 2005
+ * @author rohtash.sing Created on May 24, 2005
  */
-public class HttpsServer implements SSLConnection {
+public class HTTPSServer implements SSLConnection {
 	// The port number which the server will be listening on
 	// private static String keystore = "lakra/net/serverCert";
 	private static char keystorepass[] = getPassword();
@@ -107,7 +106,6 @@ public class HttpsServer implements SSLConnection {
 			while (true) {
 				Socket client = listen.accept();
 				System.out.println("" + client.getInetAddress());
-				// ProcessConnection cc = new ProcessConnection(client);
 				new ConnectionProcess(client);
 			}
 		} catch (Exception e) {
@@ -118,7 +116,7 @@ public class HttpsServer implements SSLConnection {
 
 	// main program
 	public static void main(String argv[]) throws Exception {
-		HttpsServer httpsServer = new HttpsServer();
+		HTTPSServer httpsServer = new HTTPSServer();
 		httpsServer.run();
 	}
 }

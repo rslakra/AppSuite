@@ -51,8 +51,8 @@ import com.rslakra.java.net.ssl.SSLConnection;
  * 
  * @author rohtash.singh Created on May 24, 2005
  */
+public class HTTPSClient implements SSLConnection {
 
-public class TestHttpsClient implements SSLConnection {
 	private static char keystorepass[] = getPassword();
 	private static char keypassword[] = getPassword();
 
@@ -108,15 +108,15 @@ public class TestHttpsClient implements SSLConnection {
 				ProcessConnection cc = new ProcessConnection(client);
 				// new ConnProcess(client);
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.out.println("Exception:" + e.getMessage());
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			System.out.println("Exception:" + ex.getMessage());
 		}
 	}
 
 	// main program
 	public static void main(String argv[]) throws Exception {
-		TestHttpsClient httpsClient = new TestHttpsClient();
+		HTTPSClient httpsClient = new HTTPSClient();
 		httpsClient.run();
 	}
 }

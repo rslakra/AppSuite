@@ -67,6 +67,24 @@ public final class CoreHelper {
 	}
 
 	/**
+	 * Returns the OS name.
+	 * 
+	 * @return
+	 */
+	public static String getOSName() {
+		return System.getProperty("os.name");
+	}
+
+	/**
+	 * Returns the Java VM Name.
+	 * 
+	 * @return
+	 */
+	public static String getJVMName() {
+		return System.getProperty("java.vm.name");
+	}
+
+	/**
 	 * Returns true if the object is null otherwise false.
 	 * 
 	 * @param object

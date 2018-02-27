@@ -40,15 +40,15 @@ import javax.net.ssl.SSLSocketFactory;
 /**
  * @author rohtash.singh Created on May 24, 2005
  */
-public class ReadHTTPsURL {
+public class HTTPSURLReader {
 	private final static int HTTPS_PORT = 443; // Default port for HTTPS
 
 	public static void main(String[] args) throws Exception {
 		// if(args.length != 1) {
-		// System.out.println("Usage : java ReadHTTPsURL");
+		// System.out.println("Usage : java HTTPSURLReader");
 		// System.exit(0);
 		// }
-		String url = "www.sun.com";
+		String url = "www.devamatre.com";
 		// The default factorypattern is configured to enable server
 		// authentication
 		// only (no client authentication).

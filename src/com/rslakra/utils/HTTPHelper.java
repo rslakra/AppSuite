@@ -112,11 +112,7 @@ public final class HTTPHelper {
 	/** EMPTY_STRING */
 	public static final String EMPTY_STRING = "".intern();
 
-	/* CUSTOME Constants. */
-	public static final String APP_PACKAGE_NAME = "com.rslakra.utils".intern();
-	public static final String APP_PLATFORM = "Android".intern();
-	public static final String APP_TYPE = "Android".intern();
-	public static final String APP_NAME = "AuthModule".intern();
+	/* CUSTOM Constants. */
 	public static final String METHOD_NAME = "methodName".intern();
 	public static final String DEVICE_ID = "deviceId".intern();
 
@@ -768,23 +764,23 @@ public final class HTTPHelper {
 		StringBuilder userAgentBuilder = new StringBuilder();
 
 		/* These properties are mandatory for the server requests. */
-		appBundleIdentifier = (CoreHelper.isNullOrEmpty(appBundleIdentifier) ? APP_PACKAGE_NAME : appBundleIdentifier);
-		appType = (CoreHelper.isNullOrEmpty(appType) ? APP_TYPE : appType);
-		// deviceModel = (isNullOrEmpty(deviceModel) ? Build.MODEL :
-		// deviceModel);
-		Locale sysLocale = Locale.getDefault();
-
 		// prepare user-agent value
-		userAgentBuilder.append("Platform=").append(APP_PLATFORM);
-		userAgentBuilder.append(";App=").append(APP_NAME);
-		userAgentBuilder.append(";ABI=").append(appBundleIdentifier);
-		userAgentBuilder.append(";Lcl=").append(sysLocale.toString());
+		if (CoreHelper.isNotNullOrEmpty(appBundleIdentifier)) {
+			userAgentBuilder.append("OSType=").append(CoreHelper.getJVMName());
+		}
 		userAgentBuilder.append(";OSVer=").append(OS_VERSION);
-		userAgentBuilder.append(";Dvc=").append(deviceModel);
-		userAgentBuilder.append(";Prd=").append(APP_NAME);
-		userAgentBuilder.append(";Lang=").append(sysLocale.getLanguage());
+		if (CoreHelper.isNotNullOrEmpty(appType)) {
+			userAgentBuilder.append(";AppType=").append(appType);
+		}
+		if (CoreHelper.isNotNullOrEmpty(appBundleIdentifier)) {
+			userAgentBuilder.append(";ABI=").append(appBundleIdentifier);
+		}
+		Locale localeDefault = Locale.getDefault();
+		userAgentBuilder.append(";LCL=").append(localeDefault.toString());
+		userAgentBuilder.append(";Lang=").append(localeDefault.getLanguage());
+		userAgentBuilder.append(";DM=").append(deviceModel);
 		userAgentBuilder.append(";AppType=").append(appType);
-		userAgentBuilder.append(";KerVer=").append(KERNEL_VERSION);
+		userAgentBuilder.append(";KVer=").append(KERNEL_VERSION);
 
 		return userAgentBuilder.toString();
 	}
@@ -797,7 +793,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static String getUserAgentString() {
-		return getUserAgentString(APP_PACKAGE_NAME, APP_TYPE, getDeviceModel());
+		return getUserAgentString(null, null, getDeviceModel());
 	}
 
 	/**
@@ -2056,25 +2052,6 @@ public final class HTTPHelper {
 		if (CoreHelper.isNull(excludedParameters)) {
 			excludedParameters = new ArrayList<String>();
 			/* remove the following parameters before generating hashCode. */
-			// excludedParameters.add(Headers.CLIENT_REQUEST_HASH_CODE);
-			// excludedParameters.add(Headers.HASH_CODE_FILE_LAST_MODIFIED);
-			// excludedParameters.add(Headers.HASH_CODE_FILE_SIZE);
-			// excludedParameters.add(Headers.USE_EXISTING_FILE);
-			// excludedParameters.add(Headers.UNIQUE_RESPONSE_HASH);
-			// excludedParameters.add(Headers.CONTENT_DISPOSITION);
-			// excludedParameters.add(Headers.RESPONSE_HEADERS);
-			// excludedParameters.add(Headers.SET_COOKIE);
-			// excludedParameters.add(Headers.ECX_SESSION_ID);
-			// excludedParameters.add(Headers.JSESSIONID);
-			// excludedParameters.add(Headers.ECX_HT);
-			// excludedParameters.add(Headers.ECX_LB);
-			// excludedParameters.add(Headers.ECX_PORTAL_ID);
-			// excludedParameters.add(Headers.JUP_SYNC);
-			// excludedParameters.add(Headers.JUP_CLIENT);
-			// excludedParameters.add(Headers.CONTENT_TYPE);
-			// excludedParameters.add(Headers.AUTHORIZATION);
-			// excludedParameters.add(Headers.CSRF_TOKEN);
-			// excludedParameters.add(Headers.REQUEST_CSRF_TOKEN);
 		}
 
 		return excludedMethods;
@@ -2127,35 +2104,6 @@ public final class HTTPHelper {
 			SortedMap<String, Object> sortedParameters = toSortedMap(requestParameters);
 			/* remove existing custom parameters, if available */
 			removeExcludedParameters(sortedParameters);
-
-			/* generating hash code. */
-			// UserSession userSession = UserSession.getInstance();
-			// if(userSession.isValidSession() &&
-			// userSession.isUserBaseUuidAvailable()) {
-			// sortedParameters.put(UUIDs.USER_BASE_UUID,
-			// userSession.getUserBaseUuid());
-			// // add portal base UUID in hash code for these methods.
-			// String methodName = getValueForKeyAsString(sortedParameters,
-			// Keys.METHOD_NAME);
-			// if(Utils.equalsAnyArgs(methodName,
-			// ServiceMethods.GET_PORTAL_DATA_JSON,
-			// ServiceMethods.GET_COMPANY_TS_LOGO)) {
-			// // some methods use portalBaseUuid as securityBaseUuid
-			// if(!sortedParameters.containsKey(UUIDs.PORTAL_BASE_UUID)) {
-			// // tweak here to get the same hash code.
-			// if(sortedParameters.containsKey(UUIDs.SECURITY_BASE_UUID)) {
-			// String portalBaseUuid =
-			// HTTPUtil.getValueForKeyAsString(sortedParameters,
-			// UUIDs.SECURITY_BASE_UUID);
-			// sortedParameters.put(UUIDs.PORTAL_BASE_UUID, portalBaseUuid);
-			// sortedParameters.remove(UUIDs.SECURITY_BASE_UUID);
-			// } else {
-			// sortedParameters.put(UUIDs.PORTAL_BASE_UUID,
-			// userSession.getPortalBaseUuid());
-			// }
-			// }
-			// }
-			// }
 
 			String paramValuesAsString = paramValuesAsString(sortedParameters);
 			valuesAsHashString = SecurityHelper.paramValueAsHashString(paramValuesAsString);
