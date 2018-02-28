@@ -1,15 +1,15 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code, in source 
- * and binary forms, with or without modification, are permitted provided 
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code, in source
+ * and binary forms, with or without modification, are permitted provided
  * that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -22,8 +22,8 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.java.net;
@@ -39,71 +39,76 @@ import java.net.Socket;
 import java.util.StringTokenizer;
 
 /**
- * @author rohtash.singh Created on May 24, 2005
+ * @author rohtash.singh
+ *         May 24, 2005
  */
-
 public class ProcessConnection extends Thread {
-	Socket client;
-	BufferedReader bReader;
-	DataOutputStream os;
-
-	public ProcessConnection(Socket s) { // constructor
-		client = s;
+	private Socket client;
+	private BufferedReader bReader;
+	private DataOutputStream outputStream;
+	
+	public ProcessConnection(Socket socket) {
+		this.client = socket;
 		try {
 			bReader = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			os = new DataOutputStream(client.getOutputStream());
-		} catch (IOException e) {
+			outputStream = new DataOutputStream(client.getOutputStream());
+		} catch(IOException e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
-		this.start(); // Thread starts here...this start() will call run()
+		
+		// Start Thread.
+		this.start();
 	}
-
+	
 	public void run() {
 		try {
 			// get a request and parse it.
 			String request = bReader.readLine();
 			System.out.println("Request: " + request);
 			StringTokenizer st = new StringTokenizer(request);
-			if ((st.countTokens() >= 2) && st.nextToken().equals("GET")) {
-				if ((request = st.nextToken()).startsWith("/"))
+			if((st.countTokens() >= 2) && st.nextToken().equals("GET")) {
+				if((request = st.nextToken()).startsWith("/")) {
 					request = request.substring(1);
-				if (request.equals(""))
+				}
+				
+				if(request.equals("")) {
 					request = request + "index.html";
+				}
 				System.out.println("request : " + request);
-				File f = new File(request);
-				shipDocument(os, f);
+				sendData(outputStream, new File(request));
 			} else {
-				os.writeBytes("400 Bad Request");
+				outputStream.writeBytes("400 Bad Request");
 			}
 			client.close();
-		} catch (Exception e) {
+		} catch(Exception e) {
 			System.out.println("Exception: " + e.getMessage());
 		}
 	}
-
+	
 	/**
-	 * Read the requested file and ships it to the browser if found.
+	 * Read the requested file and ships it
+	 * to the browser if found.
 	 */
-	public static void shipDocument(DataOutputStream out, File f) throws Exception {
+	public static void sendData(DataOutputStream outputStream, File file) throws Exception {
 		try {
-			DataInputStream in = new DataInputStream(new FileInputStream(f));
-			int len = (int) f.length();
+			DataInputStream in = new DataInputStream(new FileInputStream(file));
+			int len = (int) file.length();
 			byte[] buf = new byte[len];
 			in.readFully(buf);
 			in.close();
-			out.writeBytes("HTTP/1.0 200 OK\r\n");
-			out.writeBytes("Content-Length: " + f.length() + "\r\n");
-			out.writeBytes("Content-Type: text/html\r\n\r\n");
-			out.write(buf);
-			out.flush();
-		} catch (Exception e) {
-			out.writeBytes("<html><head><title>error</title></head><body>\r\n\r\n");
-			out.writeBytes("HTTP/1.0 400 " + e.getMessage() + "\r\n");
-			out.writeBytes("Content-Type: text/html\r\n\r\n");
-			out.writeBytes("</body></html>");
-			out.flush();
+			outputStream.writeBytes("HTTP/1.0 200 OK\r\n");
+			outputStream.writeBytes("Content-Length:" + len + "\r\n");
+			outputStream.writeBytes("Content-Type: text/html\r\n\r\n");
+			outputStream.write(buf);
+			outputStream.flush();
+		} catch(Exception e) {
+			outputStream.writeBytes("<html><head><title>error</title></head><body>\r\n\r\n");
+			outputStream.writeBytes("HTTP/1.0 400 " + e.getMessage() + "\r\n");
+			outputStream.writeBytes("Content-Type: text/html\r\n\r\n");
+			outputStream.writeBytes("</body></html>");
+			outputStream.flush();
 		} finally {
-			out.close();
+			outputStream.close();
 		}
 	}
 }

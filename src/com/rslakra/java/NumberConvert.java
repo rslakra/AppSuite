@@ -28,9 +28,9 @@
  *****************************************************************************/
 package com.rslakra.java;
 
+import com.devamatre.core.CoreHelper;
 import com.devamatre.logger.LogManager;
 import com.devamatre.logger.Logger;
-import com.rslakra.utils.CoreHelper;
 
 /**
  * 999999999999999.999999999999

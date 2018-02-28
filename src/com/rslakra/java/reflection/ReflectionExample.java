@@ -32,9 +32,9 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
+import com.devamatre.core.CoreHelper;
 import com.rslakra.java.bos.Name;
 import com.rslakra.jdk8.Person;
-import com.rslakra.utils.CoreHelper;
 
 /**
  * @author Rohtash Singh Lakra

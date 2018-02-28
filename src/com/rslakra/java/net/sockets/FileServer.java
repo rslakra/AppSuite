@@ -94,6 +94,9 @@ public class FileServer {
 			System.out.println("Listening on port " + LISTENING_PORT);
 			while (true) {
 				connection = listener.accept();
+				/*
+				 * TODO: Uncomment the below line and resolve errors.
+				 */
 				// new ConnectionHandler(directory, connection);
 			}
 		} catch (Exception e) {

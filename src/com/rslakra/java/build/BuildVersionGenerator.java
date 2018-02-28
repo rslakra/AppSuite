@@ -34,9 +34,9 @@ import java.util.Date;
 import java.util.Enumeration;
 import java.util.Properties;
 
+import com.devamatre.core.CoreHelper;
 import com.devamatre.logger.LogManager;
 import com.devamatre.logger.Logger;
-import com.rslakra.utils.CoreHelper;
 
 /**
  * 

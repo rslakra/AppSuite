@@ -1,15 +1,15 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code, in source 
- * and binary forms, with or without modification, are permitted provided 
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code, in source
+ * and binary forms, with or without modification, are permitted provided
  * that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -22,24 +22,21 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.java.net.http;
 
-import java.io.FileInputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.security.KeyStore;
 
-import javax.net.ServerSocketFactory;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 
+import com.devamatre.core.IOHelper;
+import com.devamatre.core.SSLHelper;
+import com.rslakra.java.net.NetConstants;
 import com.rslakra.java.net.ProcessConnection;
-import com.rslakra.java.net.ssl.SSLConnection;
 
 /**
  * This class implements a multithreaded simple HTTP server that supports the
@@ -51,21 +48,19 @@ import com.rslakra.java.net.ssl.SSLConnection;
  * 
  * @author rohtash.singh Created on May 24, 2005
  */
-public class HTTPSClient implements SSLConnection {
 
-	private static char keystorepass[] = getPassword();
-	private static char keypassword[] = getPassword();
-
-	// keystorepass and keypassword are same in my case so i
-	// have given them in a method.
-	private static char[] getPassword() {
-		return "rohtashlakra".toCharArray();
+public class HTTPSClient {
+	
+	private int port;
+	
+	/**
+	 * 
+	 * @param port
+	 */
+	public HTTPSClient(int port) {
+		this.port = port;
 	}
-
-	public String getCertificate() {
-		return "lakra/net/serverkeys";
-	}
-
+	
 	/**
 	 * The rest of the JSSE related code is in the getServer method: It access
 	 * the serverkeys keystore. The JKS is the Java KeyStore (a type of keystore
@@ -83,40 +78,36 @@ public class HTTPSClient implements SSLConnection {
 	 * @throws Exception
 	 */
 	public ServerSocket getServer() throws Exception {
-		String alias = "qusay";
-		KeyStore ks = KeyStore.getInstance("JKS");
-		ks.load(new FileInputStream(getCertificate()), keystorepass);
-		System.out.println("Client Certificate : " + ks.getCertificate(alias));
-		KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
-		kmf.init(ks, keypassword);
-		SSLContext sslContext = SSLContext.getInstance("SSLv3");
-		sslContext.init(kmf.getKeyManagers(), null, null);
-		ServerSocketFactory ssFactory = sslContext.getServerSocketFactory();
-		SSLServerSocket serversocket = (SSLServerSocket) ssFactory.createServerSocket(8005);
+		
+		String filePath = IOHelper.filePath(HTTPSClient.class);
+		String certFilePath = IOHelper.pathString(filePath, NetConstants.SERVER_KEYS);
+		SSLServerSocket serversocket = SSLHelper.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
 		return serversocket;
-		// return new ServerSocket(HTTPS_PORT);
 	}
-
+	
 	// multi-threading -- create a new connection for each request
 	public void run() {
 		ServerSocket listen;
 		try {
 			listen = getServer();
-			while (true) {
+			while(true) {
 				Socket client = listen.accept();
 				System.out.println("Client: " + client);
-				ProcessConnection cc = new ProcessConnection(client);
-				// new ConnProcess(client);
+				new ProcessConnection(client);
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			System.out.println("Exception:" + ex.getMessage());
+		} catch(Exception e) {
+			e.printStackTrace();
+			System.out.println("Exception:" + e.getMessage());
 		}
 	}
-
-	// main program
+	
+	/**
+	 * 
+	 * @param argv
+	 * @throws Exception
+	 */
 	public static void main(String argv[]) throws Exception {
-		HTTPSClient httpsClient = new HTTPSClient();
+		HTTPSClient httpsClient = new HTTPSClient(NetConstants.HTTPS_PORT);
 		httpsClient.run();
 	}
 }

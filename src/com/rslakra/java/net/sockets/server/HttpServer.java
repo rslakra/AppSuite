@@ -94,7 +94,7 @@ public class HttpServer implements Runnable {
 			try {
 				// Get Path of class file from Header
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-				// method to extract parth from file
+				// method to extract path from file
 				String path = getPath(in);
 				System.out.println("Path : " + path);
 				byte[] byteCode = getBytes("");
@@ -170,25 +170,18 @@ public class HttpServer implements Runnable {
 			try {
 				// Set up Key Manager to do Server Authentication
 				char[] password = "passphrase".toCharArray();
-				SSLContext sslContext = SSLContext.getInstance("TLS");// TSL
-																		// File
-																		// Server
-				KeyManagerFactory kmFactory = KeyManagerFactory.getInstance("SunX509");// Certificate
-																						// Type
-				KeyStore keyStore = KeyStore.getInstance("JKS"); // Java Key
-																	// Store
+				// TSL File Server
+				SSLContext sslContext = SSLContext.getInstance("TLS");
+				// Certificate Type
+				KeyManagerFactory kmFactory = KeyManagerFactory.getInstance("SunX509");
+				KeyStore keyStore = KeyStore.getInstance("JKS"); // Java Key Store
 
-				String serverCertFile = "testkeys";// Server Certificate File
-													// Name
+				// Server Certificate File Name
+				String serverCertFile = "testkeys";
 				keyStore.load(new FileInputStream(serverCertFile), password);
 				kmFactory.init(keyStore, password);
-				sslContext.init(kmFactory.getKeyManagers(), null, null);// Key
-																		// Manager,
-																		// Trust
-																		// Manager,
-																		// Secure
-																		// Random
-
+				// Key Manager, Trust Manager, Secure Random
+				sslContext.init(kmFactory.getKeyManagers(), null, null);
 				return sslContext.getServerSocketFactory();
 			} catch (Exception ex) {
 				ex.printStackTrace();
@@ -196,6 +189,7 @@ public class HttpServer implements Runnable {
 		} else {
 			return ServerSocketFactory.getDefault();
 		}
+		
 		return null;
 	}
 

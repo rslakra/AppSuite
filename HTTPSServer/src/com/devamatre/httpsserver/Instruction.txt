@@ -1,0 +1,2 @@
+keytool -genkey -keyalg RSA -alias selfsigned -keystore rsl.jks -storepass password -validity 360 -keysize 2048
+keytool -importkeystore -srckeystore rsl.jks -destkeystore rsl.jks -deststoretype pkcs12

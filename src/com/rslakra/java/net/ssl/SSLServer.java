@@ -1,15 +1,15 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code, in source 
- * and binary forms, with or without modification, are permitted provided 
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code, in source
+ * and binary forms, with or without modification, are permitted provided
  * that the following conditions are met:
  * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * notice, this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
@@ -22,8 +22,8 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.java.net.ssl;
@@ -39,20 +39,22 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
+
+import com.devamatre.core.IOHelper;
+import com.rslakra.java.net.NetConstants;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com) Created on May 24, 2005
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com) May 24, 2005
  * @version 1.0.0
  * @since 1.0.0
  */
 public class SSLServer {
 
 	public static void main(String[] args) {
-		char ksPass[] = "rohtashlakra".toCharArray();
+		char ksPass[] = NetConstants.KEY_PASSWORD.toCharArray();
 		char ctPass[] = ksPass;
 
 		BufferedWriter out;
@@ -60,19 +62,22 @@ public class SSLServer {
 
 		try {
 			KeyStore ks = KeyStore.getInstance("JKS");
-			ks.load(new FileInputStream("lakra/net/serverCert"), ksPass);
+			String filePath = IOHelper.filePath(SSLServer.class);
+			filePath = IOHelper.pathString(filePath, "serverCert");
+			System.out.println("filePath:" + filePath);
+			ks.load(new FileInputStream(filePath), ksPass);
 			System.out.println(ks.getProvider());
 			KeyManagerFactory kmf = KeyManagerFactory.getInstance("SunX509");
 			kmf.init(ks, ctPass);
 			SSLContext sc = SSLContext.getInstance("SSLv3");
 			sc.init(kmf.getKeyManagers(), null, null);
 			SSLServerSocketFactory ssf = sc.getServerSocketFactory();
-			SSLServerSocket s = (SSLServerSocket) ssf.createServerSocket(1601);
-			printServerSocketInfo(s);
-			SSLSocket c = (SSLSocket) s.accept();
-			printSocketInfo(c);
-			out = new BufferedWriter(new OutputStreamWriter(c.getOutputStream()));
-			in = new BufferedReader(new InputStreamReader(c.getInputStream()));
+			SSLServerSocket serverSocket = (SSLServerSocket) ssf.createServerSocket(1601);
+			IOHelper.logServerSocket(serverSocket);
+			SSLSocket socket = (SSLSocket) serverSocket.accept();
+			IOHelper.logSocket(socket);
+			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String msg = "Welcome to SSL Server:\n";
 			out.write(msg, 0, msg.length());
 			out.flush();
@@ -92,36 +97,10 @@ public class SSLServer {
 			}
 			out.close();
 			in.close();
-			c.close();
-			s.close();
+			socket.close();
+			serverSocket.close();
 		} catch (Exception e) {
 			System.err.println(e.toString());
 		}
-	}
-
-	private static void printSocketInfo(SSLSocket s) {
-		System.out.println("\n========================================\n");
-		System.out.println("Socket class: " + s.getClass());
-		System.out.println("   Remote address = " + s.getInetAddress().toString());
-		System.out.println("   Remote port = " + s.getPort());
-		System.out.println("   Local socket address = " + s.getLocalSocketAddress().toString());
-		System.out.println("   Local address = " + s.getLocalAddress().toString());
-		System.out.println("   Local port = " + s.getLocalPort());
-		System.out.println("   Need client authentication = " + s.getNeedClientAuth());
-		SSLSession ss = s.getSession();
-		System.out.println("   Cipher suite = " + ss.getCipherSuite());
-		System.out.println("   Protocol = " + ss.getProtocol());
-		System.out.println("\n========================================");
-	}
-
-	private static void printServerSocketInfo(SSLServerSocket s) {
-		System.out.println("\n========================================\n");
-		System.out.println("Server socket class: " + s.getClass());
-		System.out.println("   Socker address = " + s.getInetAddress().toString());
-		System.out.println("   Socker port = " + s.getLocalPort());
-		System.out.println("   Need client authentication = " + s.getNeedClientAuth());
-		System.out.println("   Want client authentication = " + s.getWantClientAuth());
-		System.out.println("   Use client mode = " + s.getUseClientMode());
-		System.out.println("\n========================================");
 	}
 }

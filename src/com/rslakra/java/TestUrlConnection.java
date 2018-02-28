@@ -37,9 +37,9 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang.StringEscapeUtils;
 
-import com.rslakra.utils.CoreHelper;
-import com.rslakra.utils.HTTPHelper;
-import com.rslakra.utils.HTTPHelper.HttpResponse;
+import com.devamatre.core.CoreHelper;
+import com.devamatre.core.HTTPHelper;
+import com.devamatre.core.HTTPHelper.HttpResponse;
 
 public class TestUrlConnection {
 
