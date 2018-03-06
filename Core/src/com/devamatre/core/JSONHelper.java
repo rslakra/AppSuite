@@ -1,29 +1,27 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code, in source 
- * and binary forms, with or without modification, are permitted provided 
- * that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code, in source and
+ * binary forms, with or without modification, are permitted provided that the
+ * following conditions are met: 1. Redistributions of source code must retain
+ * the above copyright notice, this list of conditions and the following
+ * disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.devamatre.core;
@@ -49,11 +47,14 @@ import com.google.gson.reflect.TypeToken;
  * @since May 18, 2015 2:39:11 PM
  */
 public final class JSONHelper {
-
+	
+	/**
+	 * 
+	 */
 	private JSONHelper() {
 		throw new RuntimeException("Object creation is not allowed!");
 	}
-
+	
 	/**
 	 * Returns the GSON object.
 	 * 
@@ -66,11 +67,11 @@ public final class JSONHelper {
 		if (prettyPrint) {
 			gsonBuilder.setPrettyPrinting();
 		}
-
+		
 		Gson gson = gsonBuilder.create();
 		return gson;
 	}
-
+	
 	/**
 	 * Returns the JSON string for the given JSON object.
 	 * 
@@ -82,7 +83,7 @@ public final class JSONHelper {
 		Gson gson = newGsonObject(prettyPrint);
 		return gson.toJson(object);
 	}
-
+	
 	/**
 	 * Returns the JSON string for the given JSON object.
 	 * 
@@ -92,7 +93,7 @@ public final class JSONHelper {
 	public static String toJSONString(Object object) {
 		return toJSONString(object, false);
 	}
-
+	
 	/**
 	 * 
 	 * @param list
@@ -105,7 +106,7 @@ public final class JSONHelper {
 		}
 		return json;
 	}
-
+	
 	/**
 	 * Returns the JSON string for the given exception.
 	 * 
@@ -115,7 +116,7 @@ public final class JSONHelper {
 	public static String toJSONString(Throwable error) {
 		return toJSONString(error, false);
 	}
-
+	
 	/**
 	 * Generates the JSON string from the given map.
 	 * 
@@ -125,7 +126,7 @@ public final class JSONHelper {
 	public static String toJSONString(Map<String, String> mapData) {
 		return newGsonObject(false).toJson(mapData);
 	}
-
+	
 	/**
 	 * Returns the object of the class type T for the given JSON string.
 	 * 
@@ -138,7 +139,32 @@ public final class JSONHelper {
 		T object = gson.fromJson(jsonString, classType);
 		return object;
 	}
-
+	
+	/**
+	 * Returns the Map object from the given data bytes.
+	 * 
+	 * @param dataBytes
+	 * @return
+	 */
+	public static Map<String, Object> jsonBytesAsMap(byte[] dataBytes) {
+		TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
+		};
+		String jsonString = IOHelper.toUTF8String(dataBytes);
+		return (new Gson().fromJson(jsonString, typeToken.getType()));
+	}
+	
+	/**
+	 * Returns the Map object from the given string.
+	 * 
+	 * @param jsonString
+	 * @return
+	 */
+	public static Map<String, List<String>> jsonHeadersAsMap(String jsonString) {
+		TypeToken<Map<String, List<String>>> typeToken = new TypeToken<Map<String, List<String>>>() {
+		};
+		return (new Gson().fromJson(jsonString, typeToken.getType()));
+	}
+	
 	/**
 	 * Returns the value for the given key from the given jsonString.
 	 * 
@@ -150,7 +176,7 @@ public final class JSONHelper {
 	public static <T> T valueForKey(String jsonString, String key) {
 		return (T) fromJSONString(jsonString, Map.class).get(key);
 	}
-
+	
 	/**
 	 * Returns the value for the given key from the given jsonString.
 	 * 
@@ -161,7 +187,7 @@ public final class JSONHelper {
 	public static String valueForKeyAsString(String jsonString, String key) {
 		return (String) valueForKey(jsonString, key);
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonObject
@@ -172,7 +198,7 @@ public final class JSONHelper {
 		JsonElement jsonElement = jsonObject.get(propertName);
 		return (jsonElement == null ? null : jsonElement.getAsString());
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonObject
@@ -183,7 +209,7 @@ public final class JSONHelper {
 		JsonElement jsonElement = jsonObject.get(propertName);
 		return (jsonElement == null ? null : jsonElement.getAsInt());
 	}
-
+	
 	/**
 	 * Returns the list of the specified objects from the given JSON string.
 	 * 
@@ -201,10 +227,10 @@ public final class JSONHelper {
 				objects.add(object);
 			}
 		}
-
+		
 		return objects;
 	}
-
+	
 	/**
 	 * Returns the list of the specified objects from the given JSON string.
 	 * 
@@ -217,7 +243,7 @@ public final class JSONHelper {
 		if (jsonString == null || !isValidJSONString(jsonString)) {
 			return mixedObjects;
 		}
-
+		
 		JsonArray jsonArray = toJSONArray(jsonString);
 		if (jsonArray != null) {
 			for (int i = 0; i < jsonArray.size(); i++) {
@@ -232,10 +258,10 @@ public final class JSONHelper {
 				}
 			}
 		}
-
+		
 		return mixedObjects;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonString
@@ -247,11 +273,11 @@ public final class JSONHelper {
 		if (jsonElement.isJsonArray()) {
 			array = jsonElement.getAsJsonArray();
 		}
-
+		
 		return array;
-
+		
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonString
@@ -261,7 +287,7 @@ public final class JSONHelper {
 		JsonParser jsonParser = new JsonParser();
 		return jsonParser.parse(jsonString);
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonString
@@ -277,11 +303,11 @@ public final class JSONHelper {
 			} catch (JsonSyntaxException ex) {
 				return false;
 			}
-
+			
 			return true;
 		}
 	}
-
+	
 	/**
 	 * Returns the list of strings for the given JSON string.
 	 * 
@@ -295,7 +321,7 @@ public final class JSONHelper {
 		List<T> listOfObjects = gson.fromJson(jsonString, typeToken.getType());
 		return listOfObjects;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonString
@@ -306,10 +332,10 @@ public final class JSONHelper {
 		};
 		Gson gson = newGsonObject(false);
 		List<String[]> list = gson.fromJson(jsonString, tt.getType());
-
+		
 		return list;
 	}
-
+	
 	/**
 	 * Returns the Map object from the given string.
 	 * 
@@ -321,7 +347,7 @@ public final class JSONHelper {
 		};
 		return (new Gson().fromJson(jsonString, typeToken.getType()));
 	}
-
+	
 	/**
 	 * Returns the Map object from the given data bytes.
 	 * 
@@ -334,7 +360,7 @@ public final class JSONHelper {
 		String jsonString = IOHelper.toUTF8String(dataBytes);
 		return (new Gson().fromJson(jsonString, typeToken.getType()));
 	}
-
+	
 	/**
 	 * Returns the Map object from the given object.
 	 * 
@@ -344,7 +370,7 @@ public final class JSONHelper {
 	public static Map<String, Object> toMap(Object object) {
 		return toMap(toJSONString(object));
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonString
@@ -356,7 +382,7 @@ public final class JSONHelper {
 		List<Object[]> list = new Gson().fromJson(jsonString, tt.getType());
 		return list;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonArray
@@ -369,7 +395,7 @@ public final class JSONHelper {
 		List<String> list = gson.fromJson(jsonArray, tt.getType());
 		return list;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonObject
@@ -380,10 +406,10 @@ public final class JSONHelper {
 		if (jsonObject != null && !CoreHelper.isNullOrEmpty(key)) {
 			return jsonObject.get(key);
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonObject
@@ -394,7 +420,7 @@ public final class JSONHelper {
 		JsonElement jsonElement = getElement(jsonObject, key);
 		return (jsonElement != null ? jsonElement.getAsString() : null);
 	}
-
+	
 	/**
 	 * Returns the value for the given key from the given jsonArray.
 	 * 
@@ -413,10 +439,10 @@ public final class JSONHelper {
 				}
 			}
 		}
-
+		
 		return value;
 	}
-
+	
 	/**
 	 * 
 	 * @param jsonObject
@@ -426,7 +452,7 @@ public final class JSONHelper {
 	public static boolean getAsBoolean(JsonObject jsonObject, String key) {
 		return Boolean.valueOf(getAsString(jsonObject, key));
 	}
-
+	
 	/**
 	 * Returns an image bytes from the given JSON string.
 	 * 
@@ -439,10 +465,10 @@ public final class JSONHelper {
 			String javaString = fromJSONString(jsonString, String.class);
 			imageBytes = javaString.getBytes();
 		}
-
+		
 		return imageBytes;
 	}
-
+	
 	/**
 	 * Returns an image files from the given JSON bytes.
 	 * 
@@ -458,8 +484,8 @@ public final class JSONHelper {
 			String jsonString = IOHelper.toUTF8String(responseBytes);
 			responseBytes = toImageBytes(jsonString);
 		}
-
+		
 		return responseBytes;
 	}
-
+	
 }

@@ -4,15 +4,16 @@
 package com.devamatre.javafx;
 
 import javafx.application.Application;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
- * @author Rohtash Singh Lakra
+ * 
+ * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @created 2018-01-05 08:46:26 PM
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class LoginApplication extends Application {
 	
@@ -25,18 +26,13 @@ public class LoginApplication extends Application {
 	}
 	
 	/**
-	 * (non-Javadoc)
 	 * 
 	 * @see javafx.application.Application#start(javafx.stage.Stage)
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		Label userNameLabel = new Label("Username:");
-		TextField userName = new TextField();
-		HBox boxUserName = new HBox();
-		boxUserName.setPadding(new Insets(10, 10, 10, 10));
-		stage.setScene(new Scene(boxUserName));
-		JavaFXHelper.setSize(stage, 640, 480);
+		stage.setScene(new Scene(null));
+		JFXHelper.setDefaultSize(stage);
 		stage.show();
 	}
 	

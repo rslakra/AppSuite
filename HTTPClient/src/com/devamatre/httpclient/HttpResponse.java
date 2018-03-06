@@ -1,29 +1,27 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
- * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code, in source 
- * and binary forms, with or without modification, are permitted provided 
- * that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright
- *    notice, this list of conditions and the following disclaimer in the
- *    documentation and/or other materials provided with the distribution.
+ * This code is licensed to Devamatre under one or more contributor license
+ * agreements. The reproduction, transmission or use of this code, in source and
+ * binary forms, with or without modification, are permitted provided that the
+ * following conditions are met: 1. Redistributions of source code must retain
+ * the above copyright notice, this list of conditions and the following
+ * disclaimer. 2. Redistributions in binary form must reproduce the above
+ * copyright notice, this list of conditions and the following disclaimer in the
+ * documentation and/or other materials provided with the distribution.
  * 
- * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
- * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
- * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
- * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
- * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
- * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
- * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
- * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
- * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
- * SUCH DAMAGE.
- *      
- * Devamatre reserves the right to modify the technical specifications and or 
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND ANY
+ * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+ * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+ * DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR ANY
+ * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+ * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+ * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+ * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+ * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+ * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ * 
+ * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
 package com.devamatre.httpclient;
@@ -32,8 +30,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.devamatre.core.CoreHelper;
-import com.devamatre.core.HTTPHelper;
 import com.devamatre.core.IOHelper;
+import com.devamatre.core.JSONHelper;
 
 /**
  *
@@ -44,30 +42,30 @@ import com.devamatre.core.IOHelper;
  * @since 1.0.0
  */
 public class HttpResponse implements Cloneable {
-
+	
 	/** The response headers */
 	private Map<String, List<String>> requestHeaders;
-
+	
 	/* responseCode */
 	private int responseCode;
-
+	
 	/** responseHeaders */
 	private Map<String, List<String>> responseHeaders;
 	private String jsonResponseHeaders;
-
+	
 	/* dataBytes */
 	private byte[] dataBytes;
-
+	
 	/* error */
 	private Throwable error;
-
+	
 	/**
 	 * 
 	 */
 	public HttpResponse() {
 		reset();
 	}
-
+	
 	/**
 	 * Returns the requestHeaders.
 	 * 
@@ -76,7 +74,7 @@ public class HttpResponse implements Cloneable {
 	public Map<String, List<String>> getRequestHeaders() {
 		return requestHeaders;
 	}
-
+	
 	/**
 	 * The requestHeaders to be set.
 	 * 
@@ -85,7 +83,7 @@ public class HttpResponse implements Cloneable {
 	public void setRequestHeaders(Map<String, List<String>> requestHeaders) {
 		this.requestHeaders = requestHeaders;
 	}
-
+	
 	/**
 	 * Returns the responseCode.
 	 * 
@@ -94,7 +92,7 @@ public class HttpResponse implements Cloneable {
 	public int getResponseCode() {
 		return responseCode;
 	}
-
+	
 	/**
 	 * The responseCode to be set.
 	 * 
@@ -103,7 +101,7 @@ public class HttpResponse implements Cloneable {
 	public void setResponseCode(int responseCode) {
 		this.responseCode = responseCode;
 	}
-
+	
 	/**
 	 * Returns the responseHeaders.
 	 * 
@@ -112,7 +110,7 @@ public class HttpResponse implements Cloneable {
 	public Map<String, List<String>> getResponseHeaders() {
 		return responseHeaders;
 	}
-
+	
 	/**
 	 * The responseHeaders to be set.
 	 * 
@@ -122,10 +120,10 @@ public class HttpResponse implements Cloneable {
 	public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
 		this.responseHeaders = responseHeaders;
 		if (!CoreHelper.isNullOrEmpty(responseHeaders)) {
-			jsonResponseHeaders = HTTPHelper.toJson(responseHeaders);
+			jsonResponseHeaders = JSONHelper.toJSONString(responseHeaders);
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -133,7 +131,7 @@ public class HttpResponse implements Cloneable {
 	public String getJsonResponseHeaders() {
 		return jsonResponseHeaders;
 	}
-
+	
 	/**
 	 * The responseHeaders to be set.
 	 * 
@@ -143,10 +141,10 @@ public class HttpResponse implements Cloneable {
 	public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
 		if (!CoreHelper.isNullOrEmpty(jsonResponseHeaders)) {
 			String jsonResponseHeader = IOHelper.toUTF8String(jsonResponseHeaders);
-			this.responseHeaders = HTTPHelper.jsonHeadersAsMap(jsonResponseHeader);
+			this.responseHeaders = JSONHelper.jsonHeadersAsMap(jsonResponseHeader);
 		}
 	}
-
+	
 	/**
 	 * Returns the dataBytes.
 	 * 
@@ -155,7 +153,7 @@ public class HttpResponse implements Cloneable {
 	public byte[] getDataBytes() {
 		return dataBytes;
 	}
-
+	
 	/**
 	 * The dataBytes to be set.
 	 * 
@@ -164,14 +162,14 @@ public class HttpResponse implements Cloneable {
 	public void setDataBytes(byte[] dataBytes) {
 		this.dataBytes = dataBytes;
 	}
-
+	
 	/**
 	 * @return the error
 	 */
 	public Throwable getError() {
 		return error;
 	}
-
+	
 	/**
 	 * @param error
 	 *            the error to set
@@ -179,14 +177,14 @@ public class HttpResponse implements Cloneable {
 	public void setError(Throwable error) {
 		this.error = error;
 	}
-
+	
 	/**
 	 * Returns success if my {@link #status} is any of my SUCCESS states.
 	 */
 	public boolean isSuccess() {
 		return (responseCode == 200);
 	}
-
+	
 	/**
 	 * Returns true if my {@link #status} is any of my ERROR states, or if my
 	 * {@link #error} or {@link #failureBO} fields have anything in them.
@@ -194,7 +192,7 @@ public class HttpResponse implements Cloneable {
 	public boolean isError() {
 		return (this.error != null);
 	}
-
+	
 	/**
 	 * Returns the response type.
 	 * 
@@ -202,17 +200,17 @@ public class HttpResponse implements Cloneable {
 	 */
 	public String getMimeType() {
 		String mimeType = null;
-
+		
 		if (responseHeaders != null) {
 			mimeType = responseHeaders.get("Content-Type").get(0);
 			if (mimeType.indexOf(";") != -1) {
 				mimeType = mimeType.substring(0, mimeType.indexOf(";")).trim();
 			}
 		}
-
+		
 		return mimeType;
 	}
-
+	
 	/**
 	 * Resets this object.
 	 */
@@ -223,7 +221,7 @@ public class HttpResponse implements Cloneable {
 		dataBytes = null;
 		error = null;
 	}
-
+	
 	/**
 	 * Creates exact copy of an object.
 	 * 
@@ -243,10 +241,10 @@ public class HttpResponse implements Cloneable {
 			// This should never happen
 			throw new InternalError(ex.toString());
 		}
-
+		
 		return cloneResponse;
 	}
-
+	
 	/**
 	 * Returns the string representation of this object.
 	 * 
@@ -260,14 +258,14 @@ public class HttpResponse implements Cloneable {
 		sBuilder.append("ResponseCode:").append(getResponseCode()).append("\n");
 		sBuilder.append("ResponseHeaders:").append(getResponseHeaders()).append("\n");
 		sBuilder.append("dataBytes:").append(IOHelper.toUTF8String(getDataBytes())).append("\n");
-
+		
 		if (this.error != null) {
 			sBuilder.append("\n\n").append(HTTPHelper.toString(getError())).append("\n\n");
 		}
-
+		
 		sBuilder.append("================ HTTP Response (End) ================\n");
-
+		
 		return sBuilder.toString();
 	}
-
+	
 }

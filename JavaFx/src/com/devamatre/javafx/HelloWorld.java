@@ -34,7 +34,7 @@ public class HelloWorld extends Application {
 		
 		stage.setScene(new Scene(message));
 		stage.setTitle(title);
-		JavaFXHelper.setSize(stage, 640, 480);
+		JFXHelper.setDefaultSize(stage);
 		stage.show();
 		
 	}

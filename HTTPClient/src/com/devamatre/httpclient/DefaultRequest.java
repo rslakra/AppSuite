@@ -56,10 +56,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import com.devamatre.core.CoreHelper;
-import com.devamatre.core.HTTPHelper;
-import com.devamatre.core.HTTPHelper.Pairs;
 import com.devamatre.core.IOHelper;
 import com.devamatre.core.SecurityHelper;
+import com.devamatre.httpclient.HTTPHelper.Pairs;
 
 /**
  * The <code>DefaultRequest</code> is the base class for all HTTP(s) request
