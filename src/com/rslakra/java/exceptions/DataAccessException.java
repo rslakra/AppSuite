@@ -37,6 +37,9 @@ package com.rslakra.java.exceptions;
  * TODO: try to send the cause as the exception string.
  * 
  * @author Rohtash Singh (rohtash.singh@devamatre.com)
+ * @created 01/12/2012 (dd/mm/yyyy)
+ * @version 1.0.0
+ * @since 1.0.0
  */
 public class DataAccessException extends RuntimeException {
 
