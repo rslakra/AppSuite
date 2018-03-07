@@ -1,22 +1,28 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009
+ * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code or the 
- * snippet is not permitted without prior express written consent of Devamatre. 
+ * agreements. The reproduction, transmission or use of this code, in source 
+ * and binary forms, with or without modification, are permitted provided 
+ * that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, 
+ * 	  this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the 
- * offenders will be liable for any damages. All rights, including  but not
- * limited to rights created by patent grant or registration of a utility model 
- * or design, are reserved. Technical specifications and features are binding 
- * only insofar as they are specifically and expressly agreed upon in a written 
- * contract.
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  * 
- * You may obtain a copy of the License for more details at:
- *      http://www.devamatre.com/licenses/license.txt.
- *      
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -117,7 +123,7 @@ public final class Multipart implements Part {
 		
 		/** Assemble the specified parts into a {@link Multipart}. */
 		public Multipart build() {
-			if(parts.isEmpty()) {
+			if (parts.isEmpty()) {
 				throw new IllegalStateException("Multipart body must have at least one part.");
 			}
 			return new Multipart(type, parts, boundary);
@@ -145,7 +151,7 @@ public final class Multipart implements Part {
 	public void writeBodyTo(OutputStream stream) throws IOException {
 		byte[] boundary = this.boundary.getBytes("UTF-8");
 		boolean first = true;
-		for(Part part : parts) {
+		for (Part part : parts) {
 			writeBoundary(stream, boundary, first, false);
 			writePart(stream, part);
 			first = false;
@@ -154,14 +160,14 @@ public final class Multipart implements Part {
 	}
 	
 	private static void writeBoundary(OutputStream out, byte[] boundary, boolean first, boolean last) throws IOException {
-		if(!first) {
+		if (!first) {
 			out.write('\r');
 			out.write('\n');
 		}
 		out.write('-');
 		out.write('-');
 		out.write(boundary);
-		if(last) {
+		if (last) {
 			out.write('-');
 			out.write('-');
 		} else {
@@ -172,8 +178,8 @@ public final class Multipart implements Part {
 	
 	private static void writePart(OutputStream out, Part part) throws IOException {
 		Map<String, String> headers = part.getHeaders();
-		if(headers != null) {
-			for(Map.Entry<String, String> header : headers.entrySet()) {
+		if (headers != null) {
+			for (Map.Entry<String, String> header : headers.entrySet()) {
 				out.write(header.getKey().getBytes("UTF-8"));
 				out.write(':');
 				out.write(' ');

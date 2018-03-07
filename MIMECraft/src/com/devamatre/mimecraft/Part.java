@@ -1,22 +1,28 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009
+ * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
- * agreements. The reproduction, transmission or use of this code or the 
- * snippet is not permitted without prior express written consent of Devamatre. 
+ * agreements. The reproduction, transmission or use of this code, in source 
+ * and binary forms, with or without modification, are permitted provided 
+ * that the following conditions are met:
+ * 1. Redistributions of source code must retain the above copyright notice, 
+ * 	  this list of conditions and the following disclaimer.
+ * 2. Redistributions in binary form must reproduce the above copyright
+ *    notice, this list of conditions and the following disclaimer in the
+ *    documentation and/or other materials provided with the distribution.
  * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the license is distributed on an "AS IS" BASIS, WITHOUT 
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied and the 
- * offenders will be liable for any damages. All rights, including  but not
- * limited to rights created by patent grant or registration of a utility model 
- * or design, are reserved. Technical specifications and features are binding 
- * only insofar as they are specifically and expressly agreed upon in a written 
- * contract.
+ * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
+ * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+ * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+ * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+ * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+ * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+ * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+ * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+ * SUCH DAMAGE.
  * 
- * You may obtain a copy of the License for more details at:
- *      http://www.devamatre.com/licenses/license.txt.
- *      
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -58,7 +64,7 @@ public interface Part {
 		private boolean hasBody = false;
 		
 		private void checkSetBody() {
-			if(hasBody) {
+			if (hasBody) {
 				throw new IllegalStateException("Only one body per part.");
 			}
 			hasBody = true;
@@ -75,7 +81,7 @@ public interface Part {
 		
 		/** Set the {@code Content-Length} header value. */
 		public Builder contentLength(int length) {
-			if(length <= 0) {
+			if (length <= 0) {
 				throw new IllegalStateException("Length must be greater than zero.");
 			}
 			Utils.isNotZero(headerLength, "Length header already set.");
@@ -130,7 +136,7 @@ public interface Part {
 			byte[] bytes;
 			try {
 				bytes = body.getBytes("UTF-8");
-			} catch(UnsupportedEncodingException e) {
+			} catch (UnsupportedEncodingException e) {
 				throw new IllegalArgumentException("Unable to convert input to UTF-8: " + body, e);
 			}
 			bodyBytes = bytes;
@@ -150,7 +156,7 @@ public interface Part {
 		/** Use the specified {@link Multipart} as the body. */
 		public Builder body(Multipart body) {
 			Utils.isNotNull(body, "Multipart body must not be null.");
-			if(headerType != null) {
+			if (headerType != null) {
 				throw new IllegalStateException("Content type must not be explicitly set for multipart body.");
 			}
 			checkSetBody();
@@ -162,32 +168,32 @@ public interface Part {
 		/** Assemble the specified headers and body into a {@link Part}. */
 		public Part build() {
 			Map<String, String> headers = new LinkedHashMap<String, String>();
-			if(headerDisposition != null) {
+			if (headerDisposition != null) {
 				headers.put("Content-Disposition", headerDisposition);
 			}
-			if(headerType != null) {
+			if (headerType != null) {
 				headers.put("Content-Type", headerType);
 			}
-			if(headerLength != 0) {
+			if (headerLength != 0) {
 				headers.put("Content-Length", Integer.toString(headerLength));
 			}
-			if(headerLanguage != null) {
+			if (headerLanguage != null) {
 				headers.put("Content-Language", headerLanguage);
 			}
-			if(headerEncoding != null) {
+			if (headerEncoding != null) {
 				headers.put("Content-Transfer-Encoding", headerEncoding);
 			}
 			
-			if(bodyBytes != null) {
+			if (bodyBytes != null) {
 				return new BytesPart(headers, bodyBytes);
 			}
-			if(bodyStream != null) {
+			if (bodyStream != null) {
 				return new StreamPart(headers, bodyStream);
 			}
-			if(bodyFile != null) {
+			if (bodyFile != null) {
 				return new FilePart(headers, bodyFile);
 			}
-			if(bodyMultipart != null) {
+			if (bodyMultipart != null) {
 				headers.putAll(bodyMultipart.getHeaders());
 				return new PartPart(headers, bodyMultipart);
 			}
@@ -266,10 +272,10 @@ public interface Part {
 					in = new FileInputStream(file);
 					Utils.copyStream(in, out, buffer);
 				} finally {
-					if(in != null) {
+					if (in != null) {
 						try {
 							in.close();
-						} catch(IOException ignored) {
+						} catch (IOException ignored) {
 						}
 					}
 				}
