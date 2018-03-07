@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -83,7 +83,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * @since Jul 17, 2015 10:31:46 AM
  */
 public final class SecurityHelper {
-
+	
 	public static final String EMPTY_STRING = "";
 	public static final String HEX_DIGIT_CHARS = "0123456789ABCDEF";
 	public static final String PROVIDER_BC = "BC";
@@ -94,43 +94,43 @@ public final class SecurityHelper {
 	public static final String ALGO_SHA_1 = "SHA-1";
 	public static final String ALGO_SHA1PRNG = "SHA1PRNG";
 	public static final String CERT_X509 = "X.509";
-
+	
 	/* Encryption ALGO - AES */
 	public static final String ALGO_AES = "AES";
 	public static final String ALGO_AES_CBC_PKCS5PADDING = "AES/CBC/PKCS5Padding";
 	public static final int IV_SIZE = 16;
 	public static final boolean USE_FILE_EXTENSION_AS_IV = true;
-
+	
 	/* Encryption ALGO - MD5 */
 	public static final String ALGO_MD5 = "MD5";
-
+	
 	/* INSTALLATION */
 	private static final String INSTALLATION = "device.id";
-
+	
 	/* Note: For debugging purposes, reduce value to 100. */
 	private static final Integer BV_ENCRYPTION_KEY_LENGTH = 32;
-
+	
 	/* pbkdf2Params */
 	private static PBKDF2Params pbkdf2Params = null;
-
+	
 	/* pbkdf2Generator */
 	private static PBKDF2Generator pbkdf2Generator = null;
-
+	
 	/* uniqueDeviceUUID */
 	private static String uniqueDeviceUUID;
-
+	
 	/* _offlineEncryptionKey */
 	private static String _offlineEncryptionKey;
-
+	
 	/* publicKey */
 	private static PublicKey publicKey;
-
+	
 	/* messageDigest */
 	private static MessageDigest sha256MessageDigest;
-
+	
 	/* Initialize X509TrustManager for the app's lifetime. */
 	private static X509TrustManager mX509TrustManager;
-
+	
 	static {
 		try {
 			/* add provider. */
@@ -140,17 +140,16 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		try {
-			TrustManagerFactory trustManagerFactory = TrustManagerFactory
-					.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
 			trustManagerFactory.init((KeyStore) null);
 			mX509TrustManager = (X509TrustManager) trustManagerFactory.getTrustManagers()[0];
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
 	}
-
+	
 	/**
 	 * Initialize the PBKDF2 generator only once.
 	 */
@@ -159,21 +158,20 @@ public final class SecurityHelper {
 			synchronized (SecurityHelper.class) {
 				if (pbkdf2Generator == null) {
 					/* pbkdf2Params */
-					pbkdf2Params = new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."),
-							PBKDF2Generator.ITERATIONS);
+					pbkdf2Params = new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."), PBKDF2Generator.ITERATIONS);
 					/* pbkdf2Generator */
 					pbkdf2Generator = new PBKDF2Generator(pbkdf2Params);
 				}
 			}
 		}
-
+		
 		return pbkdf2Generator;
 	}
-
+	
 	/**************************************************************************
 	 * Generic Utility Methods.
 	 *************************************************************************/
-
+	
 	/**
 	 * Returns the unique device ID bytes.
 	 *
@@ -201,10 +199,10 @@ public final class SecurityHelper {
 		} else {
 			deviceIDBytes = IOHelper.toUTF8Bytes(uniqueDeviceUUID);
 		}
-
+		
 		return deviceIDBytes;
 	}
-
+	
 	/**
 	 * Returns the UNIQUE device ID as string.
 	 *
@@ -213,11 +211,11 @@ public final class SecurityHelper {
 	public static String uniqueDeviceIdString() {
 		return IOHelper.toUTF8String(uniqueDeviceIdBytes("."));
 	}
-
+	
 	/**************************************************************************
 	 * encoding and decoding with URLEncoder and URLDecoder
 	 *************************************************************************/
-
+	
 	/**
 	 * Encodes the <code>value</code> using the specified
 	 * <code>charsetName</code>. If the <code>charsetName</code> is null or
@@ -235,7 +233,7 @@ public final class SecurityHelper {
 			return value;
 		}
 	}
-
+	
 	/**
 	 * Encodes the <code>value</code> using the
 	 * <code>Charset.defaultCharset().displayName()</code> character set.
@@ -246,7 +244,7 @@ public final class SecurityHelper {
 	public static String encodeWithURLEncoder(String value) {
 		return encodeWithURLEncoder(value, Charset.defaultCharset().displayName());
 	}
-
+	
 	/**
 	 * Decodes the <code>value</code> using the specified
 	 * <code>charsetName</code>. If the <code>charsetName</code> is null or
@@ -264,7 +262,7 @@ public final class SecurityHelper {
 			return value;
 		}
 	}
-
+	
 	/**
 	 * Decodes the <code>value</code> using the
 	 * <code>Charset.defaultCharset().displayName()</code> character set.
@@ -275,7 +273,7 @@ public final class SecurityHelper {
 	public static String decodeWithURLDecoder(String value) {
 		return decodeWithURLDecoder(value, Charset.defaultCharset().displayName());
 	}
-
+	
 	/**
 	 * Returns the base64 encoded string.
 	 * 
@@ -285,7 +283,7 @@ public final class SecurityHelper {
 	public static String encodeToBase64String(byte[] decrypted) {
 		return Base64.getEncoder().encodeToString(decrypted);
 	}
-
+	
 	/**
 	 * Returns the base64 encoded string.
 	 * 
@@ -295,7 +293,7 @@ public final class SecurityHelper {
 	public static String encodeToBase64String(String plainString) {
 		return encodeToBase64String(IOHelper.toUTF8Bytes(plainString));
 	}
-
+	
 	/**
 	 * Decode the encrypted string using Base64 decoding.
 	 * 
@@ -305,7 +303,7 @@ public final class SecurityHelper {
 	public static byte[] decodeToBase64Bytes(String encodedString) {
 		return Base64.getDecoder().decode(encodedString);
 	}
-
+	
 	/**
 	 * Returns the base64 decoded string.
 	 * 
@@ -315,7 +313,7 @@ public final class SecurityHelper {
 	public static String decodeToBase64String(String encodedString) {
 		return IOHelper.toUTF8String(decodeToBase64Bytes(encodedString));
 	}
-
+	
 	/**
 	 * Returns the base64 encoded hash string for the given paramValue.
 	 * 
@@ -332,10 +330,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return valueAsHashString;
 	}
-
+	
 	/**
 	 * Returns the base64 encoded hash string for the given paramValue.
 	 * 
@@ -350,10 +348,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return valueAsHashString;
 	}
-
+	
 	/**
 	 * Returns the base64 encoded hash string for the given paramValue.
 	 * 
@@ -363,7 +361,7 @@ public final class SecurityHelper {
 	public static String responseAsHashString(String dataString) {
 		return responseAsHashString(dataString.getBytes());
 	}
-
+	
 	/**
 	 * Returns the validated hash string.
 	 * 
@@ -376,14 +374,14 @@ public final class SecurityHelper {
 			hashString = hashString.replace(' ', '_');
 			hashString = hashString.replace('+', '_');
 		}
-
+		
 		return hashString;
 	}
-
+	
 	/**************************************************************************
 	 * encryption and decryption with public key
 	 *************************************************************************/
-
+	
 	/**
 	 * Encrypt the specified string with the provided key.
 	 * 
@@ -402,10 +400,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return encryptedWithKey;
 	}
-
+	
 	/**
 	 * Encrypts the given plainString using the public key.
 	 * 
@@ -415,7 +413,7 @@ public final class SecurityHelper {
 	public static String encryptWithPublicKey(String plainString) {
 		return encryptWithPublicKey(plainString, publicKey);
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -423,7 +421,7 @@ public final class SecurityHelper {
 	public static SecureRandom newSecureRandom() {
 		return new SecureRandom();
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -432,7 +430,7 @@ public final class SecurityHelper {
 	public static CertificateFactory newCertificateFactory() throws CertificateException {
 		return CertificateFactory.getInstance(CERT_X509);
 	}
-
+	
 	/**
 	 * 
 	 * @param certificateFactory
@@ -441,8 +439,7 @@ public final class SecurityHelper {
 	 * @return
 	 * @throws CertificateException
 	 */
-	public static X509Certificate newX509Certificate(CertificateFactory certificateFactory, InputStream inputStream,
-			boolean closeStream) throws CertificateException {
+	public static X509Certificate newX509Certificate(CertificateFactory certificateFactory, InputStream inputStream, boolean closeStream) throws CertificateException {
 		X509Certificate x509Cert = null;
 		try {
 			x509Cert = (X509Certificate) certificateFactory.generateCertificate(inputStream);
@@ -454,10 +451,10 @@ public final class SecurityHelper {
 				IOHelper.safeClose(inputStream);
 			}
 		}
-
+		
 		return x509Cert;
 	}
-
+	
 	/**
 	 * 
 	 * @param inputStream
@@ -465,11 +462,10 @@ public final class SecurityHelper {
 	 * @return
 	 * @throws CertificateException
 	 */
-	public static X509Certificate newX509Certificate(InputStream inputStream, boolean closeStream)
-			throws CertificateException {
+	public static X509Certificate newX509Certificate(InputStream inputStream, boolean closeStream) throws CertificateException {
 		return newX509Certificate(newCertificateFactory(), inputStream, closeStream);
 	}
-
+	
 	/**
 	 * Encrypts the given plainString using the pre-login public key.
 	 * 
@@ -487,10 +483,10 @@ public final class SecurityHelper {
 			System.err.println(ex);
 			throw new CertificateException(ex);
 		}
-
+		
 		return certificate;
 	}
-
+	
 	/**
 	 * 
 	 * @param encodedCertificate
@@ -503,10 +499,10 @@ public final class SecurityHelper {
 		} catch (CertificateException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return publicKey;
 	}
-
+	
 	/**
 	 * Returns the public key for the given key.
 	 * 
@@ -525,10 +521,10 @@ public final class SecurityHelper {
 		} catch (InvalidKeySpecException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return publicKey;
 	}
-
+	
 	/**
 	 * Encrypts the given token using the encodedCertificate.
 	 * 
@@ -558,10 +554,10 @@ public final class SecurityHelper {
 		} catch (BadPaddingException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return encryptedToken;
 	}
-
+	
 	/**
 	 * Decrypts the specified string with the provided key.
 	 * 
@@ -590,10 +586,10 @@ public final class SecurityHelper {
 		} catch (BadPaddingException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return decryptedWithKey;
 	}
-
+	
 	/**
 	 * Decrypts the given token using the encodedCertificate.
 	 * 
@@ -605,7 +601,7 @@ public final class SecurityHelper {
 	public static String decryptWithPublicKey(String token, String encodedCertificate) throws SecurityException {
 		return decryptWithPublicKey(token, getPublicKeyFromCertificate(encodedCertificate));
 	}
-
+	
 	/**
 	 * Decrypts the given encrptedText using the pre-login public key.
 	 * 
@@ -622,10 +618,10 @@ public final class SecurityHelper {
 		} catch (CertificateException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return publicKeyFromBase64Key;
 	}
-
+	
 	/**
 	 * 
 	 * @param base64Key
@@ -633,11 +629,11 @@ public final class SecurityHelper {
 	public static void createPublicKeyFromString(String base64Key) {
 		publicKey = createPublicKeyFromBase64Key(base64Key);
 	}
-
+	
 	/**************************************************************************
 	 * encryption and decryption with public key
 	 *************************************************************************/
-
+	
 	/**
 	 * Returns the salted password.
 	 * 
@@ -647,7 +643,7 @@ public final class SecurityHelper {
 	public static String generateSaltedPassword(String _password) {
 		return generateSaltedPassword(Math.random() % 5000 + "###" + System.currentTimeMillis(), _password);
 	}
-
+	
 	/**
 	 * Returns the salted password.
 	 * 
@@ -656,10 +652,9 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String generateSaltedPassword(String _salt, String _password) {
-		return (CoreHelper.isNullOrEmpty(_salt) || CoreHelper.isNullOrEmpty(_password) ? null
-				: (_salt + "###" + _password));
+		return (CoreHelper.isNullOrEmpty(_salt) || CoreHelper.isNullOrEmpty(_password) ? null : (_salt + "###" + _password));
 	}
-
+	
 	/**
 	 * Returns the generated derived key bytes of the given entropyString.
 	 * 
@@ -675,10 +670,10 @@ public final class SecurityHelper {
 				System.out.println(ex);
 			}
 		}
-
+		
 		return derivedKeyBytes;
 	}
-
+	
 	/**
 	 * Returns the PBKDF2 key as string for the given entropyString.
 	 * 
@@ -688,7 +683,7 @@ public final class SecurityHelper {
 	public static String getPBKDF2KeyAsString(String entropyString) {
 		return IOHelper.toUTF8String(getPBKDF2KeyBytes(entropyString));
 	}
-
+	
 	/**
 	 * Returns the PBKDF2 key as string for the given salt and the given
 	 * plainPassword.
@@ -700,7 +695,7 @@ public final class SecurityHelper {
 	public static String getPBKDF2KeyAsString(String salt, String plainPassword) {
 		return getPBKDF2KeyAsString(generateSaltedPassword(salt, plainPassword));
 	}
-
+	
 	/**
 	 * Converts the given dataBytes into the HEXA-String.
 	 * 
@@ -715,15 +710,15 @@ public final class SecurityHelper {
 				hexBuilder.append(HEX_DIGIT_CHARS.charAt((dataBytes[i] >> 4) & 0x0f));
 				hexBuilder.append(HEX_DIGIT_CHARS.charAt(dataBytes[i] & 0x0f));
 			}
-
+			
 			hexString = hexBuilder.toString();
 			/* make available for GC. */
 			hexBuilder = null;
 		}
-
+		
 		return hexString;
 	}
-
+	
 	/**
 	 * Returns the HEXA-String for the given string.
 	 * 
@@ -733,7 +728,7 @@ public final class SecurityHelper {
 	public static String toHexString(String plainString) {
 		return toHexString(IOHelper.toUTF8Bytes(plainString));
 	}
-
+	
 	/**
 	 * Returns the plain bytes from the given HEXA-String.
 	 * 
@@ -749,10 +744,10 @@ public final class SecurityHelper {
 				hexaBytes[i] = Integer.valueOf(hexaString.substring(2 * i, 2 * i + 2), 16).byteValue();
 			}
 		}
-
+		
 		return hexaBytes;
 	}
-
+	
 	/**
 	 * Checks padding. If the content length is less then 16 and
 	 * <code>addSpaces</code> is set to be true, then add spaces at the end
@@ -767,7 +762,7 @@ public final class SecurityHelper {
 			if (input != null && input.length >= 16) {
 				return input;
 			}
-
+			
 			byte[] _input = new byte[16];
 			int i = 0;
 			for (; i < input.length; i++) {
@@ -776,7 +771,7 @@ public final class SecurityHelper {
 			for (; i < _input.length; i++) {
 				_input[i] = 20;
 			}
-
+			
 			return _input;
 		} else {
 			if (input != null && input.length >= 16) {
@@ -788,19 +783,19 @@ public final class SecurityHelper {
 						break;
 					}
 				}
-
+				
 				byte[] _input = new byte[i + 1];
 				for (; i >= 0; i--) {
 					_input[i] = input[i];
 				}
-
+				
 				return _input;
 			}
-
+			
 			return input;
 		}
 	}
-
+	
 	/**
 	 * Encrypts the given dataBytes using the given keyBytes and ivBytes.
 	 * 
@@ -810,8 +805,7 @@ public final class SecurityHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes)
-			throws Exception {
+	public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] encryptedBytes = null;
 		long startTime = System.currentTimeMillis();
 		if (!CoreHelper.isNullOrEmpty(dataBytes) && !CoreHelper.isNullOrEmpty(keyBytes)) {
@@ -826,18 +820,17 @@ public final class SecurityHelper {
 				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec, ivParameterSpec);
 				// rawBytes = checkPadding(dataBytes);
 			}
-
+			
 			encryptedBytes = cipher.doFinal(dataBytes);
 		}
-
+		
 		if (encryptedBytes != null) {
-			System.out.println("===========> encryptWithSymmetricKey took:" + (System.currentTimeMillis() - startTime)
-					+ " millis to encrypt:" + encryptedBytes.length + " bytes.");
+			System.out.println("===========> encryptWithSymmetricKey took:" + (System.currentTimeMillis() - startTime) + " millis to encrypt:" + encryptedBytes.length + " bytes.");
 		}
-
+		
 		return encryptedBytes;
 	}
-
+	
 	/**
 	 * Encrypts the dataBytes with the keyBytes.
 	 * 
@@ -849,7 +842,7 @@ public final class SecurityHelper {
 	public static byte[] encryptWithSymmetricKey(byte[] dataBytes, byte[] keyBytes) throws Exception {
 		return encryptWithSymmetricKey(dataBytes, keyBytes, null);
 	}
-
+	
 	/**
 	 * Encrypts the given dataBytes using the given key and IV.
 	 * 
@@ -867,10 +860,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return encryptedBytes;
 	}
-
+	
 	/**
 	 * Encrypts the specified <code>stringToEncrypt</code> using the specified
 	 * <code>key</code>.
@@ -882,7 +875,7 @@ public final class SecurityHelper {
 	public static byte[] encryptWithSymmetricKey(byte[] dataBytes, String key) {
 		return encryptWithSymmetricKey(dataBytes, key, null);
 	}
-
+	
 	/**
 	 * Encrypts the specified <code>stringToEncrypt</code> using the specified
 	 * <code>key</code>.
@@ -909,10 +902,10 @@ public final class SecurityHelper {
 				System.err.println(ex);
 			}
 		}
-
+		
 		return encryptedString;
 	}
-
+	
 	/**
 	 * Decrypts the given dataBytes using the given keyBytes and ivBytes.
 	 * 
@@ -922,8 +915,7 @@ public final class SecurityHelper {
 	 * @return
 	 * @throws Exception
 	 */
-	public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes)
-			throws Exception {
+	public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] rawBytes = null;
 		long startTime = System.currentTimeMillis();
 		if (!CoreHelper.isNullOrEmpty(dataBytes) && !CoreHelper.isNullOrEmpty(keyBytes)) {
@@ -937,18 +929,17 @@ public final class SecurityHelper {
 				IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
 				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec, ivParameterSpec);
 			}
-
+			
 			rawBytes = cipher.doFinal(dataBytes);
 		}
-
+		
 		if (rawBytes != null) {
-			System.out.println("===========> decryptWithSymmetricKey took:" + (System.currentTimeMillis() - startTime)
-					+ " millis to decrypt:" + rawBytes.length + " bytes.");
+			System.out.println("===========> decryptWithSymmetricKey took:" + (System.currentTimeMillis() - startTime) + " millis to decrypt:" + rawBytes.length + " bytes.");
 		}
-
+		
 		return rawBytes;
 	}
-
+	
 	/**
 	 * Decrypts the dataBytes with the given keyBytes.
 	 * 
@@ -960,7 +951,7 @@ public final class SecurityHelper {
 	public static byte[] decryptWithSymmetricKey(byte[] dataBytes, byte[] keyBytes) throws Exception {
 		return decryptWithSymmetricKey(dataBytes, keyBytes, null);
 	}
-
+	
 	/**
 	 * Decrypts the given <code>dataBytes</code> using the given
 	 * <code>key</code> and <code>ivBytes</code>.
@@ -977,10 +968,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return rawBytes;
 	}
-
+	
 	/**
 	 * Decrypts the given <code>dataBytes</code> using the given
 	 * <code>key</code>.
@@ -992,7 +983,7 @@ public final class SecurityHelper {
 	public static byte[] decryptWithSymmetricKey(byte[] dataBytes, String key) {
 		return decryptWithSymmetricKey(dataBytes, key, null);
 	}
-
+	
 	/**
 	 * Decrypts the specified <code>encryptedString</code> using the specified
 	 * <code>key</code>.
@@ -1012,10 +1003,10 @@ public final class SecurityHelper {
 				System.err.println(ex);
 			}
 		}
-
+		
 		return decryptedString;
 	}
-
+	
 	/**
 	 * Returns the default token.
 	 * 
@@ -1026,7 +1017,7 @@ public final class SecurityHelper {
 		// return decodeToBase64String(BASE_TOKEN);
 		return null;
 	}
-
+	
 	/**
 	 * Returns the IV for the given ivParent.
 	 * 
@@ -1038,10 +1029,10 @@ public final class SecurityHelper {
 		if (CoreHelper.isNotNullOrEmpty(ivParent)) {
 			return (ivParent.length() > IV_SIZE ? ivParent.substring(0, IV_SIZE) : ivParent);
 		}
-
+		
 		throw new SecurityException("Unable to generte IV for: " + ivParent);
 	}
-
+	
 	/**
 	 * Returns the IV bytes for the given resource.
 	 * 
@@ -1062,10 +1053,10 @@ public final class SecurityHelper {
 		} catch (SecurityException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return ivBytes;
 	}
-
+	
 	/**
 	 * Decrypting the server URLs.
 	 * 
@@ -1078,7 +1069,7 @@ public final class SecurityHelper {
 	public static String decryptServerUrl(String encryptedUrl) {
 		return encryptedUrl;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -1089,7 +1080,7 @@ public final class SecurityHelper {
 		}
 		return _offlineEncryptionKey;
 	}
-
+	
 	/**
 	 * Generate a Base64 encoded "salt".
 	 * 
@@ -1106,10 +1097,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			throw new Error(ex);
 		}
-
+		
 		return saltString;
 	}
-
+	
 	/**
 	 * Generates the IV.
 	 * 
@@ -1118,7 +1109,7 @@ public final class SecurityHelper {
 	public static String generateIV() {
 		return generateSalt(IV_SIZE);
 	}
-
+	
 	/**
 	 * 
 	 * @param bytes
@@ -1126,7 +1117,7 @@ public final class SecurityHelper {
 	 */
 	public static byte[] generateRandomAESKey(int bytes) {
 		byte[] ret = null;
-
+		
 		try {
 			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 			keyGen.init(bytes);
@@ -1135,10 +1126,10 @@ public final class SecurityHelper {
 		} catch (Exception e) {
 			ret = null;
 		}
-
+		
 		return ret;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -1147,7 +1138,7 @@ public final class SecurityHelper {
 	public static KeyPair generateKeyPair() throws NoSuchAlgorithmException {
 		return generateKeyPair(ALGO_RSA, null);
 	}
-
+	
 	/**
 	 * 
 	 * @param keyPairAlgorithm
@@ -1155,8 +1146,7 @@ public final class SecurityHelper {
 	 * @return
 	 * @throws NoSuchAlgorithmException
 	 */
-	public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm)
-			throws NoSuchAlgorithmException {
+	public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keyPairAlgorithm);
 		SecureRandom secureRandom = null;
 		if (CoreHelper.isNullOrEmpty(secureRandomAlgorithm)) {
@@ -1164,12 +1154,12 @@ public final class SecurityHelper {
 		} else {
 			secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
 		}
-
+		
 		// seed the keygen
 		keyPairGenerator.initialize(2048, secureRandom);
 		return keyPairGenerator.generateKeyPair();
 	}
-
+	
 	/**
 	 * decodes an encoded x509 certificate
 	 * 
@@ -1188,7 +1178,7 @@ public final class SecurityHelper {
 		}
 		return cert;
 	}
-
+	
 	/**
 	 * 
 	 * @param length
@@ -1198,7 +1188,7 @@ public final class SecurityHelper {
 		if (length <= 0) {
 			return null;
 		}
-
+		
 		String pad = "poiuytrewqasdfgbvcxzhjklmnb,.;1234567890!^&-=_+><ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 		String mutableKey = "";
 		Random rnd = new Random();
@@ -1208,7 +1198,7 @@ public final class SecurityHelper {
 		} while (mutableKey.length() < length);
 		return mutableKey;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -1216,7 +1206,7 @@ public final class SecurityHelper {
 	public static String generateRandomSeed() {
 		return generateNewKeyWithLength(BV_ENCRYPTION_KEY_LENGTH);
 	}
-
+	
 	/**
 	 * Returns the SHA256 hash for the given bytes.
 	 * 
@@ -1232,10 +1222,10 @@ public final class SecurityHelper {
 				throw new SecurityException(ex);
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the SHA256 hash for the given string.
 	 * 
@@ -1246,7 +1236,7 @@ public final class SecurityHelper {
 	public static byte[] getSHA256Hash(String string) throws SecurityException {
 		return getSHA256Hash(CoreHelper.isNull(string) ? null : string.getBytes());
 	}
-
+	
 	/**
 	 * Returns the SHA256 hash for the given bytes.
 	 * 
@@ -1262,10 +1252,10 @@ public final class SecurityHelper {
 				throw new SecurityException(ex);
 			}
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the SHA256 hash for the given string.
 	 * 
@@ -1276,7 +1266,7 @@ public final class SecurityHelper {
 	public static byte[] getSHA512Hash(String string) throws SecurityException {
 		return getSHA512Hash(CoreHelper.isNull(string) ? null : string.getBytes());
 	}
-
+	
 	/**
 	 * Returns the SHA-1 hash for the specified input.
 	 * 
@@ -1295,10 +1285,10 @@ public final class SecurityHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return hashedString;
 	}
-
+	
 	/**
 	 * 
 	 * @param src
@@ -1310,19 +1300,19 @@ public final class SecurityHelper {
 		if (iterations < 0) {
 			throw new SecurityException("Can not hash a negative number of iterations.");
 		}
-
+		
 		try {
 			final MessageDigest messageDigest = MessageDigest.getInstance(ALGO_SHA_256);
 			for (int i = 0; i < iterations; i++) {
 				src = messageDigest.digest(src);
 			}
-
+			
 			return src;
 		} catch (Exception ex) {
 			throw new SecurityException(ex);
 		}
 	}
-
+	
 	/**
 	 * produce salted SHA256 hash
 	 * 
@@ -1340,7 +1330,7 @@ public final class SecurityHelper {
 			throw new SecurityException(e);
 		}
 	}
-
+	
 	/**
 	 * produce md4 hash
 	 * 
@@ -1355,7 +1345,7 @@ public final class SecurityHelper {
 			throw new SecurityException(e);
 		}
 	}
-
+	
 	/**
 	 * create random ket based in algorithim
 	 * 
@@ -1373,7 +1363,7 @@ public final class SecurityHelper {
 		Key key = keyGenerator.generateKey();
 		return key;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -1388,7 +1378,7 @@ public final class SecurityHelper {
 		Key key = keyGenerator.generateKey();
 		return key;
 	}
-
+	
 	/**
 	 * Returns the check sum string for the given bytes.
 	 * 
@@ -1408,10 +1398,10 @@ public final class SecurityHelper {
 				System.err.println(e);
 			}
 		}
-
+		
 		return checkSumString;
 	}
-
+	
 	/**
 	 * 
 	 * @param args
@@ -1427,7 +1417,7 @@ public final class SecurityHelper {
 		System.out.println("paddedBytes:" + Arrays.toString(paddedBytes));
 		valueBytes = checkPadding(paddedBytes, false);
 		System.out.println("valueBytes:" + Arrays.toString(valueBytes));
-
+		
 		String deviceId = "10297B1F-3D93-4EE6-B609-E43898C2C54C";
 		byte[] deviceIdBytes = getSHA512Hash(deviceId);
 		System.out.println(deviceIdBytes.length);
@@ -1436,11 +1426,11 @@ public final class SecurityHelper {
 		System.out.println("slice:" + Arrays.toString(slice));
 		System.out.println("slice:" + encodeToBase64String(slice));
 	}
-
+	
 	/**************************************************************************
 	 * Unused Methods
 	 *************************************************************************/
-
+	
 	/**
 	 * 
 	 * @param seed
@@ -1459,7 +1449,7 @@ public final class SecurityHelper {
 		rawKey = skey.getEncoded();
 		return rawKey;
 	}
-
+	
 	/**
 	 * Returns the random generated ID.
 	 * 
@@ -1472,10 +1462,10 @@ public final class SecurityHelper {
 		} catch (NoSuchAlgorithmException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return idRandom;
 	}
-
+	
 	/**
 	 * 
 	 * @param connectionHttps
@@ -1494,7 +1484,7 @@ public final class SecurityHelper {
 		}
 		return bRet;
 	}
-
+	
 	/**
 	 * The parameters for the PBKDF2 generation.
 	 * 
@@ -1502,11 +1492,11 @@ public final class SecurityHelper {
 	 * @date 11/21/2016 04:04:53 PM
 	 */
 	public static final class PBKDF2Params {
-
+		
 		private String algorithm;
 		private byte[] salt;
 		private int iterations;
-
+		
 		/**
 		 * 
 		 * @param algorithm
@@ -1518,7 +1508,7 @@ public final class SecurityHelper {
 			this.salt = salt;
 			this.iterations = iterations;
 		}
-
+		
 		/**
 		 * Returns the algorithm.
 		 * 
@@ -1527,7 +1517,7 @@ public final class SecurityHelper {
 		public String getAlgorithm() {
 			return algorithm;
 		}
-
+		
 		/**
 		 * Returns the salt.
 		 * 
@@ -1536,7 +1526,7 @@ public final class SecurityHelper {
 		public byte[] getSalt() {
 			return salt;
 		}
-
+		
 		/**
 		 * Returns the iterations.
 		 * 
@@ -1546,7 +1536,7 @@ public final class SecurityHelper {
 			return iterations;
 		}
 	}
-
+	
 	/**
 	 * This class implements the PBKDF2 in pure java.
 	 * 
@@ -1559,19 +1549,19 @@ public final class SecurityHelper {
 		/* The secret keys algorithm */
 		public static final String PBKDF2_WITH_HMAC_SHA512 = "PBKDF2WithHmacSHA512";
 		public static final String PBKDF2_WITH_HMAC_SHA1 = "PBKDF2WithHmacSHA1";
-
+		
 		/* Secure Random Algorithm */
 		public static final String SHA1PRNG = "SHA1PRNG";
-
+		
 		/* Iterations - Strong */
 		public static final int ITERATIONS = 10000;
-
+		
 		/* Key Length */
 		public static final int KEY_LENGTH = 16;
-
+		
 		/* PBKDF2 parameters */
 		private PBKDF2Params parameters;
-
+		
 		/**
 		 * 
 		 * @param parameters
@@ -1579,7 +1569,7 @@ public final class SecurityHelper {
 		public PBKDF2Generator(PBKDF2Params parameters) {
 			this.parameters = parameters;
 		}
-
+		
 		/**
 		 * 
 		 * @return
@@ -1591,7 +1581,7 @@ public final class SecurityHelper {
 			secureRandom.nextBytes(salt);
 			return salt;
 		}
-
+		
 		/**
 		 * Generates the PBKDF2 secret key.
 		 * 
@@ -1602,8 +1592,7 @@ public final class SecurityHelper {
 		 * @return
 		 * @throws NoSuchAlgorithmException
 		 */
-		private byte[] pbkdf2(char[] password, byte[] salt, int iterations, int keyLength)
-				throws NoSuchAlgorithmException {
+		private byte[] pbkdf2(char[] password, byte[] salt, int iterations, int keyLength) throws NoSuchAlgorithmException {
 			try {
 				PBEKeySpec keySpec = new PBEKeySpec(password, salt, iterations, keyLength * 8);
 				SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(parameters.getAlgorithm());
@@ -1612,7 +1601,7 @@ public final class SecurityHelper {
 				throw new IllegalStateException("Invalid SecretKeyFactory", ex);
 			}
 		}
-
+		
 		/**
 		 * Returns the PBKDF2 bytes of the given password.
 		 * 
@@ -1624,7 +1613,7 @@ public final class SecurityHelper {
 		public byte[] deriveKey(String password, int keyLength) throws NoSuchAlgorithmException {
 			return pbkdf2(password.toCharArray(), parameters.getSalt(), parameters.getIterations(), keyLength);
 		}
-
+		
 		/**
 		 * Returns the PBKDF2 hex string of the given password.
 		 * 
@@ -1636,7 +1625,7 @@ public final class SecurityHelper {
 		public String keyAsHexString(String password, int keyLength) throws NoSuchAlgorithmException {
 			return IOHelper.toHexString(deriveKey(password, keyLength));
 		}
-
+		
 		/**
 		 * Returns the PBKDF2 bytes of the given password.
 		 * 
@@ -1653,10 +1642,10 @@ public final class SecurityHelper {
 				pbkdf2String = (parameters.getIterations() + ":" + saltHexString + ":" + keyAsHexString);
 				pbkdf2String = encodeToBase64String(pbkdf2String);
 			}
-
+			
 			return pbkdf2String;
 		}
-
+		
 		/**
 		 * Validates the password with the hashed password.
 		 * 
@@ -1666,8 +1655,7 @@ public final class SecurityHelper {
 		 * @throws NoSuchAlgorithmException
 		 * @throws InvalidKeySpecException
 		 */
-		public boolean validatePassword(String password, String hashedPassword)
-				throws NoSuchAlgorithmException, InvalidKeySpecException {
+		public boolean validatePassword(String password, String hashedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
 			boolean validPassword = false;
 			if (!CoreHelper.isNullOrEmpty(password)) {
 				String[] parts = hashedPassword.split(":");
@@ -1675,18 +1663,18 @@ public final class SecurityHelper {
 				byte[] salt = IOHelper.toHexBytes(parts[1]);
 				byte[] hash = IOHelper.toHexBytes(parts[2]);
 				byte[] pbkdf2Hash = pbkdf2(password.toCharArray(), salt, iterations, hash.length);
-
+				
 				int difference = hash.length ^ pbkdf2Hash.length;
 				for (int i = 0; i < hash.length && i < pbkdf2Hash.length; i++) {
 					difference |= hash[i] ^ pbkdf2Hash[i];
 				}
-
+				
 				validPassword = (difference == 0);
 			}
-
+			
 			return validPassword;
 		}
-
+		
 		/**
 		 * authenticate
 		 * 
@@ -1694,7 +1682,7 @@ public final class SecurityHelper {
 		 * @throws NoSuchAlgorithmException
 		 * @throws InvalidKeySpecException
 		 */
-
+		
 		/*
 		 * public static void main(String[] args) throws
 		 * NoSuchAlgorithmException, InvalidKeySpecException { String password =
@@ -1714,5 +1702,5 @@ public final class SecurityHelper {
 		 * System.out.println(matched); }
 		 */
 	}
-
+	
 }

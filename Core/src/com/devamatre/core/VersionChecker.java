@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -37,10 +37,10 @@ import java.util.regex.Pattern;
  * @date 07/12/2017 03:06:28 PM
  */
 public final class VersionChecker {
-
+	
 	private final boolean DEBUG = false;
 	private String currentVersion;
-
+	
 	/**
 	 * 
 	 * @param currentVersion
@@ -48,7 +48,7 @@ public final class VersionChecker {
 	public VersionChecker(String currentVersion) {
 		this.currentVersion = currentVersion;
 	}
-
+	
 	/**
 	 * Formats the version.
 	 * 
@@ -63,13 +63,13 @@ public final class VersionChecker {
 		for (String str : split) {
 			verBuilder.append(String.format("%" + maxWidth + 's', str));
 		}
-
+		
 		if (DEBUG) {
 			System.out.println("versionFormatter:" + verBuilder.toString());
 		}
 		return verBuilder.toString();
 	}
-
+	
 	/**
 	 * 
 	 * @param version
@@ -78,7 +78,7 @@ public final class VersionChecker {
 	public String versionFormatter(String version) {
 		return versionFormatter(version, ".", 8);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -89,7 +89,7 @@ public final class VersionChecker {
 		String s2 = versionFormatter(currentVersion);
 		return (s1.compareTo(s2) > 0 ? true : false);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -100,7 +100,7 @@ public final class VersionChecker {
 		String s2 = versionFormatter(currentVersion);
 		return (s1.compareTo(s2) < 0 ? true : false);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -112,7 +112,7 @@ public final class VersionChecker {
 		String s2 = versionFormatter(currentVersion);
 		return (s1.compareTo(s2) <= 0 ? true : false);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -121,7 +121,7 @@ public final class VersionChecker {
 	public boolean isLessThanEqualTo(String aVersion) {
 		return isLessThanEqualTo(aVersion, currentVersion);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -132,7 +132,7 @@ public final class VersionChecker {
 		String s2 = versionFormatter(currentVersion);
 		return (s1.compareTo(s2) > 0 ? true : false);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -144,7 +144,7 @@ public final class VersionChecker {
 		String s2 = versionFormatter(currentVersion);
 		return (s1.compareTo(s2) >= 0 ? true : false);
 	}
-
+	
 	/**
 	 * 
 	 * @param aVersion
@@ -153,5 +153,5 @@ public final class VersionChecker {
 	public boolean isGreaterThanEqualTo(String aVersion) {
 		return isGreaterThanEqualTo(aVersion, currentVersion);
 	}
-
+	
 }

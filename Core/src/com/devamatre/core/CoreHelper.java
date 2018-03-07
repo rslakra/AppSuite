@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -42,13 +42,13 @@ import java.util.Map;
  * @since 1.0.0
  */
 public final class CoreHelper {
-
+	
 	/* instance */
 	private static CoreHelper instance;
-
+	
 	private CoreHelper() {
 	}
-
+	
 	/**
 	 * Returns the singleton instance of this object.
 	 * 
@@ -62,10 +62,10 @@ public final class CoreHelper {
 				}
 			}
 		}
-
+		
 		return instance;
 	}
-
+	
 	/**
 	 * Returns the OS name.
 	 * 
@@ -74,7 +74,7 @@ public final class CoreHelper {
 	public static String getOSName() {
 		return System.getProperty("os.name");
 	}
-
+	
 	/**
 	 * Returns the Java VM Name.
 	 * 
@@ -83,7 +83,7 @@ public final class CoreHelper {
 	public static String getJVMName() {
 		return System.getProperty("java.vm.name");
 	}
-
+	
 	/**
 	 * Returns true if the object is null otherwise false.
 	 * 
@@ -93,7 +93,7 @@ public final class CoreHelper {
 	public static <T> boolean isNull(T object) {
 		return (object == null);
 	}
-
+	
 	/**
 	 * Returns true if the object is not null otherwise false.
 	 * 
@@ -103,7 +103,7 @@ public final class CoreHelper {
 	public static <T> boolean isNotNull(T object) {
 		return (!isNull(object));
 	}
-
+	
 	/**
 	 * Returns true if an array is null otherwise false.
 	 * 
@@ -113,7 +113,7 @@ public final class CoreHelper {
 	public static <T> boolean isNullOrEmpty(T[] objects) {
 		return (isNull(objects) || objects.length == 0);
 	}
-
+	
 	/**
 	 * Returns true if the bytes array is either null or empty otherwise false.
 	 * 
@@ -123,7 +123,7 @@ public final class CoreHelper {
 	public static boolean isNullOrEmpty(byte... array) {
 		return (isNull(array) || array.length == 0);
 	}
-
+	
 	/**
 	 * Returns true if either the string is null or empty otherwise false.
 	 * 
@@ -133,7 +133,7 @@ public final class CoreHelper {
 	public static boolean isNullOrEmpty(String string) {
 		return (isNull(string) || string.isEmpty() || string.trim().length() == 0);
 	}
-
+	
 	/**
 	 * Returns true if the given string is neither null nor empty otherwise
 	 * false.
@@ -144,7 +144,7 @@ public final class CoreHelper {
 	public static boolean isNotNullOrEmpty(String string) {
 		return (!isNullOrEmpty(string));
 	}
-
+	
 	/**
 	 * Returns true if the StringBuilder is null or empty otherwise false.
 	 * 
@@ -154,7 +154,7 @@ public final class CoreHelper {
 	public static boolean isNullOrEmpty(StringBuilder stringBuilder) {
 		return (isNull(stringBuilder) || stringBuilder.length() == 0);
 	}
-
+	
 	/**
 	 * Returns true if the collection is either null or empty otherwise false.
 	 * 
@@ -164,7 +164,7 @@ public final class CoreHelper {
 	public static <T> boolean isNullOrEmpty(Collection<T> collection) {
 		return (isNull(collection) || collection.isEmpty());
 	}
-
+	
 	/**
 	 * Returns true if the map is either null or empty otherwise false.
 	 * 
@@ -174,7 +174,7 @@ public final class CoreHelper {
 	public static <T> boolean isNullOrEmpty(Map<?, ?> map) {
 		return (isNull(map) || map.isEmpty());
 	}
-
+	
 	/**
 	 * 
 	 * @param klass
@@ -185,10 +185,10 @@ public final class CoreHelper {
 		if (klass != null) {
 			classPath = klass.getPackage().getName().replace(".", File.separator);
 		}
-
+		
 		return classPath;
 	}
-
+	
 	/**
 	 * Returns true if the method is getter otherwise false.
 	 * 
@@ -205,10 +205,10 @@ public final class CoreHelper {
 				return false;
 			}
 		}
-
+		
 		return true;
 	}
-
+	
 	/**
 	 * Returns true if the method is setter otherwise false.
 	 * 
@@ -225,10 +225,10 @@ public final class CoreHelper {
 				return false;
 			}
 		}
-
+		
 		return true;
 	}
-
+	
 	/**
 	 * 
 	 * @param string
@@ -237,5 +237,5 @@ public final class CoreHelper {
 	public static String toTitleCase(CharSequence string) {
 		return string.toString();
 	}
-
+	
 }

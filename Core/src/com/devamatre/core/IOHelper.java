@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -75,7 +75,7 @@ import javax.net.ssl.SSLSocket;
  * @since Apr 22, 2015 4:52:15 PM
  */
 public final class IOHelper {
-
+	
 	/** BUFFER_1K */
 	public static final int BUFFER_1K = 1024;
 	/** BUFFER_4K */
@@ -84,7 +84,7 @@ public final class IOHelper {
 	public static final int BUFFER_8K = 8 * BUFFER_1K;
 	/** BUFFER_20K */
 	public static final int BUFFER_20K = 20 * BUFFER_1K;
-
+	
 	/** SLASH */
 	public static final String SLASH = "/".intern();
 	/** NEWLINE */
@@ -97,15 +97,15 @@ public final class IOHelper {
 	public static final String HEX_DIGITS = "0123456789abcdef".intern();
 	/** EMPTY_STRING */
 	public static final String EMPTY_STRING = "".intern();
-
+	
 	/** imageTypes */
 	private static List<String> imageTypes;
-
+	
 	// Singleton object
 	private IOHelper() {
 		throw new UnsupportedOperationException("Object creation is not allowed!");
 	}
-
+	
 	/**
 	 * 
 	 * @param logString
@@ -113,7 +113,7 @@ public final class IOHelper {
 	public static void debug(String logString) {
 		System.out.println(logString);
 	}
-
+	
 	/**
 	 * 
 	 * @param logString
@@ -121,7 +121,7 @@ public final class IOHelper {
 	public static void error(String logString) {
 		System.err.println(logString);
 	}
-
+	
 	/**
 	 * 
 	 * @param logString
@@ -129,7 +129,7 @@ public final class IOHelper {
 	public static void error(Exception ex) {
 		System.err.println(ex);
 	}
-
+	
 	/**
 	 * Returns the package path of the given class.
 	 * 
@@ -143,13 +143,13 @@ public final class IOHelper {
 			if (withClassName) {
 				pkgPath += File.separator + _class.getSimpleName();
 			}
-
+			
 			return pkgPath;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the path of the given class.
 	 * 
@@ -187,13 +187,13 @@ public final class IOHelper {
 					}
 				}
 			}
-
+			
 			return path;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the full path for the directory and childName.
 	 * 
@@ -203,7 +203,7 @@ public final class IOHelper {
 	 */
 	public static String pathString(String parentFolder, String childName) {
 		String pathString = null;
-
+		
 		if (CoreHelper.isNullOrEmpty(parentFolder)) {
 			throw new IllegalArgumentException("Parent directory should not be null/empty!");
 		} else {
@@ -213,10 +213,10 @@ public final class IOHelper {
 				pathString += (childName.startsWith(SLASH) ? "" : File.separator) + childName.trim();
 			}
 		}
-
+		
 		return pathString;
 	}
-
+	
 	/**
 	 * Returns the path of the given file, if its not null otherwise null.
 	 * 
@@ -226,7 +226,7 @@ public final class IOHelper {
 	public static String getFilePath(File file) {
 		return (file == null ? null : file.getAbsolutePath());
 	}
-
+	
 	/**
 	 * Writes the file on the specified path and populated with the provided
 	 * data.
@@ -240,20 +240,20 @@ public final class IOHelper {
 		if (CoreHelper.isNullOrEmpty(path)) {
 			throw new NullPointerException("Path must be provided!");
 		}
-
+		
 		if (CoreHelper.isNullOrEmpty(data)) {
 			throw new NullPointerException("data must be provided!");
 		}
-
+		
 		try {
 			result = saveFile(data, path);
 		} catch (IOException ex) {
 			System.err.println(ex);
 		}
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * 
 	 * @param path
@@ -262,7 +262,7 @@ public final class IOHelper {
 	public static boolean deleteFile(String path) {
 		return delete(path);
 	}
-
+	
 	/**
 	 * 
 	 * @param folderPath
@@ -271,7 +271,7 @@ public final class IOHelper {
 	public static boolean deleteFolder(String folderPath) {
 		return delete(folderPath, true);
 	}
-
+	
 	/**
 	 * 
 	 * @param fileOrFolder
@@ -280,7 +280,7 @@ public final class IOHelper {
 	public static boolean deleteFolder(File fileOrFolder) {
 		return delete(fileOrFolder, true);
 	}
-
+	
 	/**
 	 * Returns the bytes of the specified file, if exists, otherwise null.
 	 * 
@@ -303,10 +303,10 @@ public final class IOHelper {
 				safeClose(randomAccessFile);
 			}
 		}
-
+		
 		return bytes;
 	}
-
+	
 	/**
 	 * Returns the bytes of the specified path, if exists, otherwise null.
 	 * 
@@ -316,7 +316,7 @@ public final class IOHelper {
 	public static byte[] readFile(String path) {
 		return (CoreHelper.isNullOrEmpty(path) ? null : readFile(new File(path)));
 	}
-
+	
 	/**
 	 * Returns true if the given extension exists in the list otherwise false.
 	 * 
@@ -344,14 +344,14 @@ public final class IOHelper {
 			imageTypes.add("svg");
 			imageTypes.add("cur");
 		}
-
+		
 		if (extension.startsWith(".") && extension.length() > 1) {
 			extension = extension.substring(1);
 		}
-
+		
 		return imageTypes.contains(extension);
 	}
-
+	
 	/**
 	 * Loads the properties file pointing to an inputStream.
 	 * 
@@ -367,7 +367,7 @@ public final class IOHelper {
 		}
 		return properties;
 	}
-
+	
 	/**
 	 * Loads the specified properties file. All the android specific properties
 	 * should be kept in the assets folder and just pass the name of the
@@ -383,10 +383,10 @@ public final class IOHelper {
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
-
+		
 		return properties;
 	}
-
+	
 	/**
 	 * Returns the Properties object prepared from the given dataBytes.
 	 * 
@@ -396,7 +396,7 @@ public final class IOHelper {
 	public static Properties createProperties(byte[] dataBytes) {
 		return loadProperties(new ByteArrayInputStream(dataBytes));
 	}
-
+	
 	/**
 	 * Saves the specified properties into the specified file path.
 	 * 
@@ -427,7 +427,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Prints the specified properties.
 	 * 
@@ -443,7 +443,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Merges the given sourceProperties into the given targetProperties.
 	 * 
@@ -456,15 +456,15 @@ public final class IOHelper {
 		if (CoreHelper.isNull(targetProperties)) {
 			targetProperties = new Properties();
 		}
-
+		
 		// if not null, merge it into target.
 		if (CoreHelper.isNotNull(sourceProperties)) {
 			targetProperties.putAll(sourceProperties);
 		}
-
+		
 		return targetProperties;
 	}
-
+	
 	/**
 	 * Returns true if the specified file exists, otherwise false.
 	 * 
@@ -473,7 +473,7 @@ public final class IOHelper {
 	public static boolean isExist(String filePath) {
 		return (!CoreHelper.isNullOrEmpty(filePath) && new File(filePath).exists());
 	}
-
+	
 	/**
 	 * Returns true if the specified file exists, otherwise false.
 	 * 
@@ -482,7 +482,7 @@ public final class IOHelper {
 	public static boolean isExist(File file) {
 		return (file != null && file.exists());
 	}
-
+	
 	/**
 	 * Returns true if the specified file is a directory, otherwise false.
 	 * 
@@ -491,7 +491,7 @@ public final class IOHelper {
 	public static boolean isDirectory(File file) {
 		return (file != null && file.isDirectory());
 	}
-
+	
 	/**
 	 * Returns true if the specified file exists and is a directory, otherwise
 	 * false.
@@ -501,7 +501,7 @@ public final class IOHelper {
 	public static boolean isExistAndFolder(File file) {
 		return (isExist(file) && file.isDirectory());
 	}
-
+	
 	/**
 	 * Creates the buffer with the available size if its greater than the
 	 * defaultSize.
@@ -513,7 +513,7 @@ public final class IOHelper {
 	public static byte[] getBuffer(int available, int defaultSize) {
 		return new byte[(available > defaultSize ? available : defaultSize)];
 	}
-
+	
 	/**
 	 * 
 	 * @param available
@@ -522,7 +522,7 @@ public final class IOHelper {
 	public static byte[] getBuffer(int available) {
 		return getBuffer(available, BUFFER_20K);
 	}
-
+	
 	/**
 	 * Copies the contents of an <code>sourceStream</code> into an
 	 * <code>targetStream</code>.
@@ -533,8 +533,7 @@ public final class IOHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public static int copyStream(InputStream sourceStream, OutputStream targetStream, boolean closeStreams)
-			throws IOException {
+	public static int copyStream(InputStream sourceStream, OutputStream targetStream, boolean closeStreams) throws IOException {
 		System.out.println("+copyStream(" + sourceStream + ", " + targetStream + ", " + closeStreams + ")");
 		int fileSize = 0;
 		if (sourceStream != null && targetStream != null) {
@@ -545,7 +544,7 @@ public final class IOHelper {
 					targetStream.write(buffer, 0, byteCount);
 					fileSize += byteCount;
 				}
-
+				
 				/* flush output streams. */
 				targetStream.flush();
 			} catch (IOException ex) {
@@ -559,11 +558,11 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		System.out.println("-copyStream(), fileSize:" + fileSize);
 		return fileSize;
 	}
-
+	
 	/**
 	 * Writes the <code>bytes</code> to <code>outputStream</code> and closes it.
 	 * 
@@ -572,8 +571,7 @@ public final class IOHelper {
 	 * @param closeStream
 	 * @throws IOException
 	 */
-	public static boolean writeBytes(byte[] dataBytes, OutputStream outputStream, boolean closeStream)
-			throws IOException {
+	public static boolean writeBytes(byte[] dataBytes, OutputStream outputStream, boolean closeStream) throws IOException {
 		// System.out.println("+writeBytes(" + dataBytes + ", " + outputStream +
 		// ", " + closeStream + ")");
 		boolean result = false;
@@ -593,11 +591,11 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		// System.out.println("-writeBytes(), result:" + result);
 		return result;
 	}
-
+	
 	/**
 	 * Writes the <code>file</code> contents to the given
 	 * <code>outputStream</code> and flush the results.
@@ -616,7 +614,7 @@ public final class IOHelper {
 			while ((byteCount = inputStream.read(buffer)) != -1) {
 				outputStream.write(buffer, 0, byteCount);
 			}
-
+			
 			// flush output streams.
 			outputStream.flush();
 		} catch (IOException ex) {
@@ -627,10 +625,10 @@ public final class IOHelper {
 			safeClose(inputStream);
 			safeClose(outputStream);
 		}
-
+		
 		System.out.println("-sendLocalFile()");
 	}
-
+	
 	/**
 	 * Copies the contents of an <code>sourceStream</code> into an
 	 * <code>targetFile</code>.
@@ -641,8 +639,7 @@ public final class IOHelper {
 	 * @return
 	 * @throws IOException
 	 */
-	public static int copyFile(FileInputStream sourceFile, FileOutputStream targetFile, boolean closeStreams)
-			throws IOException {
+	public static int copyFile(FileInputStream sourceFile, FileOutputStream targetFile, boolean closeStreams) throws IOException {
 		System.out.println("+copyFile(" + sourceFile + ", " + targetFile + ", " + closeStreams + ")");
 		int fileSize = 0;
 		if (sourceFile != null && targetFile != null) {
@@ -653,7 +650,7 @@ public final class IOHelper {
 					targetFile.write(buffer, 0, byteCount);
 					fileSize += byteCount;
 				}
-
+				
 				// flush output streams.
 				targetFile.flush();
 			} catch (IOException ex) {
@@ -667,11 +664,11 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		System.out.println("-copyFile(), fileSize:" + fileSize);
 		return fileSize;
 	}
-
+	
 	/**
 	 * Saves the input stream contents into the specified file path.
 	 * 
@@ -690,7 +687,7 @@ public final class IOHelper {
 				if (!file.exists()) {
 					file.createNewFile();
 				}
-
+				
 				// write the contents of the input stream to output stream
 				outputStream = new BufferedOutputStream(new FileOutputStream(file));
 				byte[] buffer = getBuffer(inputStream.available());
@@ -699,7 +696,7 @@ public final class IOHelper {
 					outputStream.write(buffer, 0, byteCount);
 					fileSize += byteCount;
 				}
-
+				
 				// flush output streams.
 				outputStream.flush();
 				System.out.println("File [" + filePath + "] saved successfully! fileSize:" + fileSize);
@@ -711,7 +708,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Saves the input into the specified file.
 	 * 
@@ -729,7 +726,7 @@ public final class IOHelper {
 				System.out.println("Writing file:" + file.getAbsolutePath());
 				// make sure the parent directories exists.
 				makeDirectory(file.getParentFile());
-
+				
 				/* create the file if it does not exist. */
 				if (!file.exists()) {
 					boolean newFileCreated = file.createNewFile();
@@ -737,7 +734,7 @@ public final class IOHelper {
 						System.out.println("Unable to create the file:" + file.getAbsolutePath());
 					}
 				}
-
+				
 				outputStream = new FileOutputStream(file);
 				outputStream.write(input);
 				outputStream.flush();
@@ -749,11 +746,11 @@ public final class IOHelper {
 				safeClose(outputStream);
 			}
 		}
-
+		
 		// System.out.println("-saveFile(), result:" + result);
 		return result;
 	}
-
+	
 	/**
 	 * Saves the input into the specified file.
 	 * 
@@ -765,7 +762,7 @@ public final class IOHelper {
 	public static boolean saveFile(byte[] input, String filePath) throws IOException {
 		return saveFile(input, new File(filePath));
 	}
-
+	
 	/**
 	 * Closes the specified <code>objectCloseable</code>.
 	 * 
@@ -788,7 +785,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Creates the directory if not exists.
 	 * 
@@ -802,10 +799,10 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		return directory;
 	}
-
+	
 	/**
 	 * Creates the directory if its not exists. If <code>override</code> is set
 	 * to true, delete the existing directory and creates the new one.
@@ -821,7 +818,7 @@ public final class IOHelper {
 					if (!delete(directory, override)) {
 						System.out.println("Unable to delete '" + directory.getAbsolutePath() + "' directory.");
 					}
-
+					
 					// recreate the directory
 					directory = makeDirectory(directory);
 				}
@@ -830,11 +827,11 @@ public final class IOHelper {
 				directory = makeDirectory(directory);
 			}
 		}
-
+		
 		System.out.println("-makeDirectory(), " + (directory == null ? "" : directory.getAbsolutePath()));
 		return directory;
 	}
-
+	
 	/**
 	 * Creates the directory if not exists. If <code>override</code> is set to
 	 * true, delete the existing directory and creates the new one.
@@ -846,7 +843,7 @@ public final class IOHelper {
 	public static File makeDirectory(String dirPath, boolean override) {
 		return makeDirectory(new File(dirPath), override);
 	}
-
+	
 	/**
 	 * Creates the directory if not exists. If <code>override</code> is set to
 	 * true, delete the existing directory and creates the new one.
@@ -856,7 +853,7 @@ public final class IOHelper {
 	public static File makeDirectory(String dirPath) {
 		return makeDirectory(dirPath, false);
 	}
-
+	
 	/**
 	 * Deletes the contents of the specified <code>path</code> irrespective of
 	 * its contents, if its not null or empty.
@@ -883,18 +880,18 @@ public final class IOHelper {
 						}
 					}
 				}
-
+				
 				/* finally delete the folder. */
 				deleted = path.delete();
 			} else if (path.isFile()) {
 				deleted = path.delete();
 			}
 		}
-
+		
 		System.out.println("-delete(), deleted:" + deleted);
 		return deleted;
 	}
-
+	
 	/**
 	 * Deletes the contents of the specified <code>path</code> irrespective of
 	 * its contents, if its not null or empty.
@@ -907,10 +904,10 @@ public final class IOHelper {
 		if (!CoreHelper.isNullOrEmpty(path)) {
 			return delete(new File(path), force);
 		}
-
+		
 		return false;
 	}
-
+	
 	/**
 	 * Deletes the contents of the specified <code>path</code> irrespective of
 	 * its contents, if its not null or empty.
@@ -920,7 +917,7 @@ public final class IOHelper {
 	public static boolean delete(String path) {
 		return delete(path, false);
 	}
-
+	
 	/**
 	 * Returns the file {@link InputStream}.
 	 * 
@@ -931,7 +928,7 @@ public final class IOHelper {
 	public static InputStream newFileInputStream(String pathString) throws IOException {
 		return (CoreHelper.isNullOrEmpty(pathString) ? null : new FileInputStream(pathString));
 	}
-
+	
 	/**
 	 * Returns the file {@link InputStream}.
 	 * 
@@ -942,7 +939,7 @@ public final class IOHelper {
 	public static InputStream newByteArrayInputStream(byte[] dataBytes) throws IOException {
 		return (CoreHelper.isNull(dataBytes) ? null : new ByteArrayInputStream(dataBytes));
 	}
-
+	
 	/**
 	 * Make a BufferedReader to get incoming data.
 	 * 
@@ -953,7 +950,7 @@ public final class IOHelper {
 	public static BufferedReader newBufferedReader(Socket socket) throws IOException {
 		return (new BufferedReader(new InputStreamReader(socket.getInputStream())));
 	}
-
+	
 	/**
 	 * Make a PrintWriter to send outgoing data. This PrintWriter will
 	 * automatically flush stream when <code>println(...)</code> is called.
@@ -966,7 +963,7 @@ public final class IOHelper {
 		/* autoFlush set to be true */
 		return (new PrintWriter(socket.getOutputStream(), true));
 	}
-
+	
 	/**
 	 * Returns the input stream populated with the given bytes.
 	 * 
@@ -981,7 +978,7 @@ public final class IOHelper {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * Returns the bytes of the specified input stream.
 	 * 
@@ -1000,7 +997,7 @@ public final class IOHelper {
 				while ((length = inputStream.read(buffer)) != -1) {
 					byteStream.write(buffer, 0, length);
 				}
-
+				
 				byteStream.flush();
 				resultBytes = byteStream.toByteArray();
 			} catch (IOException ex) {
@@ -1013,11 +1010,11 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		System.out.println("-readBytes(), resultBytes:" + resultBytes);
 		return resultBytes;
 	}
-
+	
 	/**
 	 * Returns the bytes of the specified input stream.
 	 * 
@@ -1027,7 +1024,7 @@ public final class IOHelper {
 	public static byte[] readBytes(InputStream inputStream) {
 		return readBytes(inputStream, false);
 	}
-
+	
 	/**
 	 * /** Returns the UTF-8 String representation of the given
 	 * <code>bytes</code>.
@@ -1041,10 +1038,10 @@ public final class IOHelper {
 		if (replaceNonDigitCharacters && CoreHelper.isNotNullOrEmpty(utf8String)) {
 			utf8String = utf8String.replaceAll("\\D+", "");
 		}
-
+		
 		return utf8String;
 	}
-
+	
 	/**
 	 * Returns the UTF-8 String representation of the given <code>bytes</code>.
 	 * 
@@ -1054,7 +1051,7 @@ public final class IOHelper {
 	public static String toUTF8String(byte[] bytes) {
 		return toUTF8String(bytes, false);
 	}
-
+	
 	/**
 	 * Returns the UTF-8 String representation of the given <code>string</code>.
 	 * 
@@ -1064,7 +1061,7 @@ public final class IOHelper {
 	public static String toUTF8String(String string) {
 		return toUTF8String(string.getBytes());
 	}
-
+	
 	/**
 	 * Returns the ISO-8859-1 String representation of the given
 	 * <code>bytes</code>.
@@ -1075,7 +1072,7 @@ public final class IOHelper {
 	public static String toISOString(byte[] bytes) {
 		return toString(bytes, ISO_8859_1);
 	}
-
+	
 	/**
 	 * Converts the specified <code>string</code> into bytes using the specified
 	 * <code>charsetName</code>.
@@ -1088,16 +1085,15 @@ public final class IOHelper {
 		byte[] stringAsBytes = null;
 		if (CoreHelper.isNotNull(string)) {
 			try {
-				stringAsBytes = CoreHelper.isNullOrEmpty(charsetName) ? string.getBytes()
-						: string.getBytes(charsetName);
+				stringAsBytes = CoreHelper.isNullOrEmpty(charsetName) ? string.getBytes() : string.getBytes(charsetName);
 			} catch (Exception ex) {
 				System.err.println(ex);
 			}
 		}
-
+		
 		return stringAsBytes;
 	}
-
+	
 	/**
 	 * Converts the specified <code>string</code> into bytes.
 	 * 
@@ -1107,7 +1103,7 @@ public final class IOHelper {
 	public static byte[] toBytes(String string) {
 		return toBytes(string, null);
 	}
-
+	
 	/**
 	 * Returns the UTF-8 bytes for the given string.
 	 * 
@@ -1117,7 +1113,7 @@ public final class IOHelper {
 	public static byte[] toUTF8Bytes(String string) {
 		return toBytes(string, UTF_8);
 	}
-
+	
 	/**
 	 * Returns the ISO-8859-1 bytes for the given string.
 	 * 
@@ -1127,7 +1123,7 @@ public final class IOHelper {
 	public static byte[] toISOBytes(String string) {
 		return toBytes(string, ISO_8859_1);
 	}
-
+	
 	/**
 	 * Returns the string of the specified input stream.
 	 * 
@@ -1138,7 +1134,7 @@ public final class IOHelper {
 	public static String toString(InputStream inputStream) throws IOException {
 		return toUTF8String(readBytes(inputStream));
 	}
-
+	
 	/**
 	 * Returns the defaultCharset, if the given charsetName is either null or
 	 * empty otherwise the same.
@@ -1149,7 +1145,7 @@ public final class IOHelper {
 	public static String defaultCharset(String charsetName) {
 		return (CoreHelper.isNullOrEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
 	}
-
+	
 	/**
 	 * Converts the specified <code>bytes</code> to the specified
 	 * <code>charsetName</code> String.
@@ -1172,10 +1168,10 @@ public final class IOHelper {
 				bytesAsString = (CoreHelper.isNull(bytes) ? null : bytes.toString());
 			}
 		}
-
+		
 		return bytesAsString;
 	}
-
+	
 	/**
 	 * Returns the string of the given strings array.
 	 * 
@@ -1194,13 +1190,13 @@ public final class IOHelper {
 					sBuilder.append(",");
 				}
 			}
-
+			
 			sBuilder.append("]");
 		}
-
+		
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Convert a byte array to a HEXA String of the format "1f 30 b7".
 	 * 
@@ -1214,19 +1210,19 @@ public final class IOHelper {
 			for (int index = 0; index < bytes.length; index++) {
 				int hn = ((int) (bytes[index]) & 0x00ff) / 16;
 				int ln = ((int) (bytes[index]) & 0x000f);
-
+				
 				hexBuilder.append(HEX_DIGITS.charAt(hn));
 				hexBuilder.append(HEX_DIGITS.charAt(ln));
 			}
-
+			
 			hexString = hexBuilder.toString();
 			// available for GC.
 			hexBuilder = null;
 		}
-
+		
 		return hexString;
 	}
-
+	
 	/**
 	 * Convert the hex string into an array of bytes.
 	 * 
@@ -1242,10 +1238,10 @@ public final class IOHelper {
 				hexBytes[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2), 16).byteValue();
 			}
 		}
-
+		
 		return hexBytes;
 	}
-
+	
 	/**
 	 * Reads the specified file bytes.
 	 * 
@@ -1255,7 +1251,7 @@ public final class IOHelper {
 	public static byte[] readBytes(String fileName) throws IOException {
 		return readBytes(newFileInputStream(fileName), true);
 	}
-
+	
 	/**
 	 * This method writes the specified string into the specified output stream.
 	 * 
@@ -1278,7 +1274,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Converts the bytes to StringBuilder object.
 	 * 
@@ -1301,10 +1297,10 @@ public final class IOHelper {
 				safeClose(bufferedReader);
 			}
 		}
-
+		
 		return sBuilder;
 	}
-
+	
 	/**
 	 * Copies the source file at the target file.
 	 * 
@@ -1328,11 +1324,11 @@ public final class IOHelper {
 				System.out.println("File [" + sourceFilePath + "] does not exist!");
 			}
 		}
-
+		
 		System.out.println("-copyFile(), copied:" + copied);
 		return copied;
 	}
-
+	
 	/**
 	 * 
 	 * @param outputStream
@@ -1350,7 +1346,7 @@ public final class IOHelper {
 					objOutputStream.close();
 					outputStream = new ObjectOutputStream(new GZIPOutputStream(outputStream));
 				}
-
+				
 				objOutputStream.writeObject(object);
 				objOutputStream.flush();
 			} catch (IOException ex) {
@@ -1361,7 +1357,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param outputStream
@@ -1372,7 +1368,7 @@ public final class IOHelper {
 	public static void writeObject(OutputStream outputStream, Object object) throws IOException {
 		writeObject(outputStream, object, false);
 	}
-
+	
 	/**
 	 * 
 	 * @param inputStream
@@ -1391,7 +1387,7 @@ public final class IOHelper {
 					objInputStream.close();
 					objInputStream = new ObjectInputStream(new GZIPInputStream(inputStream));
 				}
-
+				
 				object = objInputStream.readObject();
 			} catch (Exception ex) {
 				System.err.println(ex);
@@ -1400,10 +1396,10 @@ public final class IOHelper {
 				safeClose(objInputStream);
 			}
 		}
-
+		
 		return object;
 	}
-
+	
 	/**
 	 * 
 	 * @param inputStream
@@ -1413,7 +1409,7 @@ public final class IOHelper {
 	public static Object readObject(InputStream inputStream) throws Exception {
 		return readObject(inputStream, false);
 	}
-
+	
 	/**
 	 * Writes the input stream data into the specified response string.
 	 * 
@@ -1422,8 +1418,7 @@ public final class IOHelper {
 	 * @param closeConnection
 	 * @throws IOException
 	 */
-	public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams)
-			throws IOException {
+	public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams) throws IOException {
 		System.out.println("+streamAsStringBuilder(" + inputStream + ", " + closeStreams + ")");
 		StringBuilder streamString = new StringBuilder();
 		if (inputStream != null) {
@@ -1432,16 +1427,16 @@ public final class IOHelper {
 			while ((inputLine = bufferedReader.readLine()) != null) {
 				streamString.append(inputLine);
 			}
-
+			
 			if (closeStreams) {
 				safeClose(bufferedReader);
 			}
 		}
-
+		
 		System.out.println("-streamAsStringBuilder(), streamString:" + streamString.toString());
 		return streamString;
 	}
-
+	
 	/**
 	 * Writes the input stream data into the specified response string.
 	 * 
@@ -1450,10 +1445,8 @@ public final class IOHelper {
 	 * @param closeConnection
 	 * @throws IOException
 	 */
-	public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile,
-			String hashCodeFilePath) throws IOException {
-		System.out.println("+writeResponse(" + inputStream + ", " + closeStreams + ", " + useExistingFile + ", "
-				+ hashCodeFilePath + ")");
+	public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile, String hashCodeFilePath) throws IOException {
+		System.out.println("+writeResponse(" + inputStream + ", " + closeStreams + ", " + useExistingFile + ", " + hashCodeFilePath + ")");
 		StringBuilder response = new StringBuilder();
 		if (inputStream != null) {
 			BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -1461,16 +1454,16 @@ public final class IOHelper {
 			while ((inputLine = bufferedReader.readLine()) != null) {
 				response.append(inputLine);
 			}
-
+			
 			if (closeStreams) {
 				safeClose(bufferedReader);
 			}
 		}
-
+		
 		System.out.println("-writeResponse(), response:" + response.toString());
 		return response;
 	}
-
+	
 	/**
 	 * Returns the validated file or folder/directory name as per the file
 	 * management naming conventions.
@@ -1502,10 +1495,10 @@ public final class IOHelper {
 			fileName = fileName.replace("®", "_");
 			fileName = fileName.replace("™", "_");
 		}
-
+		
 		return fileName;
 	}
-
+	
 	/**
 	 * Checks whether the directory has proper read/write permissions or not.
 	 * 
@@ -1520,7 +1513,7 @@ public final class IOHelper {
 		if (!dirFile.exists()) {
 			System.out.println("Directory '" + dirPath + "' does not exist.");
 		}
-
+		
 		// Create 'lock.rsl' file and delete to check read write permission.
 		if (dirFile.exists() && dirFile.isDirectory()) {
 			try {
@@ -1530,11 +1523,11 @@ public final class IOHelper {
 				System.err.println(ex);
 			}
 		}
-
+		
 		System.out.println("-hasReadWritePrivileges(), allowed:" + allowed);
 		return allowed;
 	}
-
+	
 	/**
 	 * Returns true if the fileName extension ends with any of the given
 	 * extensions otherwise false.
@@ -1553,10 +1546,10 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		return result;
 	}
-
+	
 	/**
 	 * Returns the list of all files of the given <code>extensions</code> from
 	 * the given <code>directory</code> (and optionally its sub-directories, if
@@ -1589,11 +1582,11 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		System.out.println("-listFiles(), listFiles:" + listFiles);
 		return listFiles;
 	}
-
+	
 	/**
 	 * Returns the list of all files of the given <code>extensions</code> from
 	 * the given <code>directory</code>. If the given <code>extensions</code> is
@@ -1606,7 +1599,7 @@ public final class IOHelper {
 	public static List<File> listFiles(File directory, String... extensions) {
 		return listFiles(directory, extensions, false);
 	}
-
+	
 	/**
 	 * Returns the list of all files of the given <code>extensions</code> from
 	 * the given <code>directory</code>. If the given <code>extensions</code> is
@@ -1619,7 +1612,7 @@ public final class IOHelper {
 	public static List<File> listFiles(File directory) {
 		return listFiles(directory, null, false);
 	}
-
+	
 	/**
 	 * Returns the list of file names of the given <code>extensions</code> from
 	 * the given <code>directory</code> (and optionally its sub-directories, if
@@ -1651,10 +1644,10 @@ public final class IOHelper {
 				}
 			}
 		}
-
+		
 		return listFiles;
 	}
-
+	
 	/**
 	 * Returns the list of all file names of the given <code>extensions</code>
 	 * from the given <code>directory</code>. If the given
@@ -1668,7 +1661,7 @@ public final class IOHelper {
 	public static List<String> listFileNames(File directory, String... extensions) {
 		return listFileNames(directory, extensions, false);
 	}
-
+	
 	/**
 	 * Returns the list of all files of the given <code>extension</code> from
 	 * the given <code>directory</code>. If the given <code>extension</code> is
@@ -1680,7 +1673,7 @@ public final class IOHelper {
 	public static List<String> getAllFiles(File directory) {
 		return listFileNames(directory, (String) null);
 	}
-
+	
 	/**
 	 * Returns the list of all files of the given <code>extension</code> from
 	 * the given <code>directory</code>. If the given <code>extension</code> is
@@ -1693,7 +1686,7 @@ public final class IOHelper {
 	public static List<String> getAllFiles(String directory, String extension) {
 		return listFileNames(new File(directory), extension);
 	}
-
+	
 	/**
 	 * Returns the list of all files from the given <code>directory</code>.
 	 * 
@@ -1703,7 +1696,7 @@ public final class IOHelper {
 	public static List<String> getAllFiles(String directory) {
 		return getAllFiles(directory, null);
 	}
-
+	
 	/**
 	 * Returns the list of all .ZIP files from the given <code>directory</code>.
 	 * 
@@ -1713,7 +1706,7 @@ public final class IOHelper {
 	public static List<String> getAllZipFiles(File directory) {
 		return listFileNames(directory, ".zip".intern());
 	}
-
+	
 	/**
 	 * Returns the list of all .ZIP files from the given <code>directory</code>.
 	 * 
@@ -1723,7 +1716,7 @@ public final class IOHelper {
 	public static List<String> getAllZipFiles(String directory) {
 		return getAllZipFiles(new File(directory));
 	}
-
+	
 	/**
 	 * Returns the latest version from the version list. For example: if your
 	 * versions list contains the following values:
@@ -1748,14 +1741,14 @@ public final class IOHelper {
 					return o1.compareTo(o2);
 				}
 			});
-
+			
 			latestVersion = (listOfVersions.get(listOfVersions.size() - 1));
 		}
-
+		
 		System.out.println("-getLatestVersion(), latestVersion:" + latestVersion);
 		return latestVersion;
 	}
-
+	
 	/**
 	 * Converts an object into the bytes.
 	 * 
@@ -1780,10 +1773,10 @@ public final class IOHelper {
 				safeClose(byteArrayOutputStream);
 			}
 		}
-
+		
 		return objectBytes;
 	}
-
+	
 	/**
 	 * Converts the bytes into an object.
 	 * 
@@ -1809,10 +1802,10 @@ public final class IOHelper {
 				safeClose(objectInputStream);
 			}
 		}
-
+		
 		return object;
 	}
-
+	
 	/**
 	 * Deletes the files which are older than the specified days.
 	 * 
@@ -1828,8 +1821,7 @@ public final class IOHelper {
 				try {
 					if (file.lastModified() < purgeTimeMillis) {
 						if (!file.delete()) {
-							System.out.println(
-									"Unable to delete file:" + file + "file.lastModified:" + file.lastModified());
+							System.out.println("Unable to delete file:" + file + "file.lastModified:" + file.lastModified());
 						}
 					}
 				} catch (Exception ex) {
@@ -1838,7 +1830,7 @@ public final class IOHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Deletes the files which are older than the specified days.
 	 * 
@@ -1848,7 +1840,7 @@ public final class IOHelper {
 	public static void deleteFilesOlderThanNDays(String dirPath, int olderThanNDays) {
 		deleteFilesOlderThanNDays(new File(dirPath), olderThanNDays);
 	}
-
+	
 	/**
 	 * Returns the list of file names of the given <code>prefix</code> from the
 	 * given <code>directory</code>. If the given <code>extensions</code> is
@@ -1864,10 +1856,10 @@ public final class IOHelper {
 			File[] files = directory.listFiles(new RequestHashCodeFileFilter(prefix));
 			listFiles.addAll(Arrays.asList(files));
 		}
-
+		
 		return listFiles;
 	}
-
+	
 	/**
 	 * Returns the fileName which starts with the given prefix from the given
 	 * parentFolder.
@@ -1887,10 +1879,10 @@ public final class IOHelper {
 			}
 			path = null;
 		}
-
+		
 		return prefixedFilePath;
 	}
-
+	
 	/**
 	 * Returns the extension from the specified fullPath, if its not null or
 	 * empty otherwise null.
@@ -1904,10 +1896,10 @@ public final class IOHelper {
 			int dotIndex = fullPath.lastIndexOf(".");
 			extension = ((dotIndex > -1 && dotIndex < fullPath.length() - 1) ? fullPath.substring(dotIndex + 1) : "");
 		}
-
+		
 		return extension;
 	}
-
+	
 	/**
 	 * Returns the filename from the specified fullPath, if its not null or
 	 * empty otherwise null.
@@ -1923,15 +1915,14 @@ public final class IOHelper {
 				fileName = fullPath.substring(pathSeparatorIndex + 1);
 				if (!withExtension) {
 					int dotIndex = fileName.lastIndexOf(".");
-					fileName = ((dotIndex > -1 && dotIndex < fileName.length() - 1) ? fileName.substring(0, dotIndex)
-							: fileName);
+					fileName = ((dotIndex > -1 && dotIndex < fileName.length() - 1) ? fileName.substring(0, dotIndex) : fileName);
 				}
 			}
 		}
-
+		
 		return fileName;
 	}
-
+	
 	/**
 	 * 
 	 * @param socket
@@ -1943,7 +1934,7 @@ public final class IOHelper {
 		System.out.println("Local Socket Address:" + socket.getLocalSocketAddress());
 		System.out.println("Local Address:" + socket.getLocalAddress());
 		System.out.println("Local Port:" + socket.getLocalPort());
-
+		
 		if (socket instanceof SSLSocket) {
 			SSLSocket sslSocket = (SSLSocket) socket;
 			System.out.println("Need Client Authentication:" + sslSocket.getNeedClientAuth());
@@ -1952,7 +1943,7 @@ public final class IOHelper {
 			System.out.println("Protocol:" + sslSession.getProtocol());
 		}
 	}
-
+	
 	/**
 	 * Prints the <code>ServerSocket</code> information.
 	 * 
@@ -1969,7 +1960,7 @@ public final class IOHelper {
 			System.out.println("Use Client Mode:" + sslServerSocket.getUseClientMode());
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @author Rohtash Singh
@@ -1977,10 +1968,10 @@ public final class IOHelper {
 	 * @since Dec 9, 2015 4:42:16 PM
 	 */
 	public static final class RequestHashCodeFileFilter implements FileFilter {
-
+		
 		// requestHashCode
 		private String requestHashCode;
-
+		
 		/**
 		 * 
 		 * @param requestHashCode
@@ -1988,7 +1979,7 @@ public final class IOHelper {
 		public RequestHashCodeFileFilter(String requestHashCode) {
 			this.requestHashCode = requestHashCode;
 		}
-
+		
 		/**
 		 * Returns true, if the filename starts with the requestHashCode
 		 * otherwise false.
@@ -2000,5 +1991,5 @@ public final class IOHelper {
 			return (requestHashCode != null && pathName != null && pathName.getName().startsWith(requestHashCode));
 		}
 	}
-
+	
 }

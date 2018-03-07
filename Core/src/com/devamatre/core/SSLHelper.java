@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -76,7 +76,7 @@ public class SSLHelper {
 	 */
 	public static TrustManagerFactory newTrustManagerFactory(KeyStore loadedKeyStore) throws Exception {
 		TrustManagerFactory trustManagerFactory = null;
-		if(loadedKeyStore != null) {
+		if (loadedKeyStore != null) {
 			// Create a TrustManager that trusts the CAs in our KeyStore
 			String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
 			trustManagerFactory = TrustManagerFactory.getInstance(defaultAlgorithm);
@@ -107,7 +107,7 @@ public class SSLHelper {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(keyManagers, trustManagerFactory.getTrustManagers(), null);
 			serverSocketFactory = sslContext.getServerSocketFactory();
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw makeIOException(ex);
 		}
 		
@@ -127,7 +127,7 @@ public class SSLHelper {
 	public static SSLServerSocketFactory makeSSLSocketFactory(KeyStore loadedKeyStore, KeyManagerFactory loadedKeyFactory) throws IOException {
 		try {
 			return makeSSLSocketFactory(loadedKeyStore, loadedKeyFactory.getKeyManagers());
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw makeIOException(ex);
 		}
 	}
@@ -147,7 +147,7 @@ public class SSLHelper {
 			KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
 			InputStream keyStoreStream = SSLHelper.class.getResourceAsStream(keyAndTrustStoreFilePath);
 			
-			if(keyStoreStream == null) {
+			if (keyStoreStream == null) {
 				throw new IOException("Unable to load keystore from classpath:" + keyAndTrustStoreFilePath);
 			}
 			
@@ -155,7 +155,7 @@ public class SSLHelper {
 			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
 			keyManagerFactory.init(keystore, passphrase);
 			return makeSSLSocketFactory(keystore, keyManagerFactory);
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw makeIOException(ex);
 		}
 	}
@@ -194,7 +194,7 @@ public class SSLHelper {
 			SSLContext sslContext = SSLContext.getInstance("TLS");
 			sslContext.init(null, trustManagerFactory.getTrustManagers(), null);
 			return sslContext.getServerSocketFactory();
-		} catch(Exception ex) {
+		} catch (Exception ex) {
 			throw makeIOException(ex);
 		}
 	}
@@ -206,18 +206,18 @@ public class SSLHelper {
 	 */
 	public static final void safeClose(Object closeable) {
 		try {
-			if(closeable != null) {
-				if(closeable instanceof Closeable) {
+			if (closeable != null) {
+				if (closeable instanceof Closeable) {
 					((Closeable) closeable).close();
-				} else if(closeable instanceof Socket) {
+				} else if (closeable instanceof Socket) {
 					((Socket) closeable).close();
-				} else if(closeable instanceof ServerSocket) {
+				} else if (closeable instanceof ServerSocket) {
 					((ServerSocket) closeable).close();
 				} else {
 					throw new IllegalArgumentException("Unknown object to close");
 				}
 			}
-		} catch(IOException ex) {
+		} catch (IOException ex) {
 			IOHelper.error(ex);
 		}
 	}
@@ -250,9 +250,9 @@ public class SSLHelper {
 	 * @return
 	 */
 	public static boolean isAllowedHostname(final String hostName, final String... allowedHostNames) {
-		if(hostName != null && allowedHostNames != null) {
-			for(String host : allowedHostNames) {
-				if(hostName.contains(host)) {
+		if (hostName != null && allowedHostNames != null) {
+			for (String host : allowedHostNames) {
+				if (hostName.contains(host)) {
 					return true;
 				}
 			}
@@ -281,7 +281,7 @@ public class SSLHelper {
 			 * @return
 			 */
 			public boolean verify(String hostname, SSLSession sslSession) {
-				if(hostname == null || hostname.trim().length() == 0) {
+				if (hostname == null || hostname.trim().length() == 0) {
 					hostname = hostName;
 				}
 				
@@ -291,11 +291,11 @@ public class SSLHelper {
 				// return hostNameVerifier.verify(hostname, sslSession);
 				// }
 				
-				if(hostname.equals("localhost")) {
+				if (hostname.equals("localhost")) {
 					return true;
-				} else if(hostname.equals(hostName)) {
+				} else if (hostname.equals(hostName)) {
 					return true;
-				} else if(isAllowedHostname(hostname, allowedHostNames)) {
+				} else if (isAllowedHostname(hostname, allowedHostNames)) {
 					return true;
 				}
 				

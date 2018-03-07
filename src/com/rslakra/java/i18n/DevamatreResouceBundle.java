@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
+ * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
  * that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, 
+ * 	  this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
@@ -22,14 +22,13 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-
 package com.rslakra.java.i18n;
 
-import java.io.File;
+import java.io.Serializable;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Locale;
@@ -48,19 +47,25 @@ import com.devamatre.logger.Logger;
  * @author Rohtash Singh (rohtash.singh@devamatre.com)
  * @date Aug 9, 2009 2:22:31 PM
  */
-public class DevamatreResouceBundle {
+public class DevamatreResouceBundle implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	/* Logger */
 	private static final Logger logger = LogManager.getLogger(DevamatreResouceBundle.class);
-
+	
 	/* baseName */
 	private String baseName;
-
+	
 	/* locale */
 	private Locale locale;
-
+	
 	/* resourceBundles */
 	private HashMap<String, String> resourceBundles = new HashMap<String, String>();
-
+	
 	/**
 	 * 
 	 * @param baseName
@@ -70,7 +75,7 @@ public class DevamatreResouceBundle {
 	public DevamatreResouceBundle(String baseName) {
 		this(baseName, Locale.getDefault());
 	}
-
+	
 	/**
 	 * 
 	 * @param baseName
@@ -97,7 +102,7 @@ public class DevamatreResouceBundle {
 			logger.debug("-DevamatreResouceBundle()");
 		}
 	}
-
+	
 	/**
 	 * Default Constructor.
 	 * 
@@ -119,7 +124,7 @@ public class DevamatreResouceBundle {
 		} else {
 			this.baseName = baseName;
 		}
-
+		
 		// if language is null or empty, the default language "en" is used.
 		if (language == null || "".equals(language)) {
 			language = "en";
@@ -134,7 +139,7 @@ public class DevamatreResouceBundle {
 			logger.debug("-DevamatreResouceBundle()");
 		}
 	}
-
+	
 	/**
 	 *
 	 */
@@ -142,46 +147,45 @@ public class DevamatreResouceBundle {
 		if (logger.isDebugEnabled()) {
 			logger.debug("+loadLocale(), baseName:" + getBaseName() + ", local:" + getLocal());
 		}
+		
 		ResourceBundle resBundle = null;
 		try {
 			resBundle = ResourceBundle.getBundle(getBaseName().trim(), getLocal());
 		} catch (MissingResourceException mre) {
-			logger.error("Could not find bunlde for basename: '" + (getBaseName() + getLocal().toString())
-					+ "' , mre : " + mre);
+			logger.error("Could not find bunlde for basename: '" + (getBaseName() + getLocal().toString()) + "' , mre : " + mre);
 			mre.printStackTrace();
 		}
 		if (logger.isDebugEnabled()) {
 			logger.debug("resBundle : " + resBundle);
 		}
-		Enumeration objEnum = resBundle.getKeys();
-		String key = null;
-		String value = null;
+		Enumeration<String> objEnum = resBundle.getKeys();
 		while (objEnum.hasMoreElements()) {
-			key = (String) objEnum.nextElement();
+			String key = objEnum.nextElement();
 			if (logger.isDebugEnabled()) {
 				logger.debug("key : " + key);
 			}
 			if (!resourceBundles.containsKey(key)) {
-				value = resBundle.getString(key);
+				String value = resBundle.getString(key);
 				if (logger.isDebugEnabled()) {
 					logger.debug("value : " + value);
 				}
 				resourceBundles.put(key, value);
 			}
 		}
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("-loadLocale()");
 		}
 	}
-
+	
 	private Locale getLocal() {
 		return locale;
 	}
-
+	
 	private String getBaseName() {
 		return baseName;
 	}
-
+	
 	/**
 	 * This method returns the value for the key. If does not not found, it
 	 * ruturns the key back.
@@ -203,26 +207,26 @@ public class DevamatreResouceBundle {
 		}
 		return value;
 	}
-
+	
 	/**
 	 * 
 	 * @param klass
 	 * @return
 	 */
-	public static DevamatreResouceBundle getResourceBundle(Class klass) {
+	public static DevamatreResouceBundle getResourceBundle(Class<?> klass) {
 		return new DevamatreResouceBundle(null);
 	}
-
+	
 	/**
 	 * 
 	 * @param args
 	 */
 	public static void main(String[] args) {
 		// LogManager.configure(System.getProperty("user.dir"));
-		LogManager.configure(LogManager.getDefaultConfigPath(false) + File.separator + LogManager.LOG4J_PROPERTY_FILE);
+		LogManager.configure(LogManager.LOG4J_PROPERTY_FILE);
 		Logger logger = LogManager.getLogger(DevamatreResouceBundle.class);
 		final String baseName = "org/devamatre/resources/MyResources";
-
+		
 		// DevamatreResouceBundle devResouceBundle = new
 		// DevamatreResouceBundle(null);
 		// DevamatreResouceBundle devResouceBundle = new
@@ -244,7 +248,7 @@ public class DevamatreResouceBundle {
 		// DevamatreResouceBundle devResouceBundle = new
 		// DevamatreResouceBundle(baseName, "de", null);
 		DevamatreResouceBundle devResouceBundle = new DevamatreResouceBundle(baseName, "de", "");
-
+		
 		logger.info(devResouceBundle.getValue("name"));
 		logger.info(devResouceBundle.getValue("password"));
 	}

@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -44,7 +44,7 @@ import java.net.Socket;
  */
 
 public final class NetHelper implements Serializable {
-
+	
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = 1L;
 	
@@ -52,11 +52,11 @@ public final class NetHelper implements Serializable {
 	
 	/** instance */
 	private static NetHelper instance;
-
+	
 	/** Singleton Pattern. */
 	private NetHelper() {
 	}
-
+	
 	/**
 	 * To make a singleton class serializable, it is not only sufficient to add
 	 * implements <code>Serializable</code> to its declaration. To maintain the
@@ -69,7 +69,7 @@ public final class NetHelper implements Serializable {
 	private Object readResolve() throws ObjectStreamException {
 		return instance;
 	}
-
+	
 	/**
 	 * @return NetHelper
 	 */
@@ -83,7 +83,7 @@ public final class NetHelper implements Serializable {
 		}
 		return instance;
 	}
-
+	
 	/**
 	 * 
 	 * @param args
@@ -96,17 +96,16 @@ public final class NetHelper implements Serializable {
 		long ipToNum = NetHelper.toIPNumber(newIPAddress);
 		System.out.println("\nAfter Conversion, ipToNum : " + ipToNum + ", newIPAddress : " + newIPAddress);
 	}
-
+	
 	/**
 	 * 
 	 * @param ipNumber
 	 * @return
 	 */
 	public static String toIPAddress(int ipNumber) {
-		return (ipNumber & 0xFF) + "." + ((ipNumber >> 8) & 0xFF) + "." + ((ipNumber >> 16) & 0xFF) + "."
-				+ ((ipNumber >> 24) & 0xFF);
+		return (ipNumber & 0xFF) + "." + ((ipNumber >> 8) & 0xFF) + "." + ((ipNumber >> 16) & 0xFF) + "." + ((ipNumber >> 24) & 0xFF);
 	}
-
+	
 	/**
 	 * 
 	 * @param ipAddress
@@ -118,10 +117,10 @@ public final class NetHelper implements Serializable {
 		for (int i = 0; i < addrArray.length; i++) {
 			ipNumber += ((Integer.parseInt(addrArray[i]) % 256 * Math.pow(256, i)));
 		}
-
+		
 		return ipNumber;
 	}
-
+	
 	/**
 	 * Make a BufferedReader to get incoming data.
 	 * 
@@ -132,7 +131,7 @@ public final class NetHelper implements Serializable {
 	public static BufferedReader getReader(Socket socket) throws IOException {
 		return (new BufferedReader(new InputStreamReader(socket.getInputStream())));
 	}
-
+	
 	/**
 	 * Make a PrintWriter to send outgoing data. This PrintWriter will
 	 * automatically flush stream when <code>println(...)</code> is called.

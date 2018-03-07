@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
@@ -60,10 +60,10 @@ import com.devamatre.logger.Logger;
  * @since 1.0.0
  */
 public final class StringHelper {
-
+	
 	/** <code>serialVersionUID</code> */
 	private static final long serialVersionUID = -8755337045582158234L;
-
+	
 	/* constants */
 	public static final char SPACE = '\u0020';
 	public static final char SPACE_SEPARATOR = '\u00A0';
@@ -72,7 +72,7 @@ public final class StringHelper {
 	public static final String STR_SPACE = "" + SPACE;
 	public static final String STR_LINE = "" + LINE_SEPARATOR;
 	public static final String STR_PARAGRAPH = "" + PARAGRAPH_SEPARATOR;
-
+	
 	/* Horizontal Tabulation ('\t') */
 	public static final char HTAB = '\u0009';
 	/* Vertical Tabulation */
@@ -87,21 +87,21 @@ public final class StringHelper {
 	public static final String DELIMITER = "" + HTAB;
 	public static final String VER_DELIMITER = "" + VTAB;
 	public static final String EMPTY_STR = "";
-
+	
 	/* valid email expression. */
 	private static String VALID_EMAIL_EXPRESSION = "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
-
+	
 	/** logger */
 	private static Logger logger = LogManager.getLogger(StringHelper.class);
-
+	
 	private static StringHelper instance;
-
+	
 	/**
 	 * Singleton.
 	 */
 	private StringHelper() {
 	}
-
+	
 	/**
 	 * Returns the singleton instance of this class.
 	 * 
@@ -115,10 +115,10 @@ public final class StringHelper {
 				}
 			}
 		}
-
+		
 		return instance;
 	}
-
+	
 	/**
 	 * To make a singleton class serializable, it is not only sufficient to add
 	 * implements <code>Serializable</code> to its declaration. To maintain the
@@ -131,7 +131,7 @@ public final class StringHelper {
 	private Object readResolve() throws ObjectStreamException {
 		return this;
 	}
-
+	
 	/**
 	 * Removes leading whitespace of the specified string using expressions.
 	 * 
@@ -141,7 +141,7 @@ public final class StringHelper {
 	public static String lTrim(String str) {
 		return str.replaceAll("^\\s+", "");
 	}
-
+	
 	/**
 	 * Remove trailing whitespace of the specified string using expressions.
 	 * 
@@ -151,7 +151,7 @@ public final class StringHelper {
 	public static String rTrim(String str) {
 		return str.replaceAll("\\s+$", "");
 	}
-
+	
 	/**
 	 * Replaces multiple whitespace between words with single whitespace using
 	 * expressions.
@@ -162,7 +162,7 @@ public final class StringHelper {
 	public static String iTrim(String str) {
 		return str.replaceAll("\\b\\s{2,}\\b", " ");
 	}
-
+	
 	/**
 	 * Removes all redundant (leading, trailing and centric) whitespace of the
 	 * specified string using expressions.
@@ -174,7 +174,7 @@ public final class StringHelper {
 	public static String trim(String str) {
 		return iTrim(lTrim(rTrim(str)));
 	}
-
+	
 	/**
 	 * Removes all redundant (leading, trailing and centric) delimiter
 	 * characters from the specified string.
@@ -200,13 +200,13 @@ public final class StringHelper {
 			}
 			str = strBuilder.toString();
 		}
-
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("-trim(), str: " + str);
 		}
 		return str;
 	}
-
+	
 	/**
 	 * Remove insentric White Spaces from a String.
 	 * 
@@ -230,10 +230,10 @@ public final class StringHelper {
 				}
 			} while (i != -1);
 		}
-
+		
 		return orignal;
 	}
-
+	
 	/**
 	 * Returns true if the string contains a space, otherwise false.
 	 * 
@@ -245,7 +245,7 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new IllegalArgumentException("Invalid String!, str: " + str);
 		}
-
+		
 		boolean hasSpace = false;
 		for (int index = 0; index < str.length(); index++) {
 			if (Character.isSpaceChar(str.charAt(index))) {
@@ -255,7 +255,7 @@ public final class StringHelper {
 		}
 		return hasSpace;
 	}
-
+	
 	/**
 	 * Check whether the specified string only contains digits including dot(.).
 	 * If the specified string is null or empty, it will return false.
@@ -269,7 +269,7 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new IllegalArgumentException("Invalid String!, str: " + str);
 		}
-
+		
 		boolean numeric = true;
 		for (int index = 0; numeric && index < str.length(); index++) {
 			if (!Character.isDigit(str.charAt(index)) && str.charAt(index) != '.') {
@@ -278,7 +278,7 @@ public final class StringHelper {
 		}
 		return numeric;
 	}
-
+	
 	/**
 	 * Check whether entered string is only contains digits including dot(.) not
 	 * any alphabets is null
@@ -294,10 +294,10 @@ public final class StringHelper {
 				isNumber = false;
 			}
 		}
-
+		
 		return isNumber;
 	}
-
+	
 	/**
 	 * Returns true if the string contains only digits. The $ avoids a partial
 	 * match, i.e. 1b.
@@ -308,7 +308,7 @@ public final class StringHelper {
 	public static boolean isDigits(String string) {
 		return (string != null && string.length() > 0 && string.matches("^[0-9]*$"));
 	}
-
+	
 	/**
 	 * 
 	 * @param string
@@ -322,7 +322,7 @@ public final class StringHelper {
 			return isDigits(string);
 		}
 	}
-
+	
 	/**
 	 * 
 	 * @param data
@@ -347,7 +347,7 @@ public final class StringHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Replaces the find string to the with string. It is a multi-purpose method
 	 * which can replace a single or multiple characters.
@@ -369,7 +369,7 @@ public final class StringHelper {
 		}
 		return str;
 	}
-
+	
 	/**
 	 * Returns true if a valid email address is passed. The email address
 	 * criteria is: This means an email can start with any combination of
@@ -388,7 +388,7 @@ public final class StringHelper {
 		Matcher matcher = pattern.matcher(VALID_EMAIL_EXPRESSION);
 		return matcher.find();
 	}
-
+	
 	/**
 	 * It returns true if the string matches exactly either "true"/"True" or
 	 * "yes"/"Yes".
@@ -399,7 +399,7 @@ public final class StringHelper {
 	public static boolean isTrueOrYes(String str) {
 		return str.matches("[tT]rue|[yY]es");
 	}
-
+	
 	/**
 	 * Returns true if either the string is null or empty otherwise false.
 	 * 
@@ -409,7 +409,7 @@ public final class StringHelper {
 	public static boolean isNullOrEmpty(String str) {
 		return (null == str || str.isEmpty() || str.trim().length() == 0);
 	}
-
+	
 	/**
 	 * Returns the padded string. It fills your string with up to repeat
 	 * characters with a whitespace and then all whitespace are replaced with
@@ -423,7 +423,7 @@ public final class StringHelper {
 	public static String padRight(String str, int repeat, String padStr) {
 		return String.format("%1$-" + repeat + "s", str).replaceAll(" ", padStr);
 	}
-
+	
 	/**
 	 * Returns the padded string. It fills your string with up to repeat
 	 * characters with a whitespace and then all whitespace are replaced with
@@ -437,7 +437,7 @@ public final class StringHelper {
 	public static String padLeft(String str, int repeat, String padStr) {
 		return String.format("%1$" + repeat + "s", str).replaceAll(" ", padStr);
 	}
-
+	
 	/**
 	 * Returns the padded string. It fills your string with up to repeat
 	 * characters with a whitespace and then all whitespace are replaced with
@@ -452,7 +452,7 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new IllegalArgumentException("Invalid String!, str: " + str);
 		}
-
+		
 		if (repeat > 0) {
 			int pads = repeat - str.length();
 			if (pads > 0) {
@@ -462,7 +462,7 @@ public final class StringHelper {
 		}
 		return str;
 	}
-
+	
 	/**
 	 * Returns the string of padded characters.
 	 * 
@@ -481,7 +481,7 @@ public final class StringHelper {
 		}
 		return new String(cBuffer);
 	}
-
+	
 	/**
 	 * Returns the string truncated from the start index to end index.
 	 * 
@@ -496,16 +496,16 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new IllegalArgumentException("Invalid String!, str: " + str);
 		}
-
+		
 		if (start < 0 || start > end || end > str.length()) {
 			throw new StringIndexOutOfBoundsException("Invalid Index!, start: " + start + ", endIndex:" + end);
 		}
-
+		
 		StringBuilder sBuilder = new StringBuilder(str);
 		sBuilder.delete(start, end);
 		return sBuilder.toString();
 	}
-
+	
 	/**
 	 * Returns the string in sentence case.
 	 * 
@@ -516,10 +516,10 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new NullPointerException("Invalid Parameter!, str: " + str);
 		}
-
+		
 		return new StringBuilder().append(Character.toUpperCase(str.charAt(0))).append(str.substring(1)).toString();
 	}
-
+	
 	/**
 	 * 
 	 * @param str
@@ -532,7 +532,7 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new NullPointerException("Invalid Parameter!, str: " + str);
 		}
-
+		
 		StringBuilder strBuilder = new StringBuilder();
 		String[] words = str.split(" ");
 		for (int index = 0; index < words.length; index++) {
@@ -543,13 +543,13 @@ public final class StringHelper {
 				}
 			}
 		}
-
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("-toTitleCase(), result: " + strBuilder.toString());
 		}
 		return strBuilder.toString();
 	}
-
+	
 	/**
 	 * 
 	 * @param str
@@ -562,7 +562,7 @@ public final class StringHelper {
 		if (isNullOrEmpty(str)) {
 			throw new NullPointerException("Invalid Parameter!, str: " + str);
 		}
-
+		
 		/* remove all unwanted spaces if any. */
 		StringBuilder strBuilder = new StringBuilder();
 		char ch = 0;
@@ -577,13 +577,13 @@ public final class StringHelper {
 			}
 			strBuilder.append(ch);
 		}
-
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("-toToggleCase(), result: " + strBuilder.toString());
 		}
 		return strBuilder.toString();
 	}
-
+	
 	/**
 	 * Returns the string created by joining the specified elements, separated
 	 * by using the specified delimiter. if the delimiter is null or empty
@@ -607,10 +607,10 @@ public final class StringHelper {
 				}
 			}
 		}
-
+		
 		return (sBuilder == null ? null : sBuilder.toString());
 	}
-
+	
 	/**
 	 * Returns the string created by joining the specified elements using the
 	 * default space delimiter. if the passed elements array is null, return
@@ -622,7 +622,7 @@ public final class StringHelper {
 	public static String join(String[] elements) {
 		return join(elements, null);
 	}
-
+	
 	/**
 	 * Returns the elements of string separated by using the specified
 	 * delimiter. if delimiter is null or empty, space is used as default
@@ -645,7 +645,7 @@ public final class StringHelper {
 		}
 		return elements;
 	}
-
+	
 	/**
 	 * Converts a string into an array of strings.
 	 * 
@@ -677,7 +677,7 @@ public final class StringHelper {
 		}
 		return words;
 	}
-
+	
 	/**
 	 * Returns the elements of string separated by default delimiter (space).
 	 * 
@@ -687,7 +687,7 @@ public final class StringHelper {
 	public static String[] split(String str) {
 		return split(str, " ");
 	}
-
+	
 	/**
 	 * Returns the string after replacing \\(double back-slashes) with single
 	 * back-slash and //(double slashes) with single slash.
@@ -706,7 +706,7 @@ public final class StringHelper {
 		}
 		return str;
 	}
-
+	
 	/**
 	 * Prints elements of string at output stream.
 	 * 
@@ -719,7 +719,7 @@ public final class StringHelper {
 			}
 		}
 	}
-
+	
 	/**
 	 * Logs the collection into the specified logger.
 	 * 
@@ -731,7 +731,7 @@ public final class StringHelper {
 			logger.info(collection);
 		}
 	}
-
+	
 	/**
 	 * Logs the <code>Map</code> into the specified logger.
 	 * 
@@ -744,7 +744,7 @@ public final class StringHelper {
 			logger.info(map);
 		}
 	}
-
+	
 	/**
 	 * Returns a <code>String</code> object that is filled with the number of
 	 * specified character. if <code>times <= 0</code>, an empty
@@ -760,10 +760,10 @@ public final class StringHelper {
 				indentType.append(cChar);
 			}
 		}
-
+		
 		return indentType.toString();
 	}
-
+	
 	/**
 	 * Returns a <code>String</code> object that is filled with the number of
 	 * spaces. if <code>times <= 0</code>, an empty <code>String</code> object
@@ -775,7 +775,7 @@ public final class StringHelper {
 	public static String fill(int times) {
 		return fill(SPACE_SEPARATOR, times);
 	}
-
+	
 	/**
 	 * 
 	 * @param str
@@ -785,11 +785,11 @@ public final class StringHelper {
 		if (logger.isDebugEnabled()) {
 			logger.debug("+countWords(" + str + ")");
 		}
-
+		
 		if (isNullOrEmpty(str)) {
 			throw new NullPointerException("Invalid Parameter!, str: " + str);
 		}
-
+		
 		long words = 0;
 		int index = 0;
 		boolean whiteSpace = true;
@@ -802,15 +802,15 @@ public final class StringHelper {
 			}
 			whiteSpace = isWhitespace;
 		}
-
+		
 		if (logger.isDebugEnabled()) {
 			logger.debug("-countWords(), words: " + words);
 		}
 		return words;
 	}
-
+	
 	/* optimize the below given method. */
-
+	
 	/**
 	 * Returns the unique/duplicate set of string elements.
 	 * 
@@ -832,11 +832,11 @@ public final class StringHelper {
 				if (!Character.isLetter(cChar)) {
 					str = str.substring(0, elements[i].length() - 1);
 				}
-
+				
 				if (ignoreCase) {
 					str = str.toLowerCase();
 				}
-
+				
 				if (!uniques.add(str)) {
 					duplicates.add(str);
 				}
@@ -848,7 +848,7 @@ public final class StringHelper {
 		}
 		return (unique ? uniques : duplicates);
 	}
-
+	
 	/**
 	 * Returns the string representation of the specified <code>object</code>.
 	 * 
@@ -860,7 +860,7 @@ public final class StringHelper {
 	public static String toString(Object object, boolean excludePackageName, boolean includeClassName) {
 		return getInstance().newToString(excludePackageName, includeClassName).toString(object);
 	}
-
+	
 	/**
 	 * Returns the string representation of the specified <code>object</code>.
 	 * 
@@ -871,7 +871,7 @@ public final class StringHelper {
 	public static String toString(Object object, boolean includeClassName) {
 		return getInstance().newToString(includeClassName).toString(object);
 	}
-
+	
 	/**
 	 * Returns the string representation of the specified <code>object</code>.
 	 * 
@@ -881,7 +881,7 @@ public final class StringHelper {
 	public static String toString(Object object) {
 		return getInstance().newToString().toString(object);
 	}
-
+	
 	/**
 	 * Converts an array of objects into an array of strings.
 	 * 
@@ -900,7 +900,7 @@ public final class StringHelper {
 		}
 		return strElements;
 	}
-
+	
 	/**
 	 * Converts the collection into an array of strings.
 	 * 
@@ -918,7 +918,7 @@ public final class StringHelper {
 		}
 		return strElements;
 	}
-
+	
 	/**
 	 * Returns the string of unique words. if the ignoreCase is true, the word
 	 * is considered unique, if any of the letter of the word in different case.
@@ -931,7 +931,7 @@ public final class StringHelper {
 		Set<String> uniques = filter(elements, ignoreCase, true);
 		return join(toString(uniques));
 	}
-
+	
 	/**
 	 * Returns the string of unique words without ignoring by case.
 	 * 
@@ -943,7 +943,7 @@ public final class StringHelper {
 	public static String findUnique(String[] elements) {
 		return findUnique(elements, false);
 	}
-
+	
 	/**
 	 * Returns the string of duplicate words. if the ignoreCase is true, the
 	 * word is considered unique, if any of the letter of the word in different
@@ -957,7 +957,7 @@ public final class StringHelper {
 		Set<String> duplicates = filter(elements, ignoreCase, false);
 		return join(toString(duplicates));
 	}
-
+	
 	/**
 	 * Returns the string of duplicate words.
 	 * 
@@ -967,7 +967,7 @@ public final class StringHelper {
 	public static String findDuplicate(String[] elements) {
 		return findDuplicate(elements, false);
 	}
-
+	
 	/**
 	 * Converts the specified string into boolean value. if the specified string
 	 * is null or empty, it returns false.
@@ -983,7 +983,7 @@ public final class StringHelper {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Converts the specified string into integer value. if the specified string
 	 * is null or empty, it returns -1.
@@ -1002,7 +1002,7 @@ public final class StringHelper {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Converts the specified string into long value. if the specified string is
 	 * null or empty, it returns -1.
@@ -1021,7 +1021,7 @@ public final class StringHelper {
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Tests the number of words in the string provided by user.
 	 * 
@@ -1044,7 +1044,7 @@ public final class StringHelper {
 		System.out.println("Num : " + number);
 		System.out.println("Size : " + numbersToWords(number));
 	}
-
+	
 	/**
 	 * Converts a number less than 100 to it's equivalent word(s)
 	 * 
@@ -1053,10 +1053,8 @@ public final class StringHelper {
 	 */
 	public static String onesConverter(int num) {
 		String[] Units = { " ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine" };
-		String[] Tens = { " ", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen",
-				"Eighteen", "Nineteen" };
-		String[] Hundreds = { " ", "Ten", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty",
-				"Ninety" };
+		String[] Tens = { " ", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen" };
+		String[] Hundreds = { " ", "Ten", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety" };
 		System.out.println("onesConverter Num : " + num);
 		String str = " ";
 		if (num < 10) {
@@ -1070,7 +1068,7 @@ public final class StringHelper {
 		System.out.println("onesConverter str : " + str);
 		return str;
 	}
-
+	
 	/**
 	 * Converts a number less than 1000 to it's equivalent word(s)
 	 * 
@@ -1089,7 +1087,7 @@ public final class StringHelper {
 		System.out.println("twosConverter str : " + str);
 		return str;
 	}
-
+	
 	/**
 	 * Converts a number less than 10000 to it's equivalent word(s)
 	 * 
@@ -1109,7 +1107,7 @@ public final class StringHelper {
 		System.out.println("threesConverter str : " + str);
 		return str;
 	}
-
+	
 	public static String numbersToWords(int num) {
 		System.out.println("numerToWord Num : " + num);
 		String str = "";
@@ -1127,9 +1125,9 @@ public final class StringHelper {
 		}
 		return str;
 	}
-
+	
 	static String[] Prefixes = { " ", "Thousand", "Lakhs", "Million" };
-
+	
 	/**
 	 * Returns the reversed string using recursion.
 	 * 
@@ -1142,7 +1140,7 @@ public final class StringHelper {
 		}
 		return reverse(str.substring(1)) + str.substring(0, 1);
 	}
-
+	
 	/**
 	 * 
 	 * @param args
@@ -1164,7 +1162,7 @@ public final class StringHelper {
 		System.out.println(digits + " is digits=" + isDigits(digits));
 		System.out.println(digits + " is digits (lamda)=" + isDigits(digits, true));
 	}
-
+	
 	/**
 	 * Returns the ToString object.
 	 * 
@@ -1173,7 +1171,7 @@ public final class StringHelper {
 	public ToString newToString() {
 		return new ToString();
 	}
-
+	
 	/**
 	 * Returns the ToString object.
 	 * 
@@ -1182,7 +1180,7 @@ public final class StringHelper {
 	public ToString newToString(boolean excludePackageName, boolean includeClassName) {
 		return new ToString(excludePackageName, includeClassName);
 	}
-
+	
 	/**
 	 * Returns the ToString object.
 	 * 
@@ -1191,7 +1189,7 @@ public final class StringHelper {
 	public ToString newToString(boolean includeClassName) {
 		return new ToString(includeClassName);
 	}
-
+	
 	/**
 	 * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
 	 * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
@@ -1204,12 +1202,12 @@ public final class StringHelper {
 		 * excludePackageName
 		 */
 		private boolean excludePackageName;
-
+		
 		/**
 		 * includeClassName
 		 */
 		private boolean includeClassName;
-
+		
 		/**
 		 * Parameterized Constructor.
 		 * 
@@ -1220,7 +1218,7 @@ public final class StringHelper {
 			this.excludePackageName = excludePackageName;
 			this.includeClassName = includeClassName;
 		}
-
+		
 		/**
 		 * Parameterized Constructor.
 		 * 
@@ -1229,14 +1227,14 @@ public final class StringHelper {
 		public ToString(boolean includeClassName) {
 			this(false, includeClassName);
 		}
-
+		
 		/**
 		 * Default Constructor.
 		 */
 		public ToString() {
 			this(false, false);
 		}
-
+		
 		/**
 		 * Returns the string representation of the specified
 		 * <code>object</code> including all fields.
@@ -1249,7 +1247,7 @@ public final class StringHelper {
 			if (object == null) {
 				return "null";
 			}
-
+			
 			Class<?> objectClass = object.getClass();
 			if (objectClass == String.class) {
 				return (String) object;
@@ -1261,12 +1259,12 @@ public final class StringHelper {
 						classArrayType = classArrayType.substring(index + 1);
 					}
 				}
-
+				
 				for (int i = 0; i < Array.getLength(object); i++) {
 					if (i > 0) {
 						classArrayType += ", ";
 					}
-
+					
 					Object objectArray = Array.get(object, i);
 					if (objectClass.getComponentType().isPrimitive()) {
 						classArrayType += objectArray;
@@ -1275,10 +1273,10 @@ public final class StringHelper {
 						classArrayType += toString(objectArray);
 					}
 				}
-
+				
 				return classArrayType + "}";
 			}
-
+			
 			String className = (excludePackageName ? objectClass.getSimpleName() : objectClass.getName());
 			/*
 			 * Check this class fields as well as supper classes, if any.
@@ -1289,7 +1287,7 @@ public final class StringHelper {
 				} else {
 					className = "[";
 				}
-
+				
 				Field[] classFields = objectClass.getDeclaredFields();
 				AccessibleObject.setAccessible(classFields, true);
 				// get the names and values of all fields
@@ -1316,9 +1314,9 @@ public final class StringHelper {
 				className += "]";
 				objectClass = objectClass.getSuperclass();
 			} while (objectClass != null && !objectClass.isInstance(Object.class));
-
+			
 			return className;
 		}
 	}
-
+	
 }
