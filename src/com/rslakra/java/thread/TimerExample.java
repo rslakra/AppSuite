@@ -26,29 +26,34 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.timers;
+package com.rslakra.java.thread;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class TimerTest {
-	private Timer timer;
+public class TimerExample extends TimerTask {
+	private DateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss a");
+	private DateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
 
-	public TimerTest(int seconds) {
-		timer = new Timer();
-		timer.schedule(new UpdateTask(), seconds * 1000);
+	public static void main(String[] args) {
+		// Create an instance of TimerTask implementor.
+		TimerTask task = new TimerExample();
+
+		// Create a new timer to schedule the TimerExample instance at a
+		// periodic time every 1000 milliseconds and start it immediately
+		Timer timer = new Timer();
+		timer.scheduleAtFixedRate(task, new Date(), 5000);
 	}
 
-	class UpdateTask extends TimerTask {
-		public void run() {
-			System.out.println("OK, It's time to do something!");
-			timer.cancel(); // Terminate the thread
-		}
-	}
-
-	public static void main(String args[]) {
-		System.out.println("Schedule something to do in 5 seconds.");
-		new TimerTest(5);
-		System.out.println("Waiting.");
+	/**
+	 * This method is the implementation of a contract defined in the TimerTask
+	 * class. This in the entry point of the task execution.
+	 */
+	public void run() {
+		// example just print the current time.
+		System.out.println(dateFormatter.format(new Date()) + " " + timeFormatter.format(new Date()));
 	}
 }

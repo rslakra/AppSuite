@@ -26,63 +26,32 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.timers;
+package com.rslakra.java.thread;
 
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+public class TestThreadPriority {
+	static int ctr = 0;
 
-public class ThreadPoolTest {
+	class OneThread extends Thread {
+
+		public OneThread() {
+			super();
+			setPriority(Thread.MAX_PRIORITY);
+		}
+
+		public void run() {
+			System.out.println("OneThread.run(), ctr : " + ctr);
+			if (ctr > 50 && ctr < 100) {
+				ctr = 0;
+			}
+		}
+	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		LogManager.configure("src/log4j.xml");
-		final Logger log = LogManager.getLogger(ThreadPoolTest.class);
+		// TODO Auto-generated method stub
 
-		ThreadPoolTest tPoolTest = new ThreadPoolTest();
-
-		ThreadPool tPool = new ThreadPool(5);
-		log.debug("ThreadPool Test Started!");
-		Runnable one = tPoolTest.createRunnable(log, "One", 2500);
-		tPool.execute(one);
-
-		Runnable two = tPoolTest.createRunnable(log, "Two", 1000);
-		tPool.execute(two);
-
-		Runnable three = tPoolTest.createRunnable(log, "Three", 1500);
-		tPool.execute(three);
-
-		Runnable four = tPoolTest.createRunnable(log, "Four", 3000);
-		tPool.execute(four);
-
-		Runnable five = tPoolTest.createRunnable(log, "Five", 800);
-		tPool.execute(five);
-
-		Runnable six = tPoolTest.createRunnable(log, "Six", 2000);
-		tPool.execute(six);
-		log.debug("ThreadPool Test Finished!");
 	}
 
-	public Runnable createRunnable(final Logger log, final String name, final long delay) {
-		return new Runnable() {
-			public void run() {
-				try {
-					log.debug("[" + name + "] starting up.");
-					Thread.sleep(delay);
-					log.debug("[" + name + "] processsing ...");
-					Thread.sleep(2000);
-					log.debug("[" + name + "] leaving.");
-				} catch (InterruptedException ie) {
-					log.error("[" + name + "] interrupted!");
-				} catch (Exception ex) {
-					ex.printStackTrace();
-				}
-			}
-
-			public String toString() {
-				return name;
-			}
-		};
-	}
 }

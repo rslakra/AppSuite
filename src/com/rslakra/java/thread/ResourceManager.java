@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.timers;
+package com.rslakra.java.thread;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

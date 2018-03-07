@@ -26,34 +26,45 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.timers;
+package com.rslakra.java.thread;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
+public class TestThread {
 
-public class TimerExample extends TimerTask {
-	private DateFormat timeFormatter = new SimpleDateFormat("hh:mm:ss a");
-	private DateFormat dateFormatter = new SimpleDateFormat("yyyy/MM/dd");
+	private Thread hello;
 
-	public static void main(String[] args) {
-		// Create an instance of TimerTask implementor.
-		TimerTask task = new TimerExample();
+	public void start() {
+		System.out.println("+start()");
+		if (hello != null) {
+			System.out.println("Already Started!");
+			return;
+		}
 
-		// Create a new timer to schedule the TimerExample instance at a
-		// periodic time every 1000 milliseconds and start it immediately
-		Timer timer = new Timer();
-		timer.scheduleAtFixedRate(task, new Date(), 5000);
+		HelloRunnable helloRunnable = new HelloRunnable();
+		hello = new Thread(helloRunnable);
+		hello.setName("HelloMsg");
+		hello.start();
+		System.out.println("-start()");
+	}
+
+	static class HelloRunnable implements Runnable {
+		private String msg;
+
+		public void run() {
+			System.out.println("HelloRunnable.run()");
+			if (msg.length() == 0) {
+				System.out.println("Empty String");
+			}
+			System.out.println("String is: " + msg);
+		}
 	}
 
 	/**
-	 * This method is the implementation of a contract defined in the TimerTask
-	 * class. This in the entry point of the task execution.
+	 * @param args
 	 */
-	public void run() {
-		// example just print the current time.
-		System.out.println(dateFormatter.format(new Date()) + " " + timeFormatter.format(new Date()));
+	public static void main(String[] args) {
+		System.out.println("TestThread Started");
+		TestThread testThread = new TestThread();
+		testThread.start();
+		System.out.println("TestThread Ended");
 	}
 }

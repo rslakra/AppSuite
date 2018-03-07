@@ -26,55 +26,95 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.timers;
+package com.rslakra.java.thread;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
 /**
+ * UpdateTask.java
  * 
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2009-08-09 02:12:05 PM
- * @version 1.0.0
- * @since 1.0.0
+ * The <code>UpdateTask</code> TODO Define Purpose here
+ * 
+ * 
+ * @author Rohtash Singh (rohtash.singh@devamatre.com)
+ * @date Aug 1, 2010 3:49:09 PM
  */
-public class TestTimer {
-	public static void main(String[] args) {
-		DateFormat formatter = new SimpleDateFormat("yyyy/mm/dd");
-		Calendar c = Calendar.getInstance();
-		// c.set(Calendar.HOUR, 24);
-		c.set(Calendar.HOUR_OF_DAY, 15);
-		c.set(Calendar.MINUTE, 41);
-		c.set(Calendar.SECOND, 00);
+public class UpdateTask {
 
-		Date timeToRun = c.getTime();
-		System.out.println("timeToRun=" + timeToRun);
+	private static UpdateTask instance;
+	private Timer timer;
+	private boolean checkUpdates;
+	private final Calendar calendar;
 
-		Timer timer = new Timer();
-		timer.schedule(new TimerTask() {
-			public void run() {
-				System.out.println(System.currentTimeMillis());
+	/* singleton pattern. */
+	private UpdateTask() {
+		checkUpdates = true;
+		calendar = Calendar.getInstance();
+	}
+
+	/**
+	 * @return FileUtils
+	 */
+	public static UpdateTask getInstance() {
+		synchronized (UpdateTask.class) {
+			if (instance == null) {
+				instance = new UpdateTask();
 			}
-		}, 1000);
+		}
+		return instance;
+	}
 
-		c.set(Calendar.HOUR_OF_DAY, 14);
-		c.set(Calendar.MINUTE, 41);
-		c.set(Calendar.SECOND, 00);
+	/**
+	 * Initialized Timer.
+	 * 
+	 * @param seconds
+	 */
+	public void init(int seconds) {
+		timer = new Timer();
+		timer.schedule(new UpdateTimer(), seconds * 1000);
+		if (calendar.before(new Date())) {
+			calendar.add(Calendar.DATE, -1);
+		}
+	}
 
-		Date timeToRuns = c.getTime();
-		System.out.println("timeToRuns=" + timeToRun);
-
-		timer.schedule(new TimerTask() {
-			public void run() {
-				System.out.println("timeToRuns");
-				System.out.println(System.currentTimeMillis());
+	/**
+	 * @author Rohtash Singh (rohtash.lakra@devamatre.com)
+	 * @version 2009/04/02
+	 */
+	private class UpdateTimer extends TimerTask {
+		public void run() {
+			if (isCheckUpdates()) {
+				calendar.add(Calendar.DATE, 1);
+				if (calendar.before(new Date())) {
+					calendar.add(Calendar.DATE, -1);
+				}
+				timer.cancel(); // Terminate the thread
 			}
-		}, timeToRuns);
+		}
+	}
 
+	/**
+	 * @return true, if update checking allowed.
+	 */
+	public boolean isCheckUpdates() {
+		return checkUpdates;
+	}
+
+	/**
+	 * To be set checkUpdates.
+	 * 
+	 * @param checkUpdates
+	 */
+	public void setCheckUpdates(boolean checkUpdates) {
+		this.checkUpdates = checkUpdates;
+	}
+
+	public static void main(String args[]) {
+		System.out.println("Schedule something to do in 5 seconds.");
+		UpdateTask.getInstance().init(5);
+		System.out.println("Waiting.");
 	}
 }
