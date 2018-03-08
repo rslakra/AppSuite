@@ -1,15 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="HTTPSServer/testCases"/>
+	<classpathentry kind="src" path="JavaFx/testCases"/>
+	<classpathentry kind="src" path="testCases"/>
+	<classpathentry kind="src" path="MIMECraft/testCases"/>
 	<classpathentry kind="src" path="Core/src"/>
 	<classpathentry kind="src" path="Core/testCases"/>
-	<classpathentry kind="src" path="testCases"/>
 	<classpathentry kind="src" path="HTTPClient/testCases"/>
 	<classpathentry kind="src" path="HTTPClient/src"/>
 	<classpathentry kind="src" path="HTTPSServer/src"/>
 	<classpathentry kind="src" path="JavaFx/src"/>
 	<classpathentry kind="src" path="MIMECraft/src"/>
-	<classpathentry kind="src" path="MIMECraft/testCases"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="libs/apache/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="libs/apache-http/commons-codec-1.9.jar"/>
