@@ -13,18 +13,15 @@
 	<classpathentry kind="src" path="JavaFx/src"/>
 	<classpathentry kind="src" path="MIMECraft/src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/apache/commons-lang-2.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/commons-codec-1.9.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="libs/apache-http/httpclient-4.5.3.jar"/>
 	<classpathentry kind="lib" path="libs/apache-http/httpclient-cache-4.5.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpclient-win-4.5.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="libs/apache-http/httpmime-4.5.3.jar"/>
-	<classpathentry kind="lib" path="Core/libs/dLogger-v1.0.3.jar"/>
-	<classpathentry kind="lib" path="Core/libs/gson-2.2.4.jar"/>
-	<classpathentry kind="lib" path="Core/libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="libs/apache-http/httpcore-4.4.6.jar"/>
 	<classpathentry kind="lib" path="Core/libs/bcprov-jdk15-146.jar"/>
+	<classpathentry kind="lib" path="Core/libs/gson-2.2.4.jar"/>
 	<classpathentry kind="lib" path="HTTPClient/libs/servlet-2-3.jar"/>
+	<classpathentry kind="lib" path="libs/apache/commons-lang-2.3.jar"/>
+	<classpathentry kind="lib" path="libs/dLogger-v1.0.3.jar"/>
+	<classpathentry kind="lib" path="libs/log4j-1.2.17.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

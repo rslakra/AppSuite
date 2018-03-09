@@ -75,6 +75,7 @@
 	
 	<!-- Libraries -->
 	<property name="libs.dir" value="${basedir}/libs" />
+	<property name="parent.libs.dir" value="${basedir}/../libs" />
 
 	<!-- Build Paths -->
 	<property name="build.dir" value="${basedir}/build" />
@@ -84,6 +85,7 @@
 	<!-- Build CLASSPATH Settings -->
 	<path id="build.classpath">
 		<fileset dir="${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${parent.libs.dir}" includes="**/*.jar" />
 	</path>
 
 	<!-- = = = = = = = = = = = = = = = = =
@@ -118,6 +120,7 @@
 		</mapper>
 		<path>
 			<fileset dir="${libs.dir}" includes="**/*.jar" />
+			<fileset dir="${parent.libs.dir}" includes="**/*.jar" />
 		</path>
 	</pathconvert>
 
