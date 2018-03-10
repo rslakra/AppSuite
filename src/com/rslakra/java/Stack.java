@@ -31,6 +31,8 @@ package com.rslakra.java;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.devamatre.core.enums.Char;
+
 /**
  * The <tt>Stack</tt> class represents a last-in-first-out (LIFO) stack of
  * generic items. It supports the usual <em>push</em> and <em>pop</em>
@@ -43,15 +45,18 @@ import java.util.NoSuchElementException;
  * of <i>Algorithms, 4th Edition</i> by Robert Sedgewick and Kevin Wayne.
  */
 public class Stack<E> implements Iterable<E> {
-	private int size; // size of the stack
-	private Node first; // top of stack
-
+	// size of the stack
+	private int size;
+	// top of stack
+	private Node first;
+	
 	// helper linked list class
 	private class Node {
 		private E item;
+		// next item of stack
 		private Node next;
 	}
-
+	
 	/**
 	 * Create an empty stack.
 	 */
@@ -59,23 +64,25 @@ public class Stack<E> implements Iterable<E> {
 		first = null;
 		size = 0;
 	}
-
+	
 	/**
 	 * Is the stack empty?
 	 */
 	public boolean isEmpty() {
-		return first == null;
+		return (first == null);
 	}
-
+	
 	/**
 	 * Return the number of items in the stack.
 	 */
 	public int size() {
 		return size;
 	}
-
+	
 	/**
 	 * Add the item to the stack.
+	 * 
+	 * @param item
 	 */
 	public void push(E item) {
 		Node oldfirst = first;
@@ -84,60 +91,76 @@ public class Stack<E> implements Iterable<E> {
 		first.next = oldfirst;
 		size++;
 	}
-
+	
 	/**
 	 * Delete and return the item most recently added to the stack. Throw an
 	 * exception if no such item exists because the stack is empty.
+	 * 
+	 * @return
 	 */
 	public E pop() {
-		if (isEmpty())
+		if (isEmpty()) {
 			throw new RuntimeException("Stack underflow");
-		E item = first.item; // save item to return
-		first = first.next; // delete first node
+		}
+		
+		// save item to return
+		E item = first.item;
+		// delete first node
+		first = first.next;
 		size--;
-		return item; // return the saved item
+		
+		// return the saved item
+		return item;
 	}
-
+	
 	/**
 	 * Return the item most recently added to the stack. Throw an exception if
 	 * no such item exists because the stack is empty.
 	 */
 	public E peek() {
-		if (isEmpty())
+		if (isEmpty()) {
 			throw new RuntimeException("Stack underflow");
+		}
+		
 		return first.item;
 	}
-
+	
 	/**
-	 * Return string representation.
+	 * Returns the string representation of this object.
+	 * 
+	 * @see java.lang.Object#toString()
 	 */
 	public String toString() {
-		StringBuilder s = new StringBuilder();
-		for (E item : this)
-			s.append(item + " ");
-		return s.toString();
+		StringBuilder stringBuilder = new StringBuilder();
+		for (E item : this) {
+			stringBuilder.append(item).append(Char.SPACE.toString());
+		}
+		
+		return stringBuilder.toString();
 	}
-
+	
 	/**
 	 * Return an iterator to the stack that iterates through the items in LIFO
 	 * order.
+	 * 
+	 * @see java.lang.Iterable#iterator()
 	 */
 	public Iterator<E> iterator() {
 		return new ListIterator();
 	}
-
+	
 	// an iterator, doesn't implement remove() since it's optional
 	private class ListIterator implements Iterator<E> {
 		private Node current = first;
-
+		
 		public boolean hasNext() {
 			return current != null;
 		}
-
+		
 		public void remove() {
 			throw new UnsupportedOperationException();
 		}
-
+		
 		public E next() {
 			if (!hasNext()) {
 				throw new NoSuchElementException();
@@ -147,12 +170,16 @@ public class Stack<E> implements Iterable<E> {
 			return item;
 		}
 	}
-
+	
 	/**
 	 * A test client.
 	 */
 	public static void main(String[] args) {
 		Stack<String> strStack = new Stack<String>();
+		strStack.push("Rohtash");
+		strStack.push("Singh");
+		strStack.push("Lakra");
+		System.out.println(strStack);
 		// while (!StdIn.isEmpty()) {
 		// String item = SystemUtils.getStdIn().readString();
 		// if (!item.equals("-"))

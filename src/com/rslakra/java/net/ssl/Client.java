@@ -26,50 +26,49 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java;
+package com.rslakra.java.net.ssl;
 
-import java.util.Enumeration;
-import java.util.Properties;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 
-public class AllPropertiesExample {
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSocket;
+import javax.net.ssl.SSLSocketFactory;
 
-	private Properties mProperties;
-
-	public AllPropertiesExample() {
-		mProperties = new Properties();
-		mProperties.put("Properties", "MyProperties");
-	}
-
-	public String getValue(String key) {
-		return (String) mProperties.get(key);
-	}
-
-	public void updateProperties() {
-		AllProperties flatProperties = new AllProperties(mProperties);
-		flatProperties.addValue("FirstName", "Rohtash");
-		flatProperties.addValue("Properties", "Testing -5 Error");
-		System.out.println("========== All Properties ===========");
-		flatProperties.printValues();
-		System.out.println("======================================");
-	}
-
-	public void printMyProperties() {
-		Enumeration keys = mProperties.keys();
-		while (keys.hasMoreElements()) {
-			String key = (String) keys.nextElement();
-			String value = (String) mProperties.get(key);
-			System.out.println(key + ": " + value);
+public class Client implements SSLConnection {
+	
+	SSLServerSocket sslServer = null;
+	
+	public Client() {
+		
+		try {
+			SSLSocketFactory factory = (SSLSocketFactory) SSLSocketFactory.getDefault();
+			SSLSocket client = (SSLSocket) factory.createSocket(SERVER_HOST, HTTPS_PORT);
+			
+			// Reader/Writer
+			BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+			BufferedReader reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			String line;
+			
+			while ((line = reader.readLine()) != null) {
+				System.out.println("Client : " + line);
+				writer.write(line);
+			}
+			
+			writer.close();
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
-
+	
+	public String getCertificate() {
+		return null;
+	}
+	
 	public static void main(String[] args) {
-		AllPropertiesExample mProperties = new AllPropertiesExample();
-		System.out.println("========== Before Change, My Properties ===========");
-		mProperties.printMyProperties();
-		System.out.println("======================================");
-		mProperties.updateProperties();
-		System.out.println("========== After Change, My Properties ===========");
-		mProperties.printMyProperties();
-		System.out.println("======================================");
+		Client client = new Client();
 	}
 }

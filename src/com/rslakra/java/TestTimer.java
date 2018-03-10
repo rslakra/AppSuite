@@ -28,6 +28,10 @@
  *****************************************************************************/
 package com.rslakra.java;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -40,22 +44,58 @@ import java.util.TimerTask;
  */
 public class TestTimer {
 	private Timer timer;
-
+	
 	public TestTimer(int seconds) {
 		timer = new Timer();
 		timer.schedule(new UpdateTask(), seconds * 1000);
 	}
-
+	
 	class UpdateTask extends TimerTask {
 		public void run() {
 			System.out.println("OK, It's time to do something!");
 			timer.cancel(); // Terminate the thread
 		}
 	}
-
-	public static void main(String args[]) {
+	
+	/**
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
 		System.out.println("Schedule something to do in 5 seconds.");
 		new TestTimer(5);
 		System.out.println("Waiting.");
+		
+		DateFormat formatter = new SimpleDateFormat("yyyy/mm/dd");
+		Calendar c = Calendar.getInstance();
+		// c.set(Calendar.HOUR, 24);
+		c.set(Calendar.HOUR_OF_DAY, 15);
+		c.set(Calendar.MINUTE, 41);
+		c.set(Calendar.SECOND, 00);
+		
+		Date timeToRun = c.getTime();
+		System.out.println("timeToRun=" + timeToRun);
+		
+		Timer timer = new Timer();
+		timer.schedule(new TimerTask() {
+			public void run() {
+				System.out.println(System.currentTimeMillis());
+			}
+		}, 1000);
+		
+		c.set(Calendar.HOUR_OF_DAY, 14);
+		c.set(Calendar.MINUTE, 41);
+		c.set(Calendar.SECOND, 00);
+		
+		Date timeToRuns = c.getTime();
+		System.out.println("timeToRuns=" + timeToRun);
+		
+		timer.schedule(new TimerTask() {
+			public void run() {
+				System.out.println("timeToRuns");
+				System.out.println(System.currentTimeMillis());
+			}
+		}, timeToRuns);
+		
 	}
 }

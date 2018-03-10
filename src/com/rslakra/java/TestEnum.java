@@ -28,7 +28,7 @@
  *****************************************************************************/
 package com.rslakra.java;
 
-import com.rslakra.java.enums.Gender;
+import com.devamatre.core.enums.Gender;
 
 public class TestEnum {
 	public static void main(String[] args) {

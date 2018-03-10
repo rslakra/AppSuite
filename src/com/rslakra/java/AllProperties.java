@@ -32,18 +32,18 @@ import java.util.Enumeration;
 import java.util.Properties;
 
 public class AllProperties {
-
+	
 	private Properties allProperties;
-
+	
 	public AllProperties(Properties prop) {
 		this.allProperties = prop;
 		allProperties.put("AllProperties", "AllProperties");
 	}
-
+	
 	public void addValue(String key, String value) {
 		allProperties.put(key, value);
 	}
-
+	
 	public void printValues() {
 		Enumeration keys = allProperties.keys();
 		while (keys.hasMoreElements()) {
@@ -51,5 +51,45 @@ public class AllProperties {
 			String value = (String) allProperties.get(key);
 			System.out.println(key + ": " + value);
 		}
+	}
+	
+	private Properties mProperties;
+	
+	public AllProperties() {
+		mProperties = new Properties();
+		mProperties.put("Properties", "MyProperties");
+	}
+	
+	public String getValue(String key) {
+		return (String) mProperties.get(key);
+	}
+	
+	public void updateProperties() {
+		AllProperties flatProperties = new AllProperties(mProperties);
+		flatProperties.addValue("FirstName", "Rohtash");
+		flatProperties.addValue("Properties", "Testing -5 Error");
+		System.out.println("========== All Properties ===========");
+		flatProperties.printValues();
+		System.out.println("======================================");
+	}
+	
+	public void printMyProperties() {
+		Enumeration keys = mProperties.keys();
+		while (keys.hasMoreElements()) {
+			String key = (String) keys.nextElement();
+			String value = (String) mProperties.get(key);
+			System.out.println(key + ": " + value);
+		}
+	}
+	
+	public static void main(String[] args) {
+		AllProperties mProperties = new AllProperties();
+		System.out.println("========== Before Change, My Properties ===========");
+		mProperties.printMyProperties();
+		System.out.println("======================================");
+		mProperties.updateProperties();
+		System.out.println("========== After Change, My Properties ===========");
+		mProperties.printMyProperties();
+		System.out.println("======================================");
 	}
 }

@@ -26,12 +26,8 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.sockets.server;
+package com.rslakra.java.net.socket.server;
 
-/*
- * ClassServer.java -- a simple file server that can serve
- * Http get request in both clear and secure channel
- */
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.FileNotFoundException;
@@ -44,9 +40,9 @@ import java.net.Socket;
  * Based on ClassServer.java in tutorial/rmi
  */
 public abstract class ClassServer implements Runnable {
-
+	
 	private ServerSocket server = null;
-
+	
 	/**
 	 * Constructs a ClassServer based on <b>ss</b> and obtains a file's
 	 * bytecodes using the method <b>getBytes</b>.
@@ -56,7 +52,7 @@ public abstract class ClassServer implements Runnable {
 		server = ss;
 		newListener();
 	}
-
+	
 	/**
 	 * Returns an array of bytes containing the bytes for the file represented
 	 * by the argument <b>path</b>.
@@ -69,7 +65,7 @@ public abstract class ClassServer implements Runnable {
 	 *                if error occurs reading the class
 	 */
 	public abstract byte[] getBytes(String path) throws IOException, FileNotFoundException;
-
+	
 	/**
 	 * The "listen" thread that accepts a connection to the server, parses the
 	 * header to obtain the file name and sends back the bytes for the file (or
@@ -77,7 +73,7 @@ public abstract class ClassServer implements Runnable {
 	 */
 	public void run() {
 		Socket socket;
-
+		
 		// accept a connection
 		try {
 			socket = server.accept();
@@ -86,10 +82,10 @@ public abstract class ClassServer implements Runnable {
 			e.printStackTrace();
 			return;
 		}
-
+		
 		// create a new thread to accept the next connection
 		newListener();
-
+		
 		try {
 			DataOutputStream out = new DataOutputStream(socket.getOutputStream());
 			try {
@@ -109,7 +105,7 @@ public abstract class ClassServer implements Runnable {
 					ie.printStackTrace();
 					return;
 				}
-
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 				// write out error response
@@ -117,13 +113,13 @@ public abstract class ClassServer implements Runnable {
 				out.writeBytes("Content-Type: text/html\r\n\r\n");
 				out.flush();
 			}
-
+			
 		} catch (IOException ex) {
 			// eat exception (could log error to log file, but
 			// write out to stdout for now).
 			System.out.println("error writing response: " + ex.getMessage());
 			ex.printStackTrace();
-
+			
 		} finally {
 			try {
 				socket.close();
@@ -131,14 +127,14 @@ public abstract class ClassServer implements Runnable {
 			}
 		}
 	}
-
+	
 	/**
 	 * Create a new thread to listen.
 	 */
 	private void newListener() {
 		(new Thread(this)).start();
 	}
-
+	
 	/**
 	 * Returns the path to the file obtained from parsing the HTML header.
 	 */
@@ -153,12 +149,12 @@ public abstract class ClassServer implements Runnable {
 				path = line.substring(0, index);
 			}
 		}
-
+		
 		// eat the rest of header
 		do {
 			line = in.readLine();
 		} while ((line.length() != 0) && (line.charAt(0) != '\r') && (line.charAt(0) != '\n'));
-
+		
 		if (path.length() != 0) {
 			return path;
 		} else {

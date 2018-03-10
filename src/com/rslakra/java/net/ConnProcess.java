@@ -26,45 +26,47 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java;
+package com.rslakra.java.net;
 
-public class JavaTest {
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
-	public JavaTest() {
-	}
-
-	public void testEquals() {
-		String first = "Hello";
-		String second = "Hello";
-		System.out.println("Result : " + (first == second));
-	}
-
-	public int testP() {
+/**
+ * @author rohtash.singh
+ *
+ *         TODO To change the template for this generated type comment go to
+ *         Window - Preferences - Java - Code Style - Code Templates
+ */
+public class ConnProcess extends Thread {
+	Socket client;
+	BufferedWriter out;
+	BufferedReader in;
+	
+	public ConnProcess(Socket socket) {
+		client = socket;
 		try {
-			System.out.println("Try Block");
-			return 1;
-		} finally {
-			System.out.println("Finally Block");
-			return 2;
+			out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+		} catch (IOException ex) {
+			ex.printStackTrace();
 		}
+		this.start();
 	}
-
-	public void testIncrement() {
-		int i = 0;
-		increment(i);
-		i = i++;
-		System.out.println("I : " + i);
-	}
-
-	public void increment(int i) {
-		i++;
-	}
-
-	public static void main(String[] args) {
-		JavaTest javaTest = new JavaTest();
-		javaTest.testEquals();
-		System.out.println(javaTest.testP());
-		javaTest.testIncrement();
-		System.exit(0);
+	
+	public void run() {
+		String line;
+		try {
+			while ((line = in.readLine()) != null) {
+				out.write(line);
+			}
+			out.close();
+			in.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 }

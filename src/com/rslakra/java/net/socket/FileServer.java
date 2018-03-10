@@ -26,8 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net.sockets;
-
+package com.rslakra.java.net.socket;
 import java.io.File;
 import java.net.ServerSocket;
 import java.net.Socket;

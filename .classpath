@@ -23,5 +23,6 @@
 	<classpathentry kind="lib" path="libs/apache/commons-lang-2.3.jar"/>
 	<classpathentry kind="lib" path="libs/dLogger-v1.0.3.jar"/>
 	<classpathentry kind="lib" path="libs/log4j-1.2.17.jar"/>
+	<classpathentry kind="lib" path="libs/dCore-v1.0.2.jar"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

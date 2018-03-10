@@ -26,20 +26,24 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java;
+package com.rslakra.java.net.server;
 
-/***************************************************************************
- * Created By : rohtash.singh Created on : May 25, 2006
- **************************************************************************/
-public class AssertTest {
-	public static void main(String args[]) {
-		try {
-			assert args.length > 0;
-			System.out.println("Assertion Succeeded!");
-		} catch (AssertionError e) {
-			// In this case, the message is null
-			String message = e.getMessage();
-			System.out.println("message : " + message);
+/**
+ * Created by IntelliJ IDEA. User: rohtash.singh Date: May 31, 2005 Time:
+ * 1:36:02 PM To change this template use Options | File Templates.
+ */
+public class ShowTrustStore {
+	
+	/**
+	 * 
+	 * @param args
+	 */
+	public static void main(String[] args) {
+		String trustStore = System.getProperty("javax.net.ssl.trustStore");
+		if (trustStore == null) {
+			System.out.println("javax.net.ssl.trustStore is not defined");
+		} else {
+			System.out.println("javax.net.ssl.trustStore = " + trustStore);
 		}
 	}
 }

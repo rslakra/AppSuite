@@ -26,16 +26,13 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java;
-
-public class ArrayTest {
-
-	/**
-	 * @param args
-	 */
+package com.rslakra.java.net.server;
+/**
+ * Created by IntelliJ IDEA. User: rohtash.singh Date: May 31, 2005 Time:
+ * 12:08:56 PM To change this template use Options | File Templates.
+ */
+public class ShowJavaHome {
 	public static void main(String[] args) {
-		String[] str = new String[0];
-		System.out.println("str : " + str + ", str.length : " + str.length);
+		System.out.println("\nJava Home Directory : \n\t" + System.getProperty("java.home"));
 	}
-
 }
