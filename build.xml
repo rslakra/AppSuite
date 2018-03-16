@@ -80,9 +80,21 @@
 	<property name="build.dir" value="${basedir}/build" />
 	<property name="classes.dir" value="${build.dir}/classes" />
 
+	<!-- Dependant Projects -->
+	<property name="core.project" value="${basedir}/Core" />
+	<property name="httpsserver.project" value="${basedir}/HTTPSServer" />
+	<property name="httpclient.project" value="${basedir}/HTTPClient" />
+	<property name="javafx.project" value="${basedir}/JavaFx" />
+	<property name="mimecraft.project" value="${basedir}/MIMECraft" />
+
 	<!-- Create Targets -->
 	<!-- Build CLASSPATH Settings -->
 	<path id="build.classpath">
+		<fileset dir="${core.project}/${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${httpsserver.project}/${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${httpclient.project}/${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${javafx.project}/${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${mimecraft.project}/${libs.dir}" includes="**/*.jar" />
 		<fileset dir="${libs.dir}" includes="**/*.jar" />
 	</path>
 
@@ -103,6 +115,22 @@
 		</sequential>
 	</macrodef>
 
+	<!-- 
+	<pre>
+		Macro to build all sub-projects:
+		Syntax: <iterate target="compile"/>
+	</pre>
+	-->
+	<macrodef name="iterate">
+		<attribute name="target" />
+		<sequential>
+			<subant target="@{target}">
+				<fileset dir="Modules" includes="*/build.xml" />
+			</subant>
+		</sequential>
+	</macrodef>
+
+	<!-- Print path(s) -->
 	<echopath pathid="build.classpath" />
 	<echo />
 
@@ -122,8 +150,17 @@
 	</pathconvert>
 
 	<!-- Default Target -->
-	<target name="all" description="Default Target" depends="clean, build" />
+	<!--<target name="all" description="Default Target" depends="clean, build" /> -->
 	
+	<target name="all" description="Default Target" depends="clean">
+		<ant antfile="${core.project}/build.xml" target="all" />
+		<ant antfile="${httpsserver.project}/build.xml" target="all" />
+		<ant antfile="${httpclient.project}/build.xml" target="all" />
+		<ant antfile="${javafx.project}/build.xml" target="all" />
+		<ant antfile="${mimecraft.project}/build.xml" target="all" />
+		<antcall target="build" />
+	</target>
+
 	<!-- Remove /build Directory and its sub-directories... -->
 	<target name="clean" description="Removing Directories...">
 		<delete dir="${build.dir}" />

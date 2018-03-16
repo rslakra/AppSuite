@@ -58,10 +58,10 @@ public final class VersionChecker {
 	 * @return
 	 */
 	public String versionFormatter(String version, String separator, int maxWidth) {
-		String[] split = Pattern.compile(separator, Pattern.LITERAL).split(version);
+		String[] tokens = Pattern.compile(separator, Pattern.LITERAL).split(version);
 		StringBuilder verBuilder = new StringBuilder();
-		for (String str : split) {
-			verBuilder.append(String.format("%" + maxWidth + 's', str));
+		for (String token : tokens) {
+			verBuilder.append(String.format("%" + maxWidth + 's', token));
 		}
 		
 		if (DEBUG) {

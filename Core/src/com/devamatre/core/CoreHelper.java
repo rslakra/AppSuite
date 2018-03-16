@@ -85,6 +85,15 @@ public final class CoreHelper {
 	}
 	
 	/**
+	 * Returns the system file encoding.
+	 * 
+	 * @return
+	 */
+	public static String getFileEncoding() {
+		return System.getProperty("file.encoding");
+	}
+	
+	/**
 	 * Returns true if the object is null otherwise false.
 	 * 
 	 * @param object

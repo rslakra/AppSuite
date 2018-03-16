@@ -32,6 +32,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectStreamException;
+import java.io.Serializable;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.AccessibleObject;
 import java.lang.reflect.Array;
@@ -59,10 +60,10 @@ import com.devamatre.logger.Logger;
  * @version 1.0.0
  * @since 1.0.0
  */
-public final class StringHelper {
+public final class StringHelper implements Serializable {
 	
 	/** <code>serialVersionUID</code> */
-	private static final long serialVersionUID = -8755337045582158234L;
+	private static final long serialVersionUID = 1l;
 	
 	/* constants */
 	public static final char SPACE = '\u0020';

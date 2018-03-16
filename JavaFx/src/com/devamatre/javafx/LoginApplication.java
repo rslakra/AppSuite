@@ -3,7 +3,14 @@
  */
 package com.devamatre.javafx;
 
+import java.io.IOException;
+import java.net.URL;
+
+import com.devamatre.core.IOHelper;
+
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -31,9 +38,16 @@ public class LoginApplication extends Application {
 	 */
 	@Override
 	public void start(Stage stage) throws Exception {
-		stage.setScene(new Scene(null));
-		JFXHelper.setDefaultSize(stage);
-		stage.show();
+		try {
+			URL url = getClass().getResource("loginScene.fxml");
+			FXMLLoader xmlLoader = new FXMLLoader(getClass().getResource("loginScene.fxml"));
+			Parent root = xmlLoader.load();
+			stage.setScene(new Scene(root));
+			JFXHelper.setDefaultSize(stage);
+			stage.show();
+		} catch(IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 	
 }
