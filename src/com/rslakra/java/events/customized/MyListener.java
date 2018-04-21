@@ -31,17 +31,15 @@ package com.rslakra.java.events.customized;
 import java.util.EventListener;
 
 /**
- * This <class>MyListener</class> class
+ * This <class>MyListener</class> class declares the listener class. It must
+ * extend EventListener. A class must implement this interface to get MyEvents.
  *
  * @author Rohtash Singh
  * @version Feb 3, 2006
  */
-
-// Declare the listener class. It must extend EventListener.
-// A class must implement this interface to get MyEvents.
 public interface MyListener extends EventListener {
-
+	
 	/* method for the listener */
 	public void myEventOccured(MyEvent event);
-
+	
 }

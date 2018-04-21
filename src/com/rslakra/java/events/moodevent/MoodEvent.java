@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
+ * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
  * that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, 
+ * 	  this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
@@ -22,68 +22,45 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.j2ee.beans;
+package com.rslakra.java.events.moodevent;
+
+import java.util.EventObject;
 
 /**
- * TODO Auto-generated comments.
- * 
- * @author rohtash.singh
- * @version May 31, 2006
- * 
+ * This <class>MoodEvent</class> class holds on to the source,
+ * as well as one of the Mood constants.
+ * When a listener receives the event, it can retrieve the mood by
+ * calling the getMood() method.
+ *
+ *
+ * @author Rohtash Singh
+ * @version Feb 4, 2006
  */
-public class User {
-	private String name;
-	private String password;
+public class MoodEvent extends EventObject {
 	
-	public User() {
+	/**
+	 * serialVersionUID
+	 */
+	private static final long serialVersionUID = 1L;
+	private Mood mood;
+	
+	/**
+	 * @param source
+	 */
+	public MoodEvent(Object source, Mood mood) {
+		super(source);
+		this.mood = mood;
 		
 	}
 	
 	/**
-	 * @return Returns the name.
+	 * @return Returns the mood.
 	 */
-	public String getName() {
-		return name;
-	}
-	
-	/**
-	 * @param name
-	 *            The name to set.
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-	
-	/**
-	 * @return Returns the password.
-	 */
-	public String getPassword() {
-		return password;
-	}
-	
-	/**
-	 * @param password
-	 *            The password to set.
-	 */
-	public void setPassword(String password) {
-		this.password = password;
-	}
-	
-	public String toString() {
-		return "User - Name:" + getName() + ", Password:" + getPassword();
-	}
-	
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		User user = new User();
-		user.setName("Rohtash Singh");
-		user.setPassword("Test");
-		System.out.println(user);
+	public Mood getMood() {
+		return mood;
 	}
 }

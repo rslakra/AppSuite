@@ -26,41 +26,25 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.events.customevent;
-
-import java.util.EventObject;
+package com.rslakra.java.events.moodevent;
 
 /**
- * This <class>MoodEvent</class> class holds on to the source,
- * as well as one of the Mood constants.
- * When a listener receives the event, it can retrieve the mood by
- * calling the getMood() method.
+ * This <class>MoodListener</class> class
  *
+ * we need a listener interface so HappyObject can inform others of his mood:
  *
  * @author Rohtash Singh
  * @version Feb 4, 2006
  */
-public class MoodEvent extends EventObject {
+
+public interface MoodListener {
 	
 	/**
-	 * serialVersionUID
+	 * When the Object changes his mood, he will call the moodChanged() method
+	 * on each of his listeners.
+	 *
+	 * @param event
 	 */
-	private static final long serialVersionUID = 1L;
-	private Mood mood;
+	public void moodChanged(MoodEvent event);
 	
-	/**
-	 * @param source
-	 */
-	public MoodEvent(Object source, Mood mood) {
-		super(source);
-		this.mood = mood;
-		
-	}
-	
-	/**
-	 * @return Returns the mood.
-	 */
-	public Mood getMood() {
-		return mood;
-	}
 }

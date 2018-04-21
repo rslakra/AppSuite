@@ -63,8 +63,7 @@
 	<echo />
 
 	<!-- display splash screen -->
-	<splash progressRegExp="Progress: (.*)%" showduration="10" 
-		displayText="Building ${ant.project.name} ..." />
+	<splash progressRegExp="Progress: (.*)%" showduration="10" displayText="Building ${ant.project.name} ..." />
 
 	<!-- build.properties file inclusion. -->
 	<property file="${basedir}/build.properties" />
@@ -72,9 +71,9 @@
 	<!-- Basic Structure Settings -->
 	<property name="src.dir" value="${basedir}/src" />
 	<property name="jar.file" value="${ant.project.name}-v${impl-version}.jar" />
-	
+
 	<!-- Libraries -->
-	<property name="libs.dir" value="${basedir}/libs" />
+	<property name="libs.dir" value="libs" />
 
 	<!-- Build Paths -->
 	<property name="build.dir" value="${basedir}/build" />
@@ -95,7 +94,7 @@
 		<fileset dir="${httpclient.project}/${libs.dir}" includes="**/*.jar" />
 		<fileset dir="${javafx.project}/${libs.dir}" includes="**/*.jar" />
 		<fileset dir="${mimecraft.project}/${libs.dir}" includes="**/*.jar" />
-		<fileset dir="${libs.dir}" includes="**/*.jar" />
+		<fileset dir="${basedir}/${libs.dir}" includes="**/*.jar" />
 	</path>
 
 	<!-- = = = = = = = = = = = = = = = = =
@@ -106,8 +105,7 @@
 		<sequential>
 			<property name="line.pathprefix" value="|-- " />
 			<!-- get given path in a printable form -->
-			<pathconvert pathsep="${line.separator}${line.pathprefix}" 
-				property="echo.@{pathid}" refid="@{pathid}">
+			<pathconvert pathsep="${line.separator}${line.pathprefix}" property="echo.@{pathid}" refid="@{pathid}">
 			</pathconvert>
 			<echo />
 			<echo message="Path '@{pathid}'" />
@@ -144,21 +142,24 @@
 				<globmapper from="*" to="*" />
 			</chainedmapper>
 		</mapper>
-		<path>
+		<!--path>
 			<fileset dir="${libs.dir}" includes="**/*.jar" />
-		</path>
+		</path-->
+		<path id="build.classpath" />
 	</pathconvert>
 
 	<!-- Default Target -->
 	<!--<target name="all" description="Default Target" depends="clean, build" /> -->
-	
+
 	<target name="all" description="Default Target" depends="clean">
-		<ant antfile="${core.project}/build.xml" target="all" />
+		<!--
+		<ant antfile="${core.project}/build.xml" />
 		<ant antfile="${httpsserver.project}/build.xml" target="all" />
 		<ant antfile="${httpclient.project}/build.xml" target="all" />
 		<ant antfile="${javafx.project}/build.xml" target="all" />
 		<ant antfile="${mimecraft.project}/build.xml" target="all" />
 		<antcall target="build" />
+		-->
 	</target>
 
 	<!-- Remove /build Directory and its sub-directories... -->
@@ -171,7 +172,7 @@
 		<!-- Delete .jar files, if any. -->
 		<delete>
 			<fileset dir="${basedir}" includes="*.jar" />
-		</delete>		
+		</delete>
 	</target>
 
 	<!-- Creates Directories.... -->
@@ -182,17 +183,7 @@
 	<!-- Compiles all .java classes under the build folder. -->
 	<target name="compile" depends="init" description="Compiling .java files">
 		<echo message="Compiling '${src.dir}' into '${build.dir}'" />
-		<javac fork="${javac.fork}" 
-			srcdir="${src.dir}" 
-			destdir="${classes.dir}" 
-			optimize="${javac.optimize}" 
-			debug="${javac.debug}" 
-			debuglevel="${javac.debug.level}" 
-			listfiles="${javac.listfiles}" 
-			includeantruntime="false"
-			source="${javac.source}"
-			target="${javac.target}"
-			classpathref="build.classpath" />
+		<javac fork="${javac.fork}" srcdir="${src.dir}" destdir="${classes.dir}" optimize="${javac.optimize}" debug="${javac.debug}" debuglevel="${javac.debug.level}" listfiles="${javac.listfiles}" includeantruntime="false" source="${javac.source}" target="${javac.target}" classpathref="build.classpath" />
 	</target>
 
 	<!-- Copies Logger.jar file into /../Libs Directory. -->
@@ -217,15 +208,15 @@
 				</section>
 			</manifest>
 		</jar>
-		
+
 		<!-- copy dLogger jar file into base directory -->
 		<copy file="${deploy.dir}/${jar.file}" todir="${basedir}" overwrite="true" />
-		
+
 		<tstamp>
 			<format property="NOW" pattern="${nowPattern}" />
 			<format property="distTimestamp" pattern="yyyyMMMddEEEHHmmss" />
 		</tstamp>
-		<echo message="Build Succeeded at '${NOW}'" />		
+		<echo message="Build Succeeded at '${NOW}'" />
 	</target>
 
 </project>

@@ -98,7 +98,7 @@ public class IntList implements Serializable {
 		IntList list = new IntList();
 		for (int i = 0; i < 100; i++)
 			list.add((int) (Math.random() * 40000));
-		IntList copy = (IntList) Serializer.deepclone(list);
+		IntList copy = (IntList) Serializer.deepClone(list);
 		if (list.equals(copy))
 			System.out.println("equal copies");
 		Serializer.store(list, new File("intlist.ser"));

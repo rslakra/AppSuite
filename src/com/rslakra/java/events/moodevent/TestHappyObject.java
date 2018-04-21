@@ -1,12 +1,12 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
+ * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
  * that the following conditions are met:
- * 1. Redistributions of source code must retain the above copyright
- * 	  notice, this list of conditions and the following disclaimer.
+ * 1. Redistributions of source code must retain the above copyright notice, 
+ * 	  this list of conditions and the following disclaimer.
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
@@ -22,51 +22,59 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ * 
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.net;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.Socket;
+package com.rslakra.java.events.moodevent;
 
 /**
- * @author rohtash.singh
+ * This <class>HappyObjectTest</class> class
  *
- *         TODO To change the template for this generated type comment go to
- *         Window - Preferences - Java - Code Style - Code Templates
+ *
+ * Put it all together We now have a custom event, a custom event listener
+ * interface, an event generator, and some listeners. Let's put it all together:
+ *
+ * 
+ * @author Rohtash Singh
+ * @version Feb 4, 2006
  */
-public class ConnProcess extends Thread {
-	Socket client;
-	BufferedWriter out;
-	BufferedReader in;
+
+public class TestHappyObject {
 	
-	public ConnProcess(Socket socket) {
-		client = socket;
-		try {
-			out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-			in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		this.start();
+	/**
+	 * This method creates a HappyObject instance and registers the listeners
+	 * Sky and Birds then pinches and hugs Happy0bject.
+	 */
+	public static void main(String[] args) {
+		
+		// happy object
+		HappyObject happy = new HappyObject();
+		
+		// listeners
+		MoodListener sky = new SkyMoodListener();
+		MoodListener birds = new BirdsMoodListener();
+		
+		// add listeners on happy object
+		happy.addMoodListener(sky);
+		happy.addMoodListener(birds);
+		
+		System.out.println("Let's pinch HappyObject and see reaction!");
+		happy.receivePinch();
+		System.out.println();
+		
+		System.out.println("Let's hug HappyObject and see reaction!");
+		happy.receiveHug();
+		System.out.println();
+		
+		System.out.println("Let's make HappyObject ANGRY and see reaction!");
+		System.out.println();
+		System.out.println("One Pinch!");
+		happy.receivePinch();
+		System.out.println();
+		
+		System.out.println("Second Pinch, Look out!");
+		happy.receivePinch();
 	}
 	
-	public void run() {
-		String line;
-		try {
-			while ((line = in.readLine()) != null) {
-				out.write(line);
-			}
-			out.close();
-			in.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-	}
 }

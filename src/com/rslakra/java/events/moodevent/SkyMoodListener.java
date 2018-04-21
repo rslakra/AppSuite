@@ -26,36 +26,31 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.events.customevent;
+package com.rslakra.java.events.moodevent;
 
 /**
- * This <class>Mood</class> class has three moods : Happy, Annoyed and Angry.
- * When he fires an event, the listener will retrieve a mood.
+ * This <class>Sky</class> class which responds to HappyObject's mood.
  *
- * @author      Rohtash Singh
- * @version     Feb 4, 2006
+ * @author Rohtash Singh
+ * @version Feb 4, 2006
  */
 
-public class Mood {
-
-    //moods
-    public static final Mood HAPPY = new Mood("Happy");
-    public static final Mood ANNOYED = new Mood("Annoyed");
-    public static final Mood ANGRY = new Mood("Angry");
-
-    //mood
-    private String mood;
-
-    //Constructor
-    private Mood(String mood) {
-        this.mood = mood;
-    } //end constructor
-
-    /**
-     * @return mood
-     */
-    public String toString() {
-        return mood;
-    } //end toString
-
-} //end class
+public class SkyMoodListener implements MoodListener {
+	
+	/**
+	 * 
+	 * @param event
+	 * @see com.rslakra.java.events.examples.MoodListener#moodChanged(com.rslakra.java.events.examples.MoodEvent)
+	 */
+	public void moodChanged(MoodEvent event) {
+		
+		if (event.getMood() == Mood.HAPPY) {
+			System.out.println("Sun is shining!");
+		} else if (event.getMood() == Mood.ANNOYED) {
+			System.out.println("Cloudy Skies!");
+		} else {
+			System.out.println("Lightning rains from the heavens!");
+		}
+	}
+	
+}

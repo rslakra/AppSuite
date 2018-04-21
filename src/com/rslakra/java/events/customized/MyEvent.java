@@ -40,9 +40,12 @@ import java.util.EventObject;
 
 // Declare the event. It must extend EventObject.
 public class MyEvent extends EventObject {
-
+	
+	/** serialVersionUID */
+	private static final long serialVersionUID = 1L;
+	
 	public MyEvent(Object source) {
 		super(source);
 	}
-
-} // end class
+	
+}

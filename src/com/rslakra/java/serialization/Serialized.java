@@ -38,18 +38,18 @@ import java.io.Serializable;
  *
  */
 public class Serialized implements Serializable {
-
+	
 	/** serialVersionUID */
 	private static final long serialVersionUID = 1L;
-
+	
 	public int i = 10;
 	public static int si = 100;
 	public transient int ti = 11;
 	public transient static int tsi = 111;
-
+	
 	public String str = "Rohtash";
-	public static String sstr = "Rohtash Singh";
-	public transient String tstr = "Lakra";
-	public transient static String tsstr = "Rohtash Singh Lakra";
-
+	public static String sStr = "Rohtash Singh";
+	public transient String tStr = "Lakra";
+	public transient static String tsStr = "Rohtash Singh Lakra";
+	
 }

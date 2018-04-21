@@ -44,32 +44,31 @@ import java.util.Observer;
  * @author Rohtash Singh
  * @version Feb 3, 2006
  */
-
 public class SimpleEventNotifier extends Observable {
-
+	
 	// The setChanged() protected method must overridden to make it public
 	public synchronized void setChanged() {
 		System.out.println("Called setChanged!");
 	}
-
+	
 	public static void main(String[] args) {
-
+		
 		// Create the model
 		SimpleEventNotifier notifier = new SimpleEventNotifier();
-
+		
 		// Register for events
 		notifier.addObserver(new Observer() {
 			public void update(Observable o, Object arg) {
 				System.out.println("Observer update called!");
 			}
 		});
-
+		
 		// Indicate that the model has changed
 		notifier.setChanged();
-
+		
 		// Fire an event to all the views
 		Object arg = "some information about the event";
 		notifier.notifyObservers(arg);
-
+		
 	}
-} // end class
+}

@@ -26,56 +26,49 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
+package com.rslakra.java.events.customized;
 
-package com.rslakra.java.events.mood;
+import javax.swing.event.EventListenerList;
 
 /**
- * This <class>HappyObjectTest</class> class
+ * This <class>MyEventManager</class> class manages the event registration and
+ * notification code to a class.
  *
- *
- * Put it all together We now have a custom event, a custom event listener
- * interface, an event generator, and some listeners. Let's put it all together:
- *
- * 
  * @author Rohtash Singh
- * @version Feb 4, 2006
+ * @version Feb 3, 2006
  */
-
-public class HappyObjectTest {
-
-	/**
-	 * This method creates a HappyObject instance and registers the listeners
-	 * Sky and Birds then pinches and hugs Happy0bject.
-	 */
-	public static void main(String[] args) {
-
-		// happy object
-		HappyObject happy = new HappyObject();
-
-		// listeners
-		MoodListener sky = new Sky();
-		MoodListener birds = new Birds();
-
-		// add listeners on happy object
-		happy.addMoodListener(sky);
-		happy.addMoodListener(birds);
-
-		System.out.println("Let's pinch HappyObject and see reaction!");
-		happy.receivePinch();
-		System.out.println();
-
-		System.out.println("Let's hug HappyObject and see reaction!");
-		happy.receiveHug();
-		System.out.println();
-
-		System.out.println("Let's make HappyObject ANGRY and see reaction!");
-		System.out.println();
-		System.out.println("One Pinch!");
-		happy.receivePinch();
-		System.out.println();
-
-		System.out.println("Second Pinch, Look out!");
-		happy.receivePinch();
-	} // end main
-
-} // end class
+public final class MyEventManager {
+	
+	// Create the listener list
+	protected EventListenerList myEventListeners = new EventListenerList();
+	
+	public MyEventManager() {
+		super();
+	}
+	
+	// This methods allows classes to register for MyEvents
+	public void addMyListener(MyListener listener) {
+		myEventListeners.add(MyListener.class, listener);
+	}
+	
+	// This methods allows classes to unregister for MyEvents
+	public void removeMyListener(MyListener listener) {
+		myEventListeners.remove(MyListener.class, listener);
+	}
+	
+	// This private class is used to fire MyEvents
+	void fireMyEvent(MyEvent evt) {
+		Object[] listeners = myEventListeners.getListenerList();
+		System.out.println("listeners.length : " + listeners.length);
+		
+		// Each listener occupies two elements - the first is the listener class
+		// and the second is the listener instance
+		for (int i = 0; i < listeners.length; i += 2) {
+			if (listeners[i] == MyListener.class) {
+				System.out.println("Calling method of : " + listeners[i].getClass());
+				((MyListener) listeners[i + 1]).myEventOccured(evt);
+			}
+		}
+	}
+	
+}

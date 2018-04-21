@@ -26,55 +26,31 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.events.customevent;
+package com.rslakra.java.events.moodevent;
 
 /**
- * This <class>HappyObjectTest</class> class
+ * This <class>Birds</class> class which responds to HappyObject's mood.
  *
- *
- * Put it all together We now have a custom event, a custom event listener
- * interface, an event generator, and some listeners. Let's put it all together:
- *
- * 
  * @author Rohtash Singh
  * @version Feb 4, 2006
  */
 
-public class TestHappyObject {
+public class BirdsMoodListener implements MoodListener {
 	
 	/**
-	 * This method creates a HappyObject instance and registers the listeners
-	 * Sky and Birds then pinches and hugs Happy0bject.
+	 * 
+	 * @param event
+	 * @see com.rslakra.java.events.customevent.MoodListener#moodChanged(com.rslakra.java.events.customevent.MoodEvent)
 	 */
-	public static void main(String[] args) {
+	public void moodChanged(MoodEvent event) {
 		
-		// happy object
-		HappyObject happy = new HappyObject();
-		
-		// listeners
-		MoodListener sky = new SkyMoodListener();
-		MoodListener birds = new BirdsMoodListener();
-		
-		// add listeners on happy object
-		happy.addMoodListener(sky);
-		happy.addMoodListener(birds);
-		
-		System.out.println("Let's pinch HappyObject and see reaction!");
-		happy.receivePinch();
-		System.out.println();
-		
-		System.out.println("Let's hug HappyObject and see reaction!");
-		happy.receiveHug();
-		System.out.println();
-		
-		System.out.println("Let's make HappyObject ANGRY and see reaction!");
-		System.out.println();
-		System.out.println("One Pinch!");
-		happy.receivePinch();
-		System.out.println();
-		
-		System.out.println("Second Pinch, Look out!");
-		happy.receivePinch();
+		if (event.getMood() == Mood.HAPPY) {
+			System.out.println("Birds are singing!");
+		} else if (event.getMood() == Mood.ANNOYED) {
+			System.out.println("Birds are silent!");
+		} else {
+			System.out.println("Birds are flying away!");
+		}
 	}
 	
 }

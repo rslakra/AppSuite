@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.events.customevent;
+package com.rslakra.java.events.moodevent;
 
 import java.util.ArrayList;
 import java.util.Iterator;

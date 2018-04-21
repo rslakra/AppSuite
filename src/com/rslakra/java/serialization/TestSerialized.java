@@ -41,45 +41,45 @@ import java.io.ObjectOutputStream;
  *
  */
 public class TestSerialized {
-
+	
 	public void testInstanceObjest() throws Exception {
 		// Serialize output an Instance Object
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("t1.tmp"));
 		out.writeObject(new Serialized());
 		out.flush();
-
+		
 		// Changed the static and transient static value after storage
 		Serialized.si = 10000;
 		Serialized.tsi = 100000;
-
+		
 		// Read back Serialized Instance Object
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream("t1.tmp"));
 		Serialized serialized = (Serialized) in.readObject();
 		in.close();
-
+		
 		// Show the results
 		System.out.println("Output from testInstanceObjest():\n");
-
+		
 		// instant values are serialized
 		System.out.println("Instance str     : " + serialized.str);
 		System.out.println("Instance i       : " + serialized.i);
-
+		
 		// static values are not serialized for an instant object!
 		// The new value is picked up, not the old ones!
-		System.out.println("static staticStr : " + serialized.sstr);
+		System.out.println("static staticStr : " + serialized.sStr);
 		System.out.println("static si        : " + serialized.si);
-
+		
 		// transient values are not serialized
-		System.out.println("transient tStr   : " + serialized.tstr);
-
+		System.out.println("transient tStr   : " + serialized.tStr);
+		
 		System.out.println("transient ti     : " + serialized.ti);
-
+		
 		// transient static values are not serialized
 		// The new value is picked up, not the old ones!
-		System.out.println("transient static tStaticStr: " + serialized.tsstr);
+		System.out.println("transient static tStaticStr: " + serialized.tsStr);
 		System.out.println("transient static tsi  : " + serialized.tsi);
 	}
-
+	
 	// ***********************************************************************************
 	public void testClassObjest() throws Exception {
 		// Serialize output Class Object
@@ -87,36 +87,36 @@ public class TestSerialized {
 		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("t2.tmp"));
 		out.writeObject(c);
 		out.flush();
-
+		
 		// Changed the static and transient static value after storage
 		// Changed the static and transient static value after storage
 		Serialized.si = 11111;
 		Serialized.tsi = 111111;
-
+		
 		// Read back Serialized Class Object
 		ObjectInputStream in = new ObjectInputStream(new FileInputStream("t2.tmp"));
 		Class cls = (Class) in.readObject();
 		in.close();
-
+		
 		// Show the results
 		System.out.println("\nOutput from testClassObjest():\n");
-
+		
 		// Only field with static modifier is legal to get value back
 		// The new value is picked up, not the old ones!
 		// which means they are both not serialized.
 		// The conclusion: static and tansient static does not make any
 		// differece
-
+		
 		System.out.println("static sStr  : " + cls.getDeclaredField("staticStr").get(cls));
 		System.out.println("static si    : " + cls.getDeclaredField("si").getInt(cls));
-
+		
 		System.out.println("transient static tStaticStr	: " + cls.getDeclaredField("tStaticStr").get(cls));
 		System.out.println("transient static tsi  		: " + cls.getDeclaredField("tsi").getInt(cls));
-
+		
 		// all other fields will cause exceptions,uncomment this code and try it
 		// out!
 		// System.out.println(cls.getDeclaredField("i").get(cls));
-
+		
 		// Obviously the serialzed Class object know all fields in itself
 		System.out.println("\n  Print some reflections from Class Serialized:");
 		System.out.println("Class 		: " + cls);
@@ -126,29 +126,29 @@ public class TestSerialized {
 		System.out.println("tStaticStr	: " + cls.getDeclaredField("tStaticStr"));
 		System.out.println("Fields		:" + cls.getDeclaredFields());
 	}
-
+	
 	public void show(Serialized serialized) {
 		System.out.println("===================================================================");
 		// instant values are serialized
 		System.out.println("Instance str     : " + serialized.str);
 		System.out.println("Instance i       : " + serialized.i);
-
+		
 		// static values are not serialized for an instant object!
 		// The new value is picked up, not the old ones!
-		System.out.println("static staticStr : " + serialized.sstr);
+		System.out.println("static staticStr : " + serialized.sStr);
 		System.out.println("static si        : " + serialized.si);
-
+		
 		// transient values are not serialized
-		System.out.println("transient tStr   : " + serialized.tstr);
+		System.out.println("transient tStr   : " + serialized.tStr);
 		System.out.println("transient ti     : " + serialized.ti);
-
+		
 		// transient static values are not serialized
 		// The new value is picked up, not the old ones!
-		System.out.println("transient static tStaticStr: " + serialized.tsstr);
+		System.out.println("transient static tStaticStr: " + serialized.tsStr);
 		System.out.println("transient static tsi  : " + serialized.tsi);
 		System.out.println("===================================================================");
 	}
-
+	
 	/**
 	 * @param args
 	 */
@@ -161,5 +161,5 @@ public class TestSerialized {
 			e.printStackTrace();
 		}
 	}
-
+	
 }

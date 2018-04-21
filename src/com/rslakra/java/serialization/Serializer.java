@@ -47,9 +47,9 @@ public class Serializer {
 	 * store its serialized state in File f.
 	 **/
 	static void store(Serializable o, File f) throws IOException {
-		ObjectOutputStream out = // The class for serialization
-						new ObjectOutputStream(new FileOutputStream(f));
-		out.writeObject(o); // This method serializes an object graph
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
+		// This method serializes an object graph
+		out.writeObject(o);
 		out.close();
 	}
 	
@@ -57,9 +57,10 @@ public class Serializer {
 	 * Deserialize the contents of File f and return the resulting object
 	 **/
 	static Object load(File f) throws IOException, ClassNotFoundException {
-		ObjectInputStream in = // The class for de-serialization
-						new ObjectInputStream(new FileInputStream(f));
-		return in.readObject(); // This method deserializes an object graph
+		// The class for de-serialization
+		ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
+		// This method deserializes an object graph
+		return in.readObject();
 	}
 	
 	/**
@@ -70,7 +71,7 @@ public class Serializer {
 	 * usually implemented to produce a "shallow" clone that copies references
 	 * to other objects, instead of copying all referenced objects.
 	 **/
-	static Object deepclone(final Serializable o) throws IOException, ClassNotFoundException {
+	static Object deepClone(final Serializable o) throws IOException, ClassNotFoundException {
 		// Create a connected pair of "piped" streams.
 		// We'll write bytes to one, and them from the other one.
 		final PipedOutputStream pipeout = new PipedOutputStream();
@@ -145,7 +146,7 @@ public class Serializer {
 			
 			// Create a deep clone and display that. After making the copy
 			// modify the original to prove that the clone is "deep".
-			DataStructure ds2 = (DataStructure) Serializer.deepclone(ds);
+			DataStructure ds2 = (DataStructure) Serializer.deepClone(ds);
 			ds.other.message = null;
 			ds.other.data = null; // Change original
 			System.out.println("Deep clone: " + ds2);
