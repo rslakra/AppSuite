@@ -31,11 +31,13 @@ package com.rslakra.java.vm;
 import java.util.Collection;
 import java.util.LinkedList;
 
-public class TestMemoryWarningSystem {
+import com.devamatre.core.vm.MemoryWarningSystem;
 
+public class TestMemoryWarningSystem {
+	
 	public static void main(String[] args) {
 		MemoryWarningSystem.setPercentageUsageThreshold(0.6);
-
+		
 		MemoryWarningSystem mws = new MemoryWarningSystem();
 		mws.addListener(new MemoryWarningSystem.Listener() {
 			public void memoryUsageLow(long usedMemory, long maxMemory) {
@@ -45,7 +47,7 @@ public class TestMemoryWarningSystem {
 				MemoryWarningSystem.setPercentageUsageThreshold(0.8);
 			}
 		});
-
+		
 		Collection<Double> numbers = new LinkedList<Double>();
 		while (true) {
 			numbers.add(Math.random());

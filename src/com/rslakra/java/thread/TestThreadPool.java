@@ -28,6 +28,7 @@
  *****************************************************************************/
 package com.rslakra.java.thread;
 
+import com.devamatre.core.thread.ThreadPool;
 import com.devamatre.logger.LogManager;
 import com.devamatre.logger.Logger;
 
