@@ -32,18 +32,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Rohtash Singh Lakra (Rohtash.Lakra@nasdaq.com)
+ * @author Rohtash Singh Lakra
  * @date 02/16/2018 10:53:24 AM
  */
 public class Names {
-
+	
 	// names
 	private List<Name> names;
-
+	
 	public Names() {
 		names = new ArrayList<>();
 	}
-
+	
 	/**
 	 * Returns the names.
 	 *
@@ -52,7 +52,7 @@ public class Names {
 	public List<Name> getNames() {
 		return names;
 	}
-
+	
 	/**
 	 * The names to be set.
 	 * 
@@ -61,7 +61,7 @@ public class Names {
 	public void setNames(List<Name> names) {
 		this.names = names;
 	}
-
+	
 	/**
 	 * Returns the string representation of this object.
 	 * 
@@ -70,5 +70,5 @@ public class Names {
 	public String toString() {
 		return names.toString();
 	}
-
+	
 }

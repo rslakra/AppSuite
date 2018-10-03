@@ -43,15 +43,15 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.TrustManagerFactory;
 
 /**
- * @author Rohtash Singh Lakra (Rohtash.Lakra@nasdaq.com)
+ * @author Rohtash Singh Lakra
  * @date 02/26/2018 05:17:27 PM
  */
 public interface Constants {
 	int HTTPS_PORT = 443;
-
+	
 	String CERTIFICATE = "rsl.jks";
 	String PASSWORD = "password";
-
+	
 	/**
 	 * 
 	 * @return
@@ -59,7 +59,7 @@ public interface Constants {
 	static String getHost() {
 		return "127.0.0.1";
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -67,7 +67,7 @@ public interface Constants {
 	static int getPort() {
 		return 7516;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -75,7 +75,7 @@ public interface Constants {
 	static String getCertificate() {
 		return CERTIFICATE;
 	}
-
+	
 	/**
 	 * 
 	 * @return
@@ -83,7 +83,7 @@ public interface Constants {
 	static char[] keyStorePassword() {
 		return PASSWORD.toCharArray();
 	}
-
+	
 	/**
 	 * 
 	 * @param host
@@ -103,7 +103,7 @@ public interface Constants {
 			return null;
 		}
 	}
-
+	
 	/**
 	 * Returns the package path of the given class.
 	 * 
@@ -117,13 +117,13 @@ public interface Constants {
 			if (withClassName) {
 				pkgPath += File.separator + _class.getSimpleName();
 			}
-
+			
 			return pkgPath;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the path of the given class.
 	 * 
@@ -161,13 +161,13 @@ public interface Constants {
 					}
 				}
 			}
-
+			
 			return path;
 		}
-
+		
 		return null;
 	}
-
+	
 	/**
 	 * Returns the full path for the directory and childName.
 	 * 
@@ -188,10 +188,10 @@ public interface Constants {
 				pathString += (childName.startsWith("/") ? "" : File.separator) + childName.trim();
 			}
 		}
-
+		
 		return pathString;
 	}
-
+	
 	/**
 	 * Create and initialize the SSLContext
 	 * 
@@ -203,26 +203,26 @@ public interface Constants {
 			KeyStore keyStore = KeyStore.getInstance("JKS");
 			String certFilePath = pathForCertificate(_class);
 			keyStore.load(new FileInputStream(certFilePath), Constants.keyStorePassword());
-
+			
 			// Create key manager
 			KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance("SunX509");
 			keyManagerFactory.init(keyStore, Constants.keyStorePassword());
 			KeyManager[] km = keyManagerFactory.getKeyManagers();
-
+			
 			// Create trust manager
 			TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance("SunX509");
 			trustManagerFactory.init(keyStore);
 			TrustManager[] tm = trustManagerFactory.getTrustManagers();
-
+			
 			// Initialize SSLContext
 			SSLContext sslContext = SSLContext.getInstance("TLSv1");
 			sslContext.init(km, tm, null);
-
+			
 			return sslContext;
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
-
+		
 		return null;
 	}
 }

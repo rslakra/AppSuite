@@ -107,8 +107,8 @@ public final class SecurityHelper {
 	/* INSTALLATION */
 	private static final String INSTALLATION = "device.id";
 	
-	/* Note: For debugging purposes, reduce value to 100. */
-	private static final Integer BV_ENCRYPTION_KEY_LENGTH = 32;
+	/* ENCRYPTION_KEY_LENGTH */
+	private static final Integer ENCRYPTION_KEY_LENGTH = 32;
 	
 	/* pbkdf2Params */
 	private static PBKDF2Params pbkdf2Params = null;
@@ -665,7 +665,7 @@ public final class SecurityHelper {
 		byte[] derivedKeyBytes = null;
 		if (CoreHelper.isNotNullOrEmpty(entropyString)) {
 			try {
-				derivedKeyBytes = getPBKDF2Generator().deriveKey(entropyString, BV_ENCRYPTION_KEY_LENGTH);
+				derivedKeyBytes = getPBKDF2Generator().deriveKey(entropyString, ENCRYPTION_KEY_LENGTH);
 			} catch (NoSuchAlgorithmException ex) {
 				System.out.println(ex);
 			}
@@ -1200,11 +1200,12 @@ public final class SecurityHelper {
 	}
 	
 	/**
+	 * Returns the random generated seed.
 	 * 
 	 * @return
 	 */
 	public static String generateRandomSeed() {
-		return generateNewKeyWithLength(BV_ENCRYPTION_KEY_LENGTH);
+		return generateNewKeyWithLength(ENCRYPTION_KEY_LENGTH);
 	}
 	
 	/**
