@@ -42,6 +42,8 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 
+import com.devamatre.core.IOUtility;
+
 /* ClassFileServer.java -- a simple file server that can server
  * Http get request in both clear and secure channel
  *
@@ -60,8 +62,7 @@ public class ClassFileServer extends ClassServer {
 	/**
 	 * Constructs a ClassFileServer.
 	 *
-	 * @param path
-	 *            the path where the server locates files
+	 * @param path the path where the server locates files
 	 */
 	public ClassFileServer(ServerSocket ss, String docroot) throws IOException {
 		super(ss);
@@ -69,13 +70,12 @@ public class ClassFileServer extends ClassServer {
 	}
 
 	/**
-	 * Returns an array of bytes containing the bytes for the file represented
-	 * by the argument <b>path</b>.
+	 * Returns an array of bytes containing the bytes for the file represented by
+	 * the argument <b>path</b>.
 	 *
 	 * @return the bytes for the file
-	 * @exception FileNotFoundException
-	 *                if the file corresponding to <b>path</b> could not be
-	 *                loaded.
+	 * @exception FileNotFoundException if the file corresponding to <b>path</b>
+	 *                                  could not be loaded.
 	 */
 	public byte[] getBytes(String path) throws IOException {
 		System.out.println("reading: " + path);
@@ -89,14 +89,15 @@ public class ClassFileServer extends ClassServer {
 
 			byte[] bytecodes = new byte[length];
 			in.readFully(bytecodes);
+			IOUtility.closeSilently(fin, in);
 			return bytecodes;
 		}
 	}
 
 	/**
 	 * Main method to create the class server that reads files. This takes two
-	 * command line arguments, the port on which the server accepts requests and
-	 * the root of the path. To start up the server: <br>
+	 * command line arguments, the port on which the server accepts requests and the
+	 * root of the path. To start up the server: <br>
 	 * <br>
 	 *
 	 * <code>   java ClassFileServer <port> <path>

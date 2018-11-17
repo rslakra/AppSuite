@@ -45,6 +45,8 @@ import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocket;
 
+import com.devamatre.core.IOUtility;
+
 /**
  * Created by IntelliJ IDEA. User: rohtash.singh Date: May 27, 2005 Time:
  * 2:36:33 PM To change this template use Options | File Templates.
@@ -56,7 +58,7 @@ import javax.net.ssl.SSLServerSocket;
 public class HttpServer implements Runnable {
 	// public class HttpServer extends ClassServer {
 	private ServerSocket server = null;// Server
-	
+
 	private static int DEFAULT_PORT = 1601; // On Which server accepts requests.
 	private static String ROOT_DIR = System.getProperty("user.dir");
 	private static final boolean AUTHENTICATE_CLIENT = false;// If true client
@@ -65,17 +67,17 @@ public class HttpServer implements Runnable {
 	// Server Types
 	public static final String TLS_SSL_FILE_SERVER = "TLS/SSL";
 	public static final String PLAIN_SOCKET_FILE_SERVER = "PlainSocket";
-	
+
 	public HttpServer(ServerSocket serverSocket) {
 		server = serverSocket;
 		startServer();//
 	}
-	
+
 	// Start a New Server for Listing.
 	private void startServer() {
 		(new Thread(this)).start();
 	}
-	
+
 	public void run() {
 		Socket socket;
 		// Accept connection from server
@@ -117,7 +119,7 @@ public class HttpServer implements Runnable {
 			ex.printStackTrace();
 		}
 	}
-	
+
 	private String getPath(BufferedReader in) throws IOException {
 		final String GET_CLASS = "GET /";
 		String path = "";
@@ -134,18 +136,18 @@ public class HttpServer implements Runnable {
 		do {
 			line = in.readLine();
 		} while ((line.length() != 0) && (line.charAt(0) != '\r') && (line.charAt(0) != '\n'));
-		
+
 		if (path.length() != 0) {
 			return path;
 		} else {
 			throw new IOException("Malformed Header!");
 		}
 	}
-	
+
 	/**
 	 *
-	 * Returns an array of bytes containing the bytes for the file represented
-	 * by the argument <b>path</b>.
+	 * Returns an array of bytes containing the bytes for the file represented by
+	 * the argument <b>path</b>.
 	 *
 	 * @param path
 	 * @return
@@ -161,10 +163,12 @@ public class HttpServer implements Runnable {
 			DataInputStream in = new DataInputStream(new FileInputStream(file));
 			byte[] byteCode = new byte[len];
 			in.readFully(byteCode);
+			IOUtility.closeSilently(in);
+
 			return byteCode;
 		}
 	}// End of getBytes()
-	
+
 	private static ServerSocketFactory getServerSocketFactory(String sType) {
 		if (sType.equals("TLS")) {
 			try {
@@ -176,7 +180,7 @@ public class HttpServer implements Runnable {
 				KeyManagerFactory kmFactory = KeyManagerFactory.getInstance("SunX509");
 				KeyStore keyStore = KeyStore.getInstance("JKS"); // Java Key
 																	// Store
-				
+
 				// Server Certificate File Name
 				String serverCertFile = "testkeys";
 				keyStore.load(new FileInputStream(serverCertFile), password);
@@ -190,10 +194,10 @@ public class HttpServer implements Runnable {
 		} else {
 			return ServerSocketFactory.getDefault();
 		}
-		
+
 		return null;
 	}
-	
+
 	public static void main(String[] args) {
 		try {
 			ServerSocketFactory ssFactory = getServerSocketFactory(PLAIN_SOCKET_FILE_SERVER);

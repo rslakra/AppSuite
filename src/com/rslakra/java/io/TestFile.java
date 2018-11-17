@@ -32,17 +32,22 @@ import java.io.BufferedInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.devamatre.core.IOUtility;
+
 public class TestFile {
 	public static void main(String[] args) {
+		BufferedInputStream inputStream = null;
 		try {
-			BufferedInputStream bis = new BufferedInputStream(new FileInputStream("Log4j.properties"));
-			byte[] bytes = new byte[bis.available()];
-			int len = bis.read(bytes);
+			inputStream = new BufferedInputStream(new FileInputStream("Log4j.properties"));
+			byte[] bytes = new byte[inputStream.available()];
+			int len = inputStream.read(bytes);
 			System.out.println("len : " + len);
 			String data = new String(bytes, 0, len);
 			System.out.println("data : " + data);
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
+		} finally {
+			IOUtility.closeSilently(inputStream);
 		}
 	}
 }

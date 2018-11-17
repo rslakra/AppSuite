@@ -133,6 +133,8 @@ class HTTPServerThread implements Runnable {
 			if (request.isGetRequest())
 				processGetRequest(request, outStream);
 			System.out.println("Request completed. Closing connection.");
+
+			inStream.close();
 		} catch (IOException ex) {
 			System.out.println("IOException occurred when processing request.");
 		}
@@ -154,8 +156,8 @@ class HTTPServerThread implements Runnable {
 	// Process an HTTP GET
 	void processGetRequest(HTTPRequest request, BufferedOutputStream outStream) throws IOException {
 		/*
-		 * If you want to use this in a secure environment then you should place
-		 * some restrictions on the requested file name
+		 * If you want to use this in a secure environment then you should place some
+		 * restrictions on the requested file name
 		 */
 		String fileName = request.getFileName();
 		File file = new File(fileName);

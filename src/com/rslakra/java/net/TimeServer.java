@@ -34,6 +34,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Date;
 
+import com.devamatre.core.IOUtility;
+
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
@@ -46,18 +48,24 @@ public class TimeServer {
 	final private static int DAYTIME_PORT = 13;
 
 	public static void main(String args[]) throws IOException {
-		DatagramSocket socket = new DatagramSocket(DAYTIME_PORT);
-		while (true) {
-			byte buffer[] = new byte[256];
-			DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
-			socket.receive(packet);
-			String date = new Date().toString();
-			buffer = date.getBytes();
-			// Get response address/port for client from packet
-			InetAddress address = packet.getAddress();
-			int port = packet.getPort();
-			packet = new DatagramPacket(buffer, buffer.length, address, port);
-			socket.send(packet);
+		DatagramSocket socket = null;
+		try {
+			socket = new DatagramSocket(DAYTIME_PORT);
+			while (true) {
+				byte buffer[] = new byte[256];
+				DatagramPacket packet = new DatagramPacket(buffer, buffer.length);
+				socket.receive(packet);
+				String date = new Date().toString();
+				buffer = date.getBytes();
+				// Get response address/port for client from packet
+				InetAddress address = packet.getAddress();
+				int port = packet.getPort();
+				packet = new DatagramPacket(buffer, buffer.length, address, port);
+				socket.send(packet);
+			}
+		} finally {
+			IOUtility.closeSilently(socket);
 		}
+
 	}
 }

@@ -31,6 +31,9 @@ package com.rslakra.java.net.messages;
 import java.io.FileInputStream;
 import java.io.IOException;
 
+import com.devamatre.core.CoreUtility;
+import com.devamatre.core.IOUtility;
+
 /**
  * <p>
  * Title:
@@ -54,11 +57,13 @@ public class MainMessage {
 	}
 
 	public static void main(String[] args) {
+		FileInputStream inputStream = null;
 		try {
 			byte b[] = new byte[45];
-			FileInputStream fi = new FileInputStream("f:/Message.txt");
+			final String pathString = CoreUtility.pathString(CoreUtility.getUserHome(), "Message.txt");
+			inputStream = new FileInputStream(pathString);
 			Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-			fi.read(b);
+			inputStream.read(b);
 			for (int i = 0; i < 300; i++) {
 				try {
 					Thread.sleep(99000);
@@ -68,6 +73,9 @@ public class MainMessage {
 				System.out.println(" count " + i);
 			}
 		} catch (IOException ex) {
+			ex.printStackTrace();
+		} finally {
+			IOUtility.closeSilently(inputStream);
 		}
 	}
 }
