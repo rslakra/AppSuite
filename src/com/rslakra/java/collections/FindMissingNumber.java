@@ -28,6 +28,7 @@
  *****************************************************************************/
 package com.rslakra.java.collections;
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -55,9 +56,8 @@ public class FindMissingNumber {
 			a[i] = random.nextInt(100);
 		}
 		// print
-		for (int i = 0; i < a.length; i++) {
-			System.out.println(a[i]);
-		}
+		System.out.println(Arrays.toString(a));
+		System.out.println(Arrays.toString(a));
 
 	}
 
