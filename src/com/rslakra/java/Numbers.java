@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
+ * Copyright (C) Devamatre Inc 2009-2019. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -31,9 +31,25 @@ package com.rslakra.java;
 import java.io.DataInputStream;
 import java.io.IOException;
 
-public class NumberExamples {
+/**
+ * 
+ * @author Rohtash Lakra (rohtash.singh@gmail.com)
+ * @Created Apr 10, 2019 1:04:32 PM
+ * @version 1.0.0
+ */
+public class Numbers {
 
-	public NumberExamples() {
+	private int value;
+
+	public Numbers() {
+	}
+
+	/**
+	 * 
+	 * @param value
+	 */
+	public Numbers(int value) {
+		this.value = value;
 	}
 
 	public long[] reverseDigits(long[] digits, int noOfdigits) {
@@ -90,8 +106,34 @@ public class NumberExamples {
 		}
 	}
 
+	/**
+	 * Returns the string representation of this object.
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	@Override
+	public String toString() {
+		return String.valueOf(value);
+	}
+
+	/**
+	 * 
+	 * @param number
+	 * @param other
+	 */
+	public static void swap(Numbers number, Numbers other) {
+		Numbers temp = number;
+		number = other;
+		other = temp;
+		System.out.println("number:" + number + ", other:" + other);
+	}
+
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
-		NumberExamples test = new NumberExamples();
+		Numbers nums = new Numbers();
 		long num = 0;
 		DataInputStream in = new DataInputStream(System.in);
 		System.out.print("Enter a Decimal No:");
@@ -102,7 +144,14 @@ public class NumberExamples {
 		} catch (IOException ex) {
 			System.err.println("Entered Number is not Valid!" + ex);
 		}
-		// test.decimalToBinary(num);
-		test.octalToBinary(num);
+		nums.decimalToBinary(num);
+		nums.octalToBinary(num);
+
+		Numbers first = new Numbers(10);
+		Numbers second = new Numbers(20);
+		System.out.println("first:" + first + ", second:" + second);
+		Numbers.swap(first, second);
+		System.out.println("first:" + first + ", second:" + second);
+
 	}
 }
