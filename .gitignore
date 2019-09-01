@@ -1,5 +1,11 @@
 /**/.DS_Store
-/bin
-/build
-/classes
-/release-*/
+/**/bin
+/**/classes/
+/**/release-v*/
+/**/build
+/**/target
+/**/*.iml
+/**/*.log
+/**/*.jar
+/**/.idea
+/**/.settings

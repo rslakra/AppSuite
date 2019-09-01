@@ -1,0 +1,21 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Library>
+	<Book status="on shelf">
+		<ISBN>012345678</ISBN>
+		<Title>Component Based Solutions Module Book</Title>
+		<Author>
+			<FirstName>Michael</FirstName>
+			<LastName>Heron</LastName>
+		</Author>
+		<Publisher>Abertay Shoppycop</Publisher>
+	</Book>
+	<Book status="on loan">
+		<ISBN>2222222</ISBN>
+		<Title>The Javanomicon</Title>
+		<Author>
+			<FirstName>Michael</FirstName>
+			<LastName>Heron</LastName>
+		</Author>
+		<Publisher>Abertay Shoppycop</Publisher>
+	</Book>
+</Library>

@@ -1,0 +1,11 @@
+com.devamatre.common.dataobjects - common serializable data objects
+com.devamatre.common.events - common event types
+com.devamatre.common.io - the new I/O features
+com.devamatre.common.js - common java script features
+com.devamatre.common.lang - basic language functionalities
+com.devamatre.common.net - networking operations and features
+com.devamatre.common.security - key features of security like key generation encryption and decryption etc
+com.devamatre.common.sql - Java Database Connectivity to access databases
+com.devamatre.common.widgets - hierarchy of packages for platform-indepeendent GUI components
+com.devamatre.common.utils - common utility classes
+com.devamatre.common.xml - common XML parsers

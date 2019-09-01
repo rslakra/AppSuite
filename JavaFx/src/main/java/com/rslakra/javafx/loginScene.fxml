@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!-- Import Library -->
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.pain.*?>
+<?import javafx.geometry.*?>
+
+<GridPane hgap="10" vgap="10" xmlns:fx="http://javafx.com/fxml"
+	fx:controller="com.rslakra.javafx.LoginController">
+	<!-- Contents of the grid pane -->
+	<padding>
+		<Insets bottom="10" top="10" left="10" right="10" />
+	</padding>
+
+	<children>
+		<!-- children components here -->
+		<!-- User Name -->
+		<Label text="User Name:" GridPane.rowIndex="0"
+			GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+		<TextField fx:id="userName" GridPane.rowIndex="0"
+			GridPane.columnIndex="1" />
+		<!-- Password -->
+		<Label text="Password:" GridPane.rowIndex="1"
+			GridPane.columnIndex="0" GridPane.halignment="RIGHT" />
+		<PasswordField fx:id="password" GridPane.rowIndex="1"
+			GridPane.columnIndex="1" />
+
+		<!-- Buttons Box -->
+		<HBox GridPane.rowIndex="3" GridPane.columnIndex="0"
+			GridPane.columnSpan="2" alignment="CENTER" spacing="10">
+			<children>
+				<Button text="OK" onAction="#okAction" />
+				<Button text="Cancel" onAction="#cancelAction" />
+			</children>
+		</HBox>
+
+	</children>
+</GridPane>
