@@ -26,50 +26,55 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
 
 /**
- * @author Rohtash Singh Lakra
+ * 
+ * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @created 2017-09-23 10:30:16 AM
+ * @version 1.0.0
+ * @since 1.0.0
  */
-public class Name {
-
-	private String name;
+public class ListExample {
 
 	/**
 	 * 
-	 * @param firstName
-	 * @param middleName
-	 * @param lastName
+	 * @param args
 	 */
-	public Name(final int id) {
-		this.name = "Name-" + id;
-	}
+	public static void main(String args[]) {
+		List list = new ArrayList();
+		list.add("Bernadine");
+		list.add("Elizabeth");
+		list.add("Gene");
+		list.add("Elizabeth");
+		list.add("Clara");
+		System.out.println(list);
+		System.out.println("2: " + list.get(2));
+		System.out.println("0: " + list.get(0));
+		LinkedList queue = new LinkedList();
+		queue.addFirst("Bernadine");
+		queue.addFirst("Elizabeth");
+		queue.addFirst("Gene");
+		queue.addFirst("Elizabeth");
+		queue.addFirst("Clara");
+		System.out.println(queue);
+		queue.removeLast();
+		queue.removeLast();
+		System.out.println(queue);
 
-	/**
-	 * Returns the value of name.
-	 *
-	 * @return the name
-	 */
-	public String getName() {
-		return name;
-	}
-
-	/**
-	 * The name to be set.
-	 *
-	 * @param name
-	 *            the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
-	 * Returns the string representation of this object.
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		return getName();
+		List list1 = new ArrayList();
+		list1.add("One");
+		list1.add("Two");
+		list1.add("Three");
+		System.out.println(list1);
+		ListIterator li = list1.listIterator();
+		li.next();
+		li.remove();
 	}
 }

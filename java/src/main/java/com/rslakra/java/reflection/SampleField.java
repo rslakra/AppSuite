@@ -30,7 +30,7 @@ package com.rslakra.java.reflection;
 
 import java.lang.reflect.Field;
 
-import com.rslakra.java.collections.Name;
+import com.rslakra.java.util.Name;
 
 class SampleField {
 

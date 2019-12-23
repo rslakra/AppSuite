@@ -26,32 +26,50 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
-
-import java.util.*;
+package com.rslakra.java.util;
 
 /**
- * 
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2017-09-23 10:28:13 AM
- * @version 1.0.0
- * @since 1.0.0
+ * @author Rohtash Singh Lakra
  */
-public class CollectionsExample {
+public class Name {
+
+	private String name;
 
 	/**
-	 * @param args
+	 * 
+	 * @param firstName
+	 * @param middleName
+	 * @param lastName
 	 */
-	public static void main(String[] args) {
-		
-//		List list = Collections.singletonList(new ArrayList());
-		List<String> list = new ArrayList<String>();
-		list.add("Hello");
-		System.out.println(list);
-		
-		List<String> nC = Collections.nCopies(5, "hello");
-		System.out.println(nC);
+	public Name(final int id) {
+		this.name = "Name-" + id;
+	}
 
+	/**
+	 * Returns the value of name.
+	 *
+	 * @return the name
+	 */
+	public String getName() {
+		return name;
+	}
+
+	/**
+	 * The name to be set.
+	 *
+	 * @param name
+	 *            the name to set
+	 */
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	/**
+	 * Returns the string representation of this object.
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return getName();
 	}
 }

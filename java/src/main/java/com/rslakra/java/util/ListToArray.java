@@ -26,55 +26,36 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.ListIterator;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2017-09-23 10:30:16 AM
+ * @created 2018-02-10 01:22:30 PM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class ListExample {
+public class ListToArray {
 
 	/**
-	 * 
 	 * @param args
 	 */
-	public static void main(String args[]) {
-		List list = new ArrayList();
-		list.add("Bernadine");
-		list.add("Elizabeth");
-		list.add("Gene");
-		list.add("Elizabeth");
-		list.add("Clara");
-		System.out.println(list);
-		System.out.println("2: " + list.get(2));
-		System.out.println("0: " + list.get(0));
-		LinkedList queue = new LinkedList();
-		queue.addFirst("Bernadine");
-		queue.addFirst("Elizabeth");
-		queue.addFirst("Gene");
-		queue.addFirst("Elizabeth");
-		queue.addFirst("Clara");
-		System.out.println(queue);
-		queue.removeLast();
-		queue.removeLast();
-		System.out.println(queue);
+	public static void main(String[] args) {
+		List<Integer> list = new ArrayList<Integer>();
+		for (int i = 1; i <= 5; i++) {
+			list.add(new Integer(i));
+		}
 
-		List list1 = new ArrayList();
-		list1.add("One");
-		list1.add("Two");
-		list1.add("Three");
-		System.out.println(list1);
-		ListIterator li = list1.listIterator();
-		li.next();
-		li.remove();
+		Integer[] ints = (Integer[]) list.toArray(new Integer[0]);
+
+		System.out.println("Values in an Array: \n");
+		for (int i = 0; i < ints.length; i++) {
+			System.out.println(ints[i]);
+		}
 	}
+
 }

@@ -26,36 +26,39 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Arrays;
+import java.util.Random;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:22:30 PM
+ * @created 2018-02-10 01:24:39 PM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class ListToArray {
+public class FindMissingNumber {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		List<Integer> list = new ArrayList<Integer>();
-		for (int i = 1; i <= 5; i++) {
-			list.add(new Integer(i));
-		}
 
-		Integer[] ints = (Integer[]) list.toArray(new Integer[0]);
-
-		System.out.println("Values in an Array: \n");
-		for (int i = 0; i < ints.length; i++) {
-			System.out.println(ints[i]);
+		int a[] = new int[100];
+		int b[] = new int[100];
+		Random random = new Random();
+		// populate missing number
+		for (int i = 0; i < a.length; i++) {
+			if (i == 50)
+				continue;
+			a[i] = random.nextInt(100);
 		}
+		// print
+		System.out.println(Arrays.toString(a));
+		System.out.println(Arrays.toString(a));
+
 	}
 
 }

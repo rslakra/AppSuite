@@ -26,79 +26,71 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
-import java.util.List;
 
 /**
- * TODO Auto-generated comments.
  * 
- * @author rohtash.singh
- * @version May 9, 2006
- * 
+ * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @created 2018-02-10 01:24:31 PM
+ * @version 1.0.0
+ * @since 1.0.0
  */
-public class CollectionExamples {
+public class IntCollection {
 
-	List<Name> list = new ArrayList<Name>();
+	Collection col1, col2;
 
-	public void init() {
-		Name name = null;
-		for (int i = 0; i < 5; i++) {
-			name = new Name((i + 1));
-			list.add(name);
+	public IntCollection() {
+		col1 = new ArrayList();
+		for (int i = 1; i < 6; i++) {
+			col1.add(new IntVal(i));
+		}
+
+		col2 = new ArrayList();
+		for (int i = 4; i < 10; i++) {
+			col2.add(new IntVal(i));
 		}
 	}
 
-	public void modify() {
-		for (Iterator iter = list.iterator(); iter.hasNext();) {
-			// ((Name) iter.next()).setName("Name " );
-			Name name = (Name) iter.next();
-			name.setName("!11");
-
-		}
-		// for (int i = 0; i < list.size(); i++) {
-		// Name name = (Name)list.get(i);
-		// name.setName("Name " + (i+1));
-		// }
+	public Collection getCol1() {
+		return col1;
 	}
 
-	public void show() {
-		for (int i = 0; i < list.size(); i++) {
-			Name name = (Name) list.get(i);
-			System.out.println(name.getName());
+	public Collection getCol2() {
+		return col2;
+	}
+
+	public void print(Collection col) {
+		for (Iterator iter = col.iterator(); iter.hasNext();) {
+			IntVal element = (IntVal) iter.next();
+			System.out.println(element);
 		}
-		// for (Iterator iter = list.iterator(); iter.hasNext();) {
-		//
-		// System.out.println( ((Name)iter.next()).getName() );
-		//
-		// }
 	}
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		CollectionExamples r = new CollectionExamples();
-		r.init();
-		r.show();
-
-		r.modify();
-		r.show();
+		IntCollection intCol = new IntCollection();
+		System.out.println("============ Initial Col 1 ===================");
+		intCol.print(intCol.getCol1());
+		System.out.println("============ Initial Col 2 ===================");
+		intCol.print(intCol.getCol2());
+		// System.out.println("============ After Addding 2 into 1
+		// ===================");
+		// intCol.getCol1().addAll(intCol.getCol2());
+		// intCol.print(intCol.getCol1());
+		System.out.println("============ After Removing 2 from 1 ===================");
+		intCol.getCol1().removeAll(intCol.getCol2());
+		intCol.print(intCol.getCol1());
+		// System.out.println("============ Retain All in 1
+		// ===================");
+		// intCol.getCol1().retainAll(intCol.getCol2());
+		// intCol.print(intCol.getCol1());
 	}
 
 }
-
-// class Name {
-//
-// private String name;
-//
-// public String getName() {
-// return name;
-// }
-//
-// public void setName(String name) {
-// this.name = name;
-// }
-// }

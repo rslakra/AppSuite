@@ -26,46 +26,42 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:21:33 PM
+ * @created 2018-02-10 01:21:10 PM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class TestHashMap {
-
+public class SetExample {
 	/**
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		HashMap objHashMap = new HashMap();
-		Integer objInt = null;
-		int a = 0;
-		for (int i = 1; i <= 5; i++) {
-			a = i;
-			if (i == 3)
-				a = 4;
-			objInt = (Integer) objHashMap.get("number");
-			if (objInt != null && objInt.intValue() == a) {
-				System.out.println("Already Exists value : " + a);
-				continue;
-			}
-			System.out.println("Adding Key : number, Value : " + a);
-			objHashMap.put("number", new Integer(a));
-		}
-
-		for (Iterator itr = objHashMap.entrySet().iterator(); itr.hasNext();) {
-			Map.Entry entry = (Map.Entry) itr.next();
-			System.out.println("Key : " + entry.getKey() + ", Value : " + entry.getValue());
-		}
+	public static void main(String args[]) {
+		Set set = new HashSet();
+		set.add("Bernadine");
+		set.add("Elizabeth");
+		set.add("Gene");
+		set.add("Elizabeth");
+		set.add("Clara");
+		System.out.println(set);
+		Set sortedSet = new TreeSet(set);
+		System.out.println(sortedSet);
+		Set reversedSet = new TreeSet(Collections.reverseOrder());
+		reversedSet.add("Bernadine");
+		reversedSet.add("Elizabeth");
+		reversedSet.add("Gene");
+		reversedSet.add("Elizabeth");
+		reversedSet.add("Clara");
+		System.out.println(reversedSet);
 	}
-
 }

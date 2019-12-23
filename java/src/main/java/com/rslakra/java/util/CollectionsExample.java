@@ -26,71 +26,32 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
+import java.util.*;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:24:31 PM
+ * @created 2017-09-23 10:28:13 AM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class IntCollection {
-
-	Collection col1, col2;
-
-	public IntCollection() {
-		col1 = new ArrayList();
-		for (int i = 1; i < 6; i++) {
-			col1.add(new IntVal(i));
-		}
-
-		col2 = new ArrayList();
-		for (int i = 4; i < 10; i++) {
-			col2.add(new IntVal(i));
-		}
-	}
-
-	public Collection getCol1() {
-		return col1;
-	}
-
-	public Collection getCol2() {
-		return col2;
-	}
-
-	public void print(Collection col) {
-		for (Iterator iter = col.iterator(); iter.hasNext();) {
-			IntVal element = (IntVal) iter.next();
-			System.out.println(element);
-		}
-	}
+public class CollectionsExample {
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		IntCollection intCol = new IntCollection();
-		System.out.println("============ Initial Col 1 ===================");
-		intCol.print(intCol.getCol1());
-		System.out.println("============ Initial Col 2 ===================");
-		intCol.print(intCol.getCol2());
-		// System.out.println("============ After Addding 2 into 1
-		// ===================");
-		// intCol.getCol1().addAll(intCol.getCol2());
-		// intCol.print(intCol.getCol1());
-		System.out.println("============ After Removing 2 from 1 ===================");
-		intCol.getCol1().removeAll(intCol.getCol2());
-		intCol.print(intCol.getCol1());
-		// System.out.println("============ Retain All in 1
-		// ===================");
-		// intCol.getCol1().retainAll(intCol.getCol2());
-		// intCol.print(intCol.getCol1());
-	}
+		
+//		List list = Collections.singletonList(new ArrayList());
+		List<String> list = new ArrayList<String>();
+		list.add("Hello");
+		System.out.println(list);
+		
+		List<String> nC = Collections.nCopies(5, "hello");
+		System.out.println(nC);
 
+	}
 }

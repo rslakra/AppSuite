@@ -26,39 +26,32 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.Arrays;
-import java.util.Random;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:24:39 PM
+ * @created 2018-02-10 01:20:58 PM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class FindMissingNumber {
-
+public class ReadOnlyExample {
 	/**
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-
-		int a[] = new int[100];
-		int b[] = new int[100];
-		Random random = new Random();
-		// populate missing number
-		for (int i = 0; i < a.length; i++) {
-			if (i == 50)
-				continue;
-			a[i] = random.nextInt(100);
-		}
-		// print
-		System.out.println(Arrays.toString(a));
-		System.out.println(Arrays.toString(a));
-
+	public static void main(String args[]) {
+		Set set = new HashSet();
+		set.add("Bernadine");
+		set.add("Elizabeth");
+		set.add("Gene");
+		set.add("Elizabeth");
+		set = Collections.unmodifiableSet(set);
+		set.add("Clara");
 	}
-
 }

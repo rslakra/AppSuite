@@ -26,49 +26,46 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 /**
- * @author Rohtash Singh Lakra
- * @date 02/16/2018 10:53:24 AM
+ * 
+ * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @created 2018-02-10 01:21:33 PM
+ * @version 1.0.0
+ * @since 1.0.0
  */
-public class Names {
-	
-	// names
-	private List<Name> names;
-	
-	public Names() {
-		names = new ArrayList<>();
-	}
-	
+public class TestHashMap {
+
 	/**
-	 * Returns the names.
-	 *
-	 * @return names
+	 * @param args
 	 */
-	public List<Name> getNames() {
-		return names;
+	public static void main(String[] args) {
+		HashMap objHashMap = new HashMap();
+		Integer objInt = null;
+		int a = 0;
+		for (int i = 1; i <= 5; i++) {
+			a = i;
+			if (i == 3)
+				a = 4;
+			objInt = (Integer) objHashMap.get("number");
+			if (objInt != null && objInt.intValue() == a) {
+				System.out.println("Already Exists value : " + a);
+				continue;
+			}
+			System.out.println("Adding Key : number, Value : " + a);
+			objHashMap.put("number", new Integer(a));
+		}
+
+		for (Iterator itr = objHashMap.entrySet().iterator(); itr.hasNext();) {
+			Map.Entry entry = (Map.Entry) itr.next();
+			System.out.println("Key : " + entry.getKey() + ", Value : " + entry.getValue());
+		}
 	}
-	
-	/**
-	 * The names to be set.
-	 * 
-	 * @param names
-	 */
-	public void setNames(List<Name> names) {
-		this.names = names;
-	}
-	
-	/**
-	 * Returns the string representation of this object.
-	 * 
-	 * @see java.lang.Object#toString()
-	 */
-	public String toString() {
-		return names.toString();
-	}
-	
+
 }

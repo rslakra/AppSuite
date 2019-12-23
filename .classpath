@@ -1,28 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry kind="src" path="CoreHelper/src"/>
-	<classpathentry kind="src" path="CoreHelper/testCases"/>
-	<classpathentry kind="src" path="CoreJava/src"/>
-	<classpathentry kind="src" path="CoreJava/testCases"/>
-	<classpathentry kind="src" path="HTTPSServer/testCases"/>
-	<classpathentry kind="src" path="JavaFx/testCases"/>
-	<classpathentry kind="src" path="MIMECraft/testCases"/>
-	<classpathentry kind="src" path="HTTPClient/testCases"/>
-	<classpathentry kind="src" path="HTTPClient/src"/>
-	<classpathentry kind="src" path="HTTPSServer/src"/>
-	<classpathentry kind="src" path="JavaFx/src"/>
-	<classpathentry kind="src" path="MIMECraft/src"/>
+	<classpathentry kind="src" path="core/src/main/java"/>
+	<classpathentry kind="src" path="core/src/test/java"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpclient-4.5.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpclient-cache-4.5.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpmime-4.5.3.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/httpcore-4.4.6.jar"/>
-	<classpathentry kind="lib" path="HTTPClient/libs/servlet-2-3.jar"/>
-	<classpathentry kind="lib" path="libs/dLogger-v1.0.3.jar"/>
-	<classpathentry kind="lib" path="libs/log4j-1.2.17.jar"/>
-	<classpathentry kind="lib" path="libs/dCore-v1.0.2.jar"/>
-	<classpathentry kind="lib" path="libs/apache-http/commons-lang-2.3.jar"/>
-	<classpathentry kind="lib" path="libs/gson-2.6.2.jar"/>
-	<classpathentry kind="lib" path="libs/bcprov-jdk15on-159.jar"/>
+	<classpathentry kind="var" path="M2_REPO"/>
 	<classpathentry kind="output" path="classes"/>
 </classpath>

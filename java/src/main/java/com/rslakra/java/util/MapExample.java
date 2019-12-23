@@ -26,24 +26,46 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * 
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:21:27 PM 
+ * @created 2018-02-10 01:22:09 PM
  * @version 1.0.0
  * @since 1.0.0
  */
-public class TestArray{
-
+public class MapExample {
 	/**
+	 * 
 	 * @param args
 	 */
-	public static void main(String[] args) {
-		String[] str = new String[0];
-		System.out.println("str : " + str + ", str.length : " + str.length);
+	public static void main(String args[]) {
+		String[] str = { "one", "two", "five", "four", "three" };
+		Map map = new HashMap();
+		for (int i = 0, n = str.length; i < n; i++) {
+			String key = str[i];
+			int value = -1;
+			if (key.equals("one")) {
+				value = 1;
+			} else if (key.equals("two")) {
+				value = 2;
+			} else if (key.equals("three")) {
+				value = 3;
+			} else if (key.equals("four")) {
+				value = 4;
+			} else if (key.equals("five")) {
+				value = 5;
+			}
+			map.put(key, new IntVal(value));
+		}
+		System.out.println(map);
+		Map sortedMap = new TreeMap(map);
+		System.out.println(sortedMap);
 	}
-
 }

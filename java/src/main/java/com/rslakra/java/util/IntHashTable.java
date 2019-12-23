@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
 // IntHashtable - a Hashtable that uses ints as the keys
 // This is 90% based on JavaSoft's java.util.Hashtable.

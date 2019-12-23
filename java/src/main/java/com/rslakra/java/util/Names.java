@@ -26,42 +26,49 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.TreeSet;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * 
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:21:10 PM
- * @version 1.0.0
- * @since 1.0.0
+ * @author Rohtash Singh Lakra
+ * @date 02/16/2018 10:53:24 AM
  */
-public class SetExample {
-	/**
-	 * 
-	 * @param args
-	 */
-	public static void main(String args[]) {
-		Set set = new HashSet();
-		set.add("Bernadine");
-		set.add("Elizabeth");
-		set.add("Gene");
-		set.add("Elizabeth");
-		set.add("Clara");
-		System.out.println(set);
-		Set sortedSet = new TreeSet(set);
-		System.out.println(sortedSet);
-		Set reversedSet = new TreeSet(Collections.reverseOrder());
-		reversedSet.add("Bernadine");
-		reversedSet.add("Elizabeth");
-		reversedSet.add("Gene");
-		reversedSet.add("Elizabeth");
-		reversedSet.add("Clara");
-		System.out.println(reversedSet);
+public class Names {
+	
+	// names
+	private List<Name> names;
+	
+	public Names() {
+		names = new ArrayList<>();
 	}
+	
+	/**
+	 * Returns the names.
+	 *
+	 * @return names
+	 */
+	public List<Name> getNames() {
+		return names;
+	}
+	
+	/**
+	 * The names to be set.
+	 * 
+	 * @param names
+	 */
+	public void setNames(List<Name> names) {
+		this.names = names;
+	}
+	
+	/**
+	 * Returns the string representation of this object.
+	 * 
+	 * @see java.lang.Object#toString()
+	 */
+	public String toString() {
+		return names.toString();
+	}
+	
 }

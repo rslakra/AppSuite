@@ -26,96 +26,27 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.java.collections;
+package com.rslakra.java.util;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.LinkedList;
 
 /**
- * 
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-10 01:22:51 PM
+ * @author Family
  * @version 1.0.0
- * @since 1.0.0
+ * 
  */
-public class IntVal implements Comparable {
-
-	private int value;
-
+public class SortedLinkedList<E> extends LinkedList<E> {
 	/**
 	 * 
-	 * @param value
 	 */
-	public IntVal(int value) {
-		this.value = value;
-	}
-
-	/**
-	 * 
-	 * @return
-	 */
-	public int getValue() {
-		return value;
-	}
-
-	/**
-	 * 
-	 * @return
-	 * @see java.lang.Object#hashCode()
-	 */
-	public int hashCode() {
-		return getValue() ^ 31;
-	}
-
-	/**
-	 * 
-	 * @param o
-	 * @return
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	public boolean equals(Object o) {
-		return ((IntVal) o).getValue() == this.getValue();
-	}
-
-	public String toString() {
-		return String.valueOf(value);
-		// return "IntVal, value : " + getValue();
-	}
+	private static final long serialVersionUID = 583016271887604576L;
 
 	/**
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		IntVal intVal = new IntVal(10);
-		System.out.println(intVal);
+		// TODO Auto-generated method stub
 
-		List<IntVal> list = new ArrayList<IntVal>();
-		list.add(new IntVal(10));
-		list.add(new IntVal(4));
-		list.add(new IntVal(23));
-		list.add(new IntVal(2));
-		list.add(new IntVal(11));
-		System.out.println("unsorted\n" + list);
-
-		Collections.sort(list);
-		System.out.println("sorted\n" + list);
 	}
 
-	/**
-	 * 
-	 * @param o
-	 * @return
-	 * @see java.lang.Comparable#compareTo(java.lang.Object)
-	 */
-	public int compareTo(Object o) {
-		IntVal intVal = (IntVal) o;
-		// System.out.println(value + " == " + intVal.getValue());
-		if (value == intVal.getValue()) {
-			return 0;
-		} else {
-			return (value > intVal.getValue() ? 1 : -1);
-		}
-	}
 }
