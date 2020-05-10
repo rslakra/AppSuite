@@ -1,4 +1,4 @@
-package com.rslakra.solid.interfacesegregation;
+package com.rslakra.solid.dependencyinversion;
 
 /**
  * Author: Rohtash Singh Lakra

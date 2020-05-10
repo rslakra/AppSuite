@@ -1,4 +1,4 @@
-package com.rslakra.solid.singleresponsibility.problem;
+package com.rslakra.solid.singleresponsibility;
 
 /**
  * Author: Rohtash Singh Lakra

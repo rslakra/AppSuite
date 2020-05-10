@@ -20,10 +20,4 @@ public class AreaCalculator {
 
         return sum;
     }
-
-    public static void main(String[] args) {
-        Shape[] shapes = {new Circle(3), new Square(4), new Rectangle(3, 4)};
-        AreaCalculator areaCalculator = new AreaCalculator(shapes);
-        System.out.println(areaCalculator.sum());
-    }
 }

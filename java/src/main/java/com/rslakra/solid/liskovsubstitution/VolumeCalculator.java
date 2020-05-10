@@ -24,9 +24,4 @@ public class VolumeCalculator extends AreaCalculator {
 
         return sum;
     }
-
-    public static void main(String[] args) {
-        VolumeCalculator volumeCalculator = new VolumeCalculator(new Circle(3), new Square(4));
-        System.out.println(volumeCalculator.sum());
-    }
 }

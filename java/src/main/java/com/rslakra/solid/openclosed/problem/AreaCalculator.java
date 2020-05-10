@@ -21,8 +21,4 @@ public class AreaCalculator {
 
         return sum;
     }
-
-    public static void main(String[] args) {
-        AreaCalculator areaCalculator = new AreaCalculator(new Circle(2), new Square(3));
-    }
 }

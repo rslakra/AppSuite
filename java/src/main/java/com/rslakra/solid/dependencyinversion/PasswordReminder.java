@@ -7,7 +7,6 @@ package com.rslakra.solid.dependencyinversion;
  */
 public class PasswordReminder {
 
-
     private Connection connection;
 //    private MySqlConnection connection;
 

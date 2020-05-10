@@ -1,21 +1,18 @@
-Java
-=========
+# Java
 
-This repository contains all the projects categorized based on the programming languages and usability.
+The ```Java``` project contains the java learning resources.
 
-These projects should have the basic and core implementations which can be used by other projects.
-It might be some of them use any third party library, so the source code available in this repository will be available 
-for AS IT IS usage.
+## Getting Started
+
+These instructions will get you a copy of the project up and running on your 
+local machine for development and testing purposes. See deployment for notes on 
+how to deploy the project on a live system.
+
 
 ## Folder Structure Conventions
     .
-    ├── core                     # Core project files
-    ├── http-client              # Http-Client project files
-    ├── http-server              # Http-Server project files
-    ├── java                     # Java project files
-    ├── java-fx                  # JavaFx project files
-    ├── mime-craft               # MimeCraft project files
-    ├── testcases                # TestCases project files
+    ├── src                     # Source files (alternatively `lib` or `app`)
+    ├── target                  # Compiled files (alternatively `build`)
     └── README.md
 
 
@@ -38,7 +35,7 @@ mvn --version
 
 Next, make sure you have Eclipse Version ``2019-09 R (4.13.0)`` or later version.
 
-And now check you have the ``apache-tomcat-9.x`` or later version on your 
+And now check you have the ``apache-tomcat-8.5.47`` or later version on your 
 machine.
 
 
@@ -51,7 +48,7 @@ git clone https://github.com/rslakra/Java.git
 ```
 
 
-If you are missing any of the above mentioned software, please following the 
+If you are missing any of the above mentioned softwares, please following the 
 ``Installing`` section below.
 
 

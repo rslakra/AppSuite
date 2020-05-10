@@ -23,12 +23,4 @@ public class Renderer {
     public void renderHtml() {
         System.out.println(String.format("<html><h1>sum=%.2f</h1></html>", calculator.sum()));
     }
-
-    public static void main(String[] args) {
-        AreaCalculator areaCalculator = new AreaCalculator(new Circle(2), new Square(3));
-        Renderer renderer = new Renderer(areaCalculator);
-        renderer.renderConsole();
-        renderer.renderHtml();
-        renderer.renderJson();
-    }
 }

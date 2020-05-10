@@ -1,7 +1,4 @@
-package com.rslakra.solid.singleresponsibility.solution;
-
-import com.rslakra.solid.singleresponsibility.problem.Circle;
-import com.rslakra.solid.singleresponsibility.problem.Square;
+package com.rslakra.solid.singleresponsibility;
 
 /**
  * Author: Rohtash Singh Lakra
@@ -30,12 +27,7 @@ public class AreaCalculator {
         return sum;
     }
 
-
-    public static void main(String[] args) {
-        AreaCalculator areaCalculator = new AreaCalculator(new Circle(3), new Square(4));
-        Renderer renderer = new Renderer(areaCalculator.sum());
-        renderer.renderConsole();
-        renderer.renderJson();
-        renderer.renderHtml();
+    public void output() {
+        System.out.println("Sum of the area of the shapes:" + sum());
     }
 }
