@@ -434,9 +434,9 @@ public class TestCalculator {
         renderer.renderHtml();
         renderer.renderJson();
 
-        //area calculator
+        //volume calculator
         VolumeCalculator volumeCalculator = new VolumeCalculator(new Circle(2), new Square(3));
-        renderer = new Renderer(areaCalculator);
+        renderer = new Renderer(volumeCalculator);
         renderer.renderConsole();
         renderer.renderHtml();
         renderer.renderJson();
@@ -485,6 +485,14 @@ public interface SolidShape {
     public double volume();
 }
 ```
+OR
+```java
+public interface SolidShape extends Shape {
+    public double volume();
+}
+```
+
+I want that the circle should have volume too.
 
 ```java
 public class Circle implements SolidShape {
@@ -703,9 +711,8 @@ public class MySqlConnection {
     interface:
 
 ```java
-public interface Calculator {
-
-    public double calculate();
+public interface Connection {
+    void connect();
 }
 ```
 
