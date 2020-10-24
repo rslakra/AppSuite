@@ -28,7 +28,7 @@
 		<!-- dLogger -->
 		<dependency>
 			<groupId>com.devamatre</groupId>
-			<artifactId>dLogger</artifactId>
+			<artifactId>Logger</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 

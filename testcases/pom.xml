@@ -30,7 +30,7 @@
         <!-- dLogger -->
         <dependency>
             <groupId>com.devamatre</groupId>
-            <artifactId>dLogger</artifactId>
+            <artifactId>Logger</artifactId>
             <version>${dlogger.version}</version>
         </dependency>
 
