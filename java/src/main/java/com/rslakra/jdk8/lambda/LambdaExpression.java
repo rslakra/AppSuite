@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.lambdaexpr;
+package com.rslakra.jdk8.lambda;
 
 import java.util.ArrayList;
 import java.util.Comparator;

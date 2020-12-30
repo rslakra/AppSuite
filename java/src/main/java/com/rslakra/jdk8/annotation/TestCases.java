@@ -26,19 +26,25 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.annotations;
+package com.rslakra.jdk8.annotation;
 
+import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 /**
- * An annotation that has no method, is called marker annotation.
+ * An annotation that has more than one method, is called Multi-Value
+ * annotation.
  * 
- * The @Override and @Deprecated are marker annotations.
+ * We can provide the default value also.
  * 
  * @author Rohtash Singh Lakra
  */
 @Retention(RetentionPolicy.RUNTIME)
-public @interface MarketAnnotation {
+@Target(ElementType.METHOD)
+public @interface TestCases {
+	
+	TestCase[] value();
 	
 }

@@ -26,37 +26,28 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.lambdaexpr;
+package com.rslakra.jdk8.annotation;
 
-import java.io.File;
-import java.io.FileFilter;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
-public class JavaFileFilter implements FileFilter {
+/**
+ * An annotation that has one method, is called single-value annotation.
+ * We can provide the default value also.
+ * 
+ * Let's see the code to apply the single value annotation.
+ * 
+ * @SingleValueAnnotation(value=10)
+ * 									The value can be anything.
+ * 
+ * @author Rohtash Singh Lakra
+ */
+@Retention(RetentionPolicy.RUNTIME)
+@Target(ElementType.METHOD)
+public @interface SingleValueAnnotation {
 	
-	public static void printFiles(File[] files) {
-		for(File file : files) {
-			System.out.println(file);
-		}
-	}
-	
-	public static void main(String[] args) {
-		final String dirPath = System.getProperty("user.dir") + "/src/com/rslakra/jdk18";
-		JavaFileFilter fileFilter = new JavaFileFilter();
-		File file = new File(dirPath);
-		File[] files = file.listFiles(fileFilter);
-		printFiles(files);
-		System.out.println("\n");
-		
-		// with lambda expression
-		File tempFile = new File(dirPath);
-		FileFilter lambdaFilter = (File temp) -> temp.getName().endsWith(".java");
-		File[] tempFiles = tempFile.listFiles(lambdaFilter);
-		printFiles(tempFiles);
-	}
-	
-	@Override
-	public boolean accept(File file) {
-		return file.getName().endsWith(".java");
-	}
+	int value() default 0;
 	
 }

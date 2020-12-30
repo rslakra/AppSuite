@@ -26,35 +26,48 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.annotations;
+package com.rslakra.jdk8.lambda;
 
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Repeatable;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
-
-/**
- * An annotation that has more than one method, is called Multi-Value
- * annotation.
- * 
- * We can provide the default value also.
- * 
- * @author Rohtash Singh Lakra
- */
-@Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
-@Repeatable(TestCases.class)
-public @interface TestCase {
-	/**
-	 * 
-	 * @return
+public class MyRunnable implements Runnable {
+	
+	/*
+	 * @see java.lang.Runnable#run()
 	 */
-	int value() default 0;
+	@Override
+	public void run() {
+		for(int i = 1; i <= 5; i++) {
+			System.out.println("Thread[" + i + "]" + Thread.currentThread().getName());
+		}
+	}
 	
 	/**
 	 * 
-	 * @return
+	 * @param args
 	 */
-	boolean expected() default false;
+	public static void main(String[] args) {
+		Thread mThread = new Thread(new MyRunnable());
+		mThread.start();
+		try {
+			mThread.join();
+		} catch(InterruptedException ex) {
+			// ex.printStackTrace();
+		}
+		
+		System.out.println("\n");
+		
+		// with lambda expression.
+		Runnable lambdaRunnable = () -> {
+			for(int i = 1; i <= 5; i++) {
+				System.out.println("Thread[" + i + "]" + Thread.currentThread().getName());
+			}
+		};
+		
+		Thread lambdaThread = new Thread(lambdaRunnable);
+		lambdaThread.start();
+		try {
+			lambdaThread.join();
+		} catch(InterruptedException ex) {
+			// ex.printStackTrace();
+		}
+	}
 }

@@ -26,9 +26,10 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.jdk8.annotations;
+package com.rslakra.jdk8.annotation;
 
 import java.lang.annotation.ElementType;
+import java.lang.annotation.Repeatable;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
@@ -43,8 +44,17 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface TestCases {
+@Repeatable(TestCases.class)
+public @interface TestCase {
+	/**
+	 * 
+	 * @return
+	 */
+	int value() default 0;
 	
-	TestCase[] value();
-	
+	/**
+	 * 
+	 * @return
+	 */
+	boolean expected() default false;
 }
