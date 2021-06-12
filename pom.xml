@@ -17,7 +17,6 @@
         <module>https-server</module>
         <module>http-client</module>
         <module>java</module>
-        <module>javafx</module>
         <module>testcases</module>
     </modules>
 
