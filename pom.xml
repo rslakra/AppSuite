@@ -16,7 +16,8 @@
         <module>mime-craft</module>
         <module>https-server</module>
         <module>http-client</module>
-        <module>java</module>
+        <module>jdk</module>
+        <module>MyJava</module>
     </modules>
 
     <!-- Properties -->
