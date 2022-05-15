@@ -117,7 +117,7 @@ public class HttpsClient {
             BufferedReader in = new BufferedReader(new InputStreamReader(sslSocket.getInputStream()));
             String line;
             while ((line = in.readLine()) != null) {
-                System.out.println("Clinet:" + line);
+                System.out.println("Client:" + line);
             }
 
             in.close();
