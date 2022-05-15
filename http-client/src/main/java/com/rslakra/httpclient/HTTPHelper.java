@@ -107,15 +107,15 @@ import com.rslakra.core.SecurityHelper;
 public final class HTTPHelper {
 	
 	/** SEPERATOR_HASH */
-	public static final String SEPERATOR_HASH = "#".intern();
+	public static final String SEPERATOR_HASH = "#";
 	/** COLON_DOUBLE_SLASH */
-	public static final String COLON_DOUBLE_SLASH = "://".intern();
+	public static final String COLON_DOUBLE_SLASH = "://";
 	/** EMPTY_STRING */
-	public static final String EMPTY_STRING = "".intern();
+	public static final String EMPTY_STRING = "";
 	
 	/* CUSTOM Constants. */
-	public static final String METHOD_NAME = "methodName".intern();
-	public static final String DEVICE_ID = "deviceId".intern();
+	public static final String METHOD_NAME = "methodName";
+	public static final String DEVICE_ID = "deviceId";
 	
 	/**
 	 * 
@@ -124,68 +124,68 @@ public final class HTTPHelper {
 	 * @date 03/15/2017 01:58:44 PM
 	 */
 	interface Headers {
-		String ACCEPT = "Accept".intern();
-		String ACCEPT_ENCODING = "Accept-Encoding".intern();
-		String ACCEPT_LANGUAGE = "Accept-Language".intern();
-		String CONTENT_TYPE = "Content-Type".intern();
-		String CONTENT_LENGTH = "Content-Length".intern();
+		String ACCEPT = "Accept";
+		String ACCEPT_ENCODING = "Accept-Encoding";
+		String ACCEPT_LANGUAGE = "Accept-Language";
+		String CONTENT_TYPE = "Content-Type";
+		String CONTENT_LENGTH = "Content-Length";
 		
-		String EXPIRES = "Expires".intern();
-		String PRAGMA = "Pragma".intern();
-		String PRAGMA_PUBLIC = "public".intern();
-		String CACHE_CONTROL = "Cache-Control".intern();
-		String USER_AGENT = "User-Agent".intern();
-		String CONTENT_DISPOSITION = "Content-Disposition".intern();
+		String EXPIRES = "Expires";
+		String PRAGMA = "Pragma";
+		String PRAGMA_PUBLIC = "public";
+		String CACHE_CONTROL = "Cache-Control";
+		String USER_AGENT = "User-Agent";
+		String CONTENT_DISPOSITION = "Content-Disposition";
 		
-		String SET_COOKIE = "Set-Cookie".intern();
-		String COOKIE = "Cookie".intern();
-		String LOCATION = "Location".intern();
-		String SERVER = "Server".intern();
-		String TRANSFER_ENCODING = "Transfer-Encoding".intern();
+		String SET_COOKIE = "Set-Cookie";
+		String COOKIE = "Cookie";
+		String LOCATION = "Location";
+		String SERVER = "Server";
+		String TRANSFER_ENCODING = "Transfer-Encoding";
 	}
 	
 	interface Values {
 		
-		String SCHEMA_HTTP = "http".intern();
-		String SCHEMA_HTTPS = "https".intern();
-		String HTTP_VERSION = "HTTP/1.1".intern();
+		String SCHEMA_HTTP = "http";
+		String SCHEMA_HTTPS = "https";
+		String HTTP_VERSION = "HTTP/1.1";
 		int STATUS_CODE_OK = 200;
 		
 		int HTTP_CONNECTION_TIMEOUT_SECONDS = 45;
 		int HTTP_READ_TIMEOUT_SECONDS = 45;
 		
 		// Accept
-		String ACCEPT_ALL = "*/*".intern();
+		String ACCEPT_ALL = "*/*";
 		
 		// AcceptEncoding
-		String ENCODING_GZIP_DEFLATE = "gzip, deflate".intern();
+		String ENCODING_GZIP_DEFLATE = "gzip, deflate";
 		
 		// AcceptLanguage
-		String EN_US = "en-us".intern();
-		String EN_US_Q = "en-US,en;q=0.5".intern();
+		String EN_US = "en-us";
+		String EN_US_Q = "en-US,en;q=0.5";
 		
 		// ContentDisposition
-		String FILE_NAME_EQUAL = "fileName=".intern();
+		String FILE_NAME_EQUAL = "fileName=";
 		
 		// ContentType
-		String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded".intern();
-		String CONTENT_TYPE_FORM_URLENCODED_UTF8 = "application/x-www-form-urlencoded;charset=UTF-8".intern();
-		String CONTENT_TYPE_APPLICATION_JAVA_X_SERIALIZED_OBJECT = "application/x-java-serialized-object".intern();
-		String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data".intern();
-		String CONTENY_TYPE_JSON = "application/json".intern();
+		String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
+		String CONTENT_TYPE_FORM_URLENCODED_UTF8 = "application/x-www-form-urlencoded;charset=UTF-8";
+		String CONTENT_TYPE_APPLICATION_JAVA_X_SERIALIZED_OBJECT = "application/x-java-serialized-object";
+		String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
+		String CONTENY_TYPE_JSON = "application/json";
 		
 		// Pragma
-		String NO_CACHE = "no-cache".intern();
+		String NO_CACHE = "no-cache";
 	}
 	
 	interface Methods {
-		String HEAD = "HEAD".intern();
-		String GET = "GET".intern();
-		String POST = "POST".intern();
-		String OPTIONS = "OPTIONS".intern();
-		String PUT = "PUT".intern();
-		String DELETE = "DELETE".intern();
-		String TRACE = "TRACE".intern();
+		String HEAD = "HEAD";
+		String GET = "GET";
+		String POST = "POST";
+		String OPTIONS = "OPTIONS";
+		String PUT = "PUT";
+		String DELETE = "DELETE";
+		String TRACE = "TRACE";
 	}
 	
 	/* Enables cookies at application level. */

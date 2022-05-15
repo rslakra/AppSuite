@@ -37,9 +37,9 @@ package com.rslakra.httpclient;
  */
 public interface HTTPClient {
 
-	String SCHEMA_HTTP = "http".intern();
-	String SCHEMA_HTTPS = "https".intern();
-	String HTTP_VERSION = "HTTP/1.1".intern();
+	String SCHEMA_HTTP = "http";
+	String SCHEMA_HTTPS = "https";
+	String HTTP_VERSION = "HTTP/1.1";
 	int STATUS_CODE_OK = 200;
 
 	int HTTP_CONNECTION_TIMEOUT_SECONDS = 45;

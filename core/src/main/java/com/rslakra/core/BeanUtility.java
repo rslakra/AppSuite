@@ -33,7 +33,7 @@ public enum BeanUtility {
         ClassProperties classProperties = CACHE.get(classType);
         if (classProperties == null) {
             CACHE.putIfAbsent(classType, new ClassProperties(classType));
-            classProperties = (ClassProperties) CACHE.get(classType);
+            classProperties = CACHE.get(classType);
         }
 
         return classProperties;

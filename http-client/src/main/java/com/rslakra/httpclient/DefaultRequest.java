@@ -73,10 +73,10 @@ import com.rslakra.core.SecurityHelper;
 public abstract class DefaultRequest implements HttpRequest {
 
 	/** UTF-8 */
-	public static final String UTF_8 = "UTF-8".intern();
+	public static final String UTF_8 = "UTF-8";
 
 	/** ISO-8859-1 */
-	public static final String ISO_8859_1 = "ISO-8859-1".intern();
+	public static final String ISO_8859_1 = "ISO-8859-1";
 
 	/* USE_FULLY_QUALIFIED_HOSTNAME */
 	private static final boolean USE_FULLY_QUALIFIED_HOSTNAME = false;
