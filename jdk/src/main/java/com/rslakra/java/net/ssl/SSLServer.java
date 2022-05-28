@@ -41,7 +41,7 @@ import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocket;
 
-import com.rslakra.core.IOHelper;
+import com.rslakra.core.IOUtils;
 import com.rslakra.java.net.NetConstants;
 
 /**
@@ -62,8 +62,8 @@ public class SSLServer {
 
 		try {
 			KeyStore ks = KeyStore.getInstance("JKS");
-			String filePath = IOHelper.filePath(SSLServer.class);
-			filePath = IOHelper.pathString(filePath, "serverCert");
+			String filePath = IOUtils.filePath(SSLServer.class);
+			filePath = IOUtils.pathString(filePath, "serverCert");
 			System.out.println("filePath:" + filePath);
 			ks.load(new FileInputStream(filePath), ksPass);
 			System.out.println(ks.getProvider());
@@ -73,9 +73,9 @@ public class SSLServer {
 			sc.init(kmf.getKeyManagers(), null, null);
 			SSLServerSocketFactory ssf = sc.getServerSocketFactory();
 			SSLServerSocket serverSocket = (SSLServerSocket) ssf.createServerSocket(1601);
-			IOHelper.logServerSocket(serverSocket);
+			IOUtils.logServerSocket(serverSocket);
 			SSLSocket socket = (SSLSocket) serverSocket.accept();
-			IOHelper.logSocket(socket);
+			IOUtils.logSocket(socket);
 			out = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			String msg = "Welcome to SSL Server:\n";

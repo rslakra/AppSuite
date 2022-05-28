@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -45,7 +45,8 @@ import java.util.zip.GZIPOutputStream;
  * @version 1.0.0
  * @since Apr 22, 2015 4:52:15 PM
  */
-public final class IOHelper {
+public enum IOUtils {
+    INSTANCE;
 
     /**
      * BUFFER_1K
@@ -81,10 +82,6 @@ public final class IOHelper {
      */
     public static final String ISO_8859_1 = "ISO-8859-1";
     /**
-     * ASCII7
-     */
-    public static final String ASCII7 = "ASCII7";
-    /**
      * HEX_DIGIT_CHARS
      */
     public static final String HEX_DIGITS = "0123456789abcdef";
@@ -97,11 +94,6 @@ public final class IOHelper {
      * imageTypes
      */
     private static List<String> imageTypes;
-
-    // Singleton object
-    private IOHelper() {
-        throw new UnsupportedOperationException("Object creation is not allowed!");
-    }
 
     /**
      * @param logString
@@ -118,7 +110,7 @@ public final class IOHelper {
     }
 
     /**
-     * @param ex
+     * @param logString
      */
     public static void error(Exception ex) {
         System.err.println(ex);
@@ -127,15 +119,15 @@ public final class IOHelper {
     /**
      * Returns the package path of the given class.
      *
-     * @param classType
+     * @param _class
      * @param withClassName
      * @return
      */
-    public static String getPkgPath(Class<?> classType, boolean withClassName) {
-        if (classType != null) {
-            String pkgPath = classType.getPackage().getName().replace(".", File.separator);
+    public static String getPkgPath(Class<?> _class, boolean withClassName) {
+        if (_class != null) {
+            String pkgPath = _class.getPackage().getName().replace(".", File.separator);
             if (withClassName) {
-                pkgPath += File.separator + classType.getSimpleName();
+                pkgPath += File.separator + _class.getSimpleName();
             }
 
             return pkgPath;
@@ -153,7 +145,7 @@ public final class IOHelper {
     public static String filePath(Class<?> _class) {
         if (_class != null) {
             String path = getPkgPath(_class, false);
-            if (CoreHelper.isNotNullOrEmpty(path)) {
+            if (CoreUtils.isNotNullOrEmpty(path)) {
                 URL url = _class.getClassLoader().getResource(path);
                 if (url != null) {
                     path = url.toExternalForm();
@@ -198,12 +190,12 @@ public final class IOHelper {
     public static String pathString(String parentFolder, String childName) {
         String pathString = null;
 
-        if (CoreHelper.isNullOrEmpty(parentFolder)) {
+        if (CoreUtils.isNullOrEmpty(parentFolder)) {
             throw new IllegalArgumentException("Parent directory should not be null/empty!");
         } else {
             /* Removes unnecessary spaces from parentFolder and fileName. */
             pathString = parentFolder.trim();
-            if (!CoreHelper.isNullOrEmpty(childName)) {
+            if (!CoreUtils.isNullOrEmpty(childName)) {
                 pathString += (childName.startsWith(SLASH) ? "" : File.separator) + childName.trim();
             }
         }
@@ -231,11 +223,11 @@ public final class IOHelper {
      */
     public static boolean writeFile(String path, byte[] data) {
         boolean result = false;
-        if (CoreHelper.isNullOrEmpty(path)) {
+        if (CoreUtils.isNullOrEmpty(path)) {
             throw new NullPointerException("Path must be provided!");
         }
 
-        if (CoreHelper.isNullOrEmpty(data)) {
+        if (CoreUtils.isNullOrEmpty(data)) {
             throw new NullPointerException("data must be provided!");
         }
 
@@ -275,12 +267,12 @@ public final class IOHelper {
     /**
      * Returns the bytes of the specified file, if exists, otherwise null.
      *
-     * @param file
+     * @param path
      * @return
      */
     public static byte[] readFile(File file) {
         byte[] bytes = null;
-        if (CoreHelper.isNotNull(file)) {
+        if (CoreUtils.isNotNull(file)) {
             // Read file into buffer
             RandomAccessFile randomAccessFile = null;
             try {
@@ -305,7 +297,7 @@ public final class IOHelper {
      * @return
      */
     public static byte[] readFile(String path) {
-        return (CoreHelper.isNullOrEmpty(path) ? null : readFile(new File(path)));
+        return (CoreUtils.isNullOrEmpty(path) ? null : readFile(new File(path)));
     }
 
     /**
@@ -316,7 +308,7 @@ public final class IOHelper {
      */
     public static boolean isImageType(String extension) {
         // populate with supported images types.
-        if (CoreHelper.isNull(imageTypes)) {
+        if (CoreUtils.isNull(imageTypes)) {
             imageTypes = new ArrayList<String>();
             imageTypes.add("tif");
             imageTypes.add("tiff");
@@ -395,7 +387,7 @@ public final class IOHelper {
      * @param properties
      */
     public static void saveProperties(String filePath, Properties properties) {
-        if (!CoreHelper.isNullOrEmpty(filePath)) {
+        if (!CoreUtils.isNullOrEmpty(filePath)) {
             FileOutputStream outputStream = null;
             try {
                 File file = new File(filePath);
@@ -444,12 +436,12 @@ public final class IOHelper {
      */
     public static Properties mergeProperties(Properties sourceProperties, Properties targetProperties) {
         System.out.println("Merging properties ...");
-        if (CoreHelper.isNull(targetProperties)) {
+        if (CoreUtils.isNull(targetProperties)) {
             targetProperties = new Properties();
         }
 
         // if not null, merge it into target.
-        if (CoreHelper.isNotNull(sourceProperties)) {
+        if (CoreUtils.isNotNull(sourceProperties)) {
             targetProperties.putAll(sourceProperties);
         }
 
@@ -459,16 +451,16 @@ public final class IOHelper {
     /**
      * Returns true if the specified file exists, otherwise false.
      *
-     * @param filePath
+     * @param properties
      */
     public static boolean isExist(String filePath) {
-        return (!CoreHelper.isNullOrEmpty(filePath) && new File(filePath).exists());
+        return (!CoreUtils.isNullOrEmpty(filePath) && new File(filePath).exists());
     }
 
     /**
      * Returns true if the specified file exists, otherwise false.
      *
-     * @param file
+     * @param properties
      */
     public static boolean isExist(File file) {
         return (file != null && file.exists());
@@ -477,7 +469,7 @@ public final class IOHelper {
     /**
      * Returns true if the specified file is a directory, otherwise false.
      *
-     * @param file
+     * @param properties
      */
     public static boolean isDirectory(File file) {
         return (file != null && file.isDirectory());
@@ -487,7 +479,7 @@ public final class IOHelper {
      * Returns true if the specified file exists and is a directory, otherwise
      * false.
      *
-     * @param file
+     * @param properties
      */
     public static boolean isExistAndFolder(File file) {
         return (isExist(file) && file.isDirectory());
@@ -498,7 +490,7 @@ public final class IOHelper {
      * defaultSize.
      *
      * @param available
-     * @param defaultSize
+     * @param bufferSize
      * @return
      */
     public static byte[] getBuffer(int available, int defaultSize) {
@@ -514,10 +506,11 @@ public final class IOHelper {
     }
 
     /**
-     * Copies the contents of an <code>sourceStream</code> into an <code>targetStream</code>.
+     * Copies the contents of an <code>sourceStream</code> into an
+     * <code>targetStream</code>.
      *
-     * @param sourceStream
-     * @param targetStream
+     * @param inputStream
+     * @param outputStream
      * @param closeStreams
      * @return
      * @throws IOException
@@ -564,7 +557,7 @@ public final class IOHelper {
         // System.out.println("+writeBytes(" + dataBytes + ", " + outputStream +
         // ", " + closeStream + ")");
         boolean result = false;
-        if (!CoreHelper.isNullOrEmpty(dataBytes) && CoreHelper.isNotNull(outputStream)) {
+        if (!CoreUtils.isNullOrEmpty(dataBytes) && CoreUtils.isNotNull(outputStream)) {
             try {
                 outputStream.write(dataBytes);
                 /* flush output streams. */
@@ -667,7 +660,7 @@ public final class IOHelper {
     public static void saveFile(InputStream inputStream, String filePath) {
         // System.out.println("saveFile(" + inputStream + ", " + filePath +
         // ")");
-        if (CoreHelper.isNotNull(inputStream) && !CoreHelper.isNullOrEmpty(filePath)) {
+        if (CoreUtils.isNotNull(inputStream) && !CoreUtils.isNullOrEmpty(filePath)) {
             OutputStream outputStream = null;
             int fileSize = 0;
             try {
@@ -709,7 +702,7 @@ public final class IOHelper {
     public static boolean saveFile(byte[] input, File file) throws IOException {
         // System.out.println("+saveFile(" + input + ", " + file + ")");
         boolean result = false;
-        if (CoreHelper.isNotNull(file) && !CoreHelper.isNullOrEmpty(input)) {
+        if (CoreUtils.isNotNull(file) && !CoreUtils.isNullOrEmpty(input)) {
             FileOutputStream outputStream = null;
             try {
                 System.out.println("Writing file:" + file.getAbsolutePath());
@@ -781,7 +774,7 @@ public final class IOHelper {
      * @param directory
      */
     public static File makeDirectory(File directory) {
-        if (CoreHelper.isNotNull(directory)) {
+        if (CoreUtils.isNotNull(directory)) {
             if (!directory.exists()) {
                 if (!directory.mkdirs()) {
                     System.out.println("Unable to create '" + directory.getAbsolutePath() + "' directory.");
@@ -796,13 +789,11 @@ public final class IOHelper {
      * Creates the directory if its not exists. If <code>override</code> is set
      * to true, delete the existing directory and creates the new one.
      *
-     * @param directory
-     * @param override
-     * @return
+     * @param dirPath
      */
     public static File makeDirectory(File directory, boolean override) {
         System.out.println("+makeDirectory(" + directory + ", " + override + ")");
-        if (CoreHelper.isNotNull(directory)) {
+        if (CoreUtils.isNotNull(directory)) {
             if (directory.exists()) {
                 System.out.println("Directory '" + directory.getAbsolutePath() + "' already exists.");
                 if (directory.isDirectory() && override) {
@@ -892,7 +883,7 @@ public final class IOHelper {
      */
     public static boolean delete(String path, boolean force) {
         /* check the file path is not null or not empty. */
-        if (!CoreHelper.isNullOrEmpty(path)) {
+        if (!CoreUtils.isNullOrEmpty(path)) {
             return delete(new File(path), force);
         }
 
@@ -917,7 +908,7 @@ public final class IOHelper {
      * @throws IOException
      */
     public static InputStream newFileInputStream(String pathString) throws IOException {
-        return (CoreHelper.isNullOrEmpty(pathString) ? null : new FileInputStream(pathString));
+        return (CoreUtils.isNullOrEmpty(pathString) ? null : new FileInputStream(pathString));
     }
 
     /**
@@ -928,7 +919,7 @@ public final class IOHelper {
      * @throws IOException
      */
     public static InputStream newByteArrayInputStream(byte[] dataBytes) throws IOException {
-        return (CoreHelper.isNull(dataBytes) ? null : new ByteArrayInputStream(dataBytes));
+        return (CoreUtils.isNull(dataBytes) ? null : new ByteArrayInputStream(dataBytes));
     }
 
     /**
@@ -1026,7 +1017,7 @@ public final class IOHelper {
      */
     public static String toUTF8String(byte[] bytes, boolean replaceNonDigitCharacters) {
         String utf8String = toString(bytes, UTF_8);
-        if (replaceNonDigitCharacters && CoreHelper.isNotNullOrEmpty(utf8String)) {
+        if (replaceNonDigitCharacters && CoreUtils.isNotNullOrEmpty(utf8String)) {
             utf8String = utf8String.replaceAll("\\D+", "");
         }
 
@@ -1068,21 +1059,21 @@ public final class IOHelper {
      * Converts the specified <code>string</code> into bytes using the specified
      * <code>charsetName</code>.
      *
-     * @param input
+     * @param string
      * @param charsetName
      * @return
      */
-    public static byte[] toBytes(final String input, String charsetName) {
-        byte[] dataBytes = null;
-        if (CoreHelper.isNotNull(input)) {
+    public static byte[] toBytes(String string, String charsetName) {
+        byte[] stringAsBytes = null;
+        if (CoreUtils.isNotNull(string)) {
             try {
-                dataBytes = CoreHelper.isNullOrEmpty(charsetName) ? input.getBytes() : input.getBytes(charsetName);
+                stringAsBytes = CoreUtils.isNullOrEmpty(charsetName) ? string.getBytes() : string.getBytes(charsetName);
             } catch (Exception ex) {
                 System.err.println(ex);
             }
         }
 
-        return dataBytes;
+        return stringAsBytes;
     }
 
     /**
@@ -1101,7 +1092,7 @@ public final class IOHelper {
      * @param string
      * @return
      */
-    public static byte[] toUTF8Bytes(final String string) {
+    public static byte[] toUTF8Bytes(String string) {
         return toBytes(string, UTF_8);
     }
 
@@ -1113,16 +1104,6 @@ public final class IOHelper {
      */
     public static byte[] toISOBytes(String string) {
         return toBytes(string, ISO_8859_1);
-    }
-
-    /**
-     * Returns the <code>ASCII7</code> bytes for the given <code>input</code>.
-     *
-     * @param input
-     * @return
-     */
-    public static byte[] toASCII7Bytes(final String input) {
-        return toBytes(input, ASCII7);
     }
 
     /**
@@ -1144,7 +1125,7 @@ public final class IOHelper {
      * @return
      */
     public static String defaultCharset(String charsetName) {
-        return (CoreHelper.isNullOrEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
+        return (CoreUtils.isNullOrEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
     }
 
     /**
@@ -1157,16 +1138,16 @@ public final class IOHelper {
      */
     public static String toString(byte[] bytes, String charsetName) {
         String bytesAsString = null;
-        if (!CoreHelper.isNullOrEmpty(bytes)) {
+        if (!CoreUtils.isNullOrEmpty(bytes)) {
             try {
-                if (CoreHelper.isNullOrEmpty(charsetName)) {
+                if (CoreUtils.isNullOrEmpty(charsetName)) {
                     bytesAsString = new String(bytes);
                 } else {
                     bytesAsString = new String(bytes, charsetName);
                 }
             } catch (Exception ex) {
                 System.err.println(ex);
-                bytesAsString = (CoreHelper.isNull(bytes) ? null : bytes.toString());
+                bytesAsString = (CoreUtils.isNull(bytes) ? null : bytes.toString());
             }
         }
 
@@ -1181,7 +1162,7 @@ public final class IOHelper {
      */
     public static String toString(String... strings) {
         StringBuilder sBuilder = new StringBuilder();
-        if (CoreHelper.isNullOrEmpty(strings)) {
+        if (CoreUtils.isNullOrEmpty(strings)) {
             sBuilder.append("[]");
         } else {
             sBuilder.append("[");
@@ -1206,7 +1187,7 @@ public final class IOHelper {
      */
     public static String toHexString(byte[] bytes) {
         String hexString = null;
-        if (!CoreHelper.isNullOrEmpty(bytes)) {
+        if (!CoreUtils.isNullOrEmpty(bytes)) {
             StringBuilder hexBuilder = new StringBuilder(bytes.length * 2);
             for (int index = 0; index < bytes.length; index++) {
                 int hn = ((int) (bytes[index]) & 0x00ff) / 16;
@@ -1232,7 +1213,7 @@ public final class IOHelper {
      */
     public static byte[] toHexBytes(String hexString) {
         byte[] hexBytes = null;
-        if (!CoreHelper.isNullOrEmpty(hexString)) {
+        if (!CoreUtils.isNullOrEmpty(hexString)) {
             int length = hexString.length() / 2;
             hexBytes = new byte[length];
             for (int i = 0; i < length; i++) {
@@ -1313,7 +1294,7 @@ public final class IOHelper {
     public static boolean copyFile(String sourceFilePath, String targetFilePath) throws IOException {
         System.out.println("+copyFile(" + sourceFilePath + ", " + targetFilePath + ")");
         boolean copied = false;
-        if (!CoreHelper.isNullOrEmpty(sourceFilePath) && !CoreHelper.isNullOrEmpty(targetFilePath)) {
+        if (!CoreUtils.isNullOrEmpty(sourceFilePath) && !CoreUtils.isNullOrEmpty(targetFilePath)) {
             File srcFile = new File(sourceFilePath);
             if (srcFile.exists()) {
                 int fileSize = copyFile(new FileInputStream(srcFile), new FileOutputStream(targetFilePath), true);
@@ -1361,6 +1342,7 @@ public final class IOHelper {
     /**
      * @param outputStream
      * @param object
+     * @param compress
      * @throws Exception
      */
     public static void writeObject(OutputStream outputStream, Object object) throws IOException {
@@ -1410,8 +1392,8 @@ public final class IOHelper {
      * Writes the input stream data into the specified response string.
      *
      * @param inputStream
-     * @param closeStreams
-     * @return
+     * @param response
+     * @param closeConnection
      * @throws IOException
      */
     public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams) throws IOException {
@@ -1437,10 +1419,8 @@ public final class IOHelper {
      * Writes the input stream data into the specified response string.
      *
      * @param inputStream
-     * @param closeStreams
-     * @param useExistingFile
-     * @param hashCodeFilePath
-     * @return
+     * @param response
+     * @param closeConnection
      * @throws IOException
      */
     public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile, String hashCodeFilePath) throws IOException {
@@ -1471,7 +1451,7 @@ public final class IOHelper {
      */
     public static String validateFileOrFolderName(String fileName) {
         // populate with supported images types.
-        if (!CoreHelper.isNullOrEmpty(fileName)) {
+        if (!CoreUtils.isNullOrEmpty(fileName)) {
             fileName = fileName.replace("<", "_");
             fileName = fileName.replace(">", "_");
             fileName = fileName.replace(":", "_");
@@ -1536,7 +1516,7 @@ public final class IOHelper {
      */
     public static boolean endsWith(String fileName, String... extensions) {
         boolean result = false;
-        if (!CoreHelper.isNullOrEmpty(fileName) && !CoreHelper.isNullOrEmpty(extensions)) {
+        if (!CoreUtils.isNullOrEmpty(fileName) && !CoreUtils.isNullOrEmpty(extensions)) {
             for (String extension : extensions) {
                 if (fileName.endsWith(extension)) {
                     result = true;
@@ -1564,12 +1544,12 @@ public final class IOHelper {
         List<File> listFiles = new ArrayList<File>();
         if (isExistAndFolder(directory)) {
             File[] files = directory.listFiles();
-            if (!CoreHelper.isNullOrEmpty(files)) {
+            if (!CoreUtils.isNullOrEmpty(files)) {
                 for (File file : files) {
                     if (recursive && isDirectory(file)) {
                         listFiles.addAll(listFiles(directory, extensions, recursive));
                     } else {
-                        if (CoreHelper.isNullOrEmpty(extensions)) {
+                        if (CoreUtils.isNullOrEmpty(extensions)) {
                             listFiles.add(file);
                         } else {
                             if (endsWith(file.getName(), extensions)) {
@@ -1604,6 +1584,7 @@ public final class IOHelper {
      * null or empty, all files are returned.
      *
      * @param directory
+     * @param extensions
      * @return
      */
     public static List<File> listFiles(File directory) {
@@ -1625,12 +1606,12 @@ public final class IOHelper {
         List<String> listFiles = new ArrayList<String>();
         if (isExistAndFolder(directory)) {
             File[] files = directory.listFiles();
-            if (!CoreHelper.isNullOrEmpty(files)) {
+            if (!CoreUtils.isNullOrEmpty(files)) {
                 for (File file : files) {
                     if (recursive && isDirectory(file)) {
                         listFiles.addAll(listFileNames(directory, extensions, recursive));
                     } else {
-                        if (CoreHelper.isNullOrEmpty(extensions)) {
+                        if (CoreUtils.isNullOrEmpty(extensions)) {
                             listFiles.add(file.getName());
                         } else {
                             if (endsWith(file.getName(), extensions)) {
@@ -1652,6 +1633,7 @@ public final class IOHelper {
      *
      * @param directory
      * @param extensions
+     * @param recursive
      * @return
      */
     public static List<String> listFileNames(File directory, String... extensions) {
@@ -1700,7 +1682,7 @@ public final class IOHelper {
      * @return
      */
     public static List<String> getAllZipFiles(File directory) {
-        return listFileNames(directory, ".zip".intern());
+        return listFileNames(directory, ".zip");
     }
 
     /**
@@ -1720,13 +1702,13 @@ public final class IOHelper {
      * it will return the <code>3.0</code> as latest version. If the version
      * list is null or empty, it returns empty string;
      *
-     * @param listOfVersions
+     * @param versions
      * @return
      */
     public static String getLatestVersion(List<String> listOfVersions) {
         System.out.println("+getLatestVersion(" + listOfVersions + ")");
         String latestVersion = "";
-        if (!CoreHelper.isNullOrEmpty(listOfVersions)) {
+        if (!CoreUtils.isNullOrEmpty(listOfVersions)) {
             Collections.sort(listOfVersions, new Comparator<String>() {
                 /**
                  * @see java.util.Comparator#compare(java.lang.Object,
@@ -1753,7 +1735,7 @@ public final class IOHelper {
      */
     public static <T> byte[] toBytes(T object) {
         byte[] objectBytes = null;
-        if (CoreHelper.isNotNull(object)) {
+        if (CoreUtils.isNotNull(object)) {
             ByteArrayOutputStream byteArrayOutputStream = null;
             ObjectOutputStream objectOutputStream = null;
             try {
@@ -1782,7 +1764,7 @@ public final class IOHelper {
     @SuppressWarnings("unchecked")
     public static <T> T toObject(byte[] dataBytes) {
         T object = null;
-        if (CoreHelper.isNotNull(dataBytes)) {
+        if (CoreUtils.isNotNull(dataBytes)) {
             ByteArrayInputStream byteArrayInputStream = null;
             ObjectInputStream objectInputStream = null;
             try {
@@ -1860,16 +1842,17 @@ public final class IOHelper {
      * Returns the fileName which starts with the given prefix from the given
      * parentFolder.
      *
-     * @param filePath
+     * @param parentFolder
+     * @param prefix
      * @return
      */
     public static String getPrefixedFilePath(String filePath) {
         String prefixedFilePath = null;
-        if (CoreHelper.isNotNullOrEmpty(filePath)) {
+        if (CoreUtils.isNotNullOrEmpty(filePath)) {
             File path = new File(filePath);
             String requestHashCode = getFileName(filePath, false);
             List<File> listFiles = listPrefixedFiles(path.getParentFile(), requestHashCode);
-            if (!CoreHelper.isNullOrEmpty(listFiles)) {
+            if (!CoreUtils.isNullOrEmpty(listFiles)) {
                 prefixedFilePath = listFiles.get(0).getAbsolutePath();
             }
             path = null;
@@ -1887,7 +1870,7 @@ public final class IOHelper {
      */
     public static String getExtension(String fullPath) {
         String extension = null;
-        if (!CoreHelper.isNullOrEmpty(fullPath)) {
+        if (!CoreUtils.isNullOrEmpty(fullPath)) {
             int dotIndex = fullPath.lastIndexOf(".");
             extension = ((dotIndex > -1 && dotIndex < fullPath.length() - 1) ? fullPath.substring(dotIndex + 1) : "");
         }
@@ -1904,7 +1887,7 @@ public final class IOHelper {
      */
     public static String getFileName(String fullPath, boolean withExtension) {
         String fileName = null;
-        if (!CoreHelper.isNullOrEmpty(fullPath)) {
+        if (!CoreUtils.isNullOrEmpty(fullPath)) {
             int pathSeparatorIndex = fullPath.lastIndexOf(File.separator);
             if (pathSeparatorIndex < fullPath.length() - 1) {
                 fileName = fullPath.substring(pathSeparatorIndex + 1);
@@ -1941,7 +1924,7 @@ public final class IOHelper {
     /**
      * Prints the <code>ServerSocket</code> information.
      *
-     * @param serverSocket
+     * @param ServerSocket
      */
     public static void logServerSocket(ServerSocket serverSocket) {
         System.out.println("ServerSocket Class:" + serverSocket.getClass());

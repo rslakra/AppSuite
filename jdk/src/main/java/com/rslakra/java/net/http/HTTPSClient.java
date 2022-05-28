@@ -33,8 +33,9 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLServerSocket;
 
-import com.rslakra.core.IOHelper;
-import com.rslakra.core.SSLHelper;
+import com.devamatre.core.IOUtility;
+import com.rslakra.core.IOUtils;
+import com.rslakra.core.SSLUtils;
 import com.rslakra.java.net.NetConstants;
 import com.rslakra.java.net.ProcessConnection;
 
@@ -79,9 +80,9 @@ public class HTTPSClient {
 	 */
 	public ServerSocket getServer() throws Exception {
 		
-		String filePath = IOHelper.filePath(HTTPSClient.class);
-		String certFilePath = IOHelper.pathString(filePath, NetConstants.SERVER_KEYS);
-		SSLServerSocket serversocket = SSLHelper.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
+		String filePath = IOUtils.filePath(HTTPSClient.class);
+		String certFilePath = IOUtils.pathString(filePath, NetConstants.SERVER_KEYS);
+		SSLServerSocket serversocket = SSLUtils.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
 		return serversocket;
 	}
 	

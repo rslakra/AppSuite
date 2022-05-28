@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -40,30 +40,9 @@ import java.util.Map;
  * @created 2008-02-22 08:18:05 PM
  * @since 1.0.0
  */
-public final class CoreHelper {
+public enum CoreUtils {
 
-    /* instance */
-    private static CoreHelper instance;
-
-    private CoreHelper() {
-    }
-
-    /**
-     * Returns the singleton instance of this object.
-     *
-     * @return
-     */
-    public static CoreHelper getInstance() {
-        if (instance == null) {
-            synchronized (CoreHelper.class) {
-                if (instance == null) {
-                    instance = new CoreHelper();
-                }
-            }
-        }
-
-        return instance;
-    }
+    INSTANCE;
 
     /**
      * Returns the OS name.
@@ -125,11 +104,11 @@ public final class CoreHelper {
     /**
      * Returns true if the bytes array is either null or empty otherwise false.
      *
-     * @param dataBytes
+     * @param bytes
      * @return
      */
-    public static boolean isNullOrEmpty(byte... dataBytes) {
-        return (isNull(dataBytes) || dataBytes.length == 0);
+    public static boolean isNullOrEmpty(byte... array) {
+        return (isNull(array) || array.length == 0);
     }
 
     /**

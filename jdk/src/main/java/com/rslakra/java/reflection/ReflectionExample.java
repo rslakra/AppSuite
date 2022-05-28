@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import com.rslakra.core.CoreHelper;
+import com.rslakra.core.CoreUtils;
 import com.rslakra.java.bos.Name;
 import com.rslakra.jdk8.Person;
 
@@ -53,13 +53,13 @@ public class ReflectionExample {
 
 		try {
 			Method method = person.getClass().getMethod("getName");
-			System.out.println(method.getName() + " is getter:" + CoreHelper.isGetter(method));
+			System.out.println(method.getName() + " is getter:" + CoreUtils.isGetter(method));
 
 			method = person.getClass().getMethod("setName", String.class);
-			System.out.println(method.getName() + " is setter:" + CoreHelper.isSetter(method));
+			System.out.println(method.getName() + " is setter:" + CoreUtils.isSetter(method));
 
 			method = person.getClass().getMethod("isAdult");
-			System.out.println(method.getName() + " is getter:" + CoreHelper.isGetter(method));
+			System.out.println(method.getName() + " is getter:" + CoreUtils.isGetter(method));
 
 			// Read private field 'middleName' by reflection
 			Name name = new Name("Rohtash", "Lakra");

@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -45,7 +45,7 @@ public final class VersionChecker {
 	 * 
 	 * @param currentVersion
 	 */
-	public VersionChecker(String currentVersion) {
+	public VersionChecker(final String currentVersion) {
 		this.currentVersion = currentVersion;
 	}
 	

@@ -6,36 +6,27 @@
     <!-- Parent -->
     <parent>
         <groupId>com.rslakra</groupId>
-        <artifactId>Java</artifactId>
+        <artifactId>java</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-
-    <!--    <groupId>${parent.groupId}.java</groupId>-->
+    <groupId>com.rslakra.java</groupId>
     <artifactId>mime-craft</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>The ${artifactId} Project</name>
+    <name>The ${project.artifactId} Project</name>
 
     <!-- Properties -->
     <properties>
-        <dLogger.version>1.0-SNAPSHOT</dLogger.version>
-        <dCore.version>1.0-SNAPSHOT</dCore.version>
+        <core.version>1.0-SNAPSHOT</core.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- dLogger -->
-        <dependency>
-            <groupId>com.devamatre</groupId>
-            <artifactId>dLogger</artifactId>
-            <version>${dLogger.version}</version>
-        </dependency>
-
-        <!-- core -->
+        <!-- Core -->
         <dependency>
             <groupId>com.rslakra.java</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${core.version}</version>
         </dependency>
 
     </dependencies>

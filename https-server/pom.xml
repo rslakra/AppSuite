@@ -6,37 +6,21 @@
     <!-- Parent -->
     <parent>
         <groupId>com.rslakra</groupId>
-        <artifactId>Java</artifactId>
+        <artifactId>java</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <!--    <groupId>${parent.groupId}.java</groupId>-->
-    <artifactId>https-server</artifactId>
+    <groupId>com.rslakra.java</groupId>
+    <artifactId>http-server</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>The ${artifactId} Project</name>
+    <name>The ${project.artifactId} Project</name>
 
     <!-- Properties -->
     <properties>
-        <dLogger.version>1.0-SNAPSHOT</dLogger.version>
-        <dCore.version>1.0-SNAPSHOT</dCore.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- dLogger -->
-        <dependency>
-            <groupId>com.devamatre</groupId>
-            <artifactId>dLogger</artifactId>
-            <version>${dLogger.version}</version>
-        </dependency>
-
-        <!-- dLogger -->
-        <dependency>
-            <groupId>com.rslakra.java</groupId>
-            <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
     </dependencies>
 
     <!-- Build -->

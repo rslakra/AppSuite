@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -22,41 +22,28 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *      
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.testcases.core;
-
-import com.rslakra.core.VersionChecker;
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+package com.rslakra.java.string;
 
 /**
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2018-02-28 11:47:56 AM
- * @version 1.0.0
- * @since 1.0.0
+ * 
+ * @author Rohtash Singh Lakra
  */
-public class TestVersionChecker {
+public class StrBuffer {
 
-	/** logger */
-	private static Logger logger = LogManager.getLogger(TestVersionChecker.class);
-
-	/**
-	 * @param args
-	 */
 	public static void main(String[] args) {
-		// configure logger.
-		LogManager.configure(LogManager.LOG4J_PROPERTY_FILE);
+		StringBuffer sBuffer = new StringBuffer();
+		sBuffer.append("Rohtash");
+		// sBuffer.append("Singh");
+		// sBuffer.append("Lakra");
+		sBuffer.reverse();
 
-		VersionChecker versionChecker = new VersionChecker("1.10");
-		logger.info("isOlderThan:" + versionChecker.isOlderThan("1.15"));
-		logger.info("isLessThan:" + versionChecker.isLessThan("1.15"));
-		logger.info("isLessThanEqualTo:" + versionChecker.isLessThanEqualTo("1.15"));
-		logger.info("isGreaterThanEqualTo:" + versionChecker.isGreaterThanEqualTo("1.15"));
-		logger.info("isGreaterThan:" + versionChecker.isGreaterThan("1.15"));
+		System.out.println("Length:" + sBuffer.length() + ", Capacity:" + sBuffer.capacity());
+		System.out.println(sBuffer.toString());
+
 	}
 
 }

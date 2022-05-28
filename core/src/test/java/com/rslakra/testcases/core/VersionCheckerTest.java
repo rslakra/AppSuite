@@ -1,6 +1,6 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
- * 
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,28 +22,43 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- * 
+ *
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.testcases.core;
 
-import com.rslakra.core.CoreHelper;
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
+import com.rslakra.core.VersionChecker;
 
 /**
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
- * @created 2008-02-22 08:18:05 PM
  * @version 1.0.0
+ * @created 2018-02-28 11:47:56 AM
  * @since 1.0.0
  */
-public class TestCoreHelper {
+public class VersionCheckerTest {
 
-	/**
-	 * @param args
-	 */
-	public static void main(String[] args) {
-		System.out.println(CoreHelper.isNull(null));
-	}
+    /**
+     * logger
+     */
+    private static Logger LOGGER = LogManager.getLogger(VersionCheckerTest.class);
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        // configure logger.
+        LogManager.configure(LogManager.LOG4J_PROPERTY_FILE);
+
+        VersionChecker versionChecker = new VersionChecker("1.10");
+        LOGGER.info("isOlderThan:" + versionChecker.isOlderThan("1.15"));
+        LOGGER.info("isLessThan:" + versionChecker.isLessThan("1.15"));
+        LOGGER.info("isLessThanEqualTo:" + versionChecker.isLessThanEqualTo("1.15"));
+        LOGGER.info("isGreaterThanEqualTo:" + versionChecker.isGreaterThanEqualTo("1.15"));
+        LOGGER.info("isGreaterThan:" + versionChecker.isGreaterThan("1.15"));
+    }
 
 }

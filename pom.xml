@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.rslakra</groupId>
-    <artifactId>Java</artifactId>
+    <artifactId>java</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>The ${project.artifactId} Project</name>
@@ -21,22 +21,36 @@
 
     <!-- Properties -->
     <properties>
-        <java.version>11</java.version>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.release>11</maven.compiler.release>
-        <log4j.version>2.17.1</log4j.version>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.release>1.8</maven.compiler.release>
+        <log4j.version>1.2.17</log4j.version>
+        <dLogger.version>1.1-SNAPSHOT</dLogger.version>
+        <dCore.version>1.0-SNAPSHOT</dCore.version>
         <junit.version>4.13.1</junit.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- Log4j -->
-        <!-- https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-core -->
+<!--        &lt;!&ndash; Log4j &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>log4j</groupId>-->
+<!--            <artifactId>log4j</artifactId>-->
+<!--            <version>${log4j.version}</version>-->
+<!--        </dependency>-->
+
+        <!-- dLogger -->
         <dependency>
-            <groupId>org.apache.logging.log4j</groupId>
-            <artifactId>log4j-core</artifactId>
-            <version>${log4j.version}</version>
+            <groupId>com.devamatre</groupId>
+            <artifactId>dLogger</artifactId>
+            <version>${dLogger.version}</version>
+        </dependency>
+
+        <!-- dCore -->
+        <dependency>
+            <groupId>com.devamatre</groupId>
+            <artifactId>dCore</artifactId>
+            <version>${dCore.version}</version>
         </dependency>
 
         <!-- JUnit -->

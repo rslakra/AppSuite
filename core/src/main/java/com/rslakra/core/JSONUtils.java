@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -48,14 +48,8 @@ import com.google.gson.reflect.TypeToken;
  * @version 1.0.0
  * @since May 18, 2015 2:39:11 PM
  */
-public final class JSONHelper {
-	
-	/**
-	 * 
-	 */
-	private JSONHelper() {
-		throw new RuntimeException("Object creation is not allowed!");
-	}
+public enum JSONUtils {
+	INSTANCE;
 	
 	/**
 	 * Returns the GSON object.
@@ -103,7 +97,7 @@ public final class JSONHelper {
 	 */
 	public static String toJSONString(List<String> list) {
 		String json = "";
-		if (!CoreHelper.isNullOrEmpty(list)) {
+		if (!CoreUtils.isNullOrEmpty(list)) {
 			json = new Gson().toJson(list);
 		}
 		return json;
@@ -112,7 +106,7 @@ public final class JSONHelper {
 	/**
 	 * Returns the JSON string for the given exception.
 	 * 
-	 * @param runtimeException
+	 * @param error
 	 * @return
 	 */
 	public static String toJSONString(Throwable error) {
@@ -122,7 +116,7 @@ public final class JSONHelper {
 	/**
 	 * Generates the JSON string from the given map.
 	 * 
-	 * @param mapKeyValues
+	 * @param mapData
 	 * @return
 	 */
 	public static String toJSONString(Map<String, String> mapData) {
@@ -151,7 +145,7 @@ public final class JSONHelper {
 	public static Map<String, Object> jsonBytesAsMap(byte[] dataBytes) {
 		TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
 		};
-		String jsonString = IOHelper.toUTF8String(dataBytes);
+		String jsonString = IOUtils.toUTF8String(dataBytes);
 		return (new Gson().fromJson(jsonString, typeToken.getType()));
 	}
 	
@@ -237,7 +231,7 @@ public final class JSONHelper {
 	 * Returns the list of the specified objects from the given JSON string.
 	 * 
 	 * @param jsonString
-	 * @param classType
+	 * @param classTypes
 	 * @return
 	 */
 	public static List<?> listOfObjects(String jsonString, String key, Class<?>... classTypes) {
@@ -359,7 +353,7 @@ public final class JSONHelper {
 	public static Map<String, Object> toMap(byte[] dataBytes) {
 		TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
 		};
-		String jsonString = IOHelper.toUTF8String(dataBytes);
+		String jsonString = IOUtils.toUTF8String(dataBytes);
 		return (new Gson().fromJson(jsonString, typeToken.getType()));
 	}
 	
@@ -405,7 +399,7 @@ public final class JSONHelper {
 	 * @return
 	 */
 	public static JsonElement getElement(JsonObject jsonObject, String key) {
-		if (jsonObject != null && !CoreHelper.isNullOrEmpty(key)) {
+		if (jsonObject != null && !CoreUtils.isNullOrEmpty(key)) {
 			return jsonObject.get(key);
 		}
 		
@@ -432,7 +426,7 @@ public final class JSONHelper {
 	 */
 	public static String valueForKeyAsString(JsonArray jsonArray, String key) {
 		String value = null;
-		if (jsonArray != null && !CoreHelper.isNullOrEmpty(key)) {
+		if (jsonArray != null && !CoreUtils.isNullOrEmpty(key)) {
 			for (int i = 0; i < jsonArray.size(); i++) {
 				JsonObject jsonObject = (JsonObject) jsonArray.get(i);
 				if (jsonObject != null && getAsString(jsonObject, "name").equals(key)) {
@@ -463,7 +457,7 @@ public final class JSONHelper {
 	 */
 	public static byte[] toImageBytes(String jsonString) {
 		byte[] imageBytes = null;
-		if (!CoreHelper.isNullOrEmpty(jsonString)) {
+		if (!CoreUtils.isNullOrEmpty(jsonString)) {
 			String javaString = fromJSONString(jsonString, String.class);
 			imageBytes = javaString.getBytes();
 		}
@@ -478,12 +472,12 @@ public final class JSONHelper {
 	 * @return
 	 */
 	public static byte[] toImageBytes(byte[] responseBytes) {
-		if (!CoreHelper.isNullOrEmpty(responseBytes)) {
+		if (!CoreUtils.isNullOrEmpty(responseBytes)) {
 			/*
 			 * JSON String is encoded using the Base64 String which needs to
 			 * convert back to Java String for images.
 			 */
-			String jsonString = IOHelper.toUTF8String(responseBytes);
+			String jsonString = IOUtils.toUTF8String(responseBytes);
 			responseBytes = toImageBytes(jsonString);
 		}
 		

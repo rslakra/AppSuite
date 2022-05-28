@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -82,7 +82,9 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * @version 1.0.0
  * @since Jul 17, 2015 10:31:46 AM
  */
-public final class SecurityHelper {
+public enum SecurityUtils {
+
+	INSTANCE;
 	
 	public static final String EMPTY_STRING = "";
 	public static final String HEX_DIGIT_CHARS = "0123456789ABCDEF";
@@ -155,7 +157,7 @@ public final class SecurityHelper {
 	 */
 	private static PBKDF2Generator getPBKDF2Generator() {
 		if (pbkdf2Generator == null) {
-			synchronized (SecurityHelper.class) {
+			synchronized (SecurityUtils.class) {
 				if (pbkdf2Generator == null) {
 					/* pbkdf2Params */
 					pbkdf2Params = new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."), PBKDF2Generator.ITERATIONS);
@@ -179,17 +181,17 @@ public final class SecurityHelper {
 	 */
 	public static byte[] uniqueDeviceIdBytes(String parentFolder) {
 		byte[] deviceIDBytes = null;
-		if (CoreHelper.isNullOrEmpty(uniqueDeviceUUID)) {
-			synchronized (SecurityHelper.class) {
-				if (CoreHelper.isNullOrEmpty(uniqueDeviceUUID)) {
+		if (CoreUtils.isNullOrEmpty(uniqueDeviceUUID)) {
+			synchronized (SecurityUtils.class) {
+				if (CoreUtils.isNullOrEmpty(uniqueDeviceUUID)) {
 					File installation = new File(parentFolder, INSTALLATION);
 					try {
 						if (!installation.exists()) {
-							IOHelper.saveFile(IOHelper.toUTF8Bytes(UUID.randomUUID().toString()), installation);
+							IOUtils.saveFile(IOUtils.toUTF8Bytes(UUID.randomUUID().toString()), installation);
 						}
-						deviceIDBytes = IOHelper.readFile(installation);
-						if (!CoreHelper.isNullOrEmpty(deviceIDBytes)) {
-							uniqueDeviceUUID = IOHelper.toUTF8String(deviceIDBytes);
+						deviceIDBytes = IOUtils.readFile(installation);
+						if (!CoreUtils.isNullOrEmpty(deviceIDBytes)) {
+							uniqueDeviceUUID = IOUtils.toUTF8String(deviceIDBytes);
 						}
 					} catch (Exception e) {
 						throw new RuntimeException("Failed to read/write uniqueDeviceID to	 filesystem.", e);
@@ -197,7 +199,7 @@ public final class SecurityHelper {
 				}
 			}
 		} else {
-			deviceIDBytes = IOHelper.toUTF8Bytes(uniqueDeviceUUID);
+			deviceIDBytes = IOUtils.toUTF8Bytes(uniqueDeviceUUID);
 		}
 		
 		return deviceIDBytes;
@@ -209,7 +211,7 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String uniqueDeviceIdString() {
-		return IOHelper.toUTF8String(uniqueDeviceIdBytes("."));
+		return IOUtils.toUTF8String(uniqueDeviceIdBytes("."));
 	}
 	
 	/**************************************************************************
@@ -227,7 +229,7 @@ public final class SecurityHelper {
 	 */
 	public static String encodeWithURLEncoder(String value, String charsetName) {
 		try {
-			return URLEncoder.encode(value, IOHelper.defaultCharset(charsetName));
+			return URLEncoder.encode(value, IOUtils.defaultCharset(charsetName));
 		} catch (UnsupportedEncodingException ex) {
 			System.err.println(ex);
 			return value;
@@ -256,7 +258,7 @@ public final class SecurityHelper {
 	 */
 	public static String decodeWithURLDecoder(String value, String charsetName) {
 		try {
-			return URLDecoder.decode(value, IOHelper.defaultCharset(charsetName));
+			return URLDecoder.decode(value, IOUtils.defaultCharset(charsetName));
 		} catch (UnsupportedEncodingException ex) {
 			System.err.println(ex);
 			return value;
@@ -287,17 +289,17 @@ public final class SecurityHelper {
 	/**
 	 * Returns the base64 encoded string.
 	 * 
-	 * @param plainText
+	 * @param plainString
 	 * @return
 	 */
 	public static String encodeToBase64String(String plainString) {
-		return encodeToBase64String(IOHelper.toUTF8Bytes(plainString));
+		return encodeToBase64String(IOUtils.toUTF8Bytes(plainString));
 	}
 	
 	/**
 	 * Decode the encrypted string using Base64 decoding.
 	 * 
-	 * @param encrypted
+	 * @param encodedString
 	 * @return
 	 */
 	public static byte[] decodeToBase64Bytes(String encodedString) {
@@ -311,7 +313,7 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String decodeToBase64String(String encodedString) {
-		return IOHelper.toUTF8String(decodeToBase64Bytes(encodedString));
+		return IOUtils.toUTF8String(decodeToBase64Bytes(encodedString));
 	}
 	
 	/**
@@ -344,7 +346,7 @@ public final class SecurityHelper {
 		String valueAsHashString = null;
 		try {
 			byte[] sha256HashBytes = getSHA256Hash(dataBytes);
-			valueAsHashString = IOHelper.toHexString(sha256HashBytes);
+			valueAsHashString = IOUtils.toHexString(sha256HashBytes);
 		} catch (Exception ex) {
 			System.err.println(ex);
 		}
@@ -369,7 +371,7 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String validateHashString(String hashString) {
-		if (!CoreHelper.isNullOrEmpty(hashString)) {
+		if (!CoreUtils.isNullOrEmpty(hashString)) {
 			hashString = hashString.replace('/', '_');
 			hashString = hashString.replace(' ', '_');
 			hashString = hashString.replace('+', '_');
@@ -394,7 +396,7 @@ public final class SecurityHelper {
 		try {
 			Cipher cipher = Cipher.getInstance(ALGO_RSA_NONE_NOPADDING, PROVIDER_BC);
 			cipher.init(Cipher.ENCRYPT_MODE, encryptionPublicKey);
-			byte[] plainStringBytes = IOHelper.toUTF8Bytes(plainString);
+			byte[] plainStringBytes = IOUtils.toUTF8Bytes(plainString);
 			byte[] cipherBytes = cipher.doFinal(plainStringBytes);
 			encryptedWithKey = encodeToBase64String(cipherBytes);
 		} catch (Exception ex) {
@@ -448,7 +450,7 @@ public final class SecurityHelper {
 			System.err.println(ex);
 		} finally {
 			if (closeStream) {
-				IOHelper.safeClose(inputStream);
+				IOUtils.safeClose(inputStream);
 			}
 		}
 		
@@ -572,7 +574,7 @@ public final class SecurityHelper {
 			Cipher cipher = Cipher.getInstance(ALGO_RSA_NONE_NOPADDING, PROVIDER_BC);
 			cipher.init(Cipher.DECRYPT_MODE, decryptPublicKey);
 			byte[] plainStringBytes = cipher.doFinal(decodedBytes);
-			decryptedWithKey = IOHelper.toUTF8String(plainStringBytes);
+			decryptedWithKey = IOUtils.toUTF8String(plainStringBytes);
 		} catch (NoSuchAlgorithmException ex) {
 			System.err.println(ex);
 		} catch (NoSuchProviderException ex) {
@@ -652,7 +654,7 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String generateSaltedPassword(String _salt, String _password) {
-		return (CoreHelper.isNullOrEmpty(_salt) || CoreHelper.isNullOrEmpty(_password) ? null : (_salt + "###" + _password));
+		return (CoreUtils.isNullOrEmpty(_salt) || CoreUtils.isNullOrEmpty(_password) ? null : (_salt + "###" + _password));
 	}
 	
 	/**
@@ -663,7 +665,7 @@ public final class SecurityHelper {
 	 */
 	public static byte[] getPBKDF2KeyBytes(String entropyString) {
 		byte[] derivedKeyBytes = null;
-		if (CoreHelper.isNotNullOrEmpty(entropyString)) {
+		if (CoreUtils.isNotNullOrEmpty(entropyString)) {
 			try {
 				derivedKeyBytes = getPBKDF2Generator().deriveKey(entropyString, ENCRYPTION_KEY_LENGTH);
 			} catch (NoSuchAlgorithmException ex) {
@@ -681,7 +683,7 @@ public final class SecurityHelper {
 	 * @return
 	 */
 	public static String getPBKDF2KeyAsString(String entropyString) {
-		return IOHelper.toUTF8String(getPBKDF2KeyBytes(entropyString));
+		return IOUtils.toUTF8String(getPBKDF2KeyBytes(entropyString));
 	}
 	
 	/**
@@ -699,12 +701,12 @@ public final class SecurityHelper {
 	/**
 	 * Converts the given dataBytes into the HEXA-String.
 	 * 
-	 * @param buffer
+	 * @param dataBytes
 	 * @return
 	 */
 	public static String toHexString(byte[] dataBytes) {
 		String hexString = EMPTY_STRING;
-		if (!CoreHelper.isNullOrEmpty(dataBytes)) {
+		if (!CoreUtils.isNullOrEmpty(dataBytes)) {
 			StringBuilder hexBuilder = new StringBuilder(2 * dataBytes.length);
 			for (int i = 0; i < dataBytes.length; i++) {
 				hexBuilder.append(HEX_DIGIT_CHARS.charAt((dataBytes[i] >> 4) & 0x0f));
@@ -722,11 +724,11 @@ public final class SecurityHelper {
 	/**
 	 * Returns the HEXA-String for the given string.
 	 * 
-	 * @param string
+	 * @param plainString
 	 * @return
 	 */
 	public static String toHexString(String plainString) {
-		return toHexString(IOHelper.toUTF8Bytes(plainString));
+		return toHexString(IOUtils.toUTF8Bytes(plainString));
 	}
 	
 	/**
@@ -735,13 +737,13 @@ public final class SecurityHelper {
 	 * @param hexString
 	 * @return
 	 */
-	public static byte[] hexStringAsBytes(String hexaString) {
+	public static byte[] hexStringAsBytes(String hexString) {
 		byte[] hexaBytes = null;
-		if (!CoreHelper.isNullOrEmpty(hexaString)) {
-			int length = hexaString.length() / 2;
+		if (!CoreUtils.isNullOrEmpty(hexString)) {
+			int length = hexString.length() / 2;
 			hexaBytes = new byte[length];
 			for (int i = 0; i < length; i++) {
-				hexaBytes[i] = Integer.valueOf(hexaString.substring(2 * i, 2 * i + 2), 16).byteValue();
+				hexaBytes[i] = Integer.valueOf(hexString.substring(2 * i, 2 * i + 2), 16).byteValue();
 			}
 		}
 		
@@ -808,10 +810,10 @@ public final class SecurityHelper {
 	public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] encryptedBytes = null;
 		long startTime = System.currentTimeMillis();
-		if (!CoreHelper.isNullOrEmpty(dataBytes) && !CoreHelper.isNullOrEmpty(keyBytes)) {
+		if (!CoreUtils.isNullOrEmpty(dataBytes) && !CoreUtils.isNullOrEmpty(keyBytes)) {
 			Cipher cipher = null;
 			SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGO_AES);
-			if (CoreHelper.isNullOrEmpty(ivBytes)) {
+			if (CoreUtils.isNullOrEmpty(ivBytes)) {
 				cipher = Cipher.getInstance(ALGO_AES);
 				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 			} else {
@@ -888,15 +890,15 @@ public final class SecurityHelper {
 	 *            should be of sufficient entropy.
 	 * @return An encrypted String in UTF-8 format.
 	 * 
-	 * @param stringToEncrypt
+	 * @param plainString
 	 * @param key
 	 * @return
 	 */
 	public static String encryptWithSymmetricKey(String plainString, String key) {
 		String encryptedString = null;
-		if (!CoreHelper.isNullOrEmpty(plainString) && !CoreHelper.isNullOrEmpty(key)) {
+		if (!CoreUtils.isNullOrEmpty(plainString) && !CoreUtils.isNullOrEmpty(key)) {
 			try {
-				byte[] encryptedBytes = encryptWithSymmetricKey(IOHelper.toUTF8Bytes(plainString), key);
+				byte[] encryptedBytes = encryptWithSymmetricKey(IOUtils.toUTF8Bytes(plainString), key);
 				encryptedString = toHexString(encryptedBytes);
 			} catch (Exception ex) {
 				System.err.println(ex);
@@ -918,10 +920,10 @@ public final class SecurityHelper {
 	public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] rawBytes = null;
 		long startTime = System.currentTimeMillis();
-		if (!CoreHelper.isNullOrEmpty(dataBytes) && !CoreHelper.isNullOrEmpty(keyBytes)) {
+		if (!CoreUtils.isNullOrEmpty(dataBytes) && !CoreUtils.isNullOrEmpty(keyBytes)) {
 			Cipher cipher = null;
 			SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGO_AES);
-			if (CoreHelper.isNullOrEmpty(ivBytes)) {
+			if (CoreUtils.isNullOrEmpty(ivBytes)) {
 				cipher = Cipher.getInstance(ALGO_AES);
 				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 			} else {
@@ -988,17 +990,17 @@ public final class SecurityHelper {
 	 * Decrypts the specified <code>encryptedString</code> using the specified
 	 * <code>key</code>.
 	 * 
-	 * @param encryptedTextString
+	 * @param encryptedString
 	 * @param key
 	 * @return
 	 */
 	public static String decryptWithSymmetricKey(String encryptedString, String key) {
 		String decryptedString = null;
-		if (!CoreHelper.isNullOrEmpty(encryptedString) && !CoreHelper.isNullOrEmpty(key)) {
+		if (!CoreUtils.isNullOrEmpty(encryptedString) && !CoreUtils.isNullOrEmpty(key)) {
 			try {
 				byte[] encryptedBytes = hexStringAsBytes(encryptedString);
 				byte[] decryptedBytes = decryptWithSymmetricKey(encryptedBytes, key);
-				decryptedString = IOHelper.toUTF8String(decryptedBytes);
+				decryptedString = IOUtils.toUTF8String(decryptedBytes);
 			} catch (Exception ex) {
 				System.err.println(ex);
 			}
@@ -1026,7 +1028,7 @@ public final class SecurityHelper {
 	 * @throws SecurityException
 	 */
 	public static String ivForResource(String ivParent) throws SecurityException {
-		if (CoreHelper.isNotNullOrEmpty(ivParent)) {
+		if (CoreUtils.isNotNullOrEmpty(ivParent)) {
 			return (ivParent.length() > IV_SIZE ? ivParent.substring(0, IV_SIZE) : ivParent);
 		}
 		
@@ -1042,10 +1044,10 @@ public final class SecurityHelper {
 	public static byte[] getIVBytes(String filePath) {
 		byte[] ivBytes = null;
 		try {
-			String ivParent = IOHelper.getFileName(filePath, true);
+			String ivParent = IOUtils.getFileName(filePath, true);
 			if (USE_FILE_EXTENSION_AS_IV) {
-				String extension = IOHelper.getExtension(ivParent);
-				if (!CoreHelper.isNullOrEmpty(extension)) {
+				String extension = IOUtils.getExtension(ivParent);
+				if (!CoreUtils.isNullOrEmpty(extension)) {
 					ivParent = extension;
 				}
 			}
@@ -1093,7 +1095,7 @@ public final class SecurityHelper {
 			final SecureRandom randomGenerator = SecureRandom.getInstance(ALGO_SHA1PRNG);
 			byte[] salt = new byte[size];
 			randomGenerator.nextBytes(salt);
-			saltString = IOHelper.toUTF8String(salt);
+			saltString = IOUtils.toUTF8String(salt);
 		} catch (Exception ex) {
 			throw new Error(ex);
 		}
@@ -1149,7 +1151,7 @@ public final class SecurityHelper {
 	public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keyPairAlgorithm);
 		SecureRandom secureRandom = null;
-		if (CoreHelper.isNullOrEmpty(secureRandomAlgorithm)) {
+		if (CoreUtils.isNullOrEmpty(secureRandomAlgorithm)) {
 			secureRandom = new SecureRandom();
 		} else {
 			secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
@@ -1216,7 +1218,7 @@ public final class SecurityHelper {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA256Hash(byte[] bytes) throws SecurityException {
-		if (CoreHelper.isNotNull(bytes)) {
+		if (CoreUtils.isNotNull(bytes)) {
 			try {
 				return sha256MessageDigest.digest(bytes);
 			} catch (Exception ex) {
@@ -1235,7 +1237,7 @@ public final class SecurityHelper {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA256Hash(String string) throws SecurityException {
-		return getSHA256Hash(CoreHelper.isNull(string) ? null : string.getBytes());
+		return getSHA256Hash(CoreUtils.isNull(string) ? null : string.getBytes());
 	}
 	
 	/**
@@ -1246,7 +1248,7 @@ public final class SecurityHelper {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA512Hash(byte[] bytes) throws SecurityException {
-		if (CoreHelper.isNotNull(bytes)) {
+		if (CoreUtils.isNotNull(bytes)) {
 			try {
 				return MessageDigest.getInstance(ALGO_SHA_512).digest(bytes);
 			} catch (Exception ex) {
@@ -1265,7 +1267,7 @@ public final class SecurityHelper {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA512Hash(String string) throws SecurityException {
-		return getSHA512Hash(CoreHelper.isNull(string) ? null : string.getBytes());
+		return getSHA512Hash(CoreUtils.isNull(string) ? null : string.getBytes());
 	}
 	
 	/**
@@ -1278,7 +1280,7 @@ public final class SecurityHelper {
 		String hashedString = null;
 		try {
 			MessageDigest messageDigest = MessageDigest.getInstance(ALGO_SHA_1);
-			messageDigest.update(IOHelper.toUTF8Bytes(input), 0, input.length());
+			messageDigest.update(IOUtils.toUTF8Bytes(input), 0, input.length());
 			byte[] sha1hash = messageDigest.digest();
 			hashedString = toHexString(sha1hash);
 		} catch (NoSuchAlgorithmException ex) {
@@ -1388,7 +1390,7 @@ public final class SecurityHelper {
 	 */
 	public static String getChecksum(byte[] bytes) {
 		String checkSumString = "0";
-		if (!CoreHelper.isNullOrEmpty(bytes)) {
+		if (!CoreUtils.isNullOrEmpty(bytes)) {
 			long startTime = System.currentTimeMillis();
 			try {
 				MessageDigest md5 = MessageDigest.getInstance(ALGO_MD5);
@@ -1624,7 +1626,7 @@ public final class SecurityHelper {
 		 * @throws NoSuchAlgorithmException
 		 */
 		public String keyAsHexString(String password, int keyLength) throws NoSuchAlgorithmException {
-			return IOHelper.toHexString(deriveKey(password, keyLength));
+			return IOUtils.toHexString(deriveKey(password, keyLength));
 		}
 		
 		/**
@@ -1637,8 +1639,8 @@ public final class SecurityHelper {
 		 */
 		public String hashPassword(String password, int keyLength) throws NoSuchAlgorithmException {
 			String pbkdf2String = null;
-			if (!CoreHelper.isNullOrEmpty(password)) {
-				String saltHexString = IOHelper.toHexString(parameters.getSalt());
+			if (!CoreUtils.isNullOrEmpty(password)) {
+				String saltHexString = IOUtils.toHexString(parameters.getSalt());
 				String keyAsHexString = keyAsHexString(password, keyLength);
 				pbkdf2String = (parameters.getIterations() + ":" + saltHexString + ":" + keyAsHexString);
 				pbkdf2String = encodeToBase64String(pbkdf2String);
@@ -1650,7 +1652,7 @@ public final class SecurityHelper {
 		/**
 		 * Validates the password with the hashed password.
 		 * 
-		 * @param originalPassword
+		 * @param password
 		 * @param hashedPassword
 		 * @return
 		 * @throws NoSuchAlgorithmException
@@ -1658,11 +1660,11 @@ public final class SecurityHelper {
 		 */
 		public boolean validatePassword(String password, String hashedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
 			boolean validPassword = false;
-			if (!CoreHelper.isNullOrEmpty(password)) {
+			if (!CoreUtils.isNullOrEmpty(password)) {
 				String[] parts = hashedPassword.split(":");
 				int iterations = Integer.parseInt(parts[0]);
-				byte[] salt = IOHelper.toHexBytes(parts[1]);
-				byte[] hash = IOHelper.toHexBytes(parts[2]);
+				byte[] salt = IOUtils.toHexBytes(parts[1]);
+				byte[] hash = IOUtils.toHexBytes(parts[2]);
 				byte[] pbkdf2Hash = pbkdf2(password.toCharArray(), salt, iterations, hash.length);
 				
 				int difference = hash.length ^ pbkdf2Hash.length;

@@ -37,15 +37,15 @@ import java.util.regex.Pattern;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
-import com.rslakra.core.CoreHelper;
-import com.rslakra.httpclient.HTTPHelper;
-import com.rslakra.httpclient.HTTPHelper.HttpResponse;
+import com.rslakra.core.CoreUtils;
+import com.rslakra.httpclient.HTTPUtils;
+import com.rslakra.httpclient.HTTPUtils.HttpResponse;
 
 public class TestUrlConnection {
 
     public static void main(String[] args) {
         String urlString = "https://devamatre.com/";
-        HttpResponse httpResponse = HTTPHelper.executeGetRequest(urlString, null, true);
+        HttpResponse httpResponse = HTTPUtils.executeGetRequest(urlString, null, true);
         System.out.println(httpResponse.getRequestHeaders());
 
         String formActionValue = extractFormActionValue(httpResponse.getDataBytes());
@@ -68,7 +68,7 @@ public class TestUrlConnection {
      */
     public static String extractFormActionValue(byte[] bytes) {
         String formActionValue = null;
-        if (!CoreHelper.isNullOrEmpty(bytes)) {
+        if (!CoreUtils.isNullOrEmpty(bytes)) {
             final String startString = "<form action=\"";
             final String endString = "\" method=\"post\">";
             BufferedReader bReader = null;

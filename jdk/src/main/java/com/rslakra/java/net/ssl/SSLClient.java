@@ -38,7 +38,7 @@ import java.io.PrintStream;
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
-import com.rslakra.core.IOHelper;
+import com.rslakra.core.IOUtils;
 import com.rslakra.java.net.NetConstants;
 
 /*
@@ -56,7 +56,7 @@ public class SSLClient {
 		SSLSocketFactory f = (SSLSocketFactory) SSLSocketFactory.getDefault();
 		try {
 			SSLSocket client = (SSLSocket) f.createSocket(NetConstants.CLIENT_HOST, NetConstants.HTTP_PORT);
-			IOHelper.logSocket(client);
+			IOUtils.logSocket(client);
 			client.startHandshake();
 			BufferedWriter w = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 			BufferedReader r = new BufferedReader(new InputStreamReader(client.getInputStream()));

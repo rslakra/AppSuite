@@ -6,49 +6,35 @@
     <!-- Parent -->
     <parent>
         <groupId>com.rslakra</groupId>
-        <artifactId>Java</artifactId>
+        <artifactId>java</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <!--    <groupId>${parent.groupId}.java</groupId>-->
     <artifactId>jdk</artifactId>
+    <groupId>com.rslakra.java</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
-    <name>The ${artifactId} Project</name>
+    <name>The ${project.artifactId} Project</name>
 
     <!-- Properties -->
     <properties>
-        <dLogger.version>1.0-SNAPSHOT</dLogger.version>
-        <dCore.version>1.0-SNAPSHOT</dCore.version>
+        <core.version>1.0-SNAPSHOT</core.version>
+        <http-client.version>1.0-SNAPSHOT</http-client.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- dLogger -->
+        <!-- Core -->
         <dependency>
-            <groupId>com.devamatre</groupId>
-            <artifactId>dLogger</artifactId>
-            <version>${dLogger.version}</version>
-        </dependency>
-
-        <!-- dCore -->
-        <dependency>
-            <groupId>com.devamatre</groupId>
-            <artifactId>dCore</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!-- CoreHelper -->
-        <dependency>
-            <groupId>com.rslakra</groupId>
+            <groupId>com.rslakra.java</groupId>
             <artifactId>core</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${core.version}</version>
         </dependency>
 
         <!-- http-client -->
         <dependency>
             <groupId>com.rslakra.java</groupId>
             <artifactId>http-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${http-client.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -68,20 +54,7 @@
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
             <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>
-
-        <dependency>
-            <groupId>xml-apis</groupId>
-            <artifactId>xml-apis</artifactId>
-            <version>1.4.01</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/xerces/xercesImpl -->
-        <dependency>
-            <groupId>xerces</groupId>
-            <artifactId>xercesImpl</artifactId>
-            <version>2.12.2</version>
+            <version>4.3.6</version>
         </dependency>
 
     </dependencies>

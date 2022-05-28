@@ -33,8 +33,8 @@ import java.net.Socket;
 
 import javax.net.ssl.SSLServerSocket;
 
-import com.rslakra.core.IOHelper;
-import com.rslakra.core.SSLHelper;
+import com.rslakra.core.IOUtils;
+import com.rslakra.core.SSLUtils;
 import com.rslakra.java.net.ConnectionProcess;
 import com.rslakra.java.net.NetConstants;
 
@@ -78,9 +78,9 @@ public final class HTTPSServer {
 	 * @throws Exception
 	 */
 	public ServerSocket getServer() throws Exception {
-		String filePath = IOHelper.filePath(HTTPSServer.class);
-		String certFilePath = IOHelper.pathString(filePath, NetConstants.SERVER_CERTIFICATE);
-		SSLServerSocket serversocket = SSLHelper.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
+		String filePath = IOUtils.filePath(HTTPSServer.class);
+		String certFilePath = IOUtils.pathString(filePath, NetConstants.SERVER_CERTIFICATE);
+		SSLServerSocket serversocket = SSLUtils.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
 		return serversocket;
 	}
 	

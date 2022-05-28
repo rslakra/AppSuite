@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre Inc. 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
  * 
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -92,10 +92,10 @@ import javax.net.ssl.X509TrustManager;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.rslakra.core.CoreHelper;
-import com.rslakra.core.IOHelper;
-import com.rslakra.core.JSONHelper;
-import com.rslakra.core.SecurityHelper;
+import com.rslakra.core.CoreUtils;
+import com.rslakra.core.IOUtils;
+import com.rslakra.core.JSONUtils;
+import com.rslakra.core.SecurityUtils;
 
 /**
  * This class handles the HTTP(S) requests.
@@ -104,7 +104,9 @@ import com.rslakra.core.SecurityHelper;
  * @version 1.0.0
  * @since May 1, 2015 3:24:11 PM
  */
-public final class HTTPHelper {
+public enum HTTPUtils {
+
+	INSTANCE;
 	
 	/** SEPERATOR_HASH */
 	public static final String SEPERATOR_HASH = "#";
@@ -226,11 +228,6 @@ public final class HTTPHelper {
 	// deviceModel - used in user-agent
 	private static String deviceModel;
 	
-	// Singleton object
-	private HTTPHelper() {
-		throw new UnsupportedOperationException("Object creation is not allowed!");
-	}
-	
 	/**
 	 * Initializes the cooky manager.
 	 */
@@ -285,7 +282,7 @@ public final class HTTPHelper {
 	 */
 	public static <T> Set<T> asSet(List<T> args) {
 		Set<T> set = new HashSet<T>();
-		if (!CoreHelper.isNullOrEmpty(args)) {
+		if (!CoreUtils.isNullOrEmpty(args)) {
 			set.addAll(args);
 		}
 		
@@ -301,7 +298,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static <T> boolean contains(Collection<T> collection, T value) {
-		return ((!CoreHelper.isNullOrEmpty(collection)) && collection.contains(value));
+		return ((!CoreUtils.isNullOrEmpty(collection)) && collection.contains(value));
 	}
 	
 	/**
@@ -313,7 +310,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static <K, V> boolean keyExists(Map<K, V> keyValues, K key) {
-		return (!CoreHelper.isNullOrEmpty(keyValues) && keyValues.keySet().contains(key));
+		return (!CoreUtils.isNullOrEmpty(keyValues) && keyValues.keySet().contains(key));
 	}
 	
 	/**
@@ -326,9 +323,9 @@ public final class HTTPHelper {
 	 */
 	public static Set<String> asSet(String valueString, String delimiter) {
 		Set<String> setStrings = new HashSet<String>();
-		if (CoreHelper.isNotNullOrEmpty(valueString) && CoreHelper.isNotNullOrEmpty(delimiter)) {
+		if (CoreUtils.isNotNullOrEmpty(valueString) && CoreUtils.isNotNullOrEmpty(delimiter)) {
 			String[] tokens = valueString.split(delimiter);
-			if (!CoreHelper.isNullOrEmpty(tokens)) {
+			if (!CoreUtils.isNullOrEmpty(tokens)) {
 				for (int i = 0; i < tokens.length; i++) {
 					setStrings.add(tokens[i].trim());
 				}
@@ -405,7 +402,7 @@ public final class HTTPHelper {
 	@SuppressWarnings("unchecked")
 	public static <T> T[] toArray(List<T> list, Class<T> classType) {
 		T[] listArray = null;
-		if (!CoreHelper.isNullOrEmpty(list)) {
+		if (!CoreUtils.isNullOrEmpty(list)) {
 			listArray = (T[]) Array.newInstance(classType, list.size());
 			listArray = list.toArray(listArray);
 		}
@@ -443,7 +440,7 @@ public final class HTTPHelper {
 	 */
 	public static <T> boolean equals(T type, T... types) {
 		boolean result = false;
-		if (CoreHelper.isNotNull(type) && !CoreHelper.isNullOrEmpty(types)) {
+		if (CoreUtils.isNotNull(type) && !CoreUtils.isNullOrEmpty(types)) {
 			for (int i = 0; i < types.length; i++) {
 				if (types[i].equals(type)) {
 					result = true;
@@ -465,7 +462,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static boolean equalsAnyone(boolean ignoreCase, String string, String... args) {
-		if (CoreHelper.isNotNullOrEmpty(string) && args != null) {
+		if (CoreUtils.isNotNullOrEmpty(string) && args != null) {
 			for (int i = 0; i < args.length; i++) {
 				if (ignoreCase) {
 					if (string.equalsIgnoreCase(args[i])) {
@@ -612,7 +609,7 @@ public final class HTTPHelper {
 	 */
 	public static boolean isInstanceOf(Object object, Class<?>... classTypes) {
 		boolean instanceOf = false;
-		if (CoreHelper.isNotNull(object) && !CoreHelper.isNullOrEmpty(classTypes)) {
+		if (CoreUtils.isNotNull(object) && !CoreUtils.isNullOrEmpty(classTypes)) {
 			for (int i = 0; i < classTypes.length; i++) {
 				if (classTypes[i].isInstance(object)) {
 					instanceOf = true;
@@ -688,7 +685,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static String getClassSimpleName(Class<?> klass) {
-		return (CoreHelper.isNull(klass) ? null : klass.getSimpleName());
+		return (CoreUtils.isNull(klass) ? null : klass.getSimpleName());
 	}
 	
 	/**
@@ -699,9 +696,9 @@ public final class HTTPHelper {
 	 */
 	public static String getClassSimpleName(Object object) {
 		String classSimpleName = null;
-		if (CoreHelper.isNotNull(object)) {
+		if (CoreUtils.isNotNull(object)) {
 			Class<?> klass = object.getClass().getEnclosingClass();
-			if (CoreHelper.isNull(klass)) {
+			if (CoreUtils.isNull(klass)) {
 				klass = object.getClass();
 			}
 			classSimpleName = getClassSimpleName(klass);
@@ -800,14 +797,14 @@ public final class HTTPHelper {
 		
 		/* These properties are mandatory for the server requests. */
 		// prepare user-agent value
-		if (CoreHelper.isNotNullOrEmpty(appBundleIdentifier)) {
-			userAgentBuilder.append("OSType=").append(CoreHelper.getJVMName());
+		if (CoreUtils.isNotNullOrEmpty(appBundleIdentifier)) {
+			userAgentBuilder.append("OSType=").append(CoreUtils.getJVMName());
 		}
 		userAgentBuilder.append(";OSVer=").append(OS_VERSION);
-		if (CoreHelper.isNotNullOrEmpty(appType)) {
+		if (CoreUtils.isNotNullOrEmpty(appType)) {
 			userAgentBuilder.append(";AppType=").append(appType);
 		}
-		if (CoreHelper.isNotNullOrEmpty(appBundleIdentifier)) {
+		if (CoreUtils.isNotNullOrEmpty(appBundleIdentifier)) {
 			userAgentBuilder.append(";ABI=").append(appBundleIdentifier);
 		}
 		Locale localeDefault = Locale.getDefault();
@@ -854,7 +851,7 @@ public final class HTTPHelper {
 	 */
 	public static URL newURL(String baseUrl, String urlSuffix) throws IOException {
 		URL url = null;
-		if (CoreHelper.isNullOrEmpty(urlSuffix)) {
+		if (CoreUtils.isNullOrEmpty(urlSuffix)) {
 			url = newURL(baseUrl);
 		} else {
 			url = new URL(newURL(baseUrl), urlSuffix);
@@ -962,16 +959,16 @@ public final class HTTPHelper {
 	 */
 	public static String getServerUrl(String baseServerUrl, String urlSuffix) {
 		StringBuilder urlString = new StringBuilder();
-		if (CoreHelper.isNotNullOrEmpty(baseServerUrl)) {
+		if (CoreUtils.isNotNullOrEmpty(baseServerUrl)) {
 			urlString.append(baseServerUrl);
 		}
 		
 		// append urlPrefix, if available.
-		if (!CoreHelper.isNullOrEmpty(urlSuffix)) {
-			if (urlSuffix.startsWith(IOHelper.SLASH)) {
+		if (!CoreUtils.isNullOrEmpty(urlSuffix)) {
+			if (urlSuffix.startsWith(IOUtils.SLASH)) {
 				urlString.append(urlSuffix);
 			} else {
-				urlString.append(IOHelper.SLASH).append(urlSuffix);
+				urlString.append(IOUtils.SLASH).append(urlSuffix);
 			}
 		}
 		
@@ -986,7 +983,7 @@ public final class HTTPHelper {
 	public static String getHostName(String urlString) {
 		// check in cache first
 		String hostName = urlToDomainMap.get(urlString);
-		if (CoreHelper.isNullOrEmpty(hostName)) {
+		if (CoreUtils.isNullOrEmpty(hostName)) {
 			if (USE_FULLY_QUALIFIED_HOSTNAME) {
 				hostName = getHostNameFromUrl(urlString);
 			} else {
@@ -1070,21 +1067,21 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void logURLConnection(HttpURLConnection urlConnection) throws IOException {
-		IOHelper.debug("+logURLConnection(" + urlConnection + ")");
+		IOUtils.debug("+logURLConnection(" + urlConnection + ")");
 		
 		/* extract request parameters, if available. */
 		if (urlConnection != null) {
-			IOHelper.debug("Request Method:" + urlConnection.getRequestMethod());
+			IOUtils.debug("Request Method:" + urlConnection.getRequestMethod());
 			// debug("Headers:" + urlConnection.getHeaderFields());
 			Map<String, List<String>> requestHeader = urlConnection.getHeaderFields();
 			for (String key : requestHeader.keySet()) {
 				List<String> listValue = requestHeader.get(key);
-				IOHelper.debug("Key:" + key + ", Value:" + listValue);
+				IOUtils.debug("Key:" + key + ", Value:" + listValue);
 			}
 			
 		}
 		
-		IOHelper.debug("-logURLConnection()");
+		IOUtils.debug("-logURLConnection()");
 	}
 	
 	// /////////////////////////////////////////////////////////////////////////
@@ -1099,9 +1096,9 @@ public final class HTTPHelper {
 	 */
 	public static String getRequestMethodName(HttpServletRequest servletRequest) {
 		String requestMethodName = null;
-		if (CoreHelper.isNotNull(servletRequest)) {
+		if (CoreUtils.isNotNull(servletRequest)) {
 			String[] paramValue = (String[]) servletRequest.getParameterMap().get(METHOD_NAME);
-			if (!CoreHelper.isNullOrEmpty(paramValue)) {
+			if (!CoreUtils.isNullOrEmpty(paramValue)) {
 				requestMethodName = paramValue[0].toString();
 			}
 		}
@@ -1119,7 +1116,7 @@ public final class HTTPHelper {
 	 */
 	public static Map<String, String> getRequestHeaders(HttpServletRequest servletRequest) {
 		Map<String, String> requestHeaders = new TreeMap<String, String>();
-		if (CoreHelper.isNotNull(servletRequest)) {
+		if (CoreUtils.isNotNull(servletRequest)) {
 			try {
 				/* extract request headers, if available. */
 				@SuppressWarnings("unchecked")
@@ -1127,11 +1124,11 @@ public final class HTTPHelper {
 				while (headerNames.hasMoreElements()) {
 					String headerName = headerNames.nextElement();
 					String headerValue = servletRequest.getHeader(headerName);
-					IOHelper.debug("headerName:" + headerName + ", headerValue:" + headerValue);
+					IOUtils.debug("headerName:" + headerName + ", headerValue:" + headerValue);
 					requestHeaders.put(headerName, headerValue);
 				}
 			} catch (Exception ex) {
-				IOHelper.error(ex);
+				IOUtils.error(ex);
 			}
 		}
 		
@@ -1156,7 +1153,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void logServletRequest(HttpServletRequest servletRequest) throws IOException {
-		IOHelper.debug("+logServletRequest(" + servletRequest + ")");
+		IOUtils.debug("+logServletRequest(" + servletRequest + ")");
 		/* extract request parameters, if available. */
 		if (servletRequest != null) {
 			for (Object key : servletRequest.getParameterMap().keySet()) {
@@ -1194,7 +1191,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static HttpURLConnection openHttpURLConnection(URL url, Proxy proxy) throws IOException {
-		return (CoreHelper.isNotNull(url) ? (HttpURLConnection) (CoreHelper.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+		return (CoreUtils.isNotNull(url) ? (HttpURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
 	}
 	
 	/**
@@ -1206,7 +1203,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static HttpURLConnection openHttpURLConnection(URL url) throws IOException {
-		return (CoreHelper.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
+		return (CoreUtils.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
 	}
 	
 	/**
@@ -1245,7 +1242,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static HttpsURLConnection openHttpsURLConnection(URL url, Proxy proxy) throws IOException {
-		return (CoreHelper.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (CoreHelper.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+		return (CoreUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
 	}
 	
 	/**
@@ -1291,7 +1288,7 @@ public final class HTTPHelper {
 	 * @param urlConnection
 	 */
 	public static void close(HttpURLConnection urlConnection) {
-		if (CoreHelper.isNotNull(urlConnection)) {
+		if (CoreUtils.isNotNull(urlConnection)) {
 			try {
 				// Crucial, according to the documentation.
 				urlConnection.disconnect();
@@ -1309,7 +1306,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void setConnectTimeoutProperties(HttpURLConnection urlConnection) throws IOException {
-		if (CoreHelper.isNotNull(urlConnection)) {
+		if (CoreUtils.isNotNull(urlConnection)) {
 			urlConnection.setConnectTimeout(Values.HTTP_CONNECTION_TIMEOUT_SECONDS * 1000);
 			urlConnection.setReadTimeout(Values.HTTP_READ_TIMEOUT_SECONDS * 1000);
 		}
@@ -1326,7 +1323,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod) throws IOException {
-		if (CoreHelper.isNotNull(urlConnection)) {
+		if (CoreUtils.isNotNull(urlConnection)) {
 			// set connection timeout properties.
 			setConnectTimeoutProperties(urlConnection);
 			
@@ -1337,7 +1334,7 @@ public final class HTTPHelper {
 			urlConnection.setDoInput(true);
 			
 			// request method (i.e GET/POST/PUT etc)
-			if (CoreHelper.isNotNullOrEmpty(requestMethod)) {
+			if (CoreUtils.isNotNullOrEmpty(requestMethod)) {
 				urlConnection.setRequestMethod(requestMethod);
 				urlConnection.setDoOutput(Methods.POST.equalsIgnoreCase(requestMethod));
 			} else {
@@ -1346,7 +1343,7 @@ public final class HTTPHelper {
 			}
 			
 			// add device-id in request.
-			urlConnection.addRequestProperty(DEVICE_ID, SecurityHelper.uniqueDeviceIdString());
+			urlConnection.addRequestProperty(DEVICE_ID, SecurityUtils.uniqueDeviceIdString());
 			// user-agent (default string generated for Android)
 			urlConnection.addRequestProperty(Headers.USER_AGENT, getUserAgentString());
 			// other default properties
@@ -1363,7 +1360,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void setConnectionInputAndOutput(final HttpURLConnection urlConnection) throws IOException {
-		if (CoreHelper.isNotNull(urlConnection)) {
+		if (CoreUtils.isNotNull(urlConnection)) {
 			/*
 			 * Sets the flag indicating whether this URLConnection allows input.
 			 * It cannot be set after the connection is established.
@@ -1381,7 +1378,7 @@ public final class HTTPHelper {
 	 * @throws IOException
 	 */
 	public static void setConnectionUseCaches(final HttpURLConnection urlConnection) throws IOException {
-		if (CoreHelper.isNotNull(urlConnection)) {
+		if (CoreUtils.isNotNull(urlConnection)) {
 			/*
 			 * Sets the flag indicating whether this connection allows to use
 			 * caches or not. This method can only be called prior to the
@@ -1399,23 +1396,23 @@ public final class HTTPHelper {
 	 */
 	public static String toCookyString(Map<String, String> mapCookies) {
 		String cookies = null;
-		if (!CoreHelper.isNullOrEmpty(mapCookies)) {
+		if (!CoreUtils.isNullOrEmpty(mapCookies)) {
 			/** Add Cookies. */
 			StringBuilder cookyBuilder = new StringBuilder();
 			for (String key : mapCookies.keySet()) {
 				String value = mapCookies.get(key);
-				if (CoreHelper.isNotNullOrEmpty(value)) {
+				if (CoreUtils.isNotNullOrEmpty(value)) {
 					if (equals(Headers.COOKIE, key)) {
 						cookyBuilder.append(value).append(";");
 					} else {
-						// value = SecurityHelper.encodeWithURLEncoder(value,
+						// value = SecurityUtils.encodeWithURLEncoder(value,
 						// UTF_8);
 						cookyBuilder.append(key).append("=").append(value).append(";");
 					}
 				}
 			}
 			
-			if (!CoreHelper.isNullOrEmpty(cookyBuilder)) {
+			if (!CoreUtils.isNullOrEmpty(cookyBuilder)) {
 				cookies = cookyBuilder.toString();
 				cookyBuilder = null;
 			}
@@ -1432,14 +1429,14 @@ public final class HTTPHelper {
 	 */
 	public static Map<String, String> mergeCookies(final Map<String, String> mapCookies) {
 		Map<String, String> mergedCookies = new HashMap<String, String>();
-		if (!CoreHelper.isNullOrEmpty(mapCookies)) {
+		if (!CoreUtils.isNullOrEmpty(mapCookies)) {
 			/** Merge Cookies. */
 			for (String key : mapCookies.keySet()) {
 				String value = mapCookies.get(key);
-				if (CoreHelper.isNotNullOrEmpty(value)) {
+				if (CoreUtils.isNotNullOrEmpty(value)) {
 					if (equals(Headers.COOKIE, key)) {
 						Map<String, String> oldCookies = extractCookies(value);
-						if (!CoreHelper.isNullOrEmpty(oldCookies)) {
+						if (!CoreUtils.isNullOrEmpty(oldCookies)) {
 							mergedCookies.putAll(oldCookies);
 						}
 					} else {
@@ -1460,8 +1457,8 @@ public final class HTTPHelper {
 	 * @param cookies
 	 */
 	public static void setRequestCookies(HttpURLConnection urlConnection, String cookies) {
-		if (CoreHelper.isNotNull(urlConnection) && CoreHelper.isNotNullOrEmpty(cookies)) {
-			IOHelper.debug(Headers.COOKIE + ":" + cookies);
+		if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(cookies)) {
+			IOUtils.debug(Headers.COOKIE + ":" + cookies);
 			urlConnection.setRequestProperty(Headers.COOKIE, cookies);
 		}
 	}
@@ -1486,7 +1483,7 @@ public final class HTTPHelper {
 	 */
 	public static String toUrlQueryString(Map<String, Object> requestParameters) {
 		String urlQueryString = null;
-		if (!CoreHelper.isNullOrEmpty(requestParameters)) {
+		if (!CoreUtils.isNullOrEmpty(requestParameters)) {
 			StringBuilder aueryString = new StringBuilder();
 			boolean firstParam = true;
 			for (String key : requestParameters.keySet()) {
@@ -1497,7 +1494,7 @@ public final class HTTPHelper {
 				}
 				
 				String value = String.valueOf(requestParameters.get(key));
-				value = SecurityHelper.encodeWithURLEncoder(value, IOHelper.UTF_8);
+				value = SecurityUtils.encodeWithURLEncoder(value, IOUtils.UTF_8);
 				aueryString.append(key).append("=").append(value);
 			}
 			
@@ -1528,8 +1525,8 @@ public final class HTTPHelper {
 	 */
 	public static void setQueryString(HttpURLConnection urlConnection, final String queryString) throws IOException {
 		System.out.println("setQueryString(" + urlConnection + ", " + queryString + ")");
-		if (CoreHelper.isNotNull(urlConnection) && CoreHelper.isNotNullOrEmpty(queryString)) {
-			IOHelper.writeBytes(queryString.getBytes(), urlConnection.getOutputStream(), true);
+		if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(queryString)) {
+			IOUtils.writeBytes(queryString.getBytes(), urlConnection.getOutputStream(), true);
 		}
 	}
 	
@@ -1553,13 +1550,13 @@ public final class HTTPHelper {
 	 */
 	public static Map<String, Object> toRequestParameters(String encodedParameters) {
 		Map<String, Object> requestParameters = new LinkedHashMap<String, Object>();
-		if (CoreHelper.isNotNullOrEmpty(encodedParameters)) {
-			String decodedParameters = SecurityHelper.decodeWithURLDecoder(encodedParameters);
+		if (CoreUtils.isNotNullOrEmpty(encodedParameters)) {
+			String decodedParameters = SecurityUtils.decodeWithURLDecoder(encodedParameters);
 			String[] paramTokens = decodedParameters.split("&");
-			if (!CoreHelper.isNullOrEmpty(paramTokens)) {
+			if (!CoreUtils.isNullOrEmpty(paramTokens)) {
 				for (int i = 0; i < paramTokens.length; i++) {
 					String[] tokens = paramTokens[i].split("=");
-					if (!CoreHelper.isNullOrEmpty(tokens) && tokens.length > 1) {
+					if (!CoreUtils.isNullOrEmpty(tokens) && tokens.length > 1) {
 						requestParameters.put(tokens[0], tokens[1]);
 					}
 				}
@@ -1577,14 +1574,14 @@ public final class HTTPHelper {
 	 * @param requestHeaders
 	 */
 	public static void setRequestHeaders(HttpURLConnection urlConnection, Map<String, String> requestHeaders) {
-		if (CoreHelper.isNotNull(urlConnection) && !CoreHelper.isNullOrEmpty(requestHeaders)) {
+		if (CoreUtils.isNotNull(urlConnection) && !CoreUtils.isNullOrEmpty(requestHeaders)) {
 			for (String headerKey : requestHeaders.keySet()) {
 				String headerValue = requestHeaders.get(headerKey);
 				System.out.println("headerKey:" + headerKey + ", headerValue:" + headerValue);
-				if (CoreHelper.isNotNullOrEmpty(headerValue)) {
+				if (CoreUtils.isNotNullOrEmpty(headerValue)) {
 					if (equals(Headers.COOKIE, headerKey)) {
 						String currentValue = urlConnection.getHeaderField(Headers.COOKIE);
-						if (CoreHelper.isNotNullOrEmpty(currentValue)) {
+						if (CoreUtils.isNotNullOrEmpty(currentValue)) {
 							headerValue += ";" + currentValue;
 						}
 					}
@@ -1616,7 +1613,7 @@ public final class HTTPHelper {
 		HttpURLConnection urlConnection = null;
 		
 		try {
-			if (CoreHelper.isNullOrEmpty(urlString)) {
+			if (CoreUtils.isNullOrEmpty(urlString)) {
 				throw new IllegalArgumentException("Server URL must provide!");
 			}
 			
@@ -1624,7 +1621,7 @@ public final class HTTPHelper {
 			if (Methods.GET.equalsIgnoreCase(httpMethod)) {
 				StringBuilder requestBuilder = new StringBuilder(urlString);
 				String queryString = toUrlQueryString(requestParameters);
-				if (CoreHelper.isNotNullOrEmpty(queryString)) {
+				if (CoreUtils.isNotNullOrEmpty(queryString)) {
 					requestBuilder.append("?").append(queryString);
 				}
 				urlConnection = openHttpURLConnection(requestBuilder.toString());
@@ -1660,7 +1657,7 @@ public final class HTTPHelper {
 			operationResponse.setResponseCode(urlConnection.getResponseCode());
 			operationResponse.setResponseHeaders(urlConnection.getHeaderFields());
 			if (operationResponse.getResponseCode() == 200) {
-				byte[] dataBytes = IOHelper.readBytes(urlConnection.getInputStream(), closeStream);
+				byte[] dataBytes = IOUtils.readBytes(urlConnection.getInputStream(), closeStream);
 				operationResponse.setDataBytes(dataBytes);
 				// Final cleanup:
 				dataBytes = null;
@@ -1775,10 +1772,10 @@ public final class HTTPHelper {
 		// System.out.println("+getHeader(" + headers + ", " + key +
 		// ")");
 		String value = null;
-		if (!CoreHelper.isNullOrEmpty(headers)) {
+		if (!CoreUtils.isNullOrEmpty(headers)) {
 			List<String> headerValues = headers.get(key);
 			// System.out.println("headerValues:" + headerValues);
-			if (!CoreHelper.isNullOrEmpty(headerValues)) {
+			if (!CoreUtils.isNullOrEmpty(headerValues)) {
 				value = headerValues.get(0);
 			}
 		}
@@ -1794,7 +1791,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static Map<String, List<String>> getHeaders(HttpResponse operationResponse) {
-		return (CoreHelper.isNull(operationResponse) ? null : operationResponse.getResponseHeaders());
+		return (CoreUtils.isNull(operationResponse) ? null : operationResponse.getResponseHeaders());
 	}
 	
 	/**
@@ -1805,7 +1802,7 @@ public final class HTTPHelper {
 	 */
 	public static String getMimeType(Map<String, List<String>> headers) {
 		String mimeType = null;
-		if (!CoreHelper.isNullOrEmpty(headers)) {
+		if (!CoreUtils.isNullOrEmpty(headers)) {
 			mimeType = headers.get(Headers.CONTENT_TYPE).get(0);
 			if (mimeType.indexOf(";") != -1) {
 				mimeType = mimeType.substring(0, mimeType.indexOf(";")).trim();
@@ -1825,7 +1822,7 @@ public final class HTTPHelper {
 	public static Map<String, String> extractCookies(String stringCookies) {
 		Map<String, String> mapCookies = null;
 		System.out.println("+extractCookies(" + stringCookies + ")");
-		if (CoreHelper.isNotNullOrEmpty(stringCookies)) {
+		if (CoreUtils.isNotNullOrEmpty(stringCookies)) {
 			mapCookies = new HashMap<String, String>();
 			String[] cookies = stringCookies.split(";");
 			for (String cookie : cookies) {
@@ -1850,14 +1847,14 @@ public final class HTTPHelper {
 	public static Map<String, String> extractCookies(Map<String, List<String>> responseHeaders) {
 		Map<String, String> mapCookies = null;
 		System.out.println("+extractCookies(" + responseHeaders + ")");
-		if (!CoreHelper.isNullOrEmpty(responseHeaders)) {
+		if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
 			List<String> allCookies = responseHeaders.get(Headers.SET_COOKIE);
 			System.out.println("allCookies:" + allCookies);
-			if (!CoreHelper.isNullOrEmpty(allCookies)) {
+			if (!CoreUtils.isNullOrEmpty(allCookies)) {
 				mapCookies = new HashMap<String, String>();
 				for (String stringCookie : allCookies) {
 					Map<String, String> extractedCookies = extractCookies(stringCookie);
-					if (!CoreHelper.isNullOrEmpty(extractedCookies)) {
+					if (!CoreUtils.isNullOrEmpty(extractedCookies)) {
 						mapCookies.putAll(extractedCookies);
 					}
 				}
@@ -1906,12 +1903,12 @@ public final class HTTPHelper {
 		// " + key +
 		// ", " + defaultValue + ")");
 		Object value = null;
-		if (!CoreHelper.isNullOrEmpty(mapKeyValues) && !CoreHelper.isNullOrEmpty(key)) {
+		if (!CoreUtils.isNullOrEmpty(mapKeyValues) && !CoreUtils.isNullOrEmpty(key)) {
 			value = mapKeyValues.get(key);
 		}
 		
 		// return default value if the value is null or empty.
-		if (CoreHelper.isNull(value)) {
+		if (CoreUtils.isNull(value)) {
 			value = defaultValue;
 		}
 		
@@ -1994,7 +1991,7 @@ public final class HTTPHelper {
 	 */
 	public static Map<String, String> headerValuesAsString(Map<String, List<String>> headers) {
 		Map<String, String> mapHeaders = new HashMap<String, String>();
-		if (!CoreHelper.isNullOrEmpty(headers)) {
+		if (!CoreUtils.isNullOrEmpty(headers)) {
 			Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
 			for (Map.Entry<String, List<String>> entry : entries) {
 				mapHeaders.put(entry.getKey(), entry.getValue().get(0));
@@ -2013,7 +2010,7 @@ public final class HTTPHelper {
 		System.out.println("+getContentDispositionFileNameValue(" + contentDisposition + ")");
 		
 		String valueFileName = null;
-		if (!CoreHelper.isNullOrEmpty(contentDisposition)) {
+		if (!CoreUtils.isNullOrEmpty(contentDisposition)) {
 			int fileNameIndex = contentDisposition.indexOf(Values.FILE_NAME_EQUAL);
 			if (fileNameIndex > -1 && fileNameIndex < contentDisposition.length() - 1) {
 				valueFileName = contentDisposition.substring(fileNameIndex + Values.FILE_NAME_EQUAL.length());
@@ -2030,7 +2027,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static List<String> getExcludedHeaders() {
-		if (CoreHelper.isNull(excludedHeaders)) {
+		if (CoreUtils.isNull(excludedHeaders)) {
 			excludedHeaders = new ArrayList<String>();
 			/*
 			 * excluded the following headers from the request/response headers.
@@ -2056,7 +2053,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static String[] getHeadersIgnored() {
-		if (CoreHelper.isNull(headersIgnored)) {
+		if (CoreUtils.isNull(headersIgnored)) {
 			headersIgnored = toArray(getExcludedHeaders(), String.class);
 		}
 		
@@ -2069,7 +2066,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static List<String> getExcludedParameters() {
-		if (CoreHelper.isNull(excludedParameters)) {
+		if (CoreUtils.isNull(excludedParameters)) {
 			excludedParameters = new ArrayList<String>();
 			/* remove the following parameters before generating hashCode. */
 		}
@@ -2087,7 +2084,7 @@ public final class HTTPHelper {
 	 */
 	public static boolean isExcludedParameter(String paramName) {
 		boolean excludedParameter = false;
-		if (CoreHelper.isNotNullOrEmpty(paramName) && !CoreHelper.isNullOrEmpty(getExcludedParameters())) {
+		if (CoreUtils.isNotNullOrEmpty(paramName) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
 			for (int i = 0; i < excludedParameters.size(); i++) {
 				if (excludedParameters.contains(paramName)) {
 					excludedParameter = true;
@@ -2105,7 +2102,7 @@ public final class HTTPHelper {
 	 * @param sortedParameters
 	 */
 	public static void removeExcludedParameters(SortedMap<String, Object> sortedParameters) {
-		if (!CoreHelper.isNullOrEmpty(sortedParameters) && !CoreHelper.isNullOrEmpty(getExcludedParameters())) {
+		if (!CoreUtils.isNullOrEmpty(sortedParameters) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
 			for (int i = 0; i < excludedParameters.size(); i++) {
 				sortedParameters.remove(excludedParameters.get(i));
 			}
@@ -2120,13 +2117,13 @@ public final class HTTPHelper {
 	 */
 	public static String paramValuesAsHashString(SortedMap<String, Object> requestParameters) {
 		String valuesAsHashString = null;
-		if (!CoreHelper.isNullOrEmpty(requestParameters)) {
+		if (!CoreUtils.isNullOrEmpty(requestParameters)) {
 			SortedMap<String, Object> sortedParameters = toSortedMap(requestParameters);
 			/* remove existing custom parameters, if available */
 			removeExcludedParameters(sortedParameters);
 			
 			String paramValuesAsString = paramValuesAsString(sortedParameters);
-			valuesAsHashString = SecurityHelper.paramValueAsHashString(paramValuesAsString);
+			valuesAsHashString = SecurityUtils.paramValueAsHashString(paramValuesAsString);
 		}
 		
 		return valuesAsHashString;
@@ -2152,7 +2149,7 @@ public final class HTTPHelper {
 	 */
 	public static boolean isExcludedMethodRequest(String requestMethodName, String... excludedMethods) {
 		boolean excludedMethodRequest = false;
-		if (!CoreHelper.isNullOrEmpty(requestMethodName) && !CoreHelper.isNullOrEmpty(excludedMethods)) {
+		if (!CoreUtils.isNullOrEmpty(requestMethodName) && !CoreUtils.isNullOrEmpty(excludedMethods)) {
 			for (int i = 0; i < excludedMethods.length; i++) {
 				if (excludedMethods[i].equalsIgnoreCase(requestMethodName)) {
 					excludedMethodRequest = true;
@@ -2170,7 +2167,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static List<String> getExcludedMethods() {
-		if (CoreHelper.isNull(excludedMethods)) {
+		if (CoreUtils.isNull(excludedMethods)) {
 			excludedMethods = new ArrayList<String>();
 			/* add more methods if required. */
 		}
@@ -2185,7 +2182,7 @@ public final class HTTPHelper {
 	 * @param excludedMethodRequest
 	 */
 	public static void filterRequestParameters(SortedMap<String, Object> requestParameters, boolean excludedMethodRequest) {
-		if (excludedMethodRequest && !CoreHelper.isNullOrEmpty(requestParameters)) {
+		if (excludedMethodRequest && !CoreUtils.isNullOrEmpty(requestParameters)) {
 			SortedMap<String, Object> filteredParameters = new TreeMap<String, Object>(requestParameters);
 			for (String key : filteredParameters.keySet()) {
 				if (("rand".equals(key) || "_".equals(key))) {
@@ -2229,11 +2226,11 @@ public final class HTTPHelper {
 	 */
 	public static String paramValuesAsString(String... paramValues) {
 		String valuesAsString = null;
-		if (!CoreHelper.isNullOrEmpty(paramValues)) {
+		if (!CoreUtils.isNullOrEmpty(paramValues)) {
 			StringBuilder hashBuffer = new StringBuilder();
 			Arrays.sort(paramValues);
 			for (int i = 0; i < paramValues.length; i++) {
-				String paramValue = CoreHelper.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
+				String paramValue = CoreUtils.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
 				hashBuffer.append(paramValue);
 			}
 			
@@ -2254,11 +2251,11 @@ public final class HTTPHelper {
 	 */
 	public static String paramValuesAsString(List<String> paramValues) {
 		String valuesAsString = null;
-		if (!CoreHelper.isNullOrEmpty(paramValues)) {
+		if (!CoreUtils.isNullOrEmpty(paramValues)) {
 			StringBuilder hashBuffer = new StringBuilder();
 			Collections.sort(paramValues);
 			for (String paramValue : paramValues) {
-				paramValue = CoreHelper.isNullOrEmpty(paramValue) ? "" : paramValue;
+				paramValue = CoreUtils.isNullOrEmpty(paramValue) ? "" : paramValue;
 				hashBuffer.append(paramValue);
 			}
 			
@@ -2279,12 +2276,12 @@ public final class HTTPHelper {
 	 */
 	public static String paramValuesAsString(SortedMap<String, ? extends Object> requestParameters) {
 		String valuesAsString = null;
-		if (!CoreHelper.isNullOrEmpty(requestParameters)) {
+		if (!CoreUtils.isNullOrEmpty(requestParameters)) {
 			StringBuilder hashBuffer = new StringBuilder();
 			/* the iteration should be name in the same order each time. */
 			for (String key : requestParameters.keySet()) {
 				Object value = requestParameters.get(key);
-				String valueAsString = CoreHelper.isNull(value) ? "" : value.toString();
+				String valueAsString = CoreUtils.isNull(value) ? "" : value.toString();
 				hashBuffer.append(valueAsString);
 			}
 			
@@ -2303,9 +2300,9 @@ public final class HTTPHelper {
 	 * @param values
 	 */
 	public static void addToHashBuffer(final StringBuilder hashBuffer, String... values) {
-		if (CoreHelper.isNotNull(hashBuffer) && !CoreHelper.isNullOrEmpty(values)) {
+		if (CoreUtils.isNotNull(hashBuffer) && !CoreUtils.isNullOrEmpty(values)) {
 			for (int i = 0; i < values.length; i++) {
-				if (!CoreHelper.isNullOrEmpty(values[i])) {
+				if (!CoreUtils.isNullOrEmpty(values[i])) {
 					hashBuffer.append(values[i]);
 				}
 			}
@@ -2347,13 +2344,13 @@ public final class HTTPHelper {
 	 */
 	public static String getHostNameFromUrl(String urlString) {
 		String hostName = urlString;
-		if (!CoreHelper.isNullOrEmpty(urlString)) {
+		if (!CoreUtils.isNullOrEmpty(urlString)) {
 			int startIndex = urlString.indexOf("://");
 			if (startIndex >= 0) {
 				startIndex += "://".length();
 				int endIndex = urlString.lastIndexOf(":");
 				if (endIndex > -1 && endIndex < startIndex) {
-					int slashIndex = urlString.lastIndexOf(IOHelper.SLASH);
+					int slashIndex = urlString.lastIndexOf(IOUtils.SLASH);
 					if (slashIndex != -1) {
 						hostName = urlString.substring(startIndex, slashIndex);
 					} else {
@@ -2376,7 +2373,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static boolean isDigits(String string) {
-		return (CoreHelper.isNotNullOrEmpty(string) && string.matches("^[0-9]*$"));
+		return (CoreUtils.isNotNullOrEmpty(string) && string.matches("^[0-9]*$"));
 	}
 	
 	/**
@@ -2418,7 +2415,7 @@ public final class HTTPHelper {
 	 */
 	public static boolean startsWith(String value, String... prefixes) {
 		boolean result = false;
-		if (!CoreHelper.isNullOrEmpty(value) && prefixes != null) {
+		if (!CoreUtils.isNullOrEmpty(value) && prefixes != null) {
 			for (String prefix : prefixes) {
 				if (value.startsWith(prefix)) {
 					result = true;
@@ -2461,7 +2458,7 @@ public final class HTTPHelper {
 	 * @return
 	 */
 	public static boolean containsAnyone(boolean ignoreCase, String string, String... args) {
-		if (CoreHelper.isNotNullOrEmpty(string) && args != null) {
+		if (CoreUtils.isNotNullOrEmpty(string) && args != null) {
 			for (int i = 0; i < args.length; i++) {
 				if (ignoreCase) {
 					Locale defaultLocale = Locale.getDefault();
@@ -2518,7 +2515,7 @@ public final class HTTPHelper {
 		 */
 		public static Pairs<String, String> newPair(String keyValueString) {
 			Pairs<String, String> pairs = null;
-			if (CoreHelper.isNotNullOrEmpty(keyValueString)) {
+			if (CoreUtils.isNotNullOrEmpty(keyValueString)) {
 				int equalIndex = keyValueString.indexOf("=");
 				if (equalIndex != -1) {
 					String key = keyValueString.substring(0, equalIndex).trim();
@@ -2889,23 +2886,6 @@ public final class HTTPHelper {
 		}
 		
 		/**
-		 * Returns the SSL Factory.
-		 * 
-		 * @return
-		 */
-		public static SSLFactory getInstance() {
-			if (instance == null) {
-				synchronized (SSLFactory.class) {
-					if (instance == null) {
-						instance = new SSLFactory();
-					}
-				}
-			}
-			
-			return instance;
-		}
-		
-		/**
 		 * Creates the SSL Socket Factory.
 		 * 
 		 * @return
@@ -2937,7 +2917,7 @@ public final class HTTPHelper {
 			} };
 			
 			// Create an SSLContext that uses our TrustManager
-			SSLContext sslContext = getSSLContext("TLS", trustEveryone, SecurityHelper.newSecureRandom());
+			SSLContext sslContext = getSSLContext("TLS", trustEveryone, SecurityUtils.newSecureRandom());
 			
 			// use a SocketFactory from our SSLContext
 			return sslContext.getSocketFactory();
@@ -2992,7 +2972,7 @@ public final class HTTPHelper {
 		 * @throws Exception
 		 */
 		private SSLSocketFactory createTrustSSLSocketFactory(InputStream certInputStream, SecureRandom secureRandom) throws Exception {
-			X509Certificate certificate = SecurityHelper.newX509Certificate(certInputStream, true);
+			X509Certificate certificate = SecurityUtils.newX509Certificate(certInputStream, true);
 			
 			// Create a KeyStore containing our trusted CAs
 			String keyStoreType = KeyStore.getDefaultType();
@@ -3089,7 +3069,7 @@ public final class HTTPHelper {
 			KeyStore keyStore = KeyStore.getInstance(PKCS12);
 			keyStore.load(p12CertInputStream, p12CertPass);
 			if (closeStream) {
-				IOHelper.safeClose(p12CertInputStream);
+				IOUtils.safeClose(p12CertInputStream);
 			}
 			
 			return keyStore;
@@ -3106,7 +3086,7 @@ public final class HTTPHelper {
 		 * @throws IOException
 		 */
 		public KeyStore loadPKCS12KeyStore(String p12CertFileName, String p12CertPassword) throws GeneralSecurityException, IOException {
-			return loadPKCS12KeyStore(IOHelper.toInputStream(IOHelper.readBytes(p12CertFileName)), p12CertPassword.toCharArray(), false);
+			return loadPKCS12KeyStore(IOUtils.toInputStream(IOUtils.readBytes(p12CertFileName)), p12CertPassword.toCharArray(), false);
 		}
 		
 		/**
@@ -3133,7 +3113,7 @@ public final class HTTPHelper {
 				
 				pemDecodedBytes = Base64.getDecoder().decode(pemBuilder.toString());
 			} finally {
-				IOHelper.safeClose(bufferedReader);
+				IOUtils.safeClose(bufferedReader);
 			}
 			
 			return pemDecodedBytes;
@@ -3180,7 +3160,7 @@ public final class HTTPHelper {
 			byte[] pemDecodedBytes = loadPEMCertificate(new ByteArrayInputStream(certificateString.getBytes()));
 			ByteArrayInputStream derInputStream = new ByteArrayInputStream(pemDecodedBytes);
 			
-			X509Certificate x509Certificate = SecurityHelper.newX509Certificate(derInputStream, true);
+			X509Certificate x509Certificate = SecurityUtils.newX509Certificate(derInputStream, true);
 			KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
 			trustStore.load(null);
 			String alias = x509Certificate.getSubjectX500Principal().getName();
@@ -3277,8 +3257,8 @@ public final class HTTPHelper {
 		public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
 			System.out.println("responseHeaders:" + responseHeaders);
 			this.responseHeaders = responseHeaders;
-			if (!CoreHelper.isNullOrEmpty(responseHeaders)) {
-				jsonResponseHeaders = JSONHelper.toJSONString(responseHeaders);
+			if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
+				jsonResponseHeaders = JSONUtils.toJSONString(responseHeaders);
 			}
 		}
 		
@@ -3297,9 +3277,9 @@ public final class HTTPHelper {
 		 *            the responseHeaders to set
 		 */
 		public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
-			if (!CoreHelper.isNullOrEmpty(jsonResponseHeaders)) {
-				String jsonResponseHeader = IOHelper.toUTF8String(jsonResponseHeaders);
-				this.responseHeaders = JSONHelper.jsonHeadersAsMap(jsonResponseHeader);
+			if (!CoreUtils.isNullOrEmpty(jsonResponseHeaders)) {
+				String jsonResponseHeader = IOUtils.toUTF8String(jsonResponseHeaders);
+				this.responseHeaders = JSONUtils.jsonHeadersAsMap(jsonResponseHeader);
 			}
 		}
 		
@@ -3320,7 +3300,7 @@ public final class HTTPHelper {
 		public void setDataBytes(byte[] dataBytes) {
 			System.out.println("setDataBytes(" + dataBytes + ")");
 			this.dataBytes = dataBytes;
-			System.out.println("dataBytes:" + IOHelper.toUTF8String(dataBytes));
+			System.out.println("dataBytes:" + IOUtils.toUTF8String(dataBytes));
 		}
 		
 		/**
@@ -3420,10 +3400,10 @@ public final class HTTPHelper {
 			sBuilder.append("requestHeaders:").append(getRequestHeaders()).append("\n");
 			sBuilder.append("ResponseCode:").append(getResponseCode()).append("\n");
 			sBuilder.append("ResponseHeaders:").append(getResponseHeaders()).append("\n");
-			sBuilder.append("dataBytes:").append(IOHelper.toUTF8String(getDataBytes())).append("\n");
+			sBuilder.append("dataBytes:").append(IOUtils.toUTF8String(getDataBytes())).append("\n");
 			
 			if (this.error != null) {
-				sBuilder.append("\n\n").append(HTTPHelper.toString(getError())).append("\n\n");
+				sBuilder.append("\n\n").append(HTTPUtils.toString(getError())).append("\n\n");
 			}
 			
 			sBuilder.append("===================== Operation Response (End) =====================\n");
