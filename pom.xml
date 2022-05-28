@@ -12,11 +12,11 @@
 
     <!-- Modules -->
     <modules>
-        <module>core</module>
-        <module>mime-craft</module>
-        <module>http-server</module>
-        <module>http-client</module>
-        <module>jdk</module>
+        <module>Core</module>
+        <module>MimeCraft</module>
+        <module>HttpServer</module>
+        <module>HttpClient</module>
+        <module>Jdk</module>
     </modules>
 
     <!-- Properties -->

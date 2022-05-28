@@ -10,17 +10,25 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <groupId>com.rslakra.java</groupId>
-    <artifactId>http-server</artifactId>
+    <artifactId>MimeCraft</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>The ${project.artifactId} Project</name>
 
     <!-- Properties -->
     <properties>
+        <core.version>1.0-SNAPSHOT</core.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
+        <!-- Core -->
+        <dependency>
+            <groupId>com.rslakra.java</groupId>
+            <artifactId>core</artifactId>
+            <version>${core.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!-- Build -->
@@ -39,6 +47,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>

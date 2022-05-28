@@ -9,54 +9,18 @@
         <artifactId>java</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>jdk</artifactId>
     <groupId>com.rslakra.java</groupId>
+    <artifactId>HttpServer</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>The ${project.artifactId} Project</name>
 
     <!-- Properties -->
     <properties>
-        <core.version>1.0-SNAPSHOT</core.version>
-        <http-client.version>1.0-SNAPSHOT</http-client.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- Core -->
-        <dependency>
-            <groupId>com.rslakra.java</groupId>
-            <artifactId>core</artifactId>
-            <version>${core.version}</version>
-        </dependency>
-
-        <!-- http-client -->
-        <dependency>
-            <groupId>com.rslakra.java</groupId>
-            <artifactId>http-client</artifactId>
-            <version>${http-client.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-beanutils</groupId>
-            <artifactId>commons-beanutils</artifactId>
-            <version>1.9.4</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.httpcomponents/httpclient -->
-        <dependency>
-            <groupId>org.apache.httpcomponents</groupId>
-            <artifactId>httpclient</artifactId>
-            <version>4.5.13</version>
-        </dependency>
-
     </dependencies>
 
     <!-- Build -->
