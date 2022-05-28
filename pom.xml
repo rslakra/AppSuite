@@ -14,7 +14,7 @@
     <modules>
         <module>core</module>
         <module>mime-craft</module>
-        <module>https-server</module>
+        <module>http-server</module>
         <module>http-client</module>
         <module>jdk</module>
     </modules>
