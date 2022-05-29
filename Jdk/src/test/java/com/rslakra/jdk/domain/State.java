@@ -1,4 +1,4 @@
-package com.rslakra.testcases.domain;
+package com.rslakra.jdk.domain;
 
 /**
  * Author: Rohtash Singh Lakra

@@ -1,4 +1,4 @@
-package com.rslakra.testcases;
+package com.rslakra.jdk;
 
 import java.util.Date;
 

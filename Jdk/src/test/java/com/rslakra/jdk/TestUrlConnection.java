@@ -26,7 +26,7 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.testcases;
+package com.rslakra.jdk;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

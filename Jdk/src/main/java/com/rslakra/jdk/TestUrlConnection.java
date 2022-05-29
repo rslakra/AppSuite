@@ -30,7 +30,7 @@ package com.rslakra.jdk;
 
 import com.rslakra.core.CoreUtils;
 import com.rslakra.httpclient.HTTPUtils;
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;

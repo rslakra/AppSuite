@@ -1,10 +1,10 @@
-package com.rslakra.testcases;
+package com.rslakra.jdk;
 
 import com.rslakra.core.BeanUtility;
-import com.rslakra.testcases.domain.User;
-import com.rslakra.testcases.dto.AddressDTO;
-import com.rslakra.testcases.dto.StateDTO;
-import com.rslakra.testcases.dto.UserDTO;
+import com.rslakra.jdk.domain.User;
+import com.rslakra.jdk.dto.AddressDTO;
+import com.rslakra.jdk.dto.StateDTO;
+import com.rslakra.jdk.dto.UserDTO;
 
 /**
  * Author: Rohtash Singh Lakra

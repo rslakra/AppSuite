@@ -1,4 +1,4 @@
-package com.rslakra.testcases.dto;
+package com.rslakra.jdk.dto;
 
 /**
  * Author: Rohtash Singh Lakra

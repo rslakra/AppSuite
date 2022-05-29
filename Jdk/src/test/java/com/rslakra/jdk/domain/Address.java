@@ -1,14 +1,14 @@
-package com.rslakra.testcases.dto;
+package com.rslakra.jdk.domain;
 
 /**
  * Author: Rohtash Singh Lakra
  * Created: 5/26/20 9:25 PM
  * Version: 1.0.0
  */
-public class AddressDTO {
+public class Address {
     private Long id;
     private String line1;
-    private StateDTO state;
+    private State state;
     private String city;
     private String zip;
 
@@ -28,11 +28,11 @@ public class AddressDTO {
         this.line1 = line1;
     }
 
-    public StateDTO getState() {
+    public State getState() {
         return state;
     }
 
-    public void setState(StateDTO state) {
+    public void setState(State state) {
         this.state = state;
     }
 
@@ -54,7 +54,7 @@ public class AddressDTO {
 
     @Override
     public String toString() {
-        return "AddressDTO{" +
+        return "Address{" +
                 "id=" + id +
                 ", line1='" + line1 + '\'' +
                 ", state=" + state +
