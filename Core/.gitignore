@@ -1,5 +1,7 @@
-/bin
-/build
-/classes
 /**/.DS_Store
-/release-v*
+/**/.idea
+/**/target
+/**/bin
+/**/build
+/**/classes
+/**/release-v*

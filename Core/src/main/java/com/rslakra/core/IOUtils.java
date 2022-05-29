@@ -28,12 +28,26 @@
  *****************************************************************************/
 package com.rslakra.core;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import javax.net.ssl.SSLServerSocket;
 import javax.net.ssl.SSLSession;
 import javax.net.ssl.SSLSocket;
 import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
+import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.Files;
+import java.nio.file.LinkOption;
+import java.nio.file.Path;
+import java.nio.file.attribute.FileAttribute;
+import java.nio.file.attribute.PosixFilePermission;
+import java.nio.file.attribute.PosixFilePermissions;
 import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
@@ -47,6 +61,13 @@ import java.util.zip.GZIPOutputStream;
  */
 public enum IOUtils {
     INSTANCE;
+
+
+    // LOGGER
+    private static Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
+    public static final String APPLICATION_JSON = "application/json";
+    public static final String CONTENT_TYPE = "Content-Type";
+
 
     /**
      * BUFFER_1K
@@ -95,6 +116,16 @@ public enum IOUtils {
      */
     private static List<String> imageTypes;
 
+
+    // ALL_PERMISSIONS
+    public static FileAttribute<Set<PosixFilePermission>> ALL_PERMISSIONS = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+
+    // WRITE_PERMISSION
+    public static FileAttribute<Set<PosixFilePermission>> WRITE_PERMISSION = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
+
+    // READ_PERMISSION
+    public static FileAttribute<Set<PosixFilePermission>> READ_PERMISSION = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ));
+
     /**
      * @param logString
      */
@@ -110,7 +141,7 @@ public enum IOUtils {
     }
 
     /**
-     * @param logString
+     * @param ex
      */
     public static void error(Exception ex) {
         System.err.println(ex);
@@ -267,7 +298,7 @@ public enum IOUtils {
     /**
      * Returns the bytes of the specified file, if exists, otherwise null.
      *
-     * @param path
+     * @param file
      * @return
      */
     public static byte[] readFile(File file) {
@@ -451,7 +482,7 @@ public enum IOUtils {
     /**
      * Returns true if the specified file exists, otherwise false.
      *
-     * @param properties
+     * @param filePath
      */
     public static boolean isExist(String filePath) {
         return (!CoreUtils.isNullOrEmpty(filePath) && new File(filePath).exists());
@@ -460,7 +491,7 @@ public enum IOUtils {
     /**
      * Returns true if the specified file exists, otherwise false.
      *
-     * @param properties
+     * @param file
      */
     public static boolean isExist(File file) {
         return (file != null && file.exists());
@@ -469,7 +500,7 @@ public enum IOUtils {
     /**
      * Returns true if the specified file is a directory, otherwise false.
      *
-     * @param properties
+     * @param file
      */
     public static boolean isDirectory(File file) {
         return (file != null && file.isDirectory());
@@ -479,7 +510,7 @@ public enum IOUtils {
      * Returns true if the specified file exists and is a directory, otherwise
      * false.
      *
-     * @param properties
+     * @param file
      */
     public static boolean isExistAndFolder(File file) {
         return (isExist(file) && file.isDirectory());
@@ -490,7 +521,7 @@ public enum IOUtils {
      * defaultSize.
      *
      * @param available
-     * @param bufferSize
+     * @param defaultSize
      * @return
      */
     public static byte[] getBuffer(int available, int defaultSize) {
@@ -509,8 +540,8 @@ public enum IOUtils {
      * Copies the contents of an <code>sourceStream</code> into an
      * <code>targetStream</code>.
      *
-     * @param inputStream
-     * @param outputStream
+     * @param sourceStream
+     * @param targetStream
      * @param closeStreams
      * @return
      * @throws IOException
@@ -789,7 +820,8 @@ public enum IOUtils {
      * Creates the directory if its not exists. If <code>override</code> is set
      * to true, delete the existing directory and creates the new one.
      *
-     * @param dirPath
+     * @param directory
+     * @param override
      */
     public static File makeDirectory(File directory, boolean override) {
         System.out.println("+makeDirectory(" + directory + ", " + override + ")");
@@ -969,7 +1001,7 @@ public enum IOUtils {
      */
     public static byte[] readBytes(final InputStream inputStream, final boolean closeStream) {
         System.out.println("+readBytes(" + inputStream + ", " + closeStream + ")");
-        byte[] resultBytes = null;
+        byte[] dataBytes = null;
         if (inputStream != null) {
             ByteArrayOutputStream byteStream = null;
             try {
@@ -981,7 +1013,7 @@ public enum IOUtils {
                 }
 
                 byteStream.flush();
-                resultBytes = byteStream.toByteArray();
+                dataBytes = byteStream.toByteArray();
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
@@ -993,18 +1025,8 @@ public enum IOUtils {
             }
         }
 
-        System.out.println("-readBytes(), resultBytes:" + resultBytes);
-        return resultBytes;
-    }
-
-    /**
-     * Returns the bytes of the specified input stream.
-     *
-     * @param inputStream
-     * @return
-     */
-    public static byte[] readBytes(InputStream inputStream) {
-        return readBytes(inputStream, false);
+        System.out.println("-readBytes(), dataBytes:" + dataBytes);
+        return dataBytes;
     }
 
     /**
@@ -1342,8 +1364,7 @@ public enum IOUtils {
     /**
      * @param outputStream
      * @param object
-     * @param compress
-     * @throws Exception
+     * @throws IOException
      */
     public static void writeObject(OutputStream outputStream, Object object) throws IOException {
         writeObject(outputStream, object, false);
@@ -1392,8 +1413,7 @@ public enum IOUtils {
      * Writes the input stream data into the specified response string.
      *
      * @param inputStream
-     * @param response
-     * @param closeConnection
+     * @param closeStreams
      * @throws IOException
      */
     public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams) throws IOException {
@@ -1419,8 +1439,10 @@ public enum IOUtils {
      * Writes the input stream data into the specified response string.
      *
      * @param inputStream
-     * @param response
-     * @param closeConnection
+     * @param closeStreams
+     * @param useExistingFile
+     * @param hashCodeFilePath
+     * @return
      * @throws IOException
      */
     public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile, String hashCodeFilePath) throws IOException {
@@ -1584,7 +1606,6 @@ public enum IOUtils {
      * null or empty, all files are returned.
      *
      * @param directory
-     * @param extensions
      * @return
      */
     public static List<File> listFiles(File directory) {
@@ -1633,7 +1654,6 @@ public enum IOUtils {
      *
      * @param directory
      * @param extensions
-     * @param recursive
      * @return
      */
     public static List<String> listFileNames(File directory, String... extensions) {
@@ -1702,7 +1722,7 @@ public enum IOUtils {
      * it will return the <code>3.0</code> as latest version. If the version
      * list is null or empty, it returns empty string;
      *
-     * @param versions
+     * @param listOfVersions
      * @return
      */
     public static String getLatestVersion(List<String> listOfVersions) {
@@ -1842,8 +1862,7 @@ public enum IOUtils {
      * Returns the fileName which starts with the given prefix from the given
      * parentFolder.
      *
-     * @param parentFolder
-     * @param prefix
+     * @param filePath
      * @return
      */
     public static String getPrefixedFilePath(String filePath) {
@@ -1924,7 +1943,7 @@ public enum IOUtils {
     /**
      * Prints the <code>ServerSocket</code> information.
      *
-     * @param ServerSocket
+     * @param serverSocket
      */
     public static void logServerSocket(ServerSocket serverSocket) {
         System.out.println("ServerSocket Class:" + serverSocket.getClass());
@@ -1965,6 +1984,227 @@ public enum IOUtils {
         public boolean accept(File pathName) {
             return (requestHashCode != null && pathName != null && pathName.getName().startsWith(requestHashCode));
         }
+    }
+
+
+    /**
+     * Applies the file permission on the given path.
+     *
+     * @param path
+     * @throws IOException
+     */
+    public static void applyFilePermissions(final Path path) throws IOException {
+        LOGGER.debug("+applyFilePermissions({})", path);
+        final String userName = System.getProperty("user.name");
+        LOGGER.info("userName: {}", userName);
+        if ("nobody".equalsIgnoreCase(userName)) {
+            throw new IOException(String.format("'%s' is not allowed!", userName));
+        } else if (!Files.exists(path, new LinkOption[0])) {
+            try {
+                Files.createDirectories(path.getParent(), ALL_PERMISSIONS);
+            } catch (FileAlreadyExistsException ex) {
+                LOGGER.error("Folder [{}] already exists!", path.getParent(), ex);
+                //ignore me
+            }
+
+            //create a file with write access
+            Files.createFile(path, WRITE_PERMISSION);
+        } else if (!Files.isRegularFile(path, new LinkOption[0])) {
+            throw new IOException(String.format("The file should only be a regular file: %s!", path));
+        } else {
+            Files.setPosixFilePermissions(path,
+                    EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
+            Files.setOwner(path, path.getFileSystem().getUserPrincipalLookupService().lookupPrincipalByName(userName));
+        }
+        LOGGER.debug("-applyFilePermissions()");
+    }
+
+    /**
+     * Closes the <code>AutoCloseable</code> silently.
+     *
+     * @param autoCloseable
+     */
+    public static void closeSilently(final AutoCloseable autoCloseable) {
+        if (autoCloseable != null) {
+            try {
+                autoCloseable.close();
+            } catch (Exception ex) {
+                //ignore me
+                LOGGER.error("Error while closing autoCloseable: {}", autoCloseable, ex);
+            }
+        }
+    }
+
+    /**
+     * Returns the bytes of the specified input stream.
+     *
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static byte[] readBytes(final InputStream inputStream) throws IOException {
+        return readBytes(inputStream, false);
+    }
+
+    /**
+     * Reads the file as bytes.
+     *
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public byte[] readBytes(final Path path) throws IOException {
+        return Files.readAllBytes(path);
+    }
+
+
+    /**
+     * Writes the <code>jsonString</code> to <code>outputStream</code>.
+     *
+     * @param outputStream
+     * @param jsonString
+     * @throws IOException
+     */
+    public static void writeToStream(final OutputStream outputStream, final String jsonString) throws IOException {
+        LOGGER.debug("+writeToStream({}, {})", outputStream, jsonString);
+        final OutputStreamWriter streamWriter = new OutputStreamWriter(outputStream);
+        streamWriter.write(jsonString);
+        streamWriter.flush();
+        LOGGER.debug("-writeToStream()");
+    }
+
+    /**
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static StringBuilder readStream(final InputStream inputStream) throws IOException {
+        LOGGER.debug("+readStream({})", inputStream);
+        final StringBuilder sBuilder = new StringBuilder();
+        BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
+        String inputLine;
+        while ((inputLine = in.readLine()) != null) {
+            sBuilder.append(inputLine);
+        }
+        IOUtils.closeSilently(in);
+
+        LOGGER.debug("-readStream(), sBuilder:{}", sBuilder);
+        return sBuilder;
+    }
+
+
+    /**
+     * @param path
+     * @return
+     * @throws IOException
+     */
+    public static InputStream newInputStream(final String path) throws IOException {
+        LOGGER.debug("+newInputStream({})", path);
+        return new BufferedInputStream(new FileInputStream(new File(path)));
+    }
+
+
+    /**
+     * @return
+     */
+    public static RequestBody newBody() {
+        return new RequestBody();
+    }
+
+    /**
+     * Builds JSON data for POST request body.
+     */
+    public static class RequestBody {
+
+        final JsonObject jsonObject = new JsonObject();
+
+        public RequestBody() {
+        }
+
+        public RequestBody addProperty(String property, String value) {
+            jsonObject.add(property, (JsonElement) (value == null ? JsonNull.INSTANCE : new JsonPrimitive(value)));
+            return this;
+        }
+
+        public RequestBody addProperty(String property, Number value) {
+            jsonObject.add(property, (JsonElement) (value == null ? JsonNull.INSTANCE : new JsonPrimitive(value)));
+            return this;
+        }
+
+        public RequestBody addProperty(String property, Boolean value) {
+            jsonObject.add(property, (JsonElement) (value == null ? JsonNull.INSTANCE : new JsonPrimitive(value)));
+            return this;
+        }
+
+        public RequestBody addProperty(String property, Character value) {
+            jsonObject.add(property, (JsonElement) (value == null ? JsonNull.INSTANCE : new JsonPrimitive(value)));
+            return this;
+        }
+
+        public String build() {
+            return jsonObject.toString();
+        }
+    }
+
+    /**
+     * @param hostName
+     * @param port
+     * @param pathSegment
+     * @param contentType
+     * @return
+     * @throws IOException
+     */
+    public HttpURLConnection postRequest(final String hostName, final int port, final String pathSegment,
+                                         String contentType)
+            throws IOException {
+        HttpURLConnection connection = null;
+        // 1. URL with specific pathSegment
+        final URL url = new URL(String.format("%s:%d/%s", hostName, port, pathSegment));
+        // 2. Open connection
+        connection = (HttpURLConnection) url.openConnection();
+        // 3. Specify POST method
+        connection.setRequestMethod("POST");
+        // 4. Set the headers
+        if (contentType == null || contentType.trim().length() == 0) {
+            contentType = APPLICATION_JSON;
+        }
+        connection.setRequestProperty(CONTENT_TYPE, contentType);
+        // A URL connection can be used for input and/or output. Set the DoOutput flag to true if you intend to use the URL connection for output, false if not. The default is false.
+        connection.setDoOutput(true);
+
+        return connection;
+    }
+
+    /**
+     * @param hostName
+     * @param port
+     * @param pathSegment
+     * @param contentType
+     * @return
+     */
+    public static StringBuilder post(final String hostName, final int port, final String pathSegment,
+                                     String contentType, final RequestBody requestBody) {
+        StringBuilder response = null;
+        HttpURLConnection connection = null;
+        try {
+            connection = INSTANCE.postRequest(hostName, port, pathSegment, contentType);
+            // 5. Build and add JSON data into POST request body
+            writeToStream(connection.getOutputStream(), requestBody.build());
+
+            // 6. Get the response
+            int responseCode = connection.getResponseCode();
+            System.out.println(String.format("\nSending '%s' request to URL:%s", connection.getRequestMethod(),
+                    connection.getURL().toExternalForm()));
+            System.out.println("responseCode:" + responseCode);
+            // 7. Read result
+            response = readStream(connection.getInputStream());
+            // 8. Print result
+            System.out.println(response.toString());
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
+        return response;
     }
 
 }
