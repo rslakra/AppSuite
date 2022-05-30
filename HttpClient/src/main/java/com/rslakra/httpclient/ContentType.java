@@ -1,4 +1,6 @@
-package com.rslakra.testcases.httpclient.http;
+package com.rslakra.httpclient;
+
+import com.rslakra.testcases.httpclient.http.ArrayIterator;
 
 import java.util.Iterator;
 
