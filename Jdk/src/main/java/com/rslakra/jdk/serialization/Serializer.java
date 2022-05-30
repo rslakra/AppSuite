@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
- * 
+ *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,143 +22,137 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ *
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.jdk.serialization;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.PipedInputStream;
-import java.io.PipedOutputStream;
-import java.io.Serializable;
+import com.rslakra.core.IOUtils;
 
-import com.devamatre.core.IOUtility;
+import java.io.*;
 
 /**
  * This class defines utility routines that use Java serialization.
  **/
 public class Serializer {
-	/**
-	 * Serialize the object o (and any Serializable objects it refers to) and store
-	 * its serialized state in File f.
-	 **/
-	static void store(Serializable o, File f) throws IOException {
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
-		// This method serializes an object graph
-		out.writeObject(o);
-		out.close();
-	}
+    /**
+     * Serialize the object o (and any Serializable objects it refers to) and store
+     * its serialized state in File f.
+     **/
+    static void store(Serializable o, File f) throws IOException {
+        ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
+        // This method serializes an object graph
+        out.writeObject(o);
+        out.close();
+    }
 
-	/**
-	 * Deserialize the contents of File f and return the resulting object
-	 **/
-	static Object load(File file) throws IOException, ClassNotFoundException {
-		Object readObject = null;
-		// The class for de-serialization
-		ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
-		// This method deserializes an object graph
+    /**
+     * Deserialize the contents of File f and return the resulting object
+     **/
+    static Object load(File file) throws IOException, ClassNotFoundException {
+        Object readObject = null;
+        // The class for de-serialization
+        ObjectInputStream in = new ObjectInputStream(new FileInputStream(file));
+        // This method deserializes an object graph
 
-		readObject = in.readObject();
-		IOUtility.closeSilently(in);
+        readObject = in.readObject();
+        IOUtils.closeSilently(in);
 
-		return readObject;
-	}
+        return readObject;
+    }
 
-	/**
-	 * Use object serialization to make a "deep clone" of the object o. This method
-	 * serializes o and all objects it refers to, and then deserializes that graph
-	 * of objects, which means that everything is copied. This differs from the
-	 * clone() method of an object which is usually implemented to produce a
-	 * "shallow" clone that copies references to other objects, instead of copying
-	 * all referenced objects.
-	 **/
-	static Object deepClone(final Serializable o) throws IOException, ClassNotFoundException {
-		Object clonedObject = null;
-		// Create a connected pair of "piped" streams.
-		// We'll write bytes to one, and them from the other one.
-		final PipedOutputStream pipeout = new PipedOutputStream();
-		PipedInputStream pipein = new PipedInputStream(pipeout);
+    /**
+     * Use object serialization to make a "deep clone" of the object o. This method
+     * serializes o and all objects it refers to, and then deserializes that graph
+     * of objects, which means that everything is copied. This differs from the
+     * clone() method of an object which is usually implemented to produce a
+     * "shallow" clone that copies references to other objects, instead of copying
+     * all referenced objects.
+     **/
+    static Object deepClone(final Serializable o) throws IOException, ClassNotFoundException {
+        Object clonedObject = null;
+        // Create a connected pair of "piped" streams.
+        // We'll write bytes to one, and them from the other one.
+        final PipedOutputStream pipeout = new PipedOutputStream();
+        PipedInputStream pipein = new PipedInputStream(pipeout);
 
-		// Now define an independent thread to serialize the object and write
-		// its bytes to the PipedOutputStream
-		Thread writer = new Thread() {
-			public void run() {
-				ObjectOutputStream out = null;
-				try {
-					out = new ObjectOutputStream(pipeout);
-					out.writeObject(o);
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				} finally {
-					IOUtility.closeSilently(out);
-				}
-			}
-		};
-		writer.start(); // Make the thread start serializing and writing
+        // Now define an independent thread to serialize the object and write
+        // its bytes to the PipedOutputStream
+        Thread writer = new Thread() {
+            public void run() {
+                ObjectOutputStream out = null;
+                try {
+                    out = new ObjectOutputStream(pipeout);
+                    out.writeObject(o);
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                } finally {
+                    IOUtils.closeSilently(out);
+                }
+            }
+        };
+        writer.start(); // Make the thread start serializing and writing
 
-		// Meanwhile, in this thread, read and deserialize from the piped
-		// input stream. The resulting object is a deep clone of the original.
-		ObjectInputStream in = new ObjectInputStream(pipein);
-		clonedObject = in.readObject();
-		IOUtility.closeSilently(in);
+        // Meanwhile, in this thread, read and deserialize from the piped
+        // input stream. The resulting object is a deep clone of the original.
+        ObjectInputStream in = new ObjectInputStream(pipein);
+        clonedObject = in.readObject();
+        IOUtils.closeSilently(in);
 
-		return clonedObject;
-	}
+        return clonedObject;
+    }
 
-	/**
-	 * This is a simple serializable data structure that we use below for testing
-	 * the methods above
-	 **/
-	public static class DataStructure implements Serializable {
-		String message;
-		int[] data;
-		DataStructure other;
+    /**
+     * This is a simple serializable data structure that we use below for testing
+     * the methods above
+     **/
+    public static class DataStructure implements Serializable {
+        String message;
+        int[] data;
+        DataStructure other;
 
-		public String toString() {
-			String s = message;
-			for (int i = 0; i < data.length; i++)
-				s += " " + data[i];
-			if (other != null)
-				s += "\n\t" + other.toString();
-			return s;
-		}
-	}
+        public String toString() {
+            String s = message;
+            for (int i = 0; i < data.length; i++)
+                s += " " + data[i];
+            if (other != null)
+                s += "\n\t" + other.toString();
+            return s;
+        }
+    }
 
-	/** This class defines a main() method for testing */
-	public static class Test {
-		public static void main(String[] args) throws IOException, ClassNotFoundException {
-			// Create a simple object graph
-			DataStructure ds = new DataStructure();
-			ds.message = "hello world";
-			ds.data = new int[] { 1, 2, 3, 4 };
-			ds.other = new DataStructure();
-			ds.other.message = "nested structure";
-			ds.other.data = new int[] { 9, 8, 7 };
+    /**
+     * This class defines a main() method for testing
+     */
+    public static class Test {
+        public static void main(String[] args) throws IOException, ClassNotFoundException {
+            // Create a simple object graph
+            DataStructure ds = new DataStructure();
+            ds.message = "hello world";
+            ds.data = new int[]{1, 2, 3, 4};
+            ds.other = new DataStructure();
+            ds.other.message = "nested structure";
+            ds.other.data = new int[]{9, 8, 7};
 
-			// Display the original object graph
-			System.out.println("Original data structure: " + ds);
+            // Display the original object graph
+            System.out.println("Original data structure: " + ds);
 
-			// Output it to a file
-			File f = new File("datastructure.ser");
-			System.out.println("Storing to a file...");
-			Serializer.store(ds, f);
+            // Output it to a file
+            File f = new File("datastructure.ser");
+            System.out.println("Storing to a file...");
+            Serializer.store(ds, f);
 
-			// Read it back from the file, and display it again
-			ds = (DataStructure) Serializer.load(f);
-			System.out.println("Read from the file: " + ds);
+            // Read it back from the file, and display it again
+            ds = (DataStructure) Serializer.load(f);
+            System.out.println("Read from the file: " + ds);
 
-			// Create a deep clone and display that. After making the copy
-			// modify the original to prove that the clone is "deep".
-			DataStructure ds2 = (DataStructure) Serializer.deepClone(ds);
-			ds.other.message = null;
-			ds.other.data = null; // Change original
-			System.out.println("Deep clone: " + ds2);
-		}
-	}
+            // Create a deep clone and display that. After making the copy
+            // modify the original to prove that the clone is "deep".
+            DataStructure ds2 = (DataStructure) Serializer.deepClone(ds);
+            ds.other.message = null;
+            ds.other.data = null; // Change original
+            System.out.println("Deep clone: " + ds2);
+        }
+    }
 }

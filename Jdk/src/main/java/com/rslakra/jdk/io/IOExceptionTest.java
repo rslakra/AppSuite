@@ -31,7 +31,7 @@ package com.rslakra.jdk.io;
 import java.io.File;
 import java.io.IOException;
 
-public class TestIOException {
+public class IOExceptionTest {
 	public static void main(String[] args) {
 		File dir = new File(System.getProperty("java.io.tmpdir"));
 		// dir.mkdirs(); // This works, but strips the trailing space.

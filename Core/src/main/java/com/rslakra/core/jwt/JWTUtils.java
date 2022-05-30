@@ -1,6 +1,11 @@
 package com.rslakra.core.jwt;
 
-import com.nimbusds.jose.*;
+import com.nimbusds.jose.JOSEException;
+import com.nimbusds.jose.JOSEObjectType;
+import com.nimbusds.jose.JWSAlgorithm;
+import com.nimbusds.jose.JWSHeader;
+import com.nimbusds.jose.JWSSigner;
+import com.nimbusds.jose.JWSVerifier;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
@@ -14,9 +19,17 @@ import com.rslakra.core.Utils;
 import com.rslakra.core.utils.BeanUtils;
 import org.jose4j.jwk.HttpsJwks;
 import org.jose4j.jwk.JsonWebKey;
+import org.jose4j.jws.AlgorithmIdentifiers;
+import org.jose4j.jws.JsonWebSignature;
+import org.jose4j.jwt.JwtClaims;
+import org.jose4j.jwt.NumericDate;
+import org.jose4j.keys.HmacKey;
 import org.jose4j.lang.JoseException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -33,6 +46,8 @@ import java.util.*;
 public enum JWTUtils {
     INSTANCE;
 
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(JWTUtils.class);
     public static final String ALGO_RSA = "RSA";
     public static final String UTF_8 = "UTF-8";
     public static final String NEW_LINE = "\n";
@@ -40,13 +55,16 @@ public enum JWTUtils {
     public static final String PUBLIC_KEY = "_public.key";
     public static final String JWKS_FILE_SUFFIX = ".well-known/jwks.json";
     public static final String REQUEST_TRACER = "Request-Tracer";
+    public static final String JWS_HEADER_TYPE = "typ";
+    public static final String JWS_HEADER_TYPE_VALUE = "JWT";
     private KeyFactory rsaKeyFactory;
     private SignedJWT signedJWT;
     private RSAKey rsaKey;
     private String keyFolderPath;
     private String service;
 
-    private final PayloadBuilder<String, HttpsJwks> PayloadBuilder = new PayloadBuilder();
+    // payloadBuilder
+    private final PayloadBuilder<String, HttpsJwks> payloadBuilder = new PayloadBuilder();
 
     /**
      * @return
@@ -662,10 +680,10 @@ public enum JWTUtils {
             throw new IllegalArgumentException("Invalid JWKS file url!");
         }
 
-        HttpsJwks jwksRequest = PayloadBuilder.get(urlJWKSFilePath);
+        HttpsJwks jwksRequest = payloadBuilder.get(urlJWKSFilePath);
         if (BeanUtils.isNullOrEmpty(jwksRequest)) {
             jwksRequest = new HttpsJwks(urlJWKSFilePath);
-            PayloadBuilder.add(urlJWKSFilePath, jwksRequest);
+            payloadBuilder.add(urlJWKSFilePath, jwksRequest);
             jwksRequest.setDefaultCacheDuration(defaultCacheDuration);
         }
 
@@ -702,6 +720,96 @@ public enum JWTUtils {
      */
     public static String nextRequestTracer() {
         return nextRequestTracer("requestTracer");
+    }
+
+
+    /**
+     * Encodes Client ID and Client Secret
+     *
+     * @param clientId
+     * @param clientSecret
+     * @return
+     */
+    public static String encodedClientIdAndSecret(final String clientId, final String clientSecret) {
+        LOGGER.debug("encodedClientIdAndSecret({}, {})", clientId, clientId);
+        final Charset defaultCharset = Charset.defaultCharset();
+        final byte[] dataBytes = (clientId.trim() + ":" + clientSecret.trim()).getBytes(defaultCharset);
+        return new String(Base64.getEncoder().encode(dataBytes), defaultCharset);
+    }
+
+    /**
+     * @param jwtRequest
+     * @return
+     */
+    public static String getAudienceUrl(final JwtRequest jwtRequest) {
+        return (jwtRequest.getServerBaseUrl() + jwtRequest.getPathSegment() + jwtRequest.getRealm());
+    }
+
+    /**
+     * Generates the new JWT (Json Web Token).
+     *
+     * @param clientId
+     * @param clientSecret
+     * @param audience
+     * @param expirationTimeInMinutes
+     * @param withJwtId
+     * @return
+     */
+    public static String createJwtToken(final String clientId, final String clientSecret, String audience,
+                                        int expirationTimeInMinutes, boolean withJwtId) {
+        LOGGER.debug("+createJwtToken({}, {}, {})", clientId, clientId, audience);
+        String jwtString;
+        final JwtClaims jwtClaims = new JwtClaims();
+        jwtClaims.setIssuedAt(NumericDate.now());
+        jwtClaims.setExpirationTimeMinutesInTheFuture(expirationTimeInMinutes);
+        jwtClaims.setSubject(clientId);
+        jwtClaims.setIssuer(clientId);
+        jwtClaims.setAudience(audience);
+        if (withJwtId) {
+            jwtClaims.setGeneratedJwtId();
+        }
+
+        try {
+            Key key = new HmacKey(clientSecret.getBytes(JWTUtils.UTF_8));
+            JsonWebSignature jws = new JsonWebSignature();
+            jws.setPayload(jwtClaims.toJson());
+            jws.setAlgorithmHeaderValue(AlgorithmIdentifiers.HMAC_SHA256);
+            jws.setHeader(JWTUtils.JWS_HEADER_TYPE, JWTUtils.JWS_HEADER_TYPE_VALUE);
+            jws.setKey(key);
+            jws.setDoKeyValidation(false);
+            jwtString = jws.getCompactSerialization();
+        } catch (Exception ex) {
+            LOGGER.error(ex.getLocalizedMessage(), ex);
+            throw new RuntimeException("JWT Generation is failed", ex);
+        }
+
+        LOGGER.debug("-createJWTToken(), jwtString={}", jwtString);
+        return jwtString;
+    }
+
+    /**
+     * @param jwtRequest
+     * @return
+     */
+    public static String createJwtToken(final JwtRequest jwtRequest) {
+        return createJwtToken(jwtRequest.getClientId(), jwtRequest.getClientSecret(), getAudienceUrl(jwtRequest),
+                              jwtRequest.getExpirationTimeInMinutes(), jwtRequest.isWithJwtId());
+    }
+
+    /**
+     *
+     * @param jwtToken
+     * @return
+     */
+    public static boolean isValidToken(final String jwtToken) {
+        try {
+            // parse the JWS and
+            final SignedJWT signedJWT = SignedJWT.parse(jwtToken);
+            return !signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date());
+        } catch (Exception ex) {
+            LOGGER.error(ex.getLocalizedMessage(), ex);
+            return false;
+        }
     }
 
 }

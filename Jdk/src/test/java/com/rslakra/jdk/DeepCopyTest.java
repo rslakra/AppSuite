@@ -1,6 +1,6 @@
 package com.rslakra.jdk;
 
-import com.rslakra.core.BeanUtility;
+import com.rslakra.core.utils.BeanUtils;
 import com.rslakra.jdk.domain.User;
 import com.rslakra.jdk.dto.AddressDTO;
 import com.rslakra.jdk.dto.StateDTO;
@@ -32,7 +32,7 @@ public class DeepCopyTest {
         try {
             User user = new User();
             System.out.println(userDTO);
-            BeanUtility.INSTANCE.deepCopyProperties(userDTO, user);
+            BeanUtils.deepCopyProperties(userDTO, user);
             System.out.println(user);
         } catch (Exception ex) {
             ex.printStackTrace();

@@ -105,13 +105,29 @@ public class JWTUtilsTest {
         Assert.assertEquals(clientId, jwtClaims.getIssuer());
     }
 
+    @Test
+    public void testIsValidToken() {
+        String audience = "http://localhost/identity/oauth2/access_token?realm=lakra";
+        String clientId = "testClient";
+        String clientSecret = UUID.randomUUID().toString();
+        try {
+            String jwtToken = JWTUtils.INSTANCE.createJWTToken(audience, clientId, clientSecret);
+            Assert.assertNotNull(jwtToken);
+            Assert.assertTrue(JWTUtils.isValidToken(jwtToken));
+        } catch (JOSEException ex) {
+            LOGGER.error(ex.getLocalizedMessage(), ex);
+            ex.printStackTrace();
+            Assert.assertTrue(false);
+        }
+    }
+
     /**
      * JWT Token:
      * <p>
      * eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1ZDRhMDk0NzRjM2M2ODZlNDBkZTQ3YTgiLCJjbGkiOiJnZW1pbmkiLCJpc3MiOiJmb3JkZXZ0ZXN0IiwiZXhwIjoxNTkxOTA1NzE1LCJpYXQiOjE1ODQxMjk2NTV9.dF1K6mSe8FE9JNwbZQI6knxoyOJEWEc39D1WAlMsw3o3PKKEjTg-qtN7udrLNpiOQLYF_OLNVcThsfR3axJ5sC-5_HRJqxruQmVxNHFlky1HKIbnL8QPsKDkIg5Q0iFZrYP76zAEegZG9n42I2ikV_x0pflQyiAC1F0f_bM1DNCoFQ-Vtln4cg4wQ09P7U1wLPx_-sqau2krX9eL0CvHzztyfCKbwM_d_OqEtOw4zbYgX4dD2uE0mvYlBDwc08R0cEWT_kOrYbFAqRpN2VhnzIFH9bm7rnAev1DmHDCLw1MzrPTfnR_TFvS8qmxO0Aja57t7UjF4xhD9MGek2OeY0g
      * </p>
      * <p>
-     * Encoded with ePay Private Key [epay.developer.fordevtest.jwt.pvtkey] using https://jwt.io/.
+     * Encoded with Private Key [developer.issuer.jwt.pvtKey] using https://jwt.io/.
      * <p>
      * eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzI1NiJ9.eyJzdWIiOiI1ZDRhMDk0NzRjM2M2ODZlNDBkZTQ3YTgiLCJjbGkiOiJnZW1pbmkiLCJpc3MiOiJmb3JkZXZ0ZXN0IiwiZXhwIjoxNTkxOTA1NzE1LCJpYXQiOjE1ODQxMjk2NTV9.iSxQFvb8CQRet6hG0SCEAYcjqfoBEfcXdk3FOkJZVu-h_O2tohbex44ga7MM0_faABqquinBudEZBuAXx4HOcjZer3VqAyHL3ZH_czmROlnmsj72rolzO5lsmUvT6Y4ggEu5kw_iiYE3p4K1eGP6VI2ATrSqHCbLv92Tj4WDL7jeupZAN0V3Ooi67u2YaO5OmInTkNd5QNUAsvgSfi9nfVSC5YCVY6oluR1gBh6o7Q4moKRc8m_clRfioZVse4TKXMOOCv7imUytZd-G5DvliYbstY-CHXYINSnu1IL4nYmayHBvNvqymWovGZ4e97WdM8BFUfUZACfex18puoxLOg
      * </p>
@@ -120,12 +136,11 @@ public class JWTUtilsTest {
     public void testJWTKeyGeneration() {
         final String subject = "5d4a09474c3c686e40de47a8";
         final String audience = "audience";
-        final String keyId = "gemini";
-        final String issuer = "fordevtest";
+        final String keyId = "keyId";
+        final String issuer = "issuer";
         final Date issuedAt = new Date();
-        final String keyFolderPath = "/Users/rlakra/Documents/VerizonMedia/ePay";
-        final String serviceName = "wallet-epay-service";
-//        final String serviceName = "ePayService";
+        final String keyFolderPath = "paymentKeyPath";
+        final String serviceName = "paymentService";
 
         JWTUtils.INSTANCE.setKeyFolderPath(keyFolderPath);
         JWTUtils.INSTANCE.setService(serviceName);

@@ -10,7 +10,7 @@ function usage() {
   echo -e "\tUsage: $0 <ServiceName> <Size>"
   echo -e "\t <Size> can be one of [2048, 4096]."
   echo
-  echo -e "\t\t./newRSAKeyPair wallet-epay-service 2048"
+  echo -e "\t\t./newRSAKeyPair paymentService 2048"
   echo
 }
 

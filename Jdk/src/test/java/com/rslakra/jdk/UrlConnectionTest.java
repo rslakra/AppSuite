@@ -28,6 +28,11 @@
  *****************************************************************************/
 package com.rslakra.jdk;
 
+import com.rslakra.core.utils.BeanUtils;
+import com.rslakra.httpclient.HTTPUtils;
+import com.rslakra.httpclient.HTTPUtils.HttpResponse;
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -35,13 +40,7 @@ import java.io.InputStreamReader;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.commons.lang3.StringEscapeUtils;
-
-import com.rslakra.core.CoreUtils;
-import com.rslakra.httpclient.HTTPUtils;
-import com.rslakra.httpclient.HTTPUtils.HttpResponse;
-
-public class TestUrlConnection {
+public class UrlConnectionTest {
 
     public static void main(String[] args) {
         String urlString = "https://devamatre.com/";
@@ -68,7 +67,7 @@ public class TestUrlConnection {
      */
     public static String extractFormActionValue(byte[] bytes) {
         String formActionValue = null;
-        if (!CoreUtils.isNullOrEmpty(bytes)) {
+        if (!BeanUtils.isNullOrEmpty(bytes)) {
             final String startString = "<form action=\"";
             final String endString = "\" method=\"post\">";
             BufferedReader bReader = null;
@@ -96,5 +95,4 @@ public class TestUrlConnection {
 
         return formActionValue;
     }
-
 }

@@ -13,6 +13,7 @@ public final class ToString {
     public static final String DELIMITER = ", ";
     public static final String PREFIX = " <";
     public static final String SUFFIX = ">";
+    public static final String SEPARATOR = "=";
 
     private final String prefix;
     private final String delimiter;

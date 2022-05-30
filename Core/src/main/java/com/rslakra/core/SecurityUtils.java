@@ -73,6 +73,7 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509TrustManager;
 
+import com.rslakra.core.utils.BeanUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 /**
@@ -181,16 +182,16 @@ public enum SecurityUtils {
 	 */
 	public static byte[] uniqueDeviceIdBytes(String parentFolder) {
 		byte[] deviceIDBytes = null;
-		if (CoreUtils.isNullOrEmpty(uniqueDeviceUUID)) {
+		if (BeanUtils.isNullOrEmpty(uniqueDeviceUUID)) {
 			synchronized (SecurityUtils.class) {
-				if (CoreUtils.isNullOrEmpty(uniqueDeviceUUID)) {
+				if (BeanUtils.isNullOrEmpty(uniqueDeviceUUID)) {
 					File installation = new File(parentFolder, INSTALLATION);
 					try {
 						if (!installation.exists()) {
 							IOUtils.saveFile(IOUtils.toUTF8Bytes(UUID.randomUUID().toString()), installation);
 						}
 						deviceIDBytes = IOUtils.readFile(installation);
-						if (!CoreUtils.isNullOrEmpty(deviceIDBytes)) {
+						if (!BeanUtils.isNullOrEmpty(deviceIDBytes)) {
 							uniqueDeviceUUID = IOUtils.toUTF8String(deviceIDBytes);
 						}
 					} catch (Exception e) {
@@ -371,7 +372,7 @@ public enum SecurityUtils {
 	 * @return
 	 */
 	public static String validateHashString(String hashString) {
-		if (!CoreUtils.isNullOrEmpty(hashString)) {
+		if (!BeanUtils.isNullOrEmpty(hashString)) {
 			hashString = hashString.replace('/', '_');
 			hashString = hashString.replace(' ', '_');
 			hashString = hashString.replace('+', '_');
@@ -654,7 +655,7 @@ public enum SecurityUtils {
 	 * @return
 	 */
 	public static String generateSaltedPassword(String _salt, String _password) {
-		return (CoreUtils.isNullOrEmpty(_salt) || CoreUtils.isNullOrEmpty(_password) ? null : (_salt + "###" + _password));
+		return (BeanUtils.isNullOrEmpty(_salt) || BeanUtils.isNullOrEmpty(_password) ? null : (_salt + "###" + _password));
 	}
 	
 	/**
@@ -665,7 +666,7 @@ public enum SecurityUtils {
 	 */
 	public static byte[] getPBKDF2KeyBytes(String entropyString) {
 		byte[] derivedKeyBytes = null;
-		if (CoreUtils.isNotNullOrEmpty(entropyString)) {
+		if (BeanUtils.isNotNullOrEmpty(entropyString)) {
 			try {
 				derivedKeyBytes = getPBKDF2Generator().deriveKey(entropyString, ENCRYPTION_KEY_LENGTH);
 			} catch (NoSuchAlgorithmException ex) {
@@ -706,7 +707,7 @@ public enum SecurityUtils {
 	 */
 	public static String toHexString(byte[] dataBytes) {
 		String hexString = EMPTY_STRING;
-		if (!CoreUtils.isNullOrEmpty(dataBytes)) {
+		if (!BeanUtils.isNullOrEmpty(dataBytes)) {
 			StringBuilder hexBuilder = new StringBuilder(2 * dataBytes.length);
 			for (int i = 0; i < dataBytes.length; i++) {
 				hexBuilder.append(HEX_DIGIT_CHARS.charAt((dataBytes[i] >> 4) & 0x0f));
@@ -739,7 +740,7 @@ public enum SecurityUtils {
 	 */
 	public static byte[] hexStringAsBytes(String hexString) {
 		byte[] hexaBytes = null;
-		if (!CoreUtils.isNullOrEmpty(hexString)) {
+		if (!BeanUtils.isNullOrEmpty(hexString)) {
 			int length = hexString.length() / 2;
 			hexaBytes = new byte[length];
 			for (int i = 0; i < length; i++) {
@@ -810,10 +811,10 @@ public enum SecurityUtils {
 	public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] encryptedBytes = null;
 		long startTime = System.currentTimeMillis();
-		if (!CoreUtils.isNullOrEmpty(dataBytes) && !CoreUtils.isNullOrEmpty(keyBytes)) {
+		if (!BeanUtils.isNullOrEmpty(dataBytes) && !BeanUtils.isNullOrEmpty(keyBytes)) {
 			Cipher cipher = null;
 			SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGO_AES);
-			if (CoreUtils.isNullOrEmpty(ivBytes)) {
+			if (BeanUtils.isNullOrEmpty(ivBytes)) {
 				cipher = Cipher.getInstance(ALGO_AES);
 				cipher.init(Cipher.ENCRYPT_MODE, secretKeySpec);
 			} else {
@@ -896,7 +897,7 @@ public enum SecurityUtils {
 	 */
 	public static String encryptWithSymmetricKey(String plainString, String key) {
 		String encryptedString = null;
-		if (!CoreUtils.isNullOrEmpty(plainString) && !CoreUtils.isNullOrEmpty(key)) {
+		if (!BeanUtils.isNullOrEmpty(plainString) && !BeanUtils.isNullOrEmpty(key)) {
 			try {
 				byte[] encryptedBytes = encryptWithSymmetricKey(IOUtils.toUTF8Bytes(plainString), key);
 				encryptedString = toHexString(encryptedBytes);
@@ -920,10 +921,10 @@ public enum SecurityUtils {
 	public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
 		byte[] rawBytes = null;
 		long startTime = System.currentTimeMillis();
-		if (!CoreUtils.isNullOrEmpty(dataBytes) && !CoreUtils.isNullOrEmpty(keyBytes)) {
+		if (!BeanUtils.isNullOrEmpty(dataBytes) && !BeanUtils.isNullOrEmpty(keyBytes)) {
 			Cipher cipher = null;
 			SecretKeySpec secretKeySpec = new SecretKeySpec(keyBytes, ALGO_AES);
-			if (CoreUtils.isNullOrEmpty(ivBytes)) {
+			if (BeanUtils.isNullOrEmpty(ivBytes)) {
 				cipher = Cipher.getInstance(ALGO_AES);
 				cipher.init(Cipher.DECRYPT_MODE, secretKeySpec);
 			} else {
@@ -996,7 +997,7 @@ public enum SecurityUtils {
 	 */
 	public static String decryptWithSymmetricKey(String encryptedString, String key) {
 		String decryptedString = null;
-		if (!CoreUtils.isNullOrEmpty(encryptedString) && !CoreUtils.isNullOrEmpty(key)) {
+		if (!BeanUtils.isNullOrEmpty(encryptedString) && !BeanUtils.isNullOrEmpty(key)) {
 			try {
 				byte[] encryptedBytes = hexStringAsBytes(encryptedString);
 				byte[] decryptedBytes = decryptWithSymmetricKey(encryptedBytes, key);
@@ -1028,7 +1029,7 @@ public enum SecurityUtils {
 	 * @throws SecurityException
 	 */
 	public static String ivForResource(String ivParent) throws SecurityException {
-		if (CoreUtils.isNotNullOrEmpty(ivParent)) {
+		if (BeanUtils.isNotNullOrEmpty(ivParent)) {
 			return (ivParent.length() > IV_SIZE ? ivParent.substring(0, IV_SIZE) : ivParent);
 		}
 		
@@ -1047,7 +1048,7 @@ public enum SecurityUtils {
 			String ivParent = IOUtils.getFileName(filePath, true);
 			if (USE_FILE_EXTENSION_AS_IV) {
 				String extension = IOUtils.getExtension(ivParent);
-				if (!CoreUtils.isNullOrEmpty(extension)) {
+				if (!BeanUtils.isNullOrEmpty(extension)) {
 					ivParent = extension;
 				}
 			}
@@ -1151,7 +1152,7 @@ public enum SecurityUtils {
 	public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm) throws NoSuchAlgorithmException {
 		KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keyPairAlgorithm);
 		SecureRandom secureRandom = null;
-		if (CoreUtils.isNullOrEmpty(secureRandomAlgorithm)) {
+		if (BeanUtils.isNullOrEmpty(secureRandomAlgorithm)) {
 			secureRandom = new SecureRandom();
 		} else {
 			secureRandom = SecureRandom.getInstance(secureRandomAlgorithm);
@@ -1218,7 +1219,7 @@ public enum SecurityUtils {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA256Hash(byte[] bytes) throws SecurityException {
-		if (CoreUtils.isNotNull(bytes)) {
+		if (BeanUtils.isNotNull(bytes)) {
 			try {
 				return sha256MessageDigest.digest(bytes);
 			} catch (Exception ex) {
@@ -1237,7 +1238,7 @@ public enum SecurityUtils {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA256Hash(String string) throws SecurityException {
-		return getSHA256Hash(CoreUtils.isNull(string) ? null : string.getBytes());
+		return getSHA256Hash(BeanUtils.isNull(string) ? null : string.getBytes());
 	}
 	
 	/**
@@ -1248,7 +1249,7 @@ public enum SecurityUtils {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA512Hash(byte[] bytes) throws SecurityException {
-		if (CoreUtils.isNotNull(bytes)) {
+		if (BeanUtils.isNotNull(bytes)) {
 			try {
 				return MessageDigest.getInstance(ALGO_SHA_512).digest(bytes);
 			} catch (Exception ex) {
@@ -1267,7 +1268,7 @@ public enum SecurityUtils {
 	 * @throws SecurityException
 	 */
 	public static byte[] getSHA512Hash(String string) throws SecurityException {
-		return getSHA512Hash(CoreUtils.isNull(string) ? null : string.getBytes());
+		return getSHA512Hash(BeanUtils.isNull(string) ? null : string.getBytes());
 	}
 	
 	/**
@@ -1390,7 +1391,7 @@ public enum SecurityUtils {
 	 */
 	public static String getChecksum(byte[] bytes) {
 		String checkSumString = "0";
-		if (!CoreUtils.isNullOrEmpty(bytes)) {
+		if (!BeanUtils.isNullOrEmpty(bytes)) {
 			long startTime = System.currentTimeMillis();
 			try {
 				MessageDigest md5 = MessageDigest.getInstance(ALGO_MD5);
@@ -1639,7 +1640,7 @@ public enum SecurityUtils {
 		 */
 		public String hashPassword(String password, int keyLength) throws NoSuchAlgorithmException {
 			String pbkdf2String = null;
-			if (!CoreUtils.isNullOrEmpty(password)) {
+			if (!BeanUtils.isNullOrEmpty(password)) {
 				String saltHexString = IOUtils.toHexString(parameters.getSalt());
 				String keyAsHexString = keyAsHexString(password, keyLength);
 				pbkdf2String = (parameters.getIterations() + ":" + saltHexString + ":" + keyAsHexString);
@@ -1660,7 +1661,7 @@ public enum SecurityUtils {
 		 */
 		public boolean validatePassword(String password, String hashedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
 			boolean validPassword = false;
-			if (!CoreUtils.isNullOrEmpty(password)) {
+			if (!BeanUtils.isNullOrEmpty(password)) {
 				String[] parts = hashedPassword.split(":");
 				int iterations = Integer.parseInt(parts[0]);
 				byte[] salt = IOUtils.toHexBytes(parts[1]);

@@ -80,7 +80,7 @@ public abstract class AbstractResponseHandler<T> implements ResponseHandler<T> {
      * handleErrorResponse would return null by default.
      * <p>
      * The default acceptCriteria is the statusLine between 200 and 299. You could overwrite it to throw an exception
-     * and GeminiHttp[Sync|Async]Client would retry your request.
+     * and Http[Sync|Async]Client would retry your request.
      *
      * @param httpResponse
      * @return

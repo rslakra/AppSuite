@@ -1,6 +1,5 @@
 package com.rslakra.core.jwt;
 
-import com.rslakra.core.BeanUtility;
 import com.rslakra.core.utils.BeanUtils;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwa.AlgorithmConstraints.ConstraintType;

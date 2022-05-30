@@ -68,7 +68,7 @@ public final class SyncHttpClient extends AbstractHttpClient implements AutoClos
             watch.start();
             try {
                 response = httpSyncClient.execute(ofApacheRequest(request));
-                // please refer GeminiResponseHandler, default accept criteria is http status code between 200 to 299
+                // please refer ResponseHandler, default accept criteria is http status code between 200 to 299
                 // you can set your own accept criteria to distinguish which response code should be handled as an error
                 payload = responseHandler.handleResponse(response);
             } catch (Throwable t) {

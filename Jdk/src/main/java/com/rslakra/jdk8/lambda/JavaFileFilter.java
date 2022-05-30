@@ -28,9 +28,10 @@
  *****************************************************************************/
 package com.rslakra.jdk8.lambda;
 
-import com.devamatre.core.CoreUtility;
 import com.devamatre.logger.LogManager;
 import com.devamatre.logger.Logger;
+import com.rslakra.core.IOUtils;
+import com.rslakra.core.utils.BeanUtils;
 
 import java.io.File;
 import java.io.FileFilter;
@@ -55,7 +56,7 @@ public class JavaFileFilter implements FileFilter {
     public static void main(String[] args) {
         LogManager.configure(LogManager.LOG4J_PROPERTY_FILE);
 //        String pathString = CoreUtility.pathString(JavaFileFilter.class);
-        String pathString = CoreUtility.pathString(CoreUtility.getUserDir(), "java/src/main/java/com/rslakra/jdk8/lambda");
+        String pathString = IOUtils.pathString(IOUtils.getUserDir(), "java/src/main/java/com/rslakra/jdk8/lambda");
         LOGGER.debug("pathString:" + pathString);
         JavaFileFilter fileFilter = new JavaFileFilter();
         File file = new File(pathString);

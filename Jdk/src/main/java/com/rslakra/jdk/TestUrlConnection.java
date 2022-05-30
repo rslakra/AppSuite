@@ -28,7 +28,7 @@
  *****************************************************************************/
 package com.rslakra.jdk;
 
-import com.rslakra.core.CoreUtils;
+import com.rslakra.core.utils.BeanUtils;
 import com.rslakra.httpclient.HTTPUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
@@ -66,7 +66,7 @@ public class TestUrlConnection {
      */
     public static String extractFormActionValue(byte[] bytes) {
         String formActionValue = null;
-        if (!CoreUtils.isNullOrEmpty(bytes)) {
+        if (!BeanUtils.isNullOrEmpty(bytes)) {
             final String startString = "<form action=\"";
             final String endString = "\" method=\"post\">";
             BufferedReader bReader = null;

@@ -28,10 +28,10 @@
  *****************************************************************************/
 package com.rslakra.httpclient;
 
-import com.rslakra.core.CoreUtils;
 import com.rslakra.core.IOUtils;
 import com.rslakra.core.SecurityUtils;
 import com.rslakra.core.jwt.JWTUtils;
+import com.rslakra.core.utils.BeanUtils;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHeaders;
@@ -249,7 +249,7 @@ public enum HTTPUtils {
      */
     public static <T> Set<T> asSet(List<T> args) {
         Set<T> set = new HashSet<T>();
-        if (!CoreUtils.isNullOrEmpty(args)) {
+        if (!BeanUtils.isNullOrEmpty(args)) {
             set.addAll(args);
         }
 
@@ -265,7 +265,7 @@ public enum HTTPUtils {
      * @return
      */
     public static <T> boolean contains(Collection<T> collection, T value) {
-        return ((!CoreUtils.isNullOrEmpty(collection)) && collection.contains(value));
+        return ((!BeanUtils.isNullOrEmpty(collection)) && collection.contains(value));
     }
 
     /**
@@ -277,7 +277,7 @@ public enum HTTPUtils {
      * @return
      */
     public static <K, V> boolean keyExists(Map<K, V> keyValues, K key) {
-        return (!CoreUtils.isNullOrEmpty(keyValues) && keyValues.keySet().contains(key));
+        return (!BeanUtils.isNullOrEmpty(keyValues) && keyValues.keySet().contains(key));
     }
 
     /**
@@ -290,9 +290,9 @@ public enum HTTPUtils {
      */
     public static Set<String> asSet(String valueString, String delimiter) {
         Set<String> setStrings = new HashSet<String>();
-        if (CoreUtils.isNotNullOrEmpty(valueString) && CoreUtils.isNotNullOrEmpty(delimiter)) {
+        if (BeanUtils.isNotNullOrEmpty(valueString) && BeanUtils.isNotNullOrEmpty(delimiter)) {
             String[] tokens = valueString.split(delimiter);
-            if (!CoreUtils.isNullOrEmpty(tokens)) {
+            if (!BeanUtils.isNullOrEmpty(tokens)) {
                 for (int i = 0; i < tokens.length; i++) {
                     setStrings.add(tokens[i].trim());
                 }
@@ -369,7 +369,7 @@ public enum HTTPUtils {
     @SuppressWarnings("unchecked")
     public static <T> T[] toArray(List<T> list, Class<T> classType) {
         T[] listArray = null;
-        if (!CoreUtils.isNullOrEmpty(list)) {
+        if (!BeanUtils.isNullOrEmpty(list)) {
             listArray = (T[]) Array.newInstance(classType, list.size());
             listArray = list.toArray(listArray);
         }
@@ -406,7 +406,7 @@ public enum HTTPUtils {
      */
     public static <T> boolean equals(T type, T... types) {
         boolean result = false;
-        if (CoreUtils.isNotNull(type) && !CoreUtils.isNullOrEmpty(types)) {
+        if (BeanUtils.isNotNull(type) && !BeanUtils.isNullOrEmpty(types)) {
             for (int i = 0; i < types.length; i++) {
                 if (types[i].equals(type)) {
                     result = true;
@@ -428,7 +428,7 @@ public enum HTTPUtils {
      * @return
      */
     public static boolean equalsAnyone(boolean ignoreCase, String string, String... args) {
-        if (CoreUtils.isNotNullOrEmpty(string) && args != null) {
+        if (BeanUtils.isNotNullOrEmpty(string) && args != null) {
             for (int i = 0; i < args.length; i++) {
                 if (ignoreCase) {
                     if (string.equalsIgnoreCase(args[i])) {
@@ -570,7 +570,7 @@ public enum HTTPUtils {
      */
     public static boolean isInstanceOf(Object object, Class<?>... classTypes) {
         boolean instanceOf = false;
-        if (CoreUtils.isNotNull(object) && !CoreUtils.isNullOrEmpty(classTypes)) {
+        if (BeanUtils.isNotNull(object) && !BeanUtils.isNullOrEmpty(classTypes)) {
             for (int i = 0; i < classTypes.length; i++) {
                 if (classTypes[i].isInstance(object)) {
                     instanceOf = true;
@@ -644,7 +644,7 @@ public enum HTTPUtils {
      * @return
      */
     public static String getClassSimpleName(Class<?> klass) {
-        return (CoreUtils.isNull(klass) ? null : klass.getSimpleName());
+        return (BeanUtils.isNull(klass) ? null : klass.getSimpleName());
     }
 
     /**
@@ -655,9 +655,9 @@ public enum HTTPUtils {
      */
     public static String getClassSimpleName(Object object) {
         String classSimpleName = null;
-        if (CoreUtils.isNotNull(object)) {
+        if (BeanUtils.isNotNull(object)) {
             Class<?> klass = object.getClass().getEnclosingClass();
-            if (CoreUtils.isNull(klass)) {
+            if (BeanUtils.isNull(klass)) {
                 klass = object.getClass();
             }
             classSimpleName = getClassSimpleName(klass);
@@ -754,14 +754,14 @@ public enum HTTPUtils {
 
         /* These properties are mandatory for the server requests. */
         // prepare user-agent value
-        if (CoreUtils.isNotNullOrEmpty(appBundleIdentifier)) {
-            userAgentBuilder.append("OSType=").append(CoreUtils.getJVMName());
+        if (BeanUtils.isNotNullOrEmpty(appBundleIdentifier)) {
+            userAgentBuilder.append("OSType=").append(IOUtils.getJVMName());
         }
         userAgentBuilder.append(";OSVer=").append(OS_VERSION);
-        if (CoreUtils.isNotNullOrEmpty(appType)) {
+        if (BeanUtils.isNotNullOrEmpty(appType)) {
             userAgentBuilder.append(";AppType=").append(appType);
         }
-        if (CoreUtils.isNotNullOrEmpty(appBundleIdentifier)) {
+        if (BeanUtils.isNotNullOrEmpty(appBundleIdentifier)) {
             userAgentBuilder.append(";ABI=").append(appBundleIdentifier);
         }
         Locale localeDefault = Locale.getDefault();
@@ -808,7 +808,7 @@ public enum HTTPUtils {
      */
     public static URL newURL(String baseUrl, String urlSuffix) throws IOException {
         URL url = null;
-        if (CoreUtils.isNullOrEmpty(urlSuffix)) {
+        if (BeanUtils.isNullOrEmpty(urlSuffix)) {
             url = newURL(baseUrl);
         } else {
             url = new URL(newURL(baseUrl), urlSuffix);
@@ -915,12 +915,12 @@ public enum HTTPUtils {
      */
     public static String getServerUrl(String baseServerUrl, String urlSuffix) {
         StringBuilder urlString = new StringBuilder();
-        if (CoreUtils.isNotNullOrEmpty(baseServerUrl)) {
+        if (BeanUtils.isNotNullOrEmpty(baseServerUrl)) {
             urlString.append(baseServerUrl);
         }
 
         // append urlPrefix, if available.
-        if (!CoreUtils.isNullOrEmpty(urlSuffix)) {
+        if (!BeanUtils.isNullOrEmpty(urlSuffix)) {
             if (urlSuffix.startsWith(IOUtils.SLASH)) {
                 urlString.append(urlSuffix);
             } else {
@@ -939,7 +939,7 @@ public enum HTTPUtils {
     public static String getHostName(String urlString) {
         // check in cache first
         String hostName = urlToDomainMap.get(urlString);
-        if (CoreUtils.isNullOrEmpty(hostName)) {
+        if (BeanUtils.isNullOrEmpty(hostName)) {
             if (USE_FULLY_QUALIFIED_HOSTNAME) {
                 hostName = getHostNameFromUrl(urlString);
             } else {
@@ -1052,9 +1052,9 @@ public enum HTTPUtils {
      */
     public static String getRequestMethodName(HttpServletRequest servletRequest) {
         String requestMethodName = null;
-        if (CoreUtils.isNotNull(servletRequest)) {
+        if (BeanUtils.isNotNull(servletRequest)) {
             String[] paramValue = (String[]) servletRequest.getParameterMap().get(METHOD_NAME);
-            if (!CoreUtils.isNullOrEmpty(paramValue)) {
+            if (!BeanUtils.isNullOrEmpty(paramValue)) {
                 requestMethodName = paramValue[0].toString();
             }
         }
@@ -1072,7 +1072,7 @@ public enum HTTPUtils {
      */
     public static Map<String, String> getRequestHeaders(HttpServletRequest servletRequest) {
         Map<String, String> requestHeaders = new TreeMap<String, String>();
-        if (CoreUtils.isNotNull(servletRequest)) {
+        if (BeanUtils.isNotNull(servletRequest)) {
             try {
                 /* extract request headers, if available. */
                 @SuppressWarnings("unchecked")
@@ -1147,7 +1147,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(URL url, Proxy proxy) throws IOException {
-        return (CoreUtils.isNotNull(url) ? (HttpURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+        return (BeanUtils.isNotNull(url) ? (HttpURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
     }
 
     /**
@@ -1159,7 +1159,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(URL url) throws IOException {
-        return (CoreUtils.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
+        return (BeanUtils.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
     }
 
     /**
@@ -1198,7 +1198,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static HttpsURLConnection openHttpsURLConnection(URL url, Proxy proxy) throws IOException {
-        return (CoreUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+        return (BeanUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
     }
 
     /**
@@ -1244,7 +1244,7 @@ public enum HTTPUtils {
      * @param urlConnection
      */
     public static void close(HttpURLConnection urlConnection) {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             try {
                 // Crucial, according to the documentation.
                 urlConnection.disconnect();
@@ -1262,7 +1262,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static void setConnectTimeoutProperties(HttpURLConnection urlConnection) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             urlConnection.setConnectTimeout(Values.HTTP_CONNECTION_TIMEOUT_SECONDS * 1000);
             urlConnection.setReadTimeout(Values.HTTP_READ_TIMEOUT_SECONDS * 1000);
         }
@@ -1277,7 +1277,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             // set connection timeout properties.
             setConnectTimeoutProperties(urlConnection);
 
@@ -1288,7 +1288,7 @@ public enum HTTPUtils {
             urlConnection.setDoInput(true);
 
             // request method (i.e GET/POST/PUT etc)
-            if (CoreUtils.isNotNullOrEmpty(requestMethod)) {
+            if (BeanUtils.isNotNullOrEmpty(requestMethod)) {
                 urlConnection.setRequestMethod(requestMethod);
                 urlConnection.setDoOutput(Methods.POST.equalsIgnoreCase(requestMethod));
             } else {
@@ -1313,7 +1313,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static void setConnectionInputAndOutput(final HttpURLConnection urlConnection) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this URLConnection allows input.
              * It cannot be set after the connection is established.
@@ -1331,7 +1331,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static void setConnectionUseCaches(final HttpURLConnection urlConnection) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this connection allows to use
              * caches or not. This method can only be called prior to the
@@ -1349,12 +1349,12 @@ public enum HTTPUtils {
      */
     public static String toCookyString(Map<String, String> mapCookies) {
         String cookies = null;
-        if (!CoreUtils.isNullOrEmpty(mapCookies)) {
+        if (!BeanUtils.isNullOrEmpty(mapCookies)) {
             /** Add Cookies. */
             StringBuilder cookyBuilder = new StringBuilder();
             for (String key : mapCookies.keySet()) {
                 String value = mapCookies.get(key);
-                if (CoreUtils.isNotNullOrEmpty(value)) {
+                if (BeanUtils.isNotNullOrEmpty(value)) {
                     if (equals(Headers.COOKIE, key)) {
                         cookyBuilder.append(value).append(";");
                     } else {
@@ -1365,7 +1365,7 @@ public enum HTTPUtils {
                 }
             }
 
-            if (!CoreUtils.isNullOrEmpty(cookyBuilder)) {
+            if (!BeanUtils.isNullOrEmpty(cookyBuilder)) {
                 cookies = cookyBuilder.toString();
                 cookyBuilder = null;
             }
@@ -1382,14 +1382,14 @@ public enum HTTPUtils {
      */
     public static Map<String, String> mergeCookies(final Map<String, String> mapCookies) {
         Map<String, String> mergedCookies = new HashMap<String, String>();
-        if (!CoreUtils.isNullOrEmpty(mapCookies)) {
+        if (!BeanUtils.isNullOrEmpty(mapCookies)) {
             /** Merge Cookies. */
             for (String key : mapCookies.keySet()) {
                 String value = mapCookies.get(key);
-                if (CoreUtils.isNotNullOrEmpty(value)) {
+                if (BeanUtils.isNotNullOrEmpty(value)) {
                     if (equals(Headers.COOKIE, key)) {
                         Map<String, String> oldCookies = extractCookies(value);
-                        if (!CoreUtils.isNullOrEmpty(oldCookies)) {
+                        if (!BeanUtils.isNullOrEmpty(oldCookies)) {
                             mergedCookies.putAll(oldCookies);
                         }
                     } else {
@@ -1410,7 +1410,7 @@ public enum HTTPUtils {
      * @param cookies
      */
     public static void setRequestCookies(HttpURLConnection urlConnection, String cookies) {
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(cookies)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(cookies)) {
             IOUtils.debug(Headers.COOKIE + ":" + cookies);
             urlConnection.setRequestProperty(Headers.COOKIE, cookies);
         }
@@ -1436,7 +1436,7 @@ public enum HTTPUtils {
      */
     public static String toUrlQueryString(Map<String, Object> requestParameters) {
         String urlQueryString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             StringBuilder aueryString = new StringBuilder();
             boolean firstParam = true;
             for (String key : requestParameters.keySet()) {
@@ -1478,7 +1478,7 @@ public enum HTTPUtils {
      */
     public static void setQueryString(HttpURLConnection urlConnection, final String queryString) throws IOException {
         System.out.println("setQueryString(" + urlConnection + ", " + queryString + ")");
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(queryString)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(queryString)) {
             IOUtils.writeBytes(queryString.getBytes(), urlConnection.getOutputStream(), true);
         }
     }
@@ -1503,13 +1503,13 @@ public enum HTTPUtils {
      */
     public static Map<String, Object> toRequestParameters(String encodedParameters) {
         Map<String, Object> requestParameters = new LinkedHashMap<String, Object>();
-        if (CoreUtils.isNotNullOrEmpty(encodedParameters)) {
+        if (BeanUtils.isNotNullOrEmpty(encodedParameters)) {
             String decodedParameters = SecurityUtils.decodeWithURLDecoder(encodedParameters);
             String[] paramTokens = decodedParameters.split("&");
-            if (!CoreUtils.isNullOrEmpty(paramTokens)) {
+            if (!BeanUtils.isNullOrEmpty(paramTokens)) {
                 for (int i = 0; i < paramTokens.length; i++) {
                     String[] tokens = paramTokens[i].split("=");
-                    if (!CoreUtils.isNullOrEmpty(tokens) && tokens.length > 1) {
+                    if (!BeanUtils.isNullOrEmpty(tokens) && tokens.length > 1) {
                         requestParameters.put(tokens[0], tokens[1]);
                     }
                 }
@@ -1527,14 +1527,14 @@ public enum HTTPUtils {
      * @param requestHeaders
      */
     public static void setRequestHeaders(HttpURLConnection urlConnection, Map<String, String> requestHeaders) {
-        if (CoreUtils.isNotNull(urlConnection) && !CoreUtils.isNullOrEmpty(requestHeaders)) {
+        if (BeanUtils.isNotNull(urlConnection) && !BeanUtils.isNullOrEmpty(requestHeaders)) {
             for (String headerKey : requestHeaders.keySet()) {
                 String headerValue = requestHeaders.get(headerKey);
                 System.out.println("headerKey:" + headerKey + ", headerValue:" + headerValue);
-                if (CoreUtils.isNotNullOrEmpty(headerValue)) {
+                if (BeanUtils.isNotNullOrEmpty(headerValue)) {
                     if (equals(Headers.COOKIE, headerKey)) {
                         String currentValue = urlConnection.getHeaderField(Headers.COOKIE);
-                        if (CoreUtils.isNotNullOrEmpty(currentValue)) {
+                        if (BeanUtils.isNotNullOrEmpty(currentValue)) {
                             headerValue += ";" + currentValue;
                         }
                     }
@@ -1565,7 +1565,7 @@ public enum HTTPUtils {
         HttpURLConnection urlConnection = null;
 
         try {
-            if (CoreUtils.isNullOrEmpty(urlString)) {
+            if (BeanUtils.isNullOrEmpty(urlString)) {
                 throw new IllegalArgumentException("Server URL must provide!");
             }
 
@@ -1573,7 +1573,7 @@ public enum HTTPUtils {
             if (Methods.GET.equalsIgnoreCase(httpMethod)) {
                 StringBuilder requestBuilder = new StringBuilder(urlString);
                 String queryString = toUrlQueryString(requestParameters);
-                if (CoreUtils.isNotNullOrEmpty(queryString)) {
+                if (BeanUtils.isNotNullOrEmpty(queryString)) {
                     requestBuilder.append("?").append(queryString);
                 }
                 urlConnection = openHttpURLConnection(requestBuilder.toString());
@@ -1722,10 +1722,10 @@ public enum HTTPUtils {
         // System.out.println("+getHeader(" + headers + ", " + key +
         // ")");
         String value = null;
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             List<String> headerValues = headers.get(key);
             // System.out.println("headerValues:" + headerValues);
-            if (!CoreUtils.isNullOrEmpty(headerValues)) {
+            if (!BeanUtils.isNullOrEmpty(headerValues)) {
                 value = headerValues.get(0);
             }
         }
@@ -1741,7 +1741,7 @@ public enum HTTPUtils {
      * @return
      */
     public static Map<String, List<String>> getHeaders(HttpResponse httpResponse) {
-        return (CoreUtils.isNull(httpResponse) ? null : httpResponse.getResponseHeaders());
+        return (BeanUtils.isNull(httpResponse) ? null : httpResponse.getResponseHeaders());
     }
 
     /**
@@ -1752,7 +1752,7 @@ public enum HTTPUtils {
      */
     public static String getMimeType(Map<String, List<String>> headers) {
         String mimeType = null;
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             mimeType = headers.get(Headers.CONTENT_TYPE).get(0);
             if (mimeType.indexOf(";") != -1) {
                 mimeType = mimeType.substring(0, mimeType.indexOf(";")).trim();
@@ -1772,7 +1772,7 @@ public enum HTTPUtils {
     public static Map<String, String> extractCookies(String stringCookies) {
         Map<String, String> mapCookies = null;
         System.out.println("+extractCookies(" + stringCookies + ")");
-        if (CoreUtils.isNotNullOrEmpty(stringCookies)) {
+        if (BeanUtils.isNotNullOrEmpty(stringCookies)) {
             mapCookies = new HashMap<String, String>();
             String[] cookies = stringCookies.split(";");
             for (String cookie : cookies) {
@@ -1797,14 +1797,14 @@ public enum HTTPUtils {
     public static Map<String, String> extractCookies(Map<String, List<String>> responseHeaders) {
         Map<String, String> mapCookies = null;
         System.out.println("+extractCookies(" + responseHeaders + ")");
-        if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
+        if (!BeanUtils.isNullOrEmpty(responseHeaders)) {
             List<String> allCookies = responseHeaders.get(Headers.SET_COOKIE);
             System.out.println("allCookies:" + allCookies);
-            if (!CoreUtils.isNullOrEmpty(allCookies)) {
+            if (!BeanUtils.isNullOrEmpty(allCookies)) {
                 mapCookies = new HashMap<String, String>();
                 for (String stringCookie : allCookies) {
                     Map<String, String> extractedCookies = extractCookies(stringCookie);
-                    if (!CoreUtils.isNullOrEmpty(extractedCookies)) {
+                    if (!BeanUtils.isNullOrEmpty(extractedCookies)) {
                         mapCookies.putAll(extractedCookies);
                     }
                 }
@@ -1853,12 +1853,12 @@ public enum HTTPUtils {
         // " + key +
         // ", " + defaultValue + ")");
         Object value = null;
-        if (!CoreUtils.isNullOrEmpty(mapKeyValues) && !CoreUtils.isNullOrEmpty(key)) {
+        if (!BeanUtils.isNullOrEmpty(mapKeyValues) && !BeanUtils.isNullOrEmpty(key)) {
             value = mapKeyValues.get(key);
         }
 
         // return default value if the value is null or empty.
-        if (CoreUtils.isNull(value)) {
+        if (BeanUtils.isNull(value)) {
             value = defaultValue;
         }
 
@@ -1941,7 +1941,7 @@ public enum HTTPUtils {
      */
     public static Map<String, String> headerValuesAsString(Map<String, List<String>> headers) {
         Map<String, String> mapHeaders = new HashMap<String, String>();
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
             for (Map.Entry<String, List<String>> entry : entries) {
                 mapHeaders.put(entry.getKey(), entry.getValue().get(0));
@@ -1959,7 +1959,7 @@ public enum HTTPUtils {
         System.out.println("+getContentDispositionFileNameValue(" + contentDisposition + ")");
 
         String valueFileName = null;
-        if (!CoreUtils.isNullOrEmpty(contentDisposition)) {
+        if (!BeanUtils.isNullOrEmpty(contentDisposition)) {
             int fileNameIndex = contentDisposition.indexOf(Values.FILE_NAME_EQUAL);
             if (fileNameIndex > -1 && fileNameIndex < contentDisposition.length() - 1) {
                 valueFileName = contentDisposition.substring(fileNameIndex + Values.FILE_NAME_EQUAL.length());
@@ -1976,7 +1976,7 @@ public enum HTTPUtils {
      * @return
      */
     public static List<String> getExcludedHeaders() {
-        if (CoreUtils.isNull(excludedHeaders)) {
+        if (BeanUtils.isNull(excludedHeaders)) {
             excludedHeaders = new ArrayList<String>();
             /*
              * excluded the following headers from the request/response headers.
@@ -2002,7 +2002,7 @@ public enum HTTPUtils {
      * @return
      */
     public static String[] getHeadersIgnored() {
-        if (CoreUtils.isNull(headersIgnored)) {
+        if (BeanUtils.isNull(headersIgnored)) {
             headersIgnored = toArray(getExcludedHeaders(), String.class);
         }
 
@@ -2015,7 +2015,7 @@ public enum HTTPUtils {
      * @return
      */
     public static List<String> getExcludedParameters() {
-        if (CoreUtils.isNull(excludedParameters)) {
+        if (BeanUtils.isNull(excludedParameters)) {
             excludedParameters = new ArrayList<String>();
             /* remove the following parameters before generating hashCode. */
         }
@@ -2032,7 +2032,7 @@ public enum HTTPUtils {
      */
     public static boolean isExcludedParameter(String paramName) {
         boolean excludedParameter = false;
-        if (CoreUtils.isNotNullOrEmpty(paramName) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
+        if (BeanUtils.isNotNullOrEmpty(paramName) && !BeanUtils.isNullOrEmpty(getExcludedParameters())) {
             for (int i = 0; i < excludedParameters.size(); i++) {
                 if (excludedParameters.contains(paramName)) {
                     excludedParameter = true;
@@ -2050,7 +2050,7 @@ public enum HTTPUtils {
      * @param sortedParameters
      */
     public static void removeExcludedParameters(SortedMap<String, Object> sortedParameters) {
-        if (!CoreUtils.isNullOrEmpty(sortedParameters) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
+        if (!BeanUtils.isNullOrEmpty(sortedParameters) && !BeanUtils.isNullOrEmpty(getExcludedParameters())) {
             for (int i = 0; i < excludedParameters.size(); i++) {
                 sortedParameters.remove(excludedParameters.get(i));
             }
@@ -2065,7 +2065,7 @@ public enum HTTPUtils {
      */
     public static String paramValuesAsHashString(SortedMap<String, Object> requestParameters) {
         String valuesAsHashString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             SortedMap<String, Object> sortedParameters = toSortedMap(requestParameters);
             /* remove existing custom parameters, if available */
             removeExcludedParameters(sortedParameters);
@@ -2097,7 +2097,7 @@ public enum HTTPUtils {
      */
     public static boolean isExcludedMethodRequest(String requestMethodName, String... excludedMethods) {
         boolean excludedMethodRequest = false;
-        if (!CoreUtils.isNullOrEmpty(requestMethodName) && !CoreUtils.isNullOrEmpty(excludedMethods)) {
+        if (!BeanUtils.isNullOrEmpty(requestMethodName) && !BeanUtils.isNullOrEmpty(excludedMethods)) {
             for (int i = 0; i < excludedMethods.length; i++) {
                 if (excludedMethods[i].equalsIgnoreCase(requestMethodName)) {
                     excludedMethodRequest = true;
@@ -2115,7 +2115,7 @@ public enum HTTPUtils {
      * @return
      */
     public static List<String> getExcludedMethods() {
-        if (CoreUtils.isNull(excludedMethods)) {
+        if (BeanUtils.isNull(excludedMethods)) {
             excludedMethods = new ArrayList<String>();
             /* add more methods if required. */
         }
@@ -2130,7 +2130,7 @@ public enum HTTPUtils {
      * @param excludedMethodRequest
      */
     public static void filterRequestParameters(SortedMap<String, Object> requestParameters, boolean excludedMethodRequest) {
-        if (excludedMethodRequest && !CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (excludedMethodRequest && !BeanUtils.isNullOrEmpty(requestParameters)) {
             SortedMap<String, Object> filteredParameters = new TreeMap<String, Object>(requestParameters);
             for (String key : filteredParameters.keySet()) {
                 if (("rand".equals(key) || "_".equals(key))) {
@@ -2174,11 +2174,11 @@ public enum HTTPUtils {
      */
     public static String paramValuesAsString(String... paramValues) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(paramValues)) {
+        if (!BeanUtils.isNullOrEmpty(paramValues)) {
             StringBuilder hashBuffer = new StringBuilder();
             Arrays.sort(paramValues);
             for (int i = 0; i < paramValues.length; i++) {
-                String paramValue = CoreUtils.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
+                String paramValue = BeanUtils.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
                 hashBuffer.append(paramValue);
             }
 
@@ -2199,11 +2199,11 @@ public enum HTTPUtils {
      */
     public static String paramValuesAsString(List<String> paramValues) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(paramValues)) {
+        if (!BeanUtils.isNullOrEmpty(paramValues)) {
             StringBuilder hashBuffer = new StringBuilder();
             Collections.sort(paramValues);
             for (String paramValue : paramValues) {
-                paramValue = CoreUtils.isNullOrEmpty(paramValue) ? "" : paramValue;
+                paramValue = BeanUtils.isNullOrEmpty(paramValue) ? "" : paramValue;
                 hashBuffer.append(paramValue);
             }
 
@@ -2224,12 +2224,12 @@ public enum HTTPUtils {
      */
     public static String paramValuesAsString(SortedMap<String, ? extends Object> requestParameters) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             StringBuilder hashBuffer = new StringBuilder();
             /* the iteration should be name in the same order each time. */
             for (String key : requestParameters.keySet()) {
                 Object value = requestParameters.get(key);
-                String valueAsString = CoreUtils.isNull(value) ? "" : value.toString();
+                String valueAsString = BeanUtils.isNull(value) ? "" : value.toString();
                 hashBuffer.append(valueAsString);
             }
 
@@ -2248,9 +2248,9 @@ public enum HTTPUtils {
      * @param values
      */
     public static void addToHashBuffer(final StringBuilder hashBuffer, String... values) {
-        if (CoreUtils.isNotNull(hashBuffer) && !CoreUtils.isNullOrEmpty(values)) {
+        if (BeanUtils.isNotNull(hashBuffer) && !BeanUtils.isNullOrEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
-                if (!CoreUtils.isNullOrEmpty(values[i])) {
+                if (!BeanUtils.isNullOrEmpty(values[i])) {
                     hashBuffer.append(values[i]);
                 }
             }
@@ -2292,7 +2292,7 @@ public enum HTTPUtils {
      */
     public static String getHostNameFromUrl(String urlString) {
         String hostName = urlString;
-        if (!CoreUtils.isNullOrEmpty(urlString)) {
+        if (!BeanUtils.isNullOrEmpty(urlString)) {
             int startIndex = urlString.indexOf("://");
             if (startIndex >= 0) {
                 startIndex += "://".length();
@@ -2321,7 +2321,7 @@ public enum HTTPUtils {
      * @return
      */
     public static boolean isDigits(String string) {
-        return (CoreUtils.isNotNullOrEmpty(string) && string.matches("^[0-9]*$"));
+        return (BeanUtils.isNotNullOrEmpty(string) && string.matches("^[0-9]*$"));
     }
 
     /**
@@ -2363,7 +2363,7 @@ public enum HTTPUtils {
      */
     public static boolean startsWith(String value, String... prefixes) {
         boolean result = false;
-        if (!CoreUtils.isNullOrEmpty(value) && prefixes != null) {
+        if (!BeanUtils.isNullOrEmpty(value) && prefixes != null) {
             for (String prefix : prefixes) {
                 if (value.startsWith(prefix)) {
                     result = true;
@@ -2406,7 +2406,7 @@ public enum HTTPUtils {
      * @return
      */
     public static boolean containsAnyone(boolean ignoreCase, String string, String... args) {
-        if (CoreUtils.isNotNullOrEmpty(string) && args != null) {
+        if (BeanUtils.isNotNullOrEmpty(string) && args != null) {
             for (int i = 0; i < args.length; i++) {
                 if (ignoreCase) {
                     Locale defaultLocale = Locale.getDefault();
@@ -2464,7 +2464,7 @@ public enum HTTPUtils {
          */
         public static Pairs<String, String> newPair(String keyValueString) {
             Pairs<String, String> pairs = null;
-            if (CoreUtils.isNotNullOrEmpty(keyValueString)) {
+            if (BeanUtils.isNotNullOrEmpty(keyValueString)) {
                 int equalIndex = keyValueString.indexOf("=");
                 if (equalIndex != -1) {
                     String key = keyValueString.substring(0, equalIndex).trim();

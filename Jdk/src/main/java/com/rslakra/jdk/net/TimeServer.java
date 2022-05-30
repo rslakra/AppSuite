@@ -34,7 +34,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.util.Date;
 
-import com.devamatre.core.IOUtility;
+import com.rslakra.core.IOUtils;
 
 /**
  * 
@@ -64,7 +64,7 @@ public class TimeServer {
 				socket.send(packet);
 			}
 		} finally {
-			IOUtility.closeSilently(socket);
+			IOUtils.closeSilently(socket);
 		}
 
 	}

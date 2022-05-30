@@ -26,9 +26,9 @@
  *****************************************************************************/
 package com.rslakra.httpclient;
 
-import com.rslakra.core.CoreUtils;
 import com.rslakra.core.IOUtils;
 import com.rslakra.core.JSONUtils;
+import com.rslakra.core.utils.BeanUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -121,7 +121,7 @@ public class HttpResponse implements Cloneable {
      */
     public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
         this.responseHeaders = responseHeaders;
-        if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
+        if (!BeanUtils.isNullOrEmpty(responseHeaders)) {
             jsonResponseHeaders = JSONUtils.toJSONString(responseHeaders);
         }
     }
@@ -139,7 +139,7 @@ public class HttpResponse implements Cloneable {
      * @param jsonResponseHeaders the responseHeaders to set
      */
     public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
-        if (!CoreUtils.isNullOrEmpty(jsonResponseHeaders)) {
+        if (!BeanUtils.isNullOrEmpty(jsonResponseHeaders)) {
             String jsonResponseHeader = IOUtils.toUTF8String(jsonResponseHeaders);
             this.responseHeaders = JSONUtils.jsonHeadersAsMap(jsonResponseHeader);
         }
@@ -357,7 +357,7 @@ public class HttpResponse implements Cloneable {
 //        public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
 //            System.out.println("responseHeaders:" + responseHeaders);
 //            this.responseHeaders = responseHeaders;
-//            if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
+//            if (!BeanUtils.isNullOrEmpty(responseHeaders)) {
 //                jsonResponseHeaders = JSONUtils.toJSONString(responseHeaders);
 //            }
 //        }
@@ -375,7 +375,7 @@ public class HttpResponse implements Cloneable {
 //         * @param jsonResponseHeaders the responseHeaders to set
 //         */
 //        public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
-//            if (!CoreUtils.isNullOrEmpty(jsonResponseHeaders)) {
+//            if (!BeanUtils.isNullOrEmpty(jsonResponseHeaders)) {
 //                String jsonResponseHeader = IOUtils.toUTF8String(jsonResponseHeaders);
 //                this.responseHeaders = JSONUtils.jsonHeadersAsMap(jsonResponseHeader);
 //            }

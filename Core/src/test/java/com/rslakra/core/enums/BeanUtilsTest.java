@@ -39,6 +39,15 @@ public class BeanUtilsTest {
         Assert.assertFalse(BeanUtils.isNullOrEmpty(new Object()));
     }
 
+    @Test
+    public void testIsArray() {
+        Assert.assertFalse(BeanUtils.isArray(null));
+        Assert.assertTrue(BeanUtils.isArray(new String[1]));
+        Assert.assertTrue(BeanUtils.isArray(new Integer[]{1, 2}));
+        Assert.assertTrue(BeanUtils.isArray(new Class[1]));
+        Assert.assertTrue(BeanUtils.isArray(Class[].class));
+        Assert.assertFalse(BeanUtils.isArray(String.class));
+    }
 
     @Test
     public void testSeparateCamelCase() {
@@ -77,14 +86,6 @@ public class BeanUtilsTest {
         LOGGER.info("str: {}", str);
         Assert.assertNotNull(str);
         Assert.assertEquals("$FirstName", str);
-    }
-
-
-    @Test
-    public void testIsArray() {
-        Assert.assertFalse(BeanUtils.isArray(null));
-        Assert.assertTrue(BeanUtils.isArray(new String[1]));
-        Assert.assertTrue(BeanUtils.isArray(new Integer[]{1, 2}));
     }
 
     @Test

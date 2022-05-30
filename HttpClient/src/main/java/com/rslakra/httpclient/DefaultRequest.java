@@ -28,9 +28,9 @@
  *****************************************************************************/
 package com.rslakra.httpclient;
 
-import com.rslakra.core.CoreUtils;
 import com.rslakra.core.IOUtils;
 import com.rslakra.core.SecurityUtils;
+import com.rslakra.core.utils.BeanUtils;
 import com.rslakra.httpclient.HTTPUtils.Pairs;
 
 import javax.net.ServerSocketFactory;
@@ -124,8 +124,8 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
         StringBuilder userAgentBuilder = new StringBuilder();
 
         /* These properties are mandatory for the server requests. */
-        if (CoreUtils.isNullOrEmpty(mPlatform) || CoreUtils.isNullOrEmpty(mAppName)
-                || CoreUtils.isNullOrEmpty(mAppBundleIdentifier) || CoreUtils.isNullOrEmpty(mAppType)) {
+        if (BeanUtils.isNullOrEmpty(mPlatform) || BeanUtils.isNullOrEmpty(mAppName)
+                || BeanUtils.isNullOrEmpty(mAppBundleIdentifier) || BeanUtils.isNullOrEmpty(mAppType)) {
             throw new IllegalArgumentException("Invalid User-Agent Values!");
         }
 
@@ -133,7 +133,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
         userAgentBuilder.append("Platform=").append(mPlatform);
         userAgentBuilder.append(";App=").append(mAppName);
         userAgentBuilder.append(";ABI=").append(mAppBundleIdentifier);
-        if (CoreUtils.isNotNullOrEmpty(mClientVersion)) {
+        if (BeanUtils.isNotNullOrEmpty(mClientVersion)) {
             userAgentBuilder.append(";CVer=").append(mClientVersion);
         }
 
@@ -175,7 +175,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static URL newURL(String baseUrl, String urlSuffix) throws IOException {
         URL url = null;
-        if (CoreUtils.isNullOrEmpty(urlSuffix)) {
+        if (BeanUtils.isNullOrEmpty(urlSuffix)) {
             url = newURL(baseUrl);
         } else {
             url = new URL(newURL(baseUrl), urlSuffix);
@@ -275,12 +275,12 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String getServerUrl(String baseServerUrl, String urlSuffix) {
         StringBuilder urlString = new StringBuilder();
-        if (CoreUtils.isNotNullOrEmpty(baseServerUrl)) {
+        if (BeanUtils.isNotNullOrEmpty(baseServerUrl)) {
             urlString.append(baseServerUrl);
         }
 
         // append urlPrefix, if available.
-        if (!CoreUtils.isNullOrEmpty(urlSuffix)) {
+        if (!BeanUtils.isNullOrEmpty(urlSuffix)) {
             if (urlSuffix.startsWith(IOUtils.SLASH)) {
                 if (urlString.toString().endsWith(IOUtils.SLASH)) {
                     urlString.append(urlSuffix.substring(1));
@@ -307,7 +307,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
     public static String getHostName(String urlString) {
         // check in cache first
         String hostName = urlRedirects.get(urlString);
-        if (CoreUtils.isNullOrEmpty(hostName)) {
+        if (BeanUtils.isNullOrEmpty(hostName)) {
             if (USE_FULLY_QUALIFIED_HOSTNAME) {
                 hostName = HTTPUtils.getHostNameFromUrl(urlString);
             } else {
@@ -412,7 +412,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, String> getRequestHeaders(HttpServletRequest servletRequest) {
         Map<String, String> requestHeaders = new TreeMap<String, String>();
-        if (CoreUtils.isNotNull(servletRequest)) {
+        if (BeanUtils.isNotNull(servletRequest)) {
             try {
                 /* extract request headers, if available. */
                 @SuppressWarnings("unchecked")
@@ -484,8 +484,8 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(URL url, Proxy proxy) throws IOException {
-        return (CoreUtils.isNotNull(url)
-                ? (HttpURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection())
+        return (BeanUtils.isNotNull(url)
+                ? (HttpURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection())
                 : null);
     }
 
@@ -498,7 +498,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(URL url) throws IOException {
-        return (CoreUtils.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
+        return (BeanUtils.isNotNull(url) ? (HttpURLConnection) url.openConnection() : null);
     }
 
     /**
@@ -537,8 +537,8 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @throws IOException
      */
     public static HttpsURLConnection openHttpsURLConnection(URL url, Proxy proxy) throws IOException {
-        return (CoreUtils.isNotNull(url) && url.getProtocol().equals("https")
-                ? (HttpsURLConnection) (CoreUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection())
+        return (BeanUtils.isNotNull(url) && url.getProtocol().equals("https")
+                ? (HttpsURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection())
                 : null);
     }
 
@@ -585,7 +585,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param urlConnection
      */
     public static void disconnect(HttpURLConnection urlConnection) {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             try {
                 // Crucial, according to the documentation.
                 urlConnection.disconnect();
@@ -606,7 +606,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param userAgent
      */
     public static void setUserAgent(HttpURLConnection urlConnection, final String userAgent) {
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(userAgent)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(userAgent)) {
             // user-agent (default string generated for Android)
             urlConnection.addRequestProperty(Header.USER_AGENT.getName(), userAgent);
         }
@@ -623,7 +623,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setConnectAndReadTimeouts(HttpURLConnection urlConnection, int timeoutInMillis,
                                                  int readTimeoutInMillis) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             urlConnection.setConnectTimeout(timeoutInMillis);
             urlConnection.setReadTimeout(readTimeoutInMillis);
         }
@@ -651,7 +651,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setDoInputAndDoOutput(final HttpURLConnection urlConnection, final boolean doInput,
                                              final boolean doOutput) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this URLConnection allows input.
              * It cannot be set after the connection is established.
@@ -672,7 +672,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setUseCaches(final HttpURLConnection urlConnection, final boolean useCaches,
                                     final boolean defaultUseCaches) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this connection allows to use
              * caches or not. This method can only be called prior to the
@@ -705,7 +705,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setRequestMethod(final HttpURLConnection urlConnection, final String requestMethod)
             throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this URLConnection allows input.
              * It cannot be set after the connection is established.
@@ -713,7 +713,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
             urlConnection.setDoInput(true);
 
             /* request method (i.e GET/POST/PUT etc) */
-            if (CoreUtils.isNotNullOrEmpty(requestMethod)) {
+            if (BeanUtils.isNotNullOrEmpty(requestMethod)) {
                 urlConnection.setRequestMethod(requestMethod);
                 urlConnection.setDoOutput(Method.POST == Method.valueOf(requestMethod));
             } else {
@@ -735,7 +735,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void addHeader(final HttpURLConnection urlConnection, final String fieldName, final String fieldValue)
             throws IOException {
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(fieldName)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(fieldName)) {
             urlConnection.addRequestProperty(fieldName, fieldValue);
         }
     }
@@ -752,7 +752,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setHeader(final HttpURLConnection urlConnection, final String fieldName, final String fieldValue)
             throws IOException {
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(fieldName)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(fieldName)) {
             urlConnection.setRequestProperty(fieldName, fieldValue);
         }
     }
@@ -767,7 +767,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod)
             throws IOException {
-        if (CoreUtils.isNotNull(urlConnection)) {
+        if (BeanUtils.isNotNull(urlConnection)) {
             // set connection timeout properties.
             setDefaultUseCaches(urlConnection);
             setDefaultConnectAndReadTimeouts(urlConnection);
@@ -792,12 +792,12 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String toCookyString(Map<String, String> mapCookies) {
         String cookies = null;
-        if (!CoreUtils.isNullOrEmpty(mapCookies)) {
+        if (!BeanUtils.isNullOrEmpty(mapCookies)) {
             /** Add Cookies. */
             StringBuilder cookyBuilder = new StringBuilder();
             for (String key : mapCookies.keySet()) {
                 String value = mapCookies.get(key);
-                if (CoreUtils.isNotNullOrEmpty(value)) {
+                if (BeanUtils.isNotNullOrEmpty(value)) {
                     if (HTTPUtils.equals(Header.COOKIE, key)) {
                         cookyBuilder.append(value).append(";");
                     } else {
@@ -808,7 +808,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
                 }
             }
 
-            if (!CoreUtils.isNullOrEmpty(cookyBuilder)) {
+            if (!BeanUtils.isNullOrEmpty(cookyBuilder)) {
                 cookies = cookyBuilder.toString();
                 cookyBuilder = null;
             }
@@ -825,14 +825,14 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, String> mergeCookies(final Map<String, String> mapCookies) {
         Map<String, String> mergedCookies = new HashMap<String, String>();
-        if (!CoreUtils.isNullOrEmpty(mapCookies)) {
+        if (!BeanUtils.isNullOrEmpty(mapCookies)) {
             /** Merge Cookies. */
             for (String key : mapCookies.keySet()) {
                 String value = mapCookies.get(key);
-                if (CoreUtils.isNotNullOrEmpty(value)) {
+                if (BeanUtils.isNotNullOrEmpty(value)) {
                     if (HTTPUtils.equals(Header.COOKIE, key)) {
                         Map<String, String> oldCookies = extractCookies(value);
-                        if (!CoreUtils.isNullOrEmpty(oldCookies)) {
+                        if (!BeanUtils.isNullOrEmpty(oldCookies)) {
                             mergedCookies.putAll(oldCookies);
                         }
                     } else {
@@ -853,7 +853,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param cookies
      */
     public static void setRequestCookies(HttpURLConnection urlConnection, String cookies) {
-        if (CoreUtils.isNotNull(urlConnection) && CoreUtils.isNotNullOrEmpty(cookies)) {
+        if (BeanUtils.isNotNull(urlConnection) && BeanUtils.isNotNullOrEmpty(cookies)) {
             urlConnection.setRequestProperty(Header.COOKIE.getName(), cookies);
         }
     }
@@ -878,7 +878,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String toUrlQueryString(Map<String, Object> requestParameters) {
         String urlQueryString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             StringBuilder aueryString = new StringBuilder();
             boolean firstParam = true;
             for (String key : requestParameters.keySet()) {
@@ -919,8 +919,8 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param queryString
      */
     public static void setQueryString(HttpURLConnection urlConnection, final String queryString) throws IOException {
-        if (CoreUtils.isNotNull(urlConnection) && !isGetRequest(urlConnection)
-                && CoreUtils.isNotNullOrEmpty(queryString)) {
+        if (BeanUtils.isNotNull(urlConnection) && !isGetRequest(urlConnection)
+                && BeanUtils.isNotNullOrEmpty(queryString)) {
             IOUtils.writeBytes(queryString.getBytes(), urlConnection.getOutputStream(), true);
         }
     }
@@ -946,13 +946,13 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, Object> toRequestParameters(String encodedParameters) {
         Map<String, Object> requestParameters = new LinkedHashMap<String, Object>();
-        if (CoreUtils.isNotNullOrEmpty(encodedParameters)) {
+        if (BeanUtils.isNotNullOrEmpty(encodedParameters)) {
             String decodedParameters = com.rslakra.core.SecurityUtils.decodeWithURLDecoder(encodedParameters);
             String[] paramTokens = decodedParameters.split("&");
-            if (!CoreUtils.isNullOrEmpty(paramTokens)) {
+            if (!BeanUtils.isNullOrEmpty(paramTokens)) {
                 for (int i = 0; i < paramTokens.length; i++) {
                     String[] tokens = paramTokens[i].split("=");
-                    if (!CoreUtils.isNullOrEmpty(tokens) && tokens.length > 1) {
+                    if (!BeanUtils.isNullOrEmpty(tokens) && tokens.length > 1) {
                         requestParameters.put(tokens[0], tokens[1]);
                     }
                 }
@@ -970,10 +970,10 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param requestHeaders
      */
     public static void setRequestHeaders(HttpURLConnection urlConnection, Map<String, String> requestHeaders) {
-        if (CoreUtils.isNotNull(urlConnection) && !CoreUtils.isNullOrEmpty(requestHeaders)) {
+        if (BeanUtils.isNotNull(urlConnection) && !BeanUtils.isNullOrEmpty(requestHeaders)) {
             for (String headerKey : requestHeaders.keySet()) {
                 String headerValue = requestHeaders.get(headerKey);
-                if (CoreUtils.isNotNullOrEmpty(headerValue)) {
+                if (BeanUtils.isNotNullOrEmpty(headerValue)) {
                     // headerValue =
                     // SecurityUtils.encodeToBase64String(headerValue);
                     urlConnection.setRequestProperty(headerKey, headerValue);
@@ -991,10 +991,10 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void addRequestHeadersFromParameters(HttpURLConnection urlConnection,
                                                        Map<String, Object> requestParameters) {
-        if (CoreUtils.isNotNull(urlConnection) && !CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (BeanUtils.isNotNull(urlConnection) && !BeanUtils.isNullOrEmpty(requestParameters)) {
             // add CONTENT_TYPE in headers, if available
             String contentType = HTTPUtils.getValueForKeyAsString(requestParameters, Header.CONTENT_TYPE.getName());
-            if (CoreUtils.isNotNullOrEmpty(contentType)) {
+            if (BeanUtils.isNotNullOrEmpty(contentType)) {
                 urlConnection.addRequestProperty(Header.CONTENT_TYPE.getName(), contentType);
                 requestParameters.remove(Header.CONTENT_TYPE);
             }
@@ -1003,11 +1003,11 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
             // String requestHashCode =
             // getValueForKeyAsString(requestParameters,
             // MeetXConstants.CLIENT_REQUEST_HASH_CODE);
-            // if(CoreUtils.isNotNullOrEmpty(requestHashCode)) {
+            // if(BeanUtils.isNotNullOrEmpty(requestHashCode)) {
             // String responseHashCode =
             // getValueForKeyAsString(requestParameters,
             // MeetXConstants.UNIQUE_RESPONSE_HASH);
-            // if(CoreUtils.isNotNullOrEmpty(responseHashCode)) {
+            // if(BeanUtils.isNotNullOrEmpty(responseHashCode)) {
             // urlConnection.addRequestProperty(MeetXConstants.UNIQUE_RESPONSE_HASH,
             // responseHashCode);
             // requestParameters.remove(MeetXConstants.UNIQUE_RESPONSE_HASH);
@@ -1038,7 +1038,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
         HttpURLConnection urlConnection = null;
 
         try {
-            if (CoreUtils.isNullOrEmpty(urlString)) {
+            if (BeanUtils.isNullOrEmpty(urlString)) {
                 throw new IllegalArgumentException("Server URL must provide!");
             }
 
@@ -1046,7 +1046,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
             if (Method.isGetRequest(httpMethod)) {
                 StringBuilder requestBuilder = new StringBuilder(urlString);
                 String queryString = toUrlQueryString(requestParameters);
-                if (CoreUtils.isNotNullOrEmpty(queryString)) {
+                if (BeanUtils.isNotNullOrEmpty(queryString)) {
                     requestBuilder.append("?").append(queryString);
                 }
                 urlConnection = HTTPUtils.openHttpURLConnection(requestBuilder.toString());
@@ -1058,10 +1058,10 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
 
             // add default cookies, if any
             String urlCookies = null;
-            if (CoreUtils.isNotNullOrEmpty(urlCookies)) {
+            if (BeanUtils.isNotNullOrEmpty(urlCookies)) {
                 if (requestHeaders.containsKey(Header.COOKIE)) {
                     String requestCookies = requestHeaders.get(Header.COOKIE);
-                    if (CoreUtils.isNotNullOrEmpty(requestCookies)) {
+                    if (BeanUtils.isNotNullOrEmpty(requestCookies)) {
                         urlCookies += ";" + requestCookies;
                     }
                 } else {
@@ -1200,10 +1200,10 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String getHeader(Map<String, List<String>> headers, String key) {
         String value = null;
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             List<String> headerValues = headers.get(key);
             // LogUtils.d(DEBUG_KEY, "headerValues:" + headerValues);
-            if (!CoreUtils.isNullOrEmpty(headerValues)) {
+            if (!BeanUtils.isNullOrEmpty(headerValues)) {
                 value = headerValues.get(0);
             }
         }
@@ -1218,7 +1218,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @return
      */
     public static Map<String, List<String>> getHeaders(HttpResponse httpResponse) {
-        return (CoreUtils.isNull(httpResponse) ? null : httpResponse.getResponseHeaders());
+        return (BeanUtils.isNull(httpResponse) ? null : httpResponse.getResponseHeaders());
     }
 
     /**
@@ -1229,7 +1229,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String getMimeType(Map<String, List<String>> headers) {
         String mimeType = null;
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             mimeType = headers.get(Header.CONTENT_TYPE).get(0);
             if (mimeType.indexOf(";") != -1) {
                 mimeType = mimeType.substring(0, mimeType.indexOf(";")).trim();
@@ -1248,7 +1248,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, String> extractCookies(String stringCookies) {
         Map<String, String> mapCookies = null;
-        if (CoreUtils.isNotNullOrEmpty(stringCookies)) {
+        if (BeanUtils.isNotNullOrEmpty(stringCookies)) {
             mapCookies = new HashMap<String, String>();
             String[] cookies = stringCookies.split(";");
             for (String cookie : cookies) {
@@ -1271,13 +1271,13 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, String> extractCookies(Map<String, List<String>> responseHeaders) {
         Map<String, String> mapCookies = null;
-        if (!CoreUtils.isNullOrEmpty(responseHeaders)) {
+        if (!BeanUtils.isNullOrEmpty(responseHeaders)) {
             List<String> allCookies = responseHeaders.get(Header.SET_COOKIE);
-            if (!CoreUtils.isNullOrEmpty(allCookies)) {
+            if (!BeanUtils.isNullOrEmpty(allCookies)) {
                 mapCookies = new HashMap<String, String>();
                 for (String stringCookie : allCookies) {
                     Map<String, String> extractedCookies = HTTPUtils.extractCookies(stringCookie);
-                    if (!CoreUtils.isNullOrEmpty(extractedCookies)) {
+                    if (!BeanUtils.isNullOrEmpty(extractedCookies)) {
                         mapCookies.putAll(extractedCookies);
                     }
                 }
@@ -1326,12 +1326,12 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
         // +
         // ", " + defaultValue + ")");
         Object value = null;
-        if (!CoreUtils.isNullOrEmpty(mapKeyValues) && !CoreUtils.isNullOrEmpty(key)) {
+        if (!BeanUtils.isNullOrEmpty(mapKeyValues) && !BeanUtils.isNullOrEmpty(key)) {
             value = mapKeyValues.get(key);
         }
 
         // return default value if the value is null or empty.
-        if (CoreUtils.isNull(value)) {
+        if (BeanUtils.isNull(value)) {
             value = defaultValue;
         }
 
@@ -1414,7 +1414,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static Map<String, String> headerValuesAsString(Map<String, List<String>> headers) {
         Map<String, String> mapHeaders = new HashMap<String, String>();
-        if (!CoreUtils.isNullOrEmpty(headers)) {
+        if (!BeanUtils.isNullOrEmpty(headers)) {
             Set<Map.Entry<String, List<String>>> entries = headers.entrySet();
             for (Map.Entry<String, List<String>> entry : entries) {
                 mapHeaders.put(entry.getKey(), entry.getValue().get(0));
@@ -1430,7 +1430,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String getContentDispositionFileNameValue(String contentDisposition) {
         String valueFileName = null;
-        if (!CoreUtils.isNullOrEmpty(contentDisposition)) {
+        if (!BeanUtils.isNullOrEmpty(contentDisposition)) {
             int fileNameIndex = contentDisposition.indexOf(Header.FILE_NAME_EQUAL.getName());
             if (fileNameIndex > -1 && fileNameIndex < contentDisposition.length() - 1) {
                 valueFileName = contentDisposition.substring(fileNameIndex + Header.FILE_NAME_EQUAL.getName().length());
@@ -1446,7 +1446,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @return
      */
     public static List<String> getExcludedHeaders() {
-        if (CoreUtils.isNull(excludedHeaders)) {
+        if (BeanUtils.isNull(excludedHeaders)) {
             excludedHeaders = new ArrayList<String>();
             /*
              * excluded the following headers from the request/response headers.
@@ -1472,7 +1472,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @return
      */
     public static String[] getHeadersIgnored() {
-        if (CoreUtils.isNull(headersIgnored)) {
+        if (BeanUtils.isNull(headersIgnored)) {
             headersIgnored = HTTPUtils.toArray(getExcludedHeaders(), String.class);
         }
 
@@ -1485,7 +1485,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @return
      */
     public static List<String> getExcludedParameters() {
-        if (CoreUtils.isNull(excludedParameters)) {
+        if (BeanUtils.isNull(excludedParameters)) {
             excludedParameters = new ArrayList<String>();
             /* Exclude more values here, if required. */
         }
@@ -1502,7 +1502,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static boolean isExcludedParameter(String paramName) {
         boolean excludedParameter = false;
-        if (CoreUtils.isNotNullOrEmpty(paramName) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
+        if (BeanUtils.isNotNullOrEmpty(paramName) && !BeanUtils.isNullOrEmpty(getExcludedParameters())) {
             for (int i = 0; i < excludedParameters.size(); i++) {
                 if (excludedParameters.contains(paramName)) {
                     excludedParameter = true;
@@ -1520,7 +1520,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param sortedParameters
      */
     public static void removeExcludedParameters(SortedMap<String, Object> sortedParameters) {
-        if (!CoreUtils.isNullOrEmpty(sortedParameters) && !CoreUtils.isNullOrEmpty(getExcludedParameters())) {
+        if (!BeanUtils.isNullOrEmpty(sortedParameters) && !BeanUtils.isNullOrEmpty(getExcludedParameters())) {
             for (int i = 0; i < excludedParameters.size(); i++) {
                 sortedParameters.remove(excludedParameters.get(i));
             }
@@ -1535,7 +1535,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String paramValuesAsHashString(SortedMap<String, Object> requestParameters) {
         String valuesAsHashString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             SortedMap<String, Object> sortedParameters = HTTPUtils.toSortedMap(requestParameters);
             /* remove existing custom parameters, if available */
             removeExcludedParameters(sortedParameters);
@@ -1568,7 +1568,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static boolean isExcludedMethodRequest(String requestMethodName, String... excludedMethods) {
         boolean excludedMethodRequest = false;
-        if (!CoreUtils.isNullOrEmpty(requestMethodName) && !CoreUtils.isNullOrEmpty(excludedMethods)) {
+        if (!BeanUtils.isNullOrEmpty(requestMethodName) && !BeanUtils.isNullOrEmpty(excludedMethods)) {
             for (int i = 0; i < excludedMethods.length; i++) {
                 if (excludedMethods[i].equalsIgnoreCase(requestMethodName)) {
                     excludedMethodRequest = true;
@@ -1586,7 +1586,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @return
      */
     public static List<String> getExcludedMethods() {
-        if (CoreUtils.isNull(excludedMethods)) {
+        if (BeanUtils.isNull(excludedMethods)) {
             excludedMethods = new ArrayList<String>();
             /* add more methods if required. */
         }
@@ -1602,7 +1602,7 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static void filterRequestParameters(SortedMap<String, Object> requestParameters,
                                                boolean excludedMethodRequest) {
-        if (excludedMethodRequest && !CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (excludedMethodRequest && !BeanUtils.isNullOrEmpty(requestParameters)) {
             SortedMap<String, Object> filteredParameters = new TreeMap<String, Object>(requestParameters);
             for (String key : filteredParameters.keySet()) {
                 if (("rand".equals(key) || "_".equals(key))) {
@@ -1642,11 +1642,11 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String paramValuesAsString(String... paramValues) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(paramValues)) {
+        if (!BeanUtils.isNullOrEmpty(paramValues)) {
             StringBuilder hashBuffer = new StringBuilder();
             Arrays.sort(paramValues);
             for (int i = 0; i < paramValues.length; i++) {
-                String paramValue = CoreUtils.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
+                String paramValue = BeanUtils.isNullOrEmpty(paramValues[i]) ? "" : paramValues[i];
                 hashBuffer.append(paramValue);
             }
 
@@ -1666,11 +1666,11 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String paramValuesAsString(List<String> paramValues) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(paramValues)) {
+        if (!BeanUtils.isNullOrEmpty(paramValues)) {
             StringBuilder hashBuffer = new StringBuilder();
             Collections.sort(paramValues);
             for (String paramValue : paramValues) {
-                paramValue = CoreUtils.isNullOrEmpty(paramValue) ? "" : paramValue;
+                paramValue = BeanUtils.isNullOrEmpty(paramValue) ? "" : paramValue;
                 hashBuffer.append(paramValue);
             }
 
@@ -1690,12 +1690,12 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      */
     public static String paramValuesAsString(SortedMap<String, ? extends Object> requestParameters) {
         String valuesAsString = null;
-        if (!CoreUtils.isNullOrEmpty(requestParameters)) {
+        if (!BeanUtils.isNullOrEmpty(requestParameters)) {
             StringBuilder hashBuffer = new StringBuilder();
             /* the iteration should be name in the same order each time. */
             for (String key : requestParameters.keySet()) {
                 Object value = requestParameters.get(key);
-                String valueAsString = CoreUtils.isNull(value) ? "" : value.toString();
+                String valueAsString = BeanUtils.isNull(value) ? "" : value.toString();
                 hashBuffer.append(valueAsString);
             }
 
@@ -1713,9 +1713,9 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
      * @param values
      */
     public static void addToHashBuffer(final StringBuilder hashBuffer, String... values) {
-        if (CoreUtils.isNotNull(hashBuffer) && !CoreUtils.isNullOrEmpty(values)) {
+        if (BeanUtils.isNotNull(hashBuffer) && !BeanUtils.isNullOrEmpty(values)) {
             for (int i = 0; i < values.length; i++) {
-                if (!CoreUtils.isNullOrEmpty(values[i])) {
+                if (!BeanUtils.isNullOrEmpty(values[i])) {
                     hashBuffer.append(values[i]);
                 }
             }
