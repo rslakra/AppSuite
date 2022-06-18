@@ -120,7 +120,7 @@ public abstract class AbstractHttpClient implements AutoCloseable {
      * @param request
      */
     protected final void logHttpRequest(final Request request) {
-        LOGGER.info("logHttpRequest(), name=%s, request=%s, headers=%s", clientName, request,
+        LOGGER.info("logHttpRequest(), name={}, request={}, headers={}", clientName, request,
                 request.getHeaders());
     }
 
@@ -149,7 +149,7 @@ public abstract class AbstractHttpClient implements AutoCloseable {
 
         // NOTE : enable logging for org.apache.http.impl.client.* package to capture raw http response payload
         LOGGER.info(
-                "logHttpResponse() - name=%s, state=%s, request=%s, duration(ms)=%d, statusCode=%d, exceptionName=%s, exceptionMsg=%s",
+                "logHttpResponse() - name={}, state={}, request={}, duration(ms)={}, statusCode={}, exceptionName={}, exceptionMsg={}",
                 clientName, state, request, durationMillis, statusCode, exceptionClassName, exceptionMsg);
     }
 

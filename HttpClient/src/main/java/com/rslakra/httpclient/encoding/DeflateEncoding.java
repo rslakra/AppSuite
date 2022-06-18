@@ -11,7 +11,7 @@ import org.apache.http.client.entity.DeflateDecompressingEntity;
 public class DeflateEncoding extends ContentEncoding {
 
     public DeflateEncoding() {
-        super(Type.DEFLATE);
+        super(EncodingType.DEFLATE);
     }
 
     /**

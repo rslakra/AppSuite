@@ -53,15 +53,11 @@ import java.util.*;
  */
 public abstract class DefaultRequest /*implements HttpRequest*/ {
 
-    /**
-     * UTF-8
-     */
+	/** UTF-8 */
     public static final String UTF_8 = "UTF-8";
 
-    /**
-     * ISO-8859-1
-     */
-    public static final String ISO_8859_1 = "ISO-8859-1";
+	/** ISO-8859-1 */
+	public static final String ISO_8859_1 = "ISO-8859-1";
 
     /* USE_FULLY_QUALIFIED_HOSTNAME */
     private static final boolean USE_FULLY_QUALIFIED_HOSTNAME = false;
@@ -69,10 +65,8 @@ public abstract class DefaultRequest /*implements HttpRequest*/ {
     /* KERNEL_VERSION */
     private static final String KERNEL_VERSION = System.getProperty("os.version");
 
-    /**
-     * mimeTypes
-     */
-    private static Map<String, String> mimeTypes;
+	/** mimeTypes */
+	private static Map<String, String> mimeTypes;
 
     /* urlRedirects */
     private static final Map<String, String> urlRedirects = new HashMap<String, String>(3);

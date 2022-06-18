@@ -11,12 +11,12 @@ import java.io.IOException;
  */
 public abstract class ContentEncoding {
 
-    private final Type contentEncodingType;
+    private final EncodingType contentEncodingType;
 
     /**
      * @param contentEncodingType
      */
-    public ContentEncoding(final Type contentEncodingType) {
+    public ContentEncoding(final EncodingType contentEncodingType) {
         this.contentEncodingType = contentEncodingType;
     }
 
@@ -112,18 +112,11 @@ public abstract class ContentEncoding {
     }
 
     /**
-     *
+     * EncodingType
      */
-    public enum Type {
+    public enum EncodingType {
         GZIP,
         COMPRESS,
         DEFLATE;
-
-        private Type() {
-        }
-
-        public String toString() {
-            return this.name().toLowerCase();
-        }
     }
 }

@@ -65,7 +65,7 @@ public class RestBuilder {
      */
     public RestBuilder() throws URISyntaxException {
         this(null, ContentType.ANY);
-        this.setContentEncoding(ContentEncoding.Type.GZIP, ContentEncoding.Type.DEFLATE);
+        this.setContentEncoding(ContentEncoding.EncodingType.GZIP, ContentEncoding.EncodingType.DEFLATE);
     }
 
     /**

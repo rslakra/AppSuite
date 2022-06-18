@@ -37,145 +37,79 @@ package com.rslakra.httpclient;
  */
 public enum Header {
 
-    /* Common Constants */
-    /**
-     * http
-     */
-    SCHEMA_HTTP("http"),
-    /**
-     * https
-     */
-    SCHEMA_HTTPS("https"),
-    /**
-     * HTTP/1.1
-     */
-    HTTP_VERSION("HTTP/1.1"),
+	/* Common Constants */
+	/** http */
+	SCHEMA_HTTP("http"),
+	/** https */
+	SCHEMA_HTTPS("https"),
+	/** HTTP/1.1 */
+	HTTP_VERSION("HTTP/1.1"),
 
     /* Header */
 
-    /**
-     * Accept
-     */
-    ACCEPT("Accept"),
-    /**
-     * Accept-Encoding
-     */
-    ACCEPT_ENCODING("Accept-Encoding"),
-    /**
-     * Accept-Language
-     */
-    ACCEPT_LANGUAGE("Accept-Language"),
-    /**
-     * Content-Type
-     */
-    CONTENT_TYPE("Content-Type"),
-    /**
-     * Content-Length
-     */
-    CONTENT_LENGTH("Content-Length"),
-    /**
-     * Expires
-     */
-    EXPIRES("Expires"),
-    /**
-     * Pragma
-     */
-    PRAGMA("Pragma"),
-    /**
-     * public
-     */
-    PRAGMA_PUBLIC("public"),
-    /**
-     * no-cache
-     */
-    PRAGMA_NO_CACHE("no-cache"),
-    /**
-     * Cache-Control
-     */
-    CACHE_CONTROL("Cache-Control"),
-    /**
-     * User-Agent
-     */
-    USER_AGENT("User-Agent"),
-    /**
-     * Content-Disposition
-     */
-    CONTENT_DISPOSITION("Content-Disposition"),
-    /**
-     * Set-Cookie
-     */
-    SET_COOKIE("Set-Cookie"),
-    /**
-     * Cookie
-     */
-    COOKIE("Cookie"),
-    /**
-     * Location
-     */
-    LOCATION("Location"),
-    /**
-     * Server
-     */
-    SERVER("Server"),
-    /**
-     * Transfer-Encoding
-     */
-    TRANSFER_ENCODING("Transfer-Encoding"),
+	/** Accept */
+	ACCEPT("Accept"),
+	/** Accept-Encoding */
+	ACCEPT_ENCODING("Accept-Encoding"),
+	/** Accept-Language */
+	ACCEPT_LANGUAGE("Accept-Language"),
+	/** Content-Type */
+	CONTENT_TYPE("Content-Type"),
+	/** Content-Length */
+	CONTENT_LENGTH("Content-Length"),
+	/** Expires */
+	EXPIRES("Expires"),
+	/** Pragma */
+	PRAGMA("Pragma"),
+	/** public */
+	PRAGMA_PUBLIC("public"),
+	/** no-cache */
+	PRAGMA_NO_CACHE("no-cache"),
+	/** Cache-Control */
+	CACHE_CONTROL("Cache-Control"),
+	/** User-Agent */
+	USER_AGENT("User-Agent"),
+	/** Content-Disposition */
+	CONTENT_DISPOSITION("Content-Disposition"),
+	/** Set-Cookie */
+	SET_COOKIE("Set-Cookie"),
+	/** Cookie */
+	COOKIE("Cookie"),
+	/** Location */
+	LOCATION("Location"),
+	/** Server */
+	SERVER("Server"),
+	/** Transfer-Encoding */
+	TRANSFER_ENCODING("Transfer-Encoding"),
 
     /* Header Values Here */
 
-    /**
-     * 200
-     */
-    STATUS_CODE_OK("200"),
-    /**
-     * 45
-     */
-    CONNECTION_TIMEOUT_IN_SECONDS("45"),
-    /**
-     * 45
-     */
-    READ_TIMEOUT_IN_SECONDS("45"),
-    /**
-     * ACCEPT ALL
-     */
-    ACCEPT_ALL("*/*"),
-    /**
-     * gzip, deflate
-     */
-    ENCODING_GZIP_DEFLATE("gzip, deflate"),
-    /**
-     * en-us
-     */
-    EN_US("en-us"),
-    /**
-     * en-US,en;q=0.5
-     */
-    EN_US_Q("en-US,en;q=0.5"),
-    /**
-     * fileName=
-     */
-    FILE_NAME_EQUAL("fileName="),
-    /**
-     * application/x-www-form-urlencoded
-     */
-    CONTENT_TYPE_FORM_URLENCODED("application/x-www-form-urlencoded"),
-    /**
-     * application/x-www-form-urlencoded;charset=UTF-8
-     */
-    CONTENT_TYPE_FORM_URLENCODED_UTF8("application/x-www-form-urlencoded;charset=UTF-8"),
-    /**
-     * application/x-java-serialized-object
-     */
-    APPLICATION_JAVA_X_SERIALIZED_OBJECT("application/x-java-serialized-object"),
-    /**
-     * multipart/form-data
-     */
-    MULTIPART_FORM_DATA("multipart/form-data"),
-    /**
-     * application/json
-     */
-    CONTENY_TYPE_JSON("application/json"),
+	/** 200 */
+	STATUS_CODE_OK("200"),
+	/** 45 */
+	CONNECTION_TIMEOUT_IN_SECONDS("45"),
+	/** 45 */
+	READ_TIMEOUT_IN_SECONDS("45"),
+	/** ACCEPT ALL */
+	ACCEPT_ALL("*/*"),
+	/** gzip, deflate */
+	ENCODING_GZIP_DEFLATE("gzip, deflate"),
+	/** en-us */
+	EN_US("en-us"),
+	/** en-US,en;q=0.5 */
+	EN_US_Q("en-US,en;q=0.5"),
+	/** fileName= */
+	FILE_NAME_EQUAL("fileName="),
+	/** application/x-www-form-urlencoded */
+	CONTENT_TYPE_FORM_URLENCODED("application/x-www-form-urlencoded"),
+	/** application/x-www-form-urlencoded;charset=UTF-8 */
+	CONTENT_TYPE_FORM_URLENCODED_UTF8("application/x-www-form-urlencoded;charset=UTF-8"),
+	/** application/x-java-serialized-object */
+	APPLICATION_JAVA_X_SERIALIZED_OBJECT("application/x-java-serialized-object"),
+	/** multipart/form-data */
+	MULTIPART_FORM_DATA("multipart/form-data"),
+	/** application/json */
+	CONTENY_TYPE_JSON("application/json"),
 
     /** Add More Headers Here. */
     ;

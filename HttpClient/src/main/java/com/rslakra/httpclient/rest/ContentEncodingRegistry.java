@@ -2,6 +2,7 @@ package com.rslakra.httpclient.rest;
 
 import com.rslakra.httpclient.encoding.DeflateEncoding;
 import com.rslakra.httpclient.encoding.GZIPEncoding;
+import com.rslakra.httpclient.rest.ContentEncoding.EncodingType;
 import org.apache.http.impl.client.AbstractHttpClient;
 
 import java.util.HashMap;
@@ -23,8 +24,8 @@ public class ContentEncodingRegistry {
      */
     protected Map<String, ContentEncoding> getDefaultEncoders() {
         Map<String, ContentEncoding> contentEncodingMap = new HashMap();
-        contentEncodingMap.put(ContentEncoding.Type.GZIP.toString(), new GZIPEncoding());
-        contentEncodingMap.put(ContentEncoding.Type.DEFLATE.toString(), new DeflateEncoding());
+        contentEncodingMap.put(EncodingType.GZIP.name(), new GZIPEncoding());
+        contentEncodingMap.put(EncodingType.DEFLATE.name(), new DeflateEncoding());
         return contentEncodingMap;
     }
 

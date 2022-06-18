@@ -11,7 +11,7 @@ import org.apache.http.client.entity.GzipDecompressingEntity;
 public class GZIPEncoding extends ContentEncoding {
 
     public GZIPEncoding() {
-        super(Type.GZIP);
+        super(EncodingType.GZIP);
     }
 
     /**
