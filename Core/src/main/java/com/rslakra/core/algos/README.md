@@ -8,7 +8,7 @@ How to set up
 #### 1. Clone the repository in your GIT account or local machine
 
 > ```
->   git clone https://github.com/rslakra/MyExamples.git
+>   git clone https://github.com/rslakra/AppSuite.git
 > ```
 
 #### 2. Build the project
@@ -133,7 +133,7 @@ Run the program with the following command
 
 ## Authors
 
-* **Rohtash Lakra** - [Algorithms](https://github.com/rslakra/MyExamples.git/Algorithms)
+* **Rohtash Lakra** - [Algorithms](https://github.com/rslakra/AppSuite.git/Algorithms)
 
-See also the list of [contributors](https://github.com/rslakra/MyExamples.git/contributors) who participated in 
+See also the list of [contributors](https://github.com/rslakra/AppSuite.git/contributors) who participated in 
 this project.

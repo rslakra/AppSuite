@@ -44,7 +44,7 @@ repository. Open terminal and go to your workspace. Then run the following
 command to check-out the source code on your machine.
 
 ```
-git clone https://github.com/rslakra/Java.git
+git clone https://github.com/rslakra/AppSuite.git
 ```
 
 
@@ -104,7 +104,7 @@ Please feel free to reach the project owner team for further help.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/rslakra/Java/blob/master/CONTRIBUTING.md) for details on our code of 
+Please read [CONTRIBUTING.md](https://github.com/rslakra/AppSuite/blob/master/CONTRIBUTING.md) for details on our code of 
 conduct, and the process for submitting pull requests to us.
 
 
@@ -112,11 +112,11 @@ conduct, and the process for submitting pull requests to us.
 
 * [Rohtash Singh Lakra](https://github.com/rslakra)
 
-See also the list of [contributors](https://github.com/rslakra/Java/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/rslakra/AppSuite/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/Java/LICENSE.md) file for details
+This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/AppSuite/LICENSE.md) file for details
 
 ## Acknowledgments
 

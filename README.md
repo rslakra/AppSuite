@@ -1,4 +1,4 @@
-Java
+AppSuite
 =========
 
 This repository contains all the projects categorized based on the programming languages and usability.
@@ -46,7 +46,7 @@ repository. Open terminal and go to your workspace. Then run the following
 command to check-out the source code on your machine.
 
 ```
-git clone https://github.com/rslakra/Java.git
+git clone https://github.com/rslakra/AppSuite.git
 ```
 
 
@@ -59,7 +59,7 @@ If you are missing any of the above mentioned software, please following the
 A step by step series of examples that tell you how to get a development 
 environment running
 
-These URL's will help you to download and install the required softwares.
+These URLs will help you to download and install the required softwares.
 Please follow the instructions and download the latest stable version, as 
 supported by your OS version.
 
@@ -106,7 +106,7 @@ Please feel free to reach the project owner team for further help.
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/rslakra/Java/blob/master/CONTRIBUTING.md) for details on our code of 
+Please read [CONTRIBUTING.md](https://github.com/rslakra/AppSuite/blob/master/CONTRIBUTING.md) for details on our code of 
 conduct, and the process for submitting pull requests to us.
 
 
@@ -114,11 +114,11 @@ conduct, and the process for submitting pull requests to us.
 
 * [Rohtash Singh Lakra](https://github.com/rslakra)
 
-See also the list of [contributors](https://github.com/rslakra/Java/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/rslakra/AppSuite/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/Java/LICENSE.md) file for details
+This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/AppSuite/LICENSE.md) file for details
 
 ## Acknowledgments
 

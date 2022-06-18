@@ -739,4 +739,4 @@ public class PasswordReminder {
 
 ## Authors
 
-* [Rohtash Lakra](https://github.com/rslakra/Java/tree/master/java/src/main/java/com/rslakra/solid)
+* [Rohtash Lakra](https://github.com/rslakra/AppSuite/tree/master/java/src/main/java/com/rslakra/solid)
