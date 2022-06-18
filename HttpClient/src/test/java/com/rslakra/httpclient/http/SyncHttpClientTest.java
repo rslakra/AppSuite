@@ -282,7 +282,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
             failedCallCount++;
         }
 
-        // The server adds its called times after delay while our call is back when socket time out
+        // The server adds it's called times after delay while our call is back when socket time out
         // So sleep is needed to wait for the server to add to its called count
         sleep(2000);
         verifyHttp(server).times(3, uri(path));

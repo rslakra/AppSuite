@@ -1,6 +1,5 @@
-package com.rslakra.core.xml;
+package com.rslakra.core.utils;
 
-import com.rslakra.core.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

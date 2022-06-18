@@ -1,6 +1,6 @@
 package com.rslakra.httpclient.encoding;
 
-import com.rslakra.httpclient.http.ContentEncoding;
+import com.rslakra.httpclient.rest.ContentEncoding;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 

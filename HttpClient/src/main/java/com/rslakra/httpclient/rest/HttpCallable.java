@@ -1,4 +1,4 @@
-package com.rslakra.httpclient.http;
+package com.rslakra.httpclient.rest;
 
 import java.util.concurrent.Callable;
 

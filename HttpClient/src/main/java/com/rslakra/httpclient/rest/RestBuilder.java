@@ -1,11 +1,10 @@
-package com.rslakra.httpclient.http;
+package com.rslakra.httpclient.rest;
 
 import com.rslakra.core.algos.map.ConcurrentDictionary;
 import com.rslakra.core.utils.StringHashMap;
 import com.rslakra.httpclient.ContentType;
 import com.rslakra.httpclient.HTTPUtils;
 import com.rslakra.httpclient.Method;
-import com.rslakra.httpclient.http.ContentEncoding.Type;
 import org.apache.commons.collections4.Closure;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -66,7 +65,7 @@ public class RestBuilder {
      */
     public RestBuilder() throws URISyntaxException {
         this(null, ContentType.ANY);
-        this.setContentEncoding(Type.GZIP, Type.DEFLATE);
+        this.setContentEncoding(ContentEncoding.Type.GZIP, ContentEncoding.Type.DEFLATE);
     }
 
     /**

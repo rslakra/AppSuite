@@ -1,4 +1,4 @@
-package com.rslakra.httpclient.http;
+package com.rslakra.httpclient.rest;
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

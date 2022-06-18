@@ -1,4 +1,4 @@
-package com.rslakra.httpclient.http;
+package com.rslakra.httpclient.rest;
 
 import org.apache.http.client.HttpResponseException;
 

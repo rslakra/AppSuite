@@ -9,4 +9,5 @@
 /**/*.jar
 /**/.idea
 /**/.settings
-/**/temp
+/**/*.exe
+/**/tmp

@@ -9,13 +9,12 @@ for AS IT IS usage.
 
 ## Folder Structure Conventions
     .
-    ├── core                     # Core project files
-    ├── http-client              # Http-Client project files
-    ├── http-server              # Http-Server project files
-    ├── java                     # Java project files
-    ├── java-fx                  # JavaFx project files
+    ├── Core                    # Core project files
+    ├── HttpClient              # Http-Client project files
+    ├── HttpServer              # Http-Server project files
+    ├── Jdk                     # Java project files
     ├── mime-craft               # MimeCraft project files
-    ├── testcases                # TestCases project files
+    ├── Tutors                  # TestCases project files
     └── README.md
 
 

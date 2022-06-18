@@ -1,10 +1,7 @@
-package com.rslakra.httpclient.http;
+package com.rslakra.httpclient.rest;
 
 import com.rslakra.httpclient.encoding.DeflateEncoding;
 import com.rslakra.httpclient.encoding.GZIPEncoding;
-import com.rslakra.httpclient.http.ContentEncoding.RequestInterceptor;
-import com.rslakra.httpclient.http.ContentEncoding.ResponseInterceptor;
-import com.rslakra.httpclient.http.ContentEncoding.Type;
 import org.apache.http.impl.client.AbstractHttpClient;
 
 import java.util.HashMap;
@@ -26,8 +23,8 @@ public class ContentEncodingRegistry {
      */
     protected Map<String, ContentEncoding> getDefaultEncoders() {
         Map<String, ContentEncoding> contentEncodingMap = new HashMap();
-        contentEncodingMap.put(Type.GZIP.toString(), new GZIPEncoding());
-        contentEncodingMap.put(Type.DEFLATE.toString(), new DeflateEncoding());
+        contentEncodingMap.put(ContentEncoding.Type.GZIP.toString(), new GZIPEncoding());
+        contentEncodingMap.put(ContentEncoding.Type.DEFLATE.toString(), new DeflateEncoding());
         return contentEncodingMap;
     }
 
@@ -38,8 +35,8 @@ public class ContentEncodingRegistry {
      * @param contentEncodings
      */
     void setInterceptors(AbstractHttpClient client, Object... contentEncodings) {
-        client.removeRequestInterceptorByClass(RequestInterceptor.class);
-        client.removeResponseInterceptorByClass(ResponseInterceptor.class);
+        client.removeRequestInterceptorByClass(ContentEncoding.RequestInterceptor.class);
+        client.removeResponseInterceptorByClass(ContentEncoding.ResponseInterceptor.class);
         for (Object object : contentEncodings) {
             final ContentEncoding contentEncoding = this.availableEncoders.get(object.toString());
             if (contentEncoding != null) {
