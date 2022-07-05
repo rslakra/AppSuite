@@ -1,6 +1,6 @@
 package com.rslakra.core.entity;
 
-import com.rslakra.core.utils.ToString;
+import com.rslakra.core.ToString;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -19,6 +19,8 @@ public class User {
     private String firstName;
     private String middleName;
     private String lastName;
+    private String email;
+    private boolean active;
 
     private Address address;
 
@@ -28,13 +30,14 @@ public class User {
     @Override
     public String toString() {
         return ToString.of(User.class)
-            .add("id", id)
-            .add("userName", userName)
-            .add("firstName", firstName)
-            .add("middleName", middleName)
-            .add("lastName", lastName)
-            .add("address", address)
-            .toString();
+                .add("id", id)
+                .add("userName", userName)
+                .add("firstName", firstName)
+                .add("middleName", middleName)
+                .add("lastName", lastName)
+                .add("email", email)
+                .add("address", address)
+                .toString();
     }
 
     /**

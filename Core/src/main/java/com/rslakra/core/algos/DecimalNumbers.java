@@ -4,6 +4,8 @@
 package com.rslakra.core.algos;
 
 import com.rslakra.core.Numbers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -16,6 +18,9 @@ import java.util.Map;
  * @since 12-19-2019 8:41:57 AM
  */
 public class DecimalNumbers {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(DecimalNumbers.class);
 
     private static final boolean DEBUG = false;
     private static final String SPACE = " ";
@@ -100,13 +105,13 @@ public class DecimalNumbers {
     public String twoDigitEnglishOptimized(final int number) {
         final StringBuilder wordBuilder = new StringBuilder();
         if (DEBUG) {
-            System.out.println("number: " + number);
+            LOGGER.debug("number: " + number);
         }
 
         int divisor = findDivisorDigit(Numbers.countDecimalDigits(number));
         long minNumber = Numbers.firstNDigitNumber(divisor);
         if (DEBUG) {
-            System.out.println("divisor: " + divisor + ", minNumber: " + minNumber);
+            LOGGER.debug("divisor: " + divisor + ", minNumber: " + minNumber);
         }
         wordBuilder.append(toEnglish(number / minNumber));
         wordBuilder.append(SPACE).append(placeValues.get(divisor));
@@ -121,7 +126,7 @@ public class DecimalNumbers {
      */
     public String toEnglish(final long number) {
         if (DEBUG) {
-            System.out.println("number: " + number);
+            LOGGER.debug("number: " + number);
         }
         final StringBuilder wordBuilder = new StringBuilder();
         int digits = Numbers.countDecimalDigits(number);
@@ -136,7 +141,7 @@ public class DecimalNumbers {
                 int divisor = findDivisorDigit(digits);
                 long minNumber = Numbers.firstNDigitNumber(divisor);
                 if (DEBUG) {
-                    System.out.println("divisor: " + divisor + ", minNumber: " + minNumber);
+                    LOGGER.debug("divisor: " + divisor + ", minNumber: " + minNumber);
                 }
                 wordBuilder.append(toEnglish(number / minNumber));
                 wordBuilder.append(SPACE).append(placeValues.get(divisor));

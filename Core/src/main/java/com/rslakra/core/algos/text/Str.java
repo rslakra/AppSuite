@@ -1,10 +1,16 @@
 package com.rslakra.core.algos.text;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @author Rohtash Lakra
  * @created 1/20/21 4:07 PM
  */
 public class Str {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(Str.class);
 
     /**
      * Returns the index of the pattern that starts in the string at that index. If the patterns does not exist in the
@@ -35,7 +41,7 @@ public class Str {
 
                 if (j == M) {
                     // index in text, where pattern starts
-                    System.out.println(i);
+                    LOGGER.debug("i:{}", i);
                     return i;
                 }
             }
@@ -75,7 +81,7 @@ public class Str {
                 }
             }
 
-//            System.out.println(j);
+//            LOGGER.debug(j);
             if (j == M && M > 0) {
                 // index in text, where pattern starts
                 return i - M;

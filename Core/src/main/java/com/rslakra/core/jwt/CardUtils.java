@@ -1,6 +1,6 @@
 package com.rslakra.core.jwt;
 
-import com.rslakra.core.utils.BeanUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.jose4j.jwa.AlgorithmConstraints;
 import org.jose4j.jwa.AlgorithmConstraints.ConstraintType;
 import org.jose4j.jwe.ContentEncryptionAlgorithmIdentifiers;
@@ -101,25 +101,25 @@ public enum CardUtils {
      */
     public JwtClaims newJwtClaim(final TokenType type, String cardNumber, String cvc, String ipAddress) {
         final JwtClaims jwtClaims = new JwtClaims();
-        if (BeanUtils.isNotNullOrEmpty(cardNumber)) {
+        if (StringUtils.isNotEmpty(cardNumber)) {
             jwtClaims.setClaim(ATTR_CREDIT_CARD, cardNumber);
         }
 
-        if (BeanUtils.isNotNullOrEmpty(cvc)) {
+        if (StringUtils.isNotEmpty(cvc)) {
             jwtClaims.setClaim(ATTR_CVC, cvc);
         }
 
         if (type != null) {
             jwtClaims.setClaim(ATTR_TOKEN_TYPE, type);
         } else {
-            if (BeanUtils.isNotNullOrEmpty(cvc)) {
+            if (StringUtils.isNotEmpty(cvc)) {
                 jwtClaims.setClaim(ATTR_TOKEN_TYPE, TokenType.CREDIT_CARD);
             } else {
                 jwtClaims.setClaim(ATTR_TOKEN_TYPE, TokenType.ACH);
             }
         }
 
-        if (BeanUtils.isNotNullOrEmpty(ipAddress)) {
+        if (StringUtils.isNotEmpty(ipAddress)) {
             jwtClaims.setClaim(ATTR_IP, ipAddress);
         }
 

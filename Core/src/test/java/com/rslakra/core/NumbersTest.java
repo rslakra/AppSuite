@@ -14,6 +14,7 @@ import java.util.List;
  */
 public class NumbersTest {
 
+    // LOGGER
     private static final Logger LOGGER = LoggerFactory.getLogger(NumbersTest.class);
 
     @Test
@@ -148,7 +149,7 @@ public class NumbersTest {
 
     @Test
     public void testNumbers() {
-        System.out.println();
+        LOGGER.debug("\n");
         // zero
         assertNumbers(BigDecimal.ZERO, BigDecimal.valueOf(-10), BigDecimal.TEN);
         //decimal numbers

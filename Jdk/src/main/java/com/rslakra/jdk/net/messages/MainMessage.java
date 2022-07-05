@@ -29,7 +29,6 @@
 package com.rslakra.jdk.net.messages;
 
 import com.rslakra.core.IOUtils;
-import com.rslakra.core.utils.BeanUtils;
 
 import java.io.FileInputStream;
 import java.io.IOException;

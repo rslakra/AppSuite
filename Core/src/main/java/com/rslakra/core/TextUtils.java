@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -52,7 +52,6 @@ import java.util.regex.Pattern;
  * @since 1.0.0
  */
 public enum TextUtils {
-
     INSTANCE;
 
     /**

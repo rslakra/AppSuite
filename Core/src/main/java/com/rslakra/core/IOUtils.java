@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -32,7 +32,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonPrimitive;
-import com.rslakra.core.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +66,6 @@ public enum IOUtils {
     private static Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
     public static final String APPLICATION_JSON = "application/json";
     public static final String CONTENT_TYPE = "Content-Type";
-
 
     /**
      * BUFFER_1K
@@ -126,7 +124,6 @@ public enum IOUtils {
     // READ_PERMISSION
     public static FileAttribute<Set<PosixFilePermission>> READ_PERMISSION = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ));
 
-
     /**
      * Returns the OS name.
      *
@@ -160,7 +157,6 @@ public enum IOUtils {
     }
 
     /**
-     *
      * @return
      */
     public static String getJavaTempDir() {
@@ -200,15 +196,16 @@ public enum IOUtils {
     /**
      * Returns the package path of the given class.
      *
-     * @param _class
+     * @param classType
      * @param withClassName
+     * @param <T>
      * @return
      */
-    public static String getPkgPath(Class<?> _class, boolean withClassName) {
-        if (_class != null) {
-            String pkgPath = _class.getPackage().getName().replace(".", File.separator);
+    public static <T> String getPackagePath(Class<T> classType, boolean withClassName) {
+        if (BeanUtils.isNotNull(classType)) {
+            String pkgPath = classType.getPackage().getName().replace(".", File.separator);
             if (withClassName) {
-                pkgPath += File.separator + _class.getSimpleName();
+                pkgPath += File.separator + classType.getSimpleName();
             }
 
             return pkgPath;
@@ -220,42 +217,43 @@ public enum IOUtils {
     /**
      * Returns the path of the given class.
      *
-     * @param _class
+     * @param classType
+     * @param <T>
      * @return
      */
-    public static <T> String filePath(Class<T> _class) {
-        if (_class != null) {
-            String path = getPkgPath(_class, false);
-            if (BeanUtils.isNotNullOrEmpty(path)) {
-                URL url = _class.getClassLoader().getResource(path);
+    public static <T> String filePath(final Class<T> classType) {
+        if (BeanUtils.isNotNull(classType)) {
+            String filePath = getPackagePath(classType, false);
+            if (BeanUtils.isNotNull(filePath)) {
+                URL url = classType.getClassLoader().getResource(filePath);
                 if (url != null) {
-                    path = url.toExternalForm();
-                    path = path.replace(" ", "%20");
+                    filePath = url.toExternalForm();
+                    filePath = filePath.replace(" ", "%20");
                     URI uri = null;
                     try {
-                        uri = new URI(path);
+                        uri = new URI(filePath);
                         if (uri.getPath() == null) {
-                            path = uri.toString();
-                            if (path.startsWith("jar:file:")) {
+                            filePath = uri.toString();
+                            if (filePath.startsWith("jar:file:")) {
                                 // Update path and define ZIP file
-                                path = path.substring(path.indexOf("file:/"));
-                                path = path.substring(0, path.toLowerCase().indexOf(".jar") + 4);
+                                filePath = filePath.substring(filePath.indexOf("file:/"));
+                                filePath = filePath.substring(0, filePath.toLowerCase().indexOf(".jar") + 4);
                                 // Check is UNC path string
-                                if (path.startsWith("file://")) {
-                                    path = path.substring(path.indexOf("file:/") + 6);
+                                if (filePath.startsWith("file://")) {
+                                    filePath = filePath.substring(filePath.indexOf("file:/") + 6);
                                 }
-                                path = new URI(path).getPath();
+                                filePath = new URI(filePath).getPath();
                             }
                         } else {
-                            path = uri.getPath();
+                            filePath = uri.getPath();
                         }
                     } catch (URISyntaxException ex) {
-                        ex.printStackTrace();
+                        LOGGER.error(ex.getLocalizedMessage(), ex);
                     }
                 }
             }
 
-            return path;
+            return filePath;
         }
 
         return null;
@@ -271,12 +269,12 @@ public enum IOUtils {
     public static String pathString(String parentFolder, String childName) {
         String pathString = null;
 
-        if (BeanUtils.isNullOrEmpty(parentFolder)) {
+        if (BeanUtils.isEmpty(parentFolder)) {
             throw new IllegalArgumentException("Parent directory should not be null/empty!");
         } else {
             /* Removes unnecessary spaces from parentFolder and fileName. */
             pathString = parentFolder.trim();
-            if (!BeanUtils.isNullOrEmpty(childName)) {
+            if (!BeanUtils.isEmpty(childName)) {
                 pathString += (childName.startsWith(SLASH) ? "" : File.separator) + childName.trim();
             }
         }
@@ -304,11 +302,11 @@ public enum IOUtils {
      */
     public static boolean writeFile(String path, byte[] data) {
         boolean result = false;
-        if (BeanUtils.isNullOrEmpty(path)) {
+        if (BeanUtils.isEmpty(path)) {
             throw new NullPointerException("Path must be provided!");
         }
 
-        if (BeanUtils.isNullOrEmpty(data)) {
+        if (BeanUtils.isEmpty(data)) {
             throw new NullPointerException("data must be provided!");
         }
 
@@ -378,7 +376,7 @@ public enum IOUtils {
      * @return
      */
     public static byte[] readFile(String path) {
-        return (BeanUtils.isNullOrEmpty(path) ? null : readFile(new File(path)));
+        return (BeanUtils.isEmpty(path) ? null : readFile(new File(path)));
     }
 
     /**
@@ -468,7 +466,7 @@ public enum IOUtils {
      * @param properties
      */
     public static void saveProperties(String filePath, Properties properties) {
-        if (!BeanUtils.isNullOrEmpty(filePath)) {
+        if (!BeanUtils.isEmpty(filePath)) {
             FileOutputStream outputStream = null;
             try {
                 File file = new File(filePath);
@@ -535,7 +533,7 @@ public enum IOUtils {
      * @param filePath
      */
     public static boolean isExist(String filePath) {
-        return (!BeanUtils.isNullOrEmpty(filePath) && new File(filePath).exists());
+        return (!BeanUtils.isEmpty(filePath) && new File(filePath).exists());
     }
 
     /**
@@ -638,7 +636,7 @@ public enum IOUtils {
         // System.out.println("+writeBytes(" + dataBytes + ", " + outputStream +
         // ", " + closeStream + ")");
         boolean result = false;
-        if (!BeanUtils.isNullOrEmpty(dataBytes) && BeanUtils.isNotNull(outputStream)) {
+        if (!BeanUtils.isEmpty(dataBytes) && BeanUtils.isNotNull(outputStream)) {
             try {
                 outputStream.write(dataBytes);
                 /* flush output streams. */
@@ -741,7 +739,7 @@ public enum IOUtils {
     public static void saveFile(InputStream inputStream, String filePath) {
         // System.out.println("saveFile(" + inputStream + ", " + filePath +
         // ")");
-        if (BeanUtils.isNotNull(inputStream) && !BeanUtils.isNullOrEmpty(filePath)) {
+        if (BeanUtils.isNotNull(inputStream) && !BeanUtils.isEmpty(filePath)) {
             OutputStream outputStream = null;
             int fileSize = 0;
             try {
@@ -783,7 +781,7 @@ public enum IOUtils {
     public static boolean saveFile(byte[] input, File file) throws IOException {
         // System.out.println("+saveFile(" + input + ", " + file + ")");
         boolean result = false;
-        if (BeanUtils.isNotNull(file) && !BeanUtils.isNullOrEmpty(input)) {
+        if (BeanUtils.isNotNull(file) && !BeanUtils.isEmpty(input)) {
             FileOutputStream outputStream = null;
             try {
                 System.out.println("Writing file:" + file.getAbsolutePath());
@@ -965,7 +963,7 @@ public enum IOUtils {
      */
     public static boolean delete(String path, boolean force) {
         /* check the file path is not null or not empty. */
-        if (!BeanUtils.isNullOrEmpty(path)) {
+        if (!BeanUtils.isEmpty(path)) {
             return delete(new File(path), force);
         }
 
@@ -990,7 +988,7 @@ public enum IOUtils {
      * @throws IOException
      */
     public static InputStream newFileInputStream(String pathString) throws IOException {
-        return (BeanUtils.isNullOrEmpty(pathString) ? null : new FileInputStream(pathString));
+        return (BeanUtils.isEmpty(pathString) ? null : new FileInputStream(pathString));
     }
 
     /**
@@ -1098,7 +1096,7 @@ public enum IOUtils {
      */
     public static String toUTF8String(byte[] bytes, boolean replaceNonDigitCharacters) {
         String utf8String = toString(bytes, UTF_8);
-        if (replaceNonDigitCharacters && BeanUtils.isNotNullOrEmpty(utf8String)) {
+        if (replaceNonDigitCharacters && BeanUtils.isNotEmpty(utf8String)) {
             utf8String = utf8String.replaceAll("\\D+", "");
         }
 
@@ -1148,7 +1146,7 @@ public enum IOUtils {
         byte[] stringAsBytes = null;
         if (BeanUtils.isNotNull(string)) {
             try {
-                stringAsBytes = BeanUtils.isNullOrEmpty(charsetName) ? string.getBytes() : string.getBytes(charsetName);
+                stringAsBytes = BeanUtils.isEmpty(charsetName) ? string.getBytes() : string.getBytes(charsetName);
             } catch (Exception ex) {
                 System.err.println(ex);
             }
@@ -1206,7 +1204,7 @@ public enum IOUtils {
      * @return
      */
     public static String defaultCharset(String charsetName) {
-        return (BeanUtils.isNullOrEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
+        return (BeanUtils.isEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
     }
 
     /**
@@ -1219,9 +1217,9 @@ public enum IOUtils {
      */
     public static String toString(byte[] bytes, String charsetName) {
         String bytesAsString = null;
-        if (!BeanUtils.isNullOrEmpty(bytes)) {
+        if (!BeanUtils.isEmpty(bytes)) {
             try {
-                if (BeanUtils.isNullOrEmpty(charsetName)) {
+                if (BeanUtils.isEmpty(charsetName)) {
                     bytesAsString = new String(bytes);
                 } else {
                     bytesAsString = new String(bytes, charsetName);
@@ -1243,7 +1241,7 @@ public enum IOUtils {
      */
     public static String toString(String... strings) {
         StringBuilder sBuilder = new StringBuilder();
-        if (BeanUtils.isNullOrEmpty(strings)) {
+        if (BeanUtils.isEmpty(strings)) {
             sBuilder.append("[]");
         } else {
             sBuilder.append("[");
@@ -1268,7 +1266,7 @@ public enum IOUtils {
      */
     public static String toHexString(byte[] bytes) {
         String hexString = null;
-        if (!BeanUtils.isNullOrEmpty(bytes)) {
+        if (!BeanUtils.isEmpty(bytes)) {
             StringBuilder hexBuilder = new StringBuilder(bytes.length * 2);
             for (int index = 0; index < bytes.length; index++) {
                 int hn = ((int) (bytes[index]) & 0x00ff) / 16;
@@ -1294,7 +1292,7 @@ public enum IOUtils {
      */
     public static byte[] toHexBytes(String hexString) {
         byte[] hexBytes = null;
-        if (!BeanUtils.isNullOrEmpty(hexString)) {
+        if (!BeanUtils.isEmpty(hexString)) {
             int length = hexString.length() / 2;
             hexBytes = new byte[length];
             for (int i = 0; i < length; i++) {
@@ -1375,7 +1373,7 @@ public enum IOUtils {
     public static boolean copyFile(String sourceFilePath, String targetFilePath) throws IOException {
         System.out.println("+copyFile(" + sourceFilePath + ", " + targetFilePath + ")");
         boolean copied = false;
-        if (!BeanUtils.isNullOrEmpty(sourceFilePath) && !BeanUtils.isNullOrEmpty(targetFilePath)) {
+        if (!BeanUtils.isEmpty(sourceFilePath) && !BeanUtils.isEmpty(targetFilePath)) {
             File srcFile = new File(sourceFilePath);
             if (srcFile.exists()) {
                 int fileSize = copyFile(new FileInputStream(srcFile), new FileOutputStream(targetFilePath), true);
@@ -1532,7 +1530,7 @@ public enum IOUtils {
      */
     public static String validateFileOrFolderName(String fileName) {
         // populate with supported images types.
-        if (!BeanUtils.isNullOrEmpty(fileName)) {
+        if (!BeanUtils.isEmpty(fileName)) {
             fileName = fileName.replace("<", "_");
             fileName = fileName.replace(">", "_");
             fileName = fileName.replace(":", "_");
@@ -1597,7 +1595,7 @@ public enum IOUtils {
      */
     public static boolean endsWith(String fileName, String... extensions) {
         boolean result = false;
-        if (!BeanUtils.isNullOrEmpty(fileName) && !BeanUtils.isNullOrEmpty(extensions)) {
+        if (!BeanUtils.isEmpty(fileName) && !BeanUtils.isEmpty(extensions)) {
             for (String extension : extensions) {
                 if (fileName.endsWith(extension)) {
                     result = true;
@@ -1625,12 +1623,12 @@ public enum IOUtils {
         List<File> listFiles = new ArrayList<File>();
         if (isExistAndFolder(directory)) {
             File[] files = directory.listFiles();
-            if (!BeanUtils.isNullOrEmpty(files)) {
+            if (!BeanUtils.isEmpty(files)) {
                 for (File file : files) {
                     if (recursive && isDirectory(file)) {
                         listFiles.addAll(listFiles(directory, extensions, recursive));
                     } else {
-                        if (BeanUtils.isNullOrEmpty(extensions)) {
+                        if (BeanUtils.isEmpty(extensions)) {
                             listFiles.add(file);
                         } else {
                             if (endsWith(file.getName(), extensions)) {
@@ -1686,12 +1684,12 @@ public enum IOUtils {
         List<String> listFiles = new ArrayList<String>();
         if (isExistAndFolder(directory)) {
             File[] files = directory.listFiles();
-            if (!BeanUtils.isNullOrEmpty(files)) {
+            if (!BeanUtils.isEmpty(files)) {
                 for (File file : files) {
                     if (recursive && isDirectory(file)) {
                         listFiles.addAll(listFileNames(directory, extensions, recursive));
                     } else {
-                        if (BeanUtils.isNullOrEmpty(extensions)) {
+                        if (BeanUtils.isEmpty(extensions)) {
                             listFiles.add(file.getName());
                         } else {
                             if (endsWith(file.getName(), extensions)) {
@@ -1787,7 +1785,7 @@ public enum IOUtils {
     public static String getLatestVersion(List<String> listOfVersions) {
         System.out.println("+getLatestVersion(" + listOfVersions + ")");
         String latestVersion = "";
-        if (!BeanUtils.isNullOrEmpty(listOfVersions)) {
+        if (!BeanUtils.isEmpty(listOfVersions)) {
             Collections.sort(listOfVersions, new Comparator<String>() {
                 /**
                  * @see java.util.Comparator#compare(java.lang.Object,
@@ -1926,11 +1924,11 @@ public enum IOUtils {
      */
     public static String getPrefixedFilePath(String filePath) {
         String prefixedFilePath = null;
-        if (BeanUtils.isNotNullOrEmpty(filePath)) {
+        if (BeanUtils.isNotEmpty(filePath)) {
             File path = new File(filePath);
             String requestHashCode = getFileName(filePath, false);
             List<File> listFiles = listPrefixedFiles(path.getParentFile(), requestHashCode);
-            if (!BeanUtils.isNullOrEmpty(listFiles)) {
+            if (!BeanUtils.isEmpty(listFiles)) {
                 prefixedFilePath = listFiles.get(0).getAbsolutePath();
             }
             path = null;
@@ -1948,7 +1946,7 @@ public enum IOUtils {
      */
     public static String getExtension(String fullPath) {
         String extension = null;
-        if (!BeanUtils.isNullOrEmpty(fullPath)) {
+        if (!BeanUtils.isEmpty(fullPath)) {
             int dotIndex = fullPath.lastIndexOf(".");
             extension = ((dotIndex > -1 && dotIndex < fullPath.length() - 1) ? fullPath.substring(dotIndex + 1) : "");
         }
@@ -1965,7 +1963,7 @@ public enum IOUtils {
      */
     public static String getFileName(String fullPath, boolean withExtension) {
         String fileName = null;
-        if (!BeanUtils.isNullOrEmpty(fullPath)) {
+        if (!BeanUtils.isEmpty(fullPath)) {
             int pathSeparatorIndex = fullPath.lastIndexOf(File.separator);
             if (pathSeparatorIndex < fullPath.length() - 1) {
                 fileName = fullPath.substring(pathSeparatorIndex + 1);

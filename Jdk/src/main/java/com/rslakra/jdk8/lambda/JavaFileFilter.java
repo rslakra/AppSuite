@@ -31,7 +31,6 @@ package com.rslakra.jdk8.lambda;
 import com.devamatre.logger.LogManager;
 import com.devamatre.logger.Logger;
 import com.rslakra.core.IOUtils;
-import com.rslakra.core.utils.BeanUtils;
 
 import java.io.File;
 import java.io.FileFilter;

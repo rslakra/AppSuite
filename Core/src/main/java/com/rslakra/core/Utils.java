@@ -1,6 +1,5 @@
 package com.rslakra.core;
 
-import com.rslakra.core.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +42,7 @@ public enum Utils {
      */
     public byte[] toBytes(final CharSequence charSequence) {
         byte[] dataBytes = null;
-        if (BeanUtils.isNotNullOrEmpty(charSequence)) {
+        if (BeanUtils.isNotEmpty(charSequence)) {
             dataBytes = new byte[charSequence.length()];
             for (int i = 0; i < charSequence.length(); i++) {
                 char cChar = charSequence.charAt(i);
@@ -74,7 +73,7 @@ public enum Utils {
      */
     public static String toClassPathString(final Class<?> klass, final String pathString) {
         String classPath = Utils.toClassPathString(klass);
-        if (BeanUtils.isNotNullOrEmpty(pathString)) {
+        if (BeanUtils.isNotEmpty(pathString)) {
             classPath += (pathString.startsWith(File.separator) ? "" : File.separator) + pathString;
         }
 
@@ -124,7 +123,7 @@ public enum Utils {
      * @return
      */
     public static <T> List<List<T>> partitionBySize(final Collection<T> values, final int size) {
-        if (BeanUtils.isNullOrEmpty(values) || size <= 0) {
+        if (BeanUtils.isEmpty(values) || size <= 0) {
             return Collections.emptyList();
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
@@ -229,7 +228,7 @@ public enum Utils {
 
         for (int index = 0; index < 6; index++) {
             StackTraceElement element = stack[index];
-            System.out.println(String.format("index=%d, lineNumber=%d, className=%s, methodName=%s", index,
+             LOGGER.debug(String.format("index=%d, lineNumber=%d, className=%s, methodName=%s", index,
                                              element.getLineNumber(), element.getClassName(),
                                              element.getMethodName()));
         }

@@ -8,6 +8,8 @@ import com.rslakra.core.entity.AllCountryAndCurrencyResponse;
 import com.rslakra.core.json.JSONUtils;
 import org.junit.Assert;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,6 +22,9 @@ import java.util.Set;
  * @created 5/8/20 11:25 AM
  */
 public class ENumsTest {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(ENumsTest.class);
 
     private ObjectMapper objectMapper = new ObjectMapper();
 
@@ -49,9 +54,9 @@ public class ENumsTest {
             ex.printStackTrace();
         }
 
-        System.out.println(json);
+        LOGGER.debug(json);
 
-        System.out.println("Object from JSON");
+        LOGGER.debug("Object from JSON");
         String jsonExtra = "[\"INR\",\"TWD\",\"USD\",\"EUR\"]";
         List<Currency> extraCurrencies = null;
         try {
@@ -60,8 +65,7 @@ public class ENumsTest {
             ex.printStackTrace();
         }
 
-        System.out.println(extraCurrencies);
-        System.out.println();
+        LOGGER.debug("extraCurrencies:{}\n", extraCurrencies);
 
         //
         Set<Currency> setCurrencies = null;
@@ -72,7 +76,7 @@ public class ENumsTest {
             e.printStackTrace();
         }
 
-        System.out.println(setCurrencies);
+        LOGGER.debug("setCurrencies:{}", setCurrencies);
     }
 
 
@@ -86,9 +90,9 @@ public class ENumsTest {
             ex.printStackTrace();
         }
 
-        System.out.println(json);
+        LOGGER.debug(json);
 
-        System.out.println("Object from JSON");
+        LOGGER.debug("Object from JSON");
         String jsonExtra = "[\"IN\",\"TW\",\"US\"]";
         List<Country> extraCountries = null;
         try {
@@ -97,8 +101,7 @@ public class ENumsTest {
             ex.printStackTrace();
         }
 
-        System.out.println(extraCountries);
-        System.out.println();
+        LOGGER.debug("{}", extraCountries);
 
         //
         jsonExtra = "[\"IN\",\"TW\",\"US\",\"CA\"]";
@@ -110,21 +113,20 @@ public class ENumsTest {
             e.printStackTrace();
         }
 
-        System.out.println(setCountries);
+        LOGGER.debug("{}", setCountries);
     }
 
 
     @Test
     public void testXmlCountryAndCurrency() {
         String xmlData = Utils.INSTANCE.readFile("CountryAndCurrencies.xml");
-        System.out.println(xmlData);
-        System.out.println();
+        LOGGER.debug(xmlData);
 
 //        AllCountryAndCurrencyResponse response = null;
 //        try {
 //            XmlUtils.INSTANCE.registerUnmarshaller(AllCountryAndCurrencyResponse.class);
 //            response = XmlUtils.INSTANCE.unmarshall(xmlData, AllCountryAndCurrencyResponse.class);
-//            System.out.println(response);
+//             LOGGER.debug(response);
 //        } catch (JAXBException e) {
 //            e.printStackTrace();
 //        }
@@ -135,8 +137,7 @@ public class ENumsTest {
     @Test
     public void testJsonCountryAndCurrency() {
         String jsonData = Utils.INSTANCE.readFile("CountryAndCurrencies.json");
-        System.out.println("jsonData:" + jsonData);
-        System.out.println();
+        LOGGER.debug("jsonData:" + jsonData);
 
         AllCountryAndCurrencyResponse response = null;
         //Using Gson Parser (if the json contains values that enum does not contain)
@@ -148,7 +149,7 @@ public class ENumsTest {
         }
 
         Assert.assertNotNull(response);
-        System.out.println(response);
+        LOGGER.debug("{}", response);
 //        Assert.assertEquals(response.toString(), jsonData);
 
     }

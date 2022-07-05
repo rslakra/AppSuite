@@ -1,11 +1,6 @@
 package com.rslakra.core.jwt;
 
-import com.nimbusds.jose.JOSEException;
-import com.nimbusds.jose.JOSEObjectType;
-import com.nimbusds.jose.JWSAlgorithm;
-import com.nimbusds.jose.JWSHeader;
-import com.nimbusds.jose.JWSSigner;
-import com.nimbusds.jose.JWSVerifier;
+import com.nimbusds.jose.*;
 import com.nimbusds.jose.crypto.MACSigner;
 import com.nimbusds.jose.crypto.MACVerifier;
 import com.nimbusds.jose.crypto.RSASSASigner;
@@ -14,9 +9,9 @@ import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jose.jwk.gen.RSAKeyGenerator;
 import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
+import com.rslakra.core.BeanUtils;
 import com.rslakra.core.PayloadBuilder;
 import com.rslakra.core.Utils;
-import com.rslakra.core.utils.BeanUtils;
 import org.jose4j.jwk.HttpsJwks;
 import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -54,7 +49,6 @@ public enum JWTUtils {
     public static final String PRIVATE_KEY = "_private.key";
     public static final String PUBLIC_KEY = "_public.key";
     public static final String JWKS_FILE_SUFFIX = ".well-known/jwks.json";
-    public static final String REQUEST_TRACER = "Request-Tracer";
     public static final String JWS_HEADER_TYPE = "typ";
     public static final String JWS_HEADER_TYPE_VALUE = "JWT";
     private KeyFactory rsaKeyFactory;
@@ -173,7 +167,7 @@ public enum JWTUtils {
      * @return
      */
     public Path getPath(final String pathString) {
-        if (BeanUtils.isNullOrEmpty(getKeyFolderPath())) {
+        if (BeanUtils.isEmpty(getKeyFolderPath())) {
             final String pkgString = Utils.toClassPathString(JWTUtils.class, pathString);
             return Paths.get("src/main/java", pkgString);
         } else {
@@ -443,8 +437,8 @@ public enum JWTUtils {
      * @param expiredOn
      * @return
      */
-    public JWTClaimsSet createJWTClaims(final String keyId, final String audience, final String issuer,
-                                        final String subject, final Date issuedAt, final Date expiredOn) {
+    public JWTClaimsSet createJWTClaimsSet(final String keyId, final String audience, final String issuer,
+                                           final String subject, final Date issuedAt, final Date expiredOn) {
         // Prepare JWT with claims set
         final JWTClaimsSet.Builder payloadBuilder = new JWTClaimsSet.Builder();
         if (audience != null) {
@@ -456,9 +450,9 @@ public enum JWTUtils {
             payloadBuilder.claim("cli", keyId);
         }
 //        Date issueTime = Date.from(Instant.ofEpochSecond(issuedAt.getTime()));
-//        System.out.println("issueTime:" + issueTime);
+//        LOGGER.debug("issueTime:" + issueTime);
 //        Date expiryTime = Date.from(Instant.ofEpochMilli(Instant.now().plusMillis(60 * 1000).toEpochMilli()));
-//        System.out.println("expiryTime:" + expiryTime);
+//        LOGGER.debug("expiryTime:" + expiryTime);
         payloadBuilder.issueTime(issuedAt);
         payloadBuilder.expirationTime(new Date(expiredOn.getTime() + 60 * 1000));
         return payloadBuilder.build();
@@ -481,8 +475,8 @@ public enum JWTUtils {
      * @param subject
      * @return
      */
-    public JWTClaimsSet createJWTClaims(final String audience, final String issuer, final String subject) {
-        return createJWTClaims(null, audience, issuer, subject, new Date(), addDays(new Date(), 1));
+    public JWTClaimsSet createJWTClaimsSet(final String audience, final String issuer, final String subject) {
+        return createJWTClaimsSet(null, audience, issuer, subject, new Date(), addDays(new Date(), 1));
     }
 
 
@@ -516,7 +510,7 @@ public enum JWTUtils {
                                  final String clientSecret) throws JOSEException {
         final JWSHeader jwsHeader = createJWSHeader(JWSAlgorithm.HS256, JOSEObjectType.JWT);
         // Prepare JWT with claims set
-        final JWTClaimsSet jwtClaimsSet = createJWTClaims(audience, issuer, subject);
+        final JWTClaimsSet jwtClaimsSet = createJWTClaimsSet(audience, issuer, subject);
         // Create the signed JWT.
         final SignedJWT signedJwt = new SignedJWT(jwsHeader, jwtClaimsSet);
         signedJwt.sign(new MACSigner(clientSecret));
@@ -609,7 +603,7 @@ public enum JWTUtils {
         // Prepare JWT with claims set
         final JWTClaimsSet
                 jwtClaimsSet =
-                createJWTClaims(keyId, audience, issuer, subject, issuedAt, new Date(expiredOn.getTime() + 60 * 1000));
+                createJWTClaimsSet(keyId, audience, issuer, subject, issuedAt, new Date(expiredOn.getTime() + 60 * 1000));
         signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
 
         // Create RSA-signer with the private key
@@ -676,12 +670,12 @@ public enum JWTUtils {
      */
     public List<JsonWebKey> fetchJsonWebKeys(final String urlJWKSFilePath, final long defaultCacheDuration)
             throws JoseException, IOException {
-        if (BeanUtils.isNullOrEmpty(urlJWKSFilePath)) {
+        if (BeanUtils.isEmpty(urlJWKSFilePath)) {
             throw new IllegalArgumentException("Invalid JWKS file url!");
         }
 
         HttpsJwks jwksRequest = payloadBuilder.get(urlJWKSFilePath);
-        if (BeanUtils.isNullOrEmpty(jwksRequest)) {
+        if (BeanUtils.isEmpty(jwksRequest)) {
             jwksRequest = new HttpsJwks(urlJWKSFilePath);
             payloadBuilder.add(urlJWKSFilePath, jwksRequest);
             jwksRequest.setDefaultCacheDuration(defaultCacheDuration);
@@ -698,30 +692,13 @@ public enum JWTUtils {
     public Key fetchPublicKey(final String urlJWKSFilePath, final long defaultCacheDuration)
             throws JoseException, IOException {
         final List<JsonWebKey> jsonWebKeys = fetchJsonWebKeys(urlJWKSFilePath, defaultCacheDuration);
-        if (BeanUtils.isNullOrEmpty(jsonWebKeys)) {
+        if (BeanUtils.isEmpty(jsonWebKeys)) {
             return null;
         }
 
         JsonWebKey jsonWebKey = jsonWebKeys.get(0);
         return jsonWebKey.getKey();
     }
-
-    /**
-     * @param requestTracerPrefix
-     * @return
-     */
-    public static String nextRequestTracer(final String requestTracerPrefix) {
-        return String.format("%s-%d", (requestTracerPrefix == null ? "requestTracer" : requestTracerPrefix),
-                System.currentTimeMillis());
-    }
-
-    /**
-     * @return
-     */
-    public static String nextRequestTracer() {
-        return nextRequestTracer("requestTracer");
-    }
-
 
     /**
      * Encodes Client ID and Client Secret
@@ -793,11 +770,10 @@ public enum JWTUtils {
      */
     public static String createJwtToken(final JwtRequest jwtRequest) {
         return createJwtToken(jwtRequest.getClientId(), jwtRequest.getClientSecret(), getAudienceUrl(jwtRequest),
-                              jwtRequest.getExpirationTimeInMinutes(), jwtRequest.isWithJwtId());
+                jwtRequest.getExpirationTimeInMinutes(), jwtRequest.isWithJwtId());
     }
 
     /**
-     *
      * @param jwtToken
      * @return
      */
@@ -811,5 +787,4 @@ public enum JWTUtils {
             return false;
         }
     }
-
 }

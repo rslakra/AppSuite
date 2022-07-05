@@ -1,10 +1,16 @@
 package com.rslakra.core.algos;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 /**
  * @Author Rohtash Lakra
  * @Since 1/14/20 4:39 PM
  */
 public class TowerOfHanoi {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(TowerOfHanoi.class);
 
     /**
      * Tower of Hanoi.
@@ -17,7 +23,7 @@ public class TowerOfHanoi {
     public void towerOfHanoi(int disks, int A, int B, int C) {
         if (disks > 0) {
             towerOfHanoi(disks - 1, A, C, B);
-            System.out.println(String.format("Move disk from %d to %d", A, C));
+            LOGGER.debug(String.format("Move disk from %d to %d", A, C));
             towerOfHanoi(disks - 1, B, A, C);
         }
     }
@@ -28,9 +34,9 @@ public class TowerOfHanoi {
     public static void main(String[] args) {
         TowerOfHanoi toh = new TowerOfHanoi();
         for (int i = 0; i < 10; i++) {
-            System.out.println("Tower of Hanoi with " + i + " disks.");
+            LOGGER.debug("Tower of Hanoi with " + i + " disks.");
             toh.towerOfHanoi(i, 1, 2, 3);
-            System.out.println();
+            LOGGER.debug("\n");
         }
     }
 

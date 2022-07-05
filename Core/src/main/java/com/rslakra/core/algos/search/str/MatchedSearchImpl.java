@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.search.str;
 
 import com.rslakra.core.algos.search.MatchedSearch;
-import com.rslakra.core.utils.ToString;
+import com.rslakra.core.ToString;
 
 /**
  * @author Rohtash Lakra (rlakra)

@@ -46,14 +46,14 @@ public class UtilsTest {
     @Test
     public void testHashCode() {
         int hashCode = -2;
-        System.out.println("0x7fffffff:" + 0x7fffffff);
-        System.out.println("hashCode:" + Utils.hashCode(hashCode));
+         LOGGER.debug("0x7fffffff:" + 0x7fffffff);
+         LOGGER.debug("hashCode:" + Utils.hashCode(hashCode));
         assertTrue(Utils.hashCode(hashCode) > 0);
 
         String[] strings = {"Aa", "BB"};
         for (String str : strings) {
-            System.out.println(str + "=" + Utils.hashCode(str));
-            System.out.println(str + "=" + str.hashCode());
+             LOGGER.debug(str + "=" + Utils.hashCode(str));
+             LOGGER.debug(str + "=" + str.hashCode());
         }
     }
 

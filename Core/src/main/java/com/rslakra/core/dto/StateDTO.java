@@ -1,6 +1,6 @@
 package com.rslakra.core.dto;
 
-import com.rslakra.core.utils.ToString;
+import com.rslakra.core.ToString;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

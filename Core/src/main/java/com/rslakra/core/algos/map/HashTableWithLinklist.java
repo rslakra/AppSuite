@@ -1,6 +1,6 @@
 package com.rslakra.core.algos.map;
 
-import com.rslakra.core.utils.HashUtils;
+import com.rslakra.core.HashUtils;
 
 /**
  * @author Rohtash Lakra

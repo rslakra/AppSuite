@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -33,7 +33,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
-import com.rslakra.core.utils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -211,7 +210,7 @@ public enum JSONUtils {
      */
     public static String toJSONString(List<String> list) {
         String json = "";
-        if (!BeanUtils.isNullOrEmpty(list)) {
+        if (!BeanUtils.isEmpty(list)) {
             json = new Gson().toJson(list);
         }
         return json;
@@ -504,7 +503,7 @@ public enum JSONUtils {
      * @return
      */
     public static JsonElement getElement(JsonObject jsonObject, String key) {
-        if (jsonObject != null && !BeanUtils.isNullOrEmpty(key)) {
+        if (jsonObject != null && !BeanUtils.isEmpty(key)) {
             return jsonObject.get(key);
         }
 
@@ -530,7 +529,7 @@ public enum JSONUtils {
      */
     public static String valueForKeyAsString(JsonArray jsonArray, String key) {
         String value = null;
-        if (jsonArray != null && !BeanUtils.isNullOrEmpty(key)) {
+        if (jsonArray != null && !BeanUtils.isEmpty(key)) {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = (JsonObject) jsonArray.get(i);
                 if (jsonObject != null && getAsString(jsonObject, "name").equals(key)) {
@@ -560,7 +559,7 @@ public enum JSONUtils {
      */
     public static byte[] toImageBytes(String jsonString) {
         byte[] imageBytes = null;
-        if (!BeanUtils.isNullOrEmpty(jsonString)) {
+        if (!BeanUtils.isEmpty(jsonString)) {
             String javaString = fromJSONString(jsonString, String.class);
             imageBytes = javaString.getBytes();
         }
@@ -575,7 +574,7 @@ public enum JSONUtils {
      * @return
      */
     public static byte[] toImageBytes(byte[] responseBytes) {
-        if (!BeanUtils.isNullOrEmpty(responseBytes)) {
+        if (!BeanUtils.isEmpty(responseBytes)) {
             /*
              * JSON String is encoded using the Base64 String which needs to
              * convert back to Java String for images.

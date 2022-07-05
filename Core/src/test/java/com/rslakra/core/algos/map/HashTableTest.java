@@ -1,6 +1,7 @@
 package com.rslakra.core.algos.map;
 
-import com.rslakra.core.algos.map.HashTable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -9,6 +10,9 @@ import org.testng.annotations.Test;
  * @created 5/4/22 5:38 PM
  */
 public class HashTableTest {
+
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(HashTableTest.class);
 
     // toolSet
     private HashTable<String, String> toolSet = new HashTable<>();
@@ -33,7 +37,7 @@ public class HashTableTest {
         Assert.assertNotNull(toolSet);
         Assert.assertEquals(0, toolSet.size());
         Assert.assertTrue(toolSet.isEmpty());
-        System.out.println(toolSet);
+        LOGGER.debug("{}", toolSet);
         if (filled) {
             buildToolSet(toolSet);
         }
@@ -60,8 +64,8 @@ public class HashTableTest {
         Assert.assertNotNull(toolSet);
         Assert.assertEquals(12, toolSet.size());
         Assert.assertFalse(toolSet.isEmpty());
-        System.out.println("Toolset size: " + toolSet.size());
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Toolset size: " + toolSet.size());
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     public void emptyToolset() {
@@ -77,38 +81,38 @@ public class HashTableTest {
         toolSet.remove("3/4sae");
         toolSet.remove("1/4d");
         toolSet.remove("2de");
-        System.out.println("Toolset size: " + toolSet.size());
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Toolset size: " + toolSet.size());
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     private void removeSkidPlate() {
         //get the 10mm socket and wrench
         String socket = toolSet.get("10mm");
         String wrench = toolSet.get("1/4d");
-        System.out.println("Removed 4 skid plate nuts with the " + socket + " and " + wrench);
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Removed 4 skid plate nuts with the " + socket + " and " + wrench);
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     private void replaceSkidPlate() {
         //get the 10mm socket and wrench
         String socket = toolSet.get("10mm");
         String wrench = toolSet.get("1/4d");
-        System.out.println("Replaced 4 skid plate nuts with the " + socket + " and " + wrench);
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Replaced 4 skid plate nuts with the " + socket + " and " + wrench);
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     private void drainAndReplaceOil() {
         //this motorcycle's drain plug nut is 17mm.  That's a strange size, check to see if the toolSet has it
-        System.out.println(
+        LOGGER.debug(
             "Toolset has 17mm socket: " + toolSet.containsValue("17mm Socket") + " - " + toolSet.containsKey("17mm"));
 
         String socket = toolSet.get("17mm");
         String wrench = toolSet.get("1/4d");
-        System.out.println("Removed oil drain plug with " + socket + " and " + wrench);
-        System.out.println("Drained 1.7 quarts of oil");
-        System.out.println("Replaced oil drain plug with " + socket + " and " + wrench);
-        System.out.println("Added 1.7 quarts of oil");
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Removed oil drain plug with " + socket + " and " + wrench);
+        LOGGER.debug("Drained 1.7 quarts of oil");
+        LOGGER.debug("Replaced oil drain plug with " + socket + " and " + wrench);
+        LOGGER.debug("Added 1.7 quarts of oil");
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     @Test
@@ -125,7 +129,7 @@ public class HashTableTest {
         Assert.assertNotNull(toolSet);
         Assert.assertEquals(12, toolSet.size());
         Assert.assertFalse(toolSet.isEmpty());
-        System.out.println(toolSet);
+        LOGGER.debug("{}", toolSet);
     }
 
     @Test
@@ -133,7 +137,7 @@ public class HashTableTest {
         HashTable<String, String> toolSet = newHashTable(true);
         toolSet.put("null", null);
         Assert.assertEquals(13, toolSet.size());
-        System.out.println(toolSet);
+        LOGGER.debug("{}", toolSet);
     }
 
 
@@ -147,8 +151,8 @@ public class HashTableTest {
         Assert.assertEquals("1/4 socket wrench", wrench);
         String unKnownSocket = toolSet.get("101mm");
         Assert.assertNotEquals("unKnownSocket", unKnownSocket);
-        System.out.println("Removed 4 skid plate nuts with the " + socket + " and " + wrench);
-        System.out.println("Toolset: " + toolSet);
+        LOGGER.debug("Removed 4 skid plate nuts with the " + socket + " and " + wrench);
+        LOGGER.debug("Toolset: " + toolSet);
     }
 
     @Test

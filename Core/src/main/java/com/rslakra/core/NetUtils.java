@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
@@ -28,6 +28,9 @@
  *****************************************************************************/
 package com.rslakra.core;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,11 +43,13 @@ import java.net.Socket;
  */
 
 public enum NetUtils {
-
     INSTANCE;
 
+    // LOGGER
+    private static Logger LOGGER = LoggerFactory.getLogger(NetUtils.class);
+    public static final String OCTET_ZERO = "0";
+    public static final String OCTET_255 = "255";
     public static final String LOCAL_HOST = "localhost";
-
 
     /**
      * @param args
@@ -80,6 +85,69 @@ public enum NetUtils {
         return ipNumber;
     }
 
+
+    /**
+     * Returns the integer equivalent.
+     *
+     * @param numString
+     * @return
+     */
+    public static int toInteger(final String numString) {
+        return Integer.parseInt(numString);
+    }
+
+    /**
+     * @param ipOctet
+     * @param subNetMaskOctet
+     * @return
+     */
+    public static String toBroadcastAddressOctet(String ipOctet, String subNetMaskOctet) {
+        LOGGER.debug("+toBroadcastAddressOctet({}, {})", ipOctet, subNetMaskOctet);
+        String broadCastAddressOctet = null;
+        if (OCTET_ZERO.equals(subNetMaskOctet)) {
+            broadCastAddressOctet = OCTET_255;
+        } else if (OCTET_255.equals(subNetMaskOctet)) {
+            broadCastAddressOctet = ipOctet;
+        } else {
+            int ipOctetValue = toInteger(ipOctet);
+            int subNetMaskOctetValue = toInteger(subNetMaskOctet);
+            LOGGER.debug("ipOctetValue:{}, subNetMaskOctetValue:{})", ipOctetValue, subNetMaskOctetValue);
+            int magicMultiplier = 256 - subNetMaskOctetValue;
+            int result = (magicMultiplier * ((ipOctetValue / magicMultiplier) + 1)) - 1;
+            LOGGER.debug("magicMultiplier:{}, result:{})", magicMultiplier, result);
+            broadCastAddressOctet = String.valueOf(result);
+        }
+
+        LOGGER.debug("-toBroadcastAddressOctet(), broadCastAddressOctet:{}", broadCastAddressOctet);
+        return broadCastAddressOctet;
+    }
+
+    /**
+     * Returns the broadcast address of the given IP address and subnet mask.
+     *
+     * @param ipAddress
+     * @param subNetMask
+     * @return
+     */
+    public static String findBroadcastAddress(String ipAddress, String subNetMask) {
+        LOGGER.debug("+findBroadcastAddress({}, {})", ipAddress, subNetMask);
+        final StringBuilder broadCastAddress = new StringBuilder();
+        if (BeanUtils.isNotEmpty(ipAddress) && BeanUtils.isNotEmpty(subNetMask)) {
+            String[] ipTokens = ipAddress.split("[.]");
+            String[] subNetMaskTokens = subNetMask.split("[.]");
+            for (int i = 0; i < ipTokens.length; i++) {
+                broadCastAddress.append(toBroadcastAddressOctet(ipTokens[i], subNetMaskTokens[i]));
+                if (i < ipTokens.length - 1) {
+                    broadCastAddress.append(".");
+                }
+            }
+        }
+
+        LOGGER.debug("-findBroadcastAddress(), broadCastAddress:{}", broadCastAddress);
+        return broadCastAddress.toString();
+    }
+
+
     /**
      * Make a BufferedReader to get incoming data.
      *
@@ -103,4 +171,6 @@ public enum NetUtils {
         /* autoFlush set to be true */
         return (new PrintWriter(socket.getOutputStream(), true));
     }
+
+
 }

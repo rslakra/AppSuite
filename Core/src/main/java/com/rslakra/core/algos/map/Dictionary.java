@@ -1,6 +1,6 @@
 package com.rslakra.core.algos.map;
 
-import com.rslakra.core.utils.ToString;
+import com.rslakra.core.ToString;
 
 /**
  * @author Rohtash Lakra (rlakra)

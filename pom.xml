@@ -15,7 +15,6 @@
         <module>Core</module>
         <module>MimeCraft</module>
         <module>HttpServer</module>
-        <module>HttpClient</module>
         <module>Jdk</module>
     </modules>
 

@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.map;
 
-import com.rslakra.core.utils.HashUtils;
-import com.rslakra.core.utils.ToString;
+import com.rslakra.core.HashUtils;
+import com.rslakra.core.ToString;
 
 import java.util.Arrays;
 import java.util.Collection;

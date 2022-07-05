@@ -1,5 +1,8 @@
 package com.rslakra.core.jwt;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -21,6 +24,9 @@ import java.util.Base64;
  */
 public class KeyPairTest {
 
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(KeyPairTest.class);
+
     public static void main(String args[]) {
         KeyPairTest keyPairTest = new KeyPairTest();
         try {
@@ -29,12 +35,12 @@ public class KeyPairTest {
             KeyPairGenerator keyGen = KeyPairGenerator.getInstance("RSA");
             keyGen.initialize(2048);
             KeyPair generatedKeyPair = keyGen.genKeyPair();
-            System.out.println("Generated Key Pair");
+            LOGGER.debug("Generated Key Pair");
             keyPairTest.dumpKeyPair(generatedKeyPair);
             keyPairTest.saveKeyPair(path, generatedKeyPair);
 
             KeyPair loadedKeyPair = keyPairTest.loadKeyPair(path, "RSA");
-            System.out.println("Loaded Key Pair");
+            LOGGER.debug("Loaded Key Pair");
             keyPairTest.dumpKeyPair(loadedKeyPair);
         } catch (Exception e) {
             e.printStackTrace();
@@ -44,10 +50,10 @@ public class KeyPairTest {
 
     private void dumpKeyPair(KeyPair keyPair) {
         PublicKey pub = keyPair.getPublic();
-        System.out.println("Public Key: " + toHexString(pub.getEncoded()));
+        LOGGER.debug("Public Key: " + toHexString(pub.getEncoded()));
 
         PrivateKey priv = keyPair.getPrivate();
-        System.out.println("Private Key: " + toHexString(priv.getEncoded()));
+        LOGGER.debug("Private Key: " + toHexString(priv.getEncoded()));
     }
 
     private String toHexString(byte[] rawBytes) {

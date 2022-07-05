@@ -2,8 +2,8 @@ package com.rslakra.core.algos.search.str;
 
 import com.rslakra.core.algos.search.MatchedSearch;
 import com.rslakra.core.algos.search.Searchable;
-import com.rslakra.core.utils.BeanUtils;
-import com.rslakra.core.utils.StopWatch;
+import com.rslakra.core.BeanUtils;
+import com.rslakra.core.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

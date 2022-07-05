@@ -1,5 +1,5 @@
 /******************************************************************************
- * Copyright (C) Devamatre 2009 - 2018. All rights reserved.
+ * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
  *
  * This code is licensed to Devamatre under one or more contributor license
  * agreements. The reproduction, transmission or use of this code, in source
@@ -28,9 +28,9 @@
  *****************************************************************************/
 package com.rslakra.jdk;
 
-import com.rslakra.core.utils.BeanUtils;
-import com.rslakra.httpclient.HTTPUtils;
-import com.rslakra.httpclient.HttpResponse;
+import com.rslakra.core.BeanUtils;
+import com.rslakra.core.http.HTTPUtils;
+import com.rslakra.core.http.HttpResponse;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
@@ -67,7 +67,7 @@ public class UrlConnectionTest {
      */
     public static String extractFormActionValue(byte[] bytes) {
         String formActionValue = null;
-        if (!BeanUtils.isNullOrEmpty(bytes)) {
+        if (!BeanUtils.isEmpty(bytes)) {
             final String startString = "<form action=\"";
             final String endString = "\" method=\"post\">";
             BufferedReader bReader = null;
