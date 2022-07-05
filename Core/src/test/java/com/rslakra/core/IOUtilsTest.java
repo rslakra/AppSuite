@@ -24,8 +24,7 @@ public class IOUtilsTest {
      */
     @Test
     public void testApplyFilePermissions() {
-        final String userDir = System.getProperty("user.dir");
-        String parentFolder = String.format("%s/temp", userDir);
+        String parentFolder = String.format("%s/temp", IOUtils.getBuildDir());
         String fileName = "test.tmp";
         LOGGER.debug("parentFolder: {}, fileName: {}", parentFolder, fileName);
         Path tempPathFolder = Paths.get(String.format("%s/%s", parentFolder, fileName));

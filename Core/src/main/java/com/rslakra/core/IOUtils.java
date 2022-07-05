@@ -159,6 +159,13 @@ public enum IOUtils {
     /**
      * @return
      */
+    public static String getBuildDir() {
+        return String.format("%s/%s", getUserDir(), "target");
+    }
+
+    /**
+     * @return
+     */
     public static String getJavaTempDir() {
         return System.getProperty("java.io.tmpdir");
     }
