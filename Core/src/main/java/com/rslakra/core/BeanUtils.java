@@ -34,7 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -45,6 +45,7 @@ import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 /**
@@ -87,6 +88,8 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns true if the provided reference is null otherwise false.
+     *
      * @param object
      * @return
      */
@@ -95,11 +98,25 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns true if the provided reference is not null otherwise false.
+     *
      * @param object
      * @return
      */
     public static boolean isNotNull(final Object object) {
         return !isNull(object);
+    }
+
+    /**
+     * Returns true if the provided references are not null otherwise false.
+     *
+     * @param object
+     * @param classType
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean isNotNull(final Object object, final Class<T> classType) {
+        return (!isNull(object) && !isNull(classType));
     }
 
     /**
@@ -166,7 +183,35 @@ public enum BeanUtils {
         }
 
         return false;
+    }
 
+    /**
+     * Returns true if the provided Object is assignment-compatible with the object represented by the
+     * <code>Class<T></code> otherwise false.
+     *
+     * @param object
+     * @param classType
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean isTypeOf(final Object object, final Class<T> classType) {
+        return (isNotNull(classType) && classType.isInstance(object));
+    }
+
+    /**
+     * Returns true if the class or interface represented by the <code>Class<T></code> classObject is either the same
+     * as, or is a superclass or superinterface of, the class or interface represented by the specified Class parameter.
+     * It returns true if so; otherwise it returns false. If this Class classObject represents a primitive type, this
+     * method returns true if the specified Class parameter is exactly this Class classObject; otherwise it returns
+     * false.
+     *
+     * @param classObject
+     * @param classType
+     * @param <T>
+     * @return
+     */
+    public static <T> boolean isAssignableFrom(final Object classObject, final Class<T> classType) {
+        return (isTypeOf(classObject, Class.class) && classType.isAssignableFrom((Class) classObject));
     }
 
     /**
@@ -175,9 +220,8 @@ public enum BeanUtils {
      * @param object
      * @return
      */
-    public static boolean isMap(final Object object) {
-        return (isNotNull(object) && (object instanceof Map || (object instanceof Class && Map.class.isAssignableFrom(
-                (Class) object))));
+    public static boolean isTypeOfMap(final Object object) {
+        return (isTypeOf(object, Map.class) || isAssignableFrom(object, Map.class));
     }
 
     /**
@@ -186,8 +230,8 @@ public enum BeanUtils {
      * @param object
      * @return
      */
-    public static boolean isList(final Object object) {
-        return (isNotNull(object) && (object instanceof List || List.class.isAssignableFrom((Class) object)));
+    public static boolean isTypeOfList(final Object object) {
+        return (isTypeOf(object, List.class) || isAssignableFrom(object, List.class));
     }
 
     /**
@@ -196,8 +240,8 @@ public enum BeanUtils {
      * @param object
      * @return
      */
-    public static boolean isSet(final Object object) {
-        return (isNotNull(object) && (object instanceof Set || Set.class.isAssignableFrom((Class) object)));
+    public static boolean isTypeOfSet(final Object object) {
+        return (isTypeOf(object, Set.class) || isAssignableFrom(object, Set.class));
     }
 
     /**
@@ -206,9 +250,38 @@ public enum BeanUtils {
      * @param object
      * @return
      */
-    public static boolean isCollection(final Object object) {
-        return (isNotNull(object) && (object instanceof Collection || Collection.class.isAssignableFrom(
-                (Class) object)));
+    public static boolean isTypeOfCollection(final Object object) {
+        return (isTypeOf(object, Collection.class) || isAssignableFrom(object, Collection.class));
+    }
+
+    /**
+     * Returns true if the <code>object</code> is a type of <code>CharSequence</code> otherwise false.
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfCharSequence(final Object object) {
+        return (isTypeOf(object, CharSequence.class) || isAssignableFrom(object, CharSequence.class));
+    }
+
+    /**
+     * Returns true if the <code>object</code> is a type of <code>BigDecimal</code> otherwise false.
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfBigDecimal(final Object object) {
+        return (isTypeOf(object, BigDecimal.class) || isAssignableFrom(object, BigDecimal.class));
+    }
+
+    /**
+     * Returns true if the <code>object</code> is a type of <code>Date</code> otherwise false.
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfDate(final Object object) {
+        return (isTypeOf(object, Date.class) || isAssignableFrom(object, Date.class));
     }
 
     /**
@@ -219,15 +292,14 @@ public enum BeanUtils {
      */
     public static int getLength(final Object object) {
         if (isNotNull(object)) {
-//            final Class<?> classType = object.getClass();
             if (isArray(object)) {
                 return ((Object[]) object).length;
-            } else if (isMap(object)) {
+            } else if (isTypeOfMap(object)) {
                 return ((Map) object).size();
-            } else if (isCollection(object)) {
+            } else if (isTypeOfCollection(object)) {
                 return ((Collection) object).size();
-//            } else {
-//                throw new IllegalArgumentException("Unhandled class:" + object.getClass());
+            } else if (isTypeOfCharSequence(object)) {
+                return ((CharSequence) object).length();
             }
         }
 
@@ -245,13 +317,13 @@ public enum BeanUtils {
         boolean result = false;
         if (isNull(object)) {
             result = true;
-        } else if (object instanceof CharSequence && ((CharSequence) object).length() == 0) {
-            result = true;
         } else if (isArray(object) && getLength(object) == 0) {
             result = true;
-        } else if (object instanceof Map && ((Map) object).size() == 0) {
+        } else if (isTypeOfMap(object) && getLength(object) == 0) {
             result = true;
-        } else if (object instanceof Collection && ((Collection) object).size() == 0) {
+        } else if (isTypeOfCollection(object) && getLength(object) == 0) {
+            result = true;
+        } else if (isTypeOfCharSequence(object) && getLength(object) == 0) {
             result = true;
         }
 
@@ -260,6 +332,8 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns true if the <code>object</code> is null or empty otherwise false.
+     *
      * @param object
      * @return
      */
@@ -275,6 +349,275 @@ public enum BeanUtils {
         if (isNull(object)) {
             throw new IllegalStateException(message);
         }
+    }
+
+    /**
+     * Capitalize the string.
+     *
+     * @param self
+     * @return
+     */
+    public static String toTitleCase(final CharSequence self) {
+        return isEmpty(self) ? EMPTY_STR
+                : EMPTY_STR + Character.toUpperCase(self.charAt(0)) + self.subSequence(1, self.length());
+    }
+
+
+    /**
+     * @param pathSegments
+     * @return
+     */
+    public static String pathSegments(final String... pathSegments) {
+        Objects.nonNull(pathSegments);
+        return String.join(File.separator, pathSegments);
+    }
+
+    /**
+     * Returns the unique random <code>UUID</code> string.
+     *
+     * @return
+     */
+    public static String nextUuid() {
+        return UUID.randomUUID().toString();
+    }
+
+
+    /**
+     * Returns true if the <code>source</code> and <code>target</code> objects are same otherwise false.
+     *
+     * @param source
+     * @param target
+     * @return
+     */
+    public static boolean equals(final Object source, final Object target) {
+        if (source == target) {
+            return true;
+        } else if (isNotNull(source)) {
+            if (isNotNull(target)) {
+                if (isTypeOfBigDecimal(source.getClass())) {
+                    return ((BigDecimal) source).compareTo((BigDecimal) target) == 0;
+                } else if (isTypeOfDate(source.getClass())) {
+                    return ((Date) source).getTime() == ((Date) target).getTime();
+                }
+
+                return source.equals(target);
+            }
+        }
+
+        return false;
+    }
+
+
+    /**
+     * @param source
+     * @param target
+     * @return
+     */
+    public static boolean notEquals(final Object source, final Object target) {
+        return !equals(source, target);
+    }
+
+    /**
+     * @param charSequence
+     */
+    public static byte[] toBytes(final CharSequence charSequence) {
+        byte[] dataBytes = null;
+        if (BeanUtils.isNotEmpty(charSequence)) {
+            dataBytes = new byte[charSequence.length()];
+            for (int i = 0; i < charSequence.length(); i++) {
+                char cChar = charSequence.charAt(i);
+                if (cChar > 0xff) {
+                    throw new IllegalArgumentException(
+                            "Invalid Character: " + (cChar) + " at index:" + (i + 1) + " in string: " + charSequence);
+                }
+                dataBytes[i] = (byte) cChar;
+            }
+        }
+
+        return dataBytes;
+    }
+
+    /**
+     * @param klass
+     * @return
+     */
+    public static String toClassPathString(final Class<?> klass) {
+        assert klass != null;
+        return klass.getPackage().getName().replace(".", "/");
+    }
+
+    /**
+     * @param klass
+     * @param pathString
+     * @return
+     */
+    public static String toClassPathString(final Class<?> klass, final String pathString) {
+        String classPath = toClassPathString(klass);
+        if (BeanUtils.isNotEmpty(pathString)) {
+            classPath += (pathString.startsWith(File.separator) ? "" : File.separator) + pathString;
+        }
+
+        return classPath;
+    }
+
+    /**
+     * @param inputList
+     * @param size
+     * @param <T>
+     * @return
+     */
+    public static final <T> Collection<List<T>> partitionListBySize(final List<T> inputList, final int size) {
+        if (isEmpty(inputList) || size <= 0) {
+            return Collections.emptyList();
+        } else if (inputList.size() <= size) {
+            return Collections.singletonList(inputList);
+        } else {
+            final AtomicInteger counter = new AtomicInteger(0);
+            return inputList.stream().collect(Collectors.groupingBy(s -> counter.getAndIncrement() / size)).values();
+        }
+    }
+
+//    /**
+//     * @param inputSet
+//     * @param size
+//     * @param <T>
+//     * @return
+//     */
+//    public final <T> Collection<Set<T>> partitionSetBySize(final Set<T> inputSet, final int size) {
+//        if (inputSet == null || inputSet.isEmpty() || size <= 0) {
+//            return Collections.emptyList();
+//        } else if (inputSet.size() <= size) {
+//            return Collections.singletonList(inputSet);
+//        } else {
+//            final AtomicInteger counter = new AtomicInteger(0);
+//            return inputSet.stream()
+//                .collect(Collectors.toSet()).values();
+//        }
+//    }
+
+
+    /**
+     * @param values
+     * @param size
+     * @param <T>
+     * @return
+     */
+    public static <T> List<List<T>> partitionBySize(final Collection<T> values, final int size) {
+        if (BeanUtils.isEmpty(values) || size <= 0) {
+            return Collections.emptyList();
+        } else {
+            final AtomicInteger counter = new AtomicInteger(0);
+            return new ArrayList<>(
+                    values.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / size)).values());
+//        } else {
+//            final List<List<T>> partitionList = new ArrayList<>(values.size() / size + 1);
+//            List<T> current = new LinkedList<>();
+//            partitionList.add(current);
+//
+//            for (Iterator<T> itr = values.iterator(); itr.hasNext(); current.add(itr.next())) {
+//                if (current.size() == size) {
+//                    current = new LinkedList();
+//                    partitionList.add(current);
+//                }
+//            }
+//
+//            return partitionList;
+        }
+    }
+
+    /**
+     * @param typeClass
+     * @param name
+     * @param <T>
+     * @return
+     */
+    public static <T> T findEnumByClass(final Class<T> typeClass, final String name) {
+        return Arrays.stream(typeClass.getEnumConstants())
+                .filter(e -> ((Enum) e).name().equalsIgnoreCase(name)).findAny().orElse(null);
+    }
+
+    /**
+     * @param inputStream
+     * @return
+     * @throws IOException
+     */
+    public static String readContents(final InputStream inputStream) throws IOException {
+        final StringBuilder sBuilder = new StringBuilder();
+        try (BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream))) {
+            String line = null;
+            while ((line = bReader.readLine()) != null) {
+                sBuilder.append(line);
+            }
+        }
+
+        return sBuilder.toString();
+    }
+
+    /**
+     * @param fileName
+     * @return
+     */
+    public static String readFile(final String fileName) {
+        try {
+            return readContents(BeanUtils.class.getClassLoader().getResourceAsStream(fileName));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+    }
+
+    /**
+     * Returns true if the value is not null and equal to zero otherwise false.
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isZero(final BigDecimal value) {
+        return (isNotNull(value) && value.signum() == 0);
+    }
+
+    /**
+     * Returns true if the value is not null and greater than zero otherwise false.
+     *
+     * @param value
+     * @return
+     */
+    public static boolean isPositive(final BigDecimal value) {
+        return (isNotNull(value) && value.signum() == 1);
+    }
+
+
+    /**
+     * Returns true if the value is not null and less than zero otherwise false.
+     *
+     * @param value
+     * @return
+     */
+    public boolean isNegative(final BigDecimal value) {
+        return (isNotNull(value) && value.signum() == -1);
+    }
+
+    /**
+     *
+     */
+    public static void logCallerClassNameAndMethodName() {
+        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        String callerClass = "unknown";
+        String callerMethod = "unknown";
+
+        for (int index = 0; index < 6; index++) {
+            StackTraceElement element = stack[index];
+            LOGGER.debug(String.format("index=%d, lineNumber=%d, className=%s, methodName=%s", index,
+                    element.getLineNumber(), element.getClassName(),
+                    element.getMethodName()));
+        }
+
+        if (stack != null && stack.length > 2) {
+            callerClass = stack[2].getClassName();
+            callerMethod = stack[2].getMethodName();
+        }
+        LOGGER.info("logCallerClassNameAndMethodName", "caller class=%s, method=%s", callerClass, callerMethod);
+
     }
 
     /**
@@ -343,16 +686,16 @@ public enum BeanUtils {
             } else {
                 return (T) response.toArray(new Object[response.size()]);
             }
-        } else if (isSet(responseType)) {
+        } else if (isTypeOfSet(responseType)) {
             if (isArray(response)) {
                 return (T) Arrays.asList(response).stream().collect(Collectors.toSet());
-            } else if (isCollection(response)) {
+            } else if (isTypeOfCollection(response)) {
                 return (T) response.stream().collect(Collectors.toSet());
             }
-        } else if (isList(responseType)) {
+        } else if (isTypeOfList(responseType)) {
             if (isArray(response)) {
                 return (T) Arrays.asList(response);
-            } else if (isCollection(response)) {
+            } else if (isTypeOfCollection(response)) {
                 return (T) response.stream().collect(Collectors.toList());
             }
         }
@@ -389,16 +732,16 @@ public enum BeanUtils {
         if (isArray(responseType)) {
             if (isArray(response)) {
                 return INSTANCE.arrayFromObject(response, responseType);
-            } else if (isMap(response)) {
+            } else if (isTypeOfMap(response)) {
                 return INSTANCE.arrayFromMap((Map) response, responseType, true);
-            } else if (isCollection(response)) {
+            } else if (isTypeOfCollection(response)) {
                 return INSTANCE.arrayFromCollection((Collection<T>) response, responseType);
             }
-        } else if (isMap(responseType)) {
-        } else if (isCollection(responseType)) {
-            if (isMap(response)) {
+        } else if (isTypeOfMap(responseType)) {
+        } else if (isTypeOfCollection(responseType)) {
+            if (isTypeOfMap(response)) {
                 return INSTANCE.arrayFromMap((Map) response, responseType, true);
-            } else if (isCollection(response)) {
+            } else if (isTypeOfCollection(response)) {
                 return INSTANCE.arrayFromCollection((Collection<T>) response, responseType);
             }
         }
@@ -418,64 +761,11 @@ public enum BeanUtils {
                 + self.subSequence(1, self.length());
     }
 
-
-    /**
-     * @param pathSegments
-     * @return
-     */
-    public static String pathSegments(final String... pathSegments) {
-        Objects.nonNull(pathSegments);
-        return String.join(File.separator, pathSegments);
-    }
-
-    /**
-     * Returns the unique random <code>UUID</code> string.
-     *
-     * @return
-     */
-    public static String nextUuid() {
-        return UUID.randomUUID().toString();
-    }
-
-    /**
-     * Returns true if the <code>source</code> and <code>target</code> objects are same otherwise false.
-     *
-     * @param source
-     * @param target
-     * @return
-     */
-    public static boolean equals(final Object source, final Object target) {
-        if (source == target) {
-            return true;
-        } else if (isNotNull(source)) {
-            final Class<?> sourceClass = source.getClass();
-            if (isNotNull(target)) {
-                if (BigDecimal.class.isAssignableFrom(sourceClass)) {
-                    return ((BigDecimal) source).compareTo((BigDecimal) target) == 0;
-                } else if (Date.class.isAssignableFrom(sourceClass)) {
-                    return ((Date) source).getTime() == ((Date) target).getTime();
-                }
-                return source.equals(target);
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param source
-     * @param target
-     * @return
-     */
-    public static boolean notEquals(final Object source, final Object target) {
-        return !equals(source, target);
-    }
-
     /**
      * @param name
      * @return
      */
-    public final boolean isModifiable(final String name) {
+    private boolean isModifiable(final String name) {
         return !IMMUTABLE_ATTRIBUTES.contains(name);
     }
 
@@ -486,7 +776,7 @@ public enum BeanUtils {
      * @return
      * @throws IntrospectionException
      */
-    public final PropertyDescriptor[] getBeanInfo(final Class<?> classType) throws IntrospectionException {
+    public static PropertyDescriptor[] getBeanInfo(final Class<?> classType) throws IntrospectionException {
         return Introspector.getBeanInfo(classType).getPropertyDescriptors();
     }
 
@@ -521,7 +811,7 @@ public enum BeanUtils {
                 typePropertyDescriptor = new LinkedHashMap();
                 final PropertyDescriptor[] propertyDescriptors = getBeanInfo(classType);
                 for (PropertyDescriptor propertyDescriptor : propertyDescriptors) {
-                    if (propertyDescriptor.getWriteMethod() == null) {
+                    if (isNull(propertyDescriptor.getWriteMethod())) {
                         findWriteMethod(classType, propertyDescriptor);
                     }
 
@@ -934,7 +1224,7 @@ public enum BeanUtils {
                                                 final Set<String> ignoredProperties) throws Exception {
         final List<PropertyDescriptor> updatedProperties = new ArrayList<>();
         // Iterate over all the attributes
-        for (PropertyDescriptor propertyDescriptor : BeanUtils.INSTANCE.getBeanInfo(target.getClass())) {
+        for (PropertyDescriptor propertyDescriptor : BeanUtils.getBeanInfo(target.getClass())) {
             // Only copy writable attributes
             if (propertyDescriptor.getWriteMethod() != null) {
                 final String propName = propertyDescriptor.getName();
@@ -1003,6 +1293,20 @@ public enum BeanUtils {
                     : fullString.substring(0, firstLetterIndex) + upperCasedFirstLetter
                     + fullString.substring(firstLetterIndex + 1));
         }
+    }
+
+    /**
+     * Returns empty if null otherwise string.
+     *
+     * @param object
+     * @return
+     */
+    public static String toString(final Object object) {
+        if (isTypeOfBigDecimal(object)) {
+            return ((BigDecimal) object).toPlainString();
+        }
+
+        return Objects.toString(object);
     }
 
 

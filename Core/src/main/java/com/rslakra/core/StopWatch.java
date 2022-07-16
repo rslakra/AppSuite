@@ -15,19 +15,27 @@ public class StopWatch {
     // LOGGER
     private static Logger LOGGER = LoggerFactory.getLogger(StopWatch.class);
     private Instant startTime;
-    private Instant endTime;
+    private Instant stopTime;
     private Duration duration;
 
     public StopWatch() {
     }
 
+    /**
+     *
+     */
     public void startTimer() {
         startTime = Instant.now();
+        LOGGER.debug("startTimer()");
     }
 
-    public void endTimer() {
-        endTime = Instant.now();
-        duration = Duration.between(startTime, endTime);
+    /**
+     *
+     */
+    public void stopTimer() {
+        stopTime = Instant.now();
+        duration = Duration.between(startTime, stopTime);
+        LOGGER.debug("stopTimer()");
     }
 
     /**
@@ -35,7 +43,7 @@ public class StopWatch {
      */
     private String timeTaken() {
         return String.format("%dD, %02d:%02d:%02d.%04d", duration.toDays(), duration.toHours(), duration.toMinutes(),
-                             duration.getSeconds(), duration.toMillis());
+                duration.getSeconds(), duration.toMillis());
     }
 
     /**
@@ -44,10 +52,10 @@ public class StopWatch {
     @Override
     public String toString() {
         return ToString.of(StopWatch.class)
-            .add("startTime", startTime)
-            .add("endTime", endTime)
-            .add("duration", timeTaken())
-            .toString();
+                .add("startTime", startTime)
+                .add("endTime", stopTime)
+                .add("duration", timeTaken())
+                .toString();
     }
 
 }

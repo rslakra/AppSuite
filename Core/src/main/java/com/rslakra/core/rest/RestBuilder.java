@@ -1,11 +1,12 @@
 package com.rslakra.core.rest;
 
-import com.rslakra.core.rest.ContentEncoding.Type;
-import com.rslakra.core.http.ContentType;
-import com.rslakra.core.http.HTTPUtils;
-import com.rslakra.core.http.Method;
 import com.rslakra.core.algos.map.ConcurrentDictionary;
 import com.rslakra.core.algos.map.StringHashMap;
+import com.rslakra.core.http.ContentEncoding.EncodingType;
+import com.rslakra.core.http.ContentEncodingRegistry;
+import com.rslakra.core.http.ContentType;
+import com.rslakra.core.http.HTTPUtils;
+import com.rslakra.core.http.HttpMethod;
 import org.apache.commons.collections4.Closure;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -36,11 +37,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Rohtash Lakra
@@ -53,8 +50,8 @@ public class RestBuilder {
     public static final String COOKIE_DATE_PATTERNS = "rest.protocol.cookie-datepatterns";
     public static final String HTTP_ROUTE_DEFAULT_PROXY = "rest.route.default-proxy";
     private final List<String>
-        cookieDataPatterns =
-        Arrays.asList("EEE, dd-MMM-yyyy HH:mm:ss z", "EEE, dd MMM yyyy HH:mm:ss z");
+            cookieDataPatterns =
+            Arrays.asList("EEE, dd-MMM-yyyy HH:mm:ss z", "EEE, dd MMM yyyy HH:mm:ss z");
     private AuthConfig authConfig = new AuthConfig(this);
     private HttpClient httpClient;
     private UriBuilder defaultURI = null;
@@ -70,7 +67,7 @@ public class RestBuilder {
      */
     public RestBuilder() throws URISyntaxException {
         this(null, ContentType.ANY);
-        this.setContentEncoding(Type.GZIP, Type.DEFLATE);
+        this.setContentEncoding(EncodingType.GZIP, EncodingType.DEFLATE);
     }
 
     /**
@@ -116,10 +113,10 @@ public class RestBuilder {
      * @throws URISyntaxException
      */
     public Object get(final Map<String, ?> args, final Closure responseClosure)
-        throws ClientProtocolException, IOException, URISyntaxException {
+            throws ClientProtocolException, IOException, URISyntaxException {
         RequestDelegate
-            delegate =
-            new RequestDelegate(this, new HttpGet(), getContentType(), getHeaders(), getResponseHandlers());
+                delegate =
+                new RequestDelegate(this, new HttpGet(), getContentType(), getHeaders(), getResponseHandlers());
         delegate.setPropertiesFromMap(args);
         if (responseClosure != null) {
             delegate.getResponse().put(Status.SUCCESS, responseClosure);
@@ -148,10 +145,10 @@ public class RestBuilder {
      * @throws IOException
      */
     public Object post(final Map<String, ?> args, final Closure responseClosure)
-        throws URISyntaxException, ClientProtocolException, IOException {
+            throws URISyntaxException, ClientProtocolException, IOException {
         RequestDelegate
-            requestDelegate =
-            new RequestDelegate(this, new HttpPost(), getContentType(), getHeaders(), getResponseHandlers());
+                requestDelegate =
+                new RequestDelegate(this, new HttpPost(), getContentType(), getHeaders(), getResponseHandlers());
 //        requestDelegate.setRequestContentType(ContentType.URLENC.toString());
         requestDelegate.setPropertiesFromMap(args);
         if (responseClosure != null) {
@@ -168,8 +165,8 @@ public class RestBuilder {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    public Object request(final Method method, final Closure configClosure)
-        throws ClientProtocolException, IOException {
+    public Object request(final HttpMethod method, final Closure configClosure)
+            throws ClientProtocolException, IOException {
         return this.doRequest(this.defaultURI.toURI(), method, getContentType(), configClosure);
     }
 
@@ -181,8 +178,8 @@ public class RestBuilder {
      * @throws ClientProtocolException
      * @throws IOException
      */
-    public Object request(final Method method, final Object contentType, final Closure configClosure)
-        throws ClientProtocolException, IOException {
+    public Object request(final HttpMethod method, final Object contentType, final Closure configClosure)
+            throws ClientProtocolException, IOException {
         return this.doRequest(this.defaultURI.toURI(), method, contentType, configClosure);
     }
 
@@ -196,34 +193,33 @@ public class RestBuilder {
      * @throws IOException
      * @throws URISyntaxException
      */
-    public Object request(final Object uri, final Method method, final Object contentType, final Closure configClosure)
-        throws ClientProtocolException, IOException, URISyntaxException {
+    public Object request(final Object uri, final HttpMethod method, final Object contentType, final Closure configClosure)
+            throws ClientProtocolException, IOException, URISyntaxException {
         return this.doRequest(UriBuilder.toUri(uri), method, contentType, configClosure);
     }
 
     /**
      * @param uri
-     * @param method
+     * @param httpMethod
      * @param contentType
      * @param configClosure
      * @return
      * @throws ClientProtocolException
      * @throws IOException
      */
-    protected Object doRequest(final URI uri, final Method method, final Object contentType,
-                               final Closure configClosure)
-        throws ClientProtocolException, IOException {
+    protected Object doRequest(final URI uri, final HttpMethod httpMethod, final Object contentType, final Closure configClosure)
+            throws ClientProtocolException, IOException {
         HttpRequestBase reqMethod;
         try {
-            reqMethod = method.getRequestType().newInstance();
+            reqMethod = httpMethod.getRequestType().newInstance();
         } catch (Exception var7) {
             throw new RuntimeException(var7);
         }
 
         reqMethod.setURI(uri);
         RequestDelegate
-            requestDelegate =
-            new RequestDelegate(this, reqMethod, contentType, getHeaders(), getResponseHandlers());
+                requestDelegate =
+                new RequestDelegate(this, reqMethod, contentType, getHeaders(), getResponseHandlers());
         return this.execute(requestDelegate);
     }
 
@@ -234,7 +230,7 @@ public class RestBuilder {
      * @throws IOException
      */
     protected Object execute(final RestBuilder.RequestDelegate requestDelegate)
-        throws ClientProtocolException, IOException {
+            throws ClientProtocolException, IOException {
         requestDelegate.encodeBody();
         final HttpRequestBase reqMethod = requestDelegate.getHttpRequestBase();
         final Object contentType = requestDelegate.getContentType();
@@ -268,7 +264,7 @@ public class RestBuilder {
             }
 
             return this.getHttpClient()
-                .execute(reqMethod, new RestResponseHandler(requestDelegate), requestDelegate.getContext());
+                    .execute(reqMethod, new RestResponseHandler(requestDelegate), requestDelegate.getContext());
         }
     }
 
@@ -412,7 +408,7 @@ public class RestBuilder {
      * @throws ResponseParseException
      */
     protected Object defaultSuccessHandler(HttpResponseDecorator response, Object parsedData)
-        throws ResponseParseException {
+            throws ResponseParseException {
 //        try {
 //            if (parsedData instanceof InputStream) {
 //                ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -478,12 +474,12 @@ public class RestBuilder {
     }
 
     /**
-     * @param encodings
+     * @param contentEncodingTypes
      */
-    public void setContentEncoding(final Object... encodings) {
-        final HttpClient client = this.getHttpClient();
-        if (client instanceof AbstractHttpClient) {
-            this.contentEncodingHandler.setInterceptors((AbstractHttpClient) client, encodings);
+    public void setContentEncoding(final EncodingType... contentEncodingTypes) {
+        final HttpClient httpClient = this.getHttpClient();
+        if (httpClient instanceof AbstractHttpClient) {
+            this.contentEncodingHandler.setInterceptors((AbstractHttpClient) httpClient, contentEncodingTypes);
         } else {
             throw new IllegalStateException("The HttpClient is not an AbstractHttpClient!");
         }
@@ -598,7 +594,7 @@ public class RestBuilder {
      * @throws KeyStoreException
      */
     public void ignoreSSLIssues() throws KeyManagementException, UnrecoverableKeyException, NoSuchAlgorithmException,
-                                         KeyStoreException {
+            KeyStoreException {
         TrustStrategy trustStrategy = new TrustStrategy() {
             public boolean isTrusted(X509Certificate[] chain, String authType) throws CertificateException {
                 return true;
@@ -608,10 +604,10 @@ public class RestBuilder {
 //        HttpClientBuilder.create().setSSLSocketFactory().build();
 //        SSLConnectionSocketFactory.getSocketFactory().createLayeredSocket()
         SSLSocketFactory
-            sslSocketFactory =
-            new SSLSocketFactory(trustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+                sslSocketFactory =
+                new SSLSocketFactory(trustStrategy, SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
         this.getHttpClient().getConnectionManager().getSchemeRegistry()
-            .register(new Scheme("https", 443, sslSocketFactory));
+                .register(new Scheme("https", 443, sslSocketFactory));
     }
 
     /**
@@ -676,9 +672,9 @@ public class RestBuilder {
          */
         public RequestDelegate(final RestBuilder restBuilder, final HttpRequestBase request, final Map<String, ?> args,
                                final Closure successHandler)
-            throws URISyntaxException {
+                throws URISyntaxException {
             this(restBuilder, request, RestBuilder.this.getContentType(), RestBuilder.this.getHeaders(),
-                 RestBuilder.this.getResponseHandlers());
+                    RestBuilder.this.getResponseHandlers());
             if (successHandler != null) {
                 this.responseHandlers.put(Status.SUCCESS.toString(), successHandler);
             }

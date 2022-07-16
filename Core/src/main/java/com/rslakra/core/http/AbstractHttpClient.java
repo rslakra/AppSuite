@@ -7,7 +7,11 @@ import io.github.resilience4j.retry.Retry;
 import org.apache.commons.collections4.MapUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -42,9 +46,9 @@ public abstract class AbstractHttpClient implements AutoCloseable {
      * @param builder
      */
     protected AbstractHttpClient(final HttpClientBuilder builder) {
-        this.clientName = builder.clientName;
-        this.circuitBreaker = builder.circuitBreaker;
-        this.retry = builder.retry;
+        this.clientName = builder.getClientName();
+        this.circuitBreaker = builder.getCircuitBreaker();
+        this.retry = builder.getRetry();
     }
 
     /**

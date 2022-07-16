@@ -1,5 +1,6 @@
 package com.rslakra.core.http;
 
+import com.rslakra.core.BeanUtils;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,11 +22,7 @@ public final class Headers extends LinkedHashMap<String, List<String>> {
      * @param value
      */
     public void addHeader(final String key, final String value) {
-        if (super.containsKey(key)) {
-            super.get(key).add(value);
-        } else {
-            super.put(key, Arrays.asList(value));
-        }
+        this.addHeader(key, Arrays.asList(value));
     }
 
     /**
@@ -41,10 +38,10 @@ public final class Headers extends LinkedHashMap<String, List<String>> {
     }
 
     /**
-     * @param entry
+     * @param headerEntry
      */
-    private void addHeader(final Map.Entry<String, List<String>> entry) {
-        addHeader(entry.getKey(), entry.getValue());
+    private void addHeader(final Map.Entry<String, List<String>> headerEntry) {
+        addHeader(headerEntry.getKey(), headerEntry.getValue());
     }
 
     /**
@@ -53,7 +50,7 @@ public final class Headers extends LinkedHashMap<String, List<String>> {
      * @param headers
      */
     public void addHeaders(final Headers headers) {
-        if (headers != null) {
+        if (BeanUtils.isNotNull(headers)) {
             headers.entrySet().stream().forEach(entry -> addHeader(entry));
         }
     }
@@ -68,7 +65,7 @@ public final class Headers extends LinkedHashMap<String, List<String>> {
     /**
      * @return
      */
-    public List<String> getHeader(final String key) {
+    public List<String> getHeaders(final String key) {
         return super.get(key);
     }
 

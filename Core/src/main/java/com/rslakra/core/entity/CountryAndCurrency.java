@@ -34,7 +34,7 @@ public class CountryAndCurrency {
     @Override
     public String toString() {
         try {
-            return JSONUtils.INSTANCE.toJson(this);
+            return JSONUtils.toJson(this);
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;

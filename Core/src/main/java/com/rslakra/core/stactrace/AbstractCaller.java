@@ -76,10 +76,10 @@ public abstract class AbstractCaller extends SecurityManager implements Caller {
      * @return
      */
     protected int getOffset(final StackTraceElement[] stackTraceElements, final Class<?> classType) {
-        for (int i = 0; i < stackTraceElements.length; i++) {
-            if (stackTraceElements[i].getClassName().equals(classType.getName()) && "init"
-                .equals(stackTraceElements[i].getMethodName())) {
-                return i;
+        for (int index = 0; index < stackTraceElements.length; index++) {
+            if (stackTraceElements[index].getClassName().equals(classType.getName()) && "init"
+                .equals(stackTraceElements[index].getMethodName())) {
+                return index;
             }
         }
 

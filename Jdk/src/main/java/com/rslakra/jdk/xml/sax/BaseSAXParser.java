@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (C) Devamatre Inc 2009-2018. All rights reserved.
- * 
+ *
  * This code is licensed to Devamatre under one or more contributor license 
  * agreements. The reproduction, transmission or use of this code, in source 
  * and binary forms, with or without modification, are permitted provided 
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- * 
+ *
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,93 +22,92 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *      
+ *
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
 package com.rslakra.jdk.xml.sax;
 
+import com.devamatre.logger.LogManager;
+import com.devamatre.logger.Logger;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
-
 /**
  * BaseSAXParser.java
- * 
+ * <p>
  * The <code>BaseSAXParser</code> is the base class of all XML handlers.
- * 
- * 
+ * <p>
+ * <p>
  * This the base class for handling xml files.
- * 
+ *
  * @author Rohtash Singh (rohtash.singh@devamatre.com)
  * @since 2008/09/11
  */
 public abstract class BaseSAXParser extends DefaultHandler {
 
-	/* logger */
-	private final Logger logger = LogManager.getLogger(BaseSAXParser.class);
+    /* logger */
+    private final Logger LOGGER = LogManager.getLogger(BaseSAXParser.class);
 
-	/* buffer for collecting text */
-	private final StringBuilder buffer = new StringBuilder();
+    /* buffer for collecting text */
+    private final StringBuilder buffer = new StringBuilder();
 
-	/**
-	 * 
-	 */
-	public BaseSAXParser() {
-		resetBuffer();
-	}
+    /**
+     *
+     */
+    public BaseSAXParser() {
+        resetBuffer();
+    }
 
-	public abstract void parse();
+    public abstract void parse();
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
-	 *      java.lang.String, java.lang.String, org.xml.sax.Attributes)
-	 */
-	public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
-		logger.debug("startElement(), uri:" + uri + ", localName:" + localName + ", qName:" + qName + ", attributes:"
-				+ attributes);
-		resetBuffer();
-	}
+    /**
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.helpers.DefaultHandler#startElement(java.lang.String,
+     * java.lang.String, java.lang.String, org.xml.sax.Attributes)
+     */
+    public void startElement(String uri, String localName, String qName, Attributes attributes) throws SAXException {
+        LOGGER.debug("startElement(), uri:" + uri + ", localName:" + localName + ", qName:" + qName + ", attributes:"
+                + attributes);
+        resetBuffer();
+    }
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
-	 *      java.lang.String, java.lang.String)
-	 */
-	public void endElement(String uri, String localName, String qName) throws SAXException {
-		logger.debug("endElement(), uri : " + uri + ", localName:" + localName + ", qName : " + qName);
-	}
+    /**
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.helpers.DefaultHandler#endElement(java.lang.String,
+     * java.lang.String, java.lang.String)
+     */
+    public void endElement(String uri, String localName, String qName) throws SAXException {
+        LOGGER.debug("endElement(), uri : " + uri + ", localName:" + localName + ", qName : " + qName);
+    }
 
-	/**
-	 * (non-Javadoc)
-	 * 
-	 * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
-	 */
-	public final void characters(char[] chars, int start, int length) throws SAXException {
-		buffer.append(chars, start, length);
-	}
+    /**
+     * (non-Javadoc)
+     *
+     * @see org.xml.sax.helpers.DefaultHandler#characters(char[], int, int)
+     */
+    public final void characters(char[] chars, int start, int length) throws SAXException {
+        buffer.append(chars, start, length);
+    }
 
-	/**
-	 * Returns the current buffer.
-	 * 
-	 * @return
-	 */
-	public final String getBuffer() {
-		return buffer.toString();
-	}
+    /**
+     * Returns the current buffer.
+     *
+     * @return
+     */
+    public final String getBuffer() {
+        return buffer.toString();
+    }
 
-	/**
-	 * Returns the current buffer.
-	 * 
-	 * @return
-	 */
-	protected final void resetBuffer() {
-		buffer.setLength(0);
-	}
+    /**
+     * Returns the current buffer.
+     *
+     * @return
+     */
+    protected final void resetBuffer() {
+        buffer.setLength(0);
+    }
 }

@@ -29,8 +29,8 @@
 //package com.rslakra.jdk.thread;
 //
 //import com.devamatre.core.thread.ThreadPool;
-//import com.devamatre.logger.LogManager;
-//import com.devamatre.logger.Logger;
+//import com.devamatre.LOGGERLogManager;
+//import com.devamatre.LOGGERLogger;
 //
 //public class TestThreadPool {
 //

@@ -1,6 +1,5 @@
 package com.rslakra.core.jwt;
 
-import com.rslakra.core.NumbersTest;
 import org.jose4j.lang.JoseException;
 import org.junit.Assert;
 import org.junit.Test;
@@ -31,9 +30,9 @@ public class CardUtilTest {
             Key publicKey = JWTUtils.INSTANCE.fetchPublicKey(EPAY_PUBLIC_KEY_URL, 5 * 60);
             CardUtils.INSTANCE.setPublicKey((PublicKey) publicKey);
             cardEncryptedToken =
-                CardUtils.INSTANCE.newEncryptedToken(TokenType.CREDIT_CARD, cardNumber, cvc, idAddress);
+                    CardUtils.INSTANCE.newEncryptedToken(TokenType.CREDIT_CARD, cardNumber, cvc, idAddress);
             Assert.assertNotNull(cardEncryptedToken);
-             LOGGER.debug(cardEncryptedToken);
+            LOGGER.debug(cardEncryptedToken);
         } catch (JoseException | IOException ex) {
             ex.printStackTrace();
             Assert.assertNull(cardEncryptedToken);

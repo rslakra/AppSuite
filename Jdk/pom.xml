@@ -10,7 +10,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>Jdk</artifactId>
-    <groupId>com.rslakra.dAppSuite</groupId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <name>The ${project.artifactId} Project</name>
@@ -24,7 +23,7 @@
     <dependencies>
         <!-- Core -->
         <dependency>
-            <groupId>com.rslakra.dAppSuite</groupId>
+            <groupId>com.rslakra</groupId>
             <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>

@@ -9,7 +9,6 @@
         <artifactId>dAppSuite</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.rslakra.dAppSuite</groupId>
     <artifactId>MimeCraft</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -24,11 +23,10 @@
     <dependencies>
         <!-- Core -->
         <dependency>
-            <groupId>com.rslakra.dAppSuite</groupId>
+            <groupId>com.rslakra</groupId>
             <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
-
     </dependencies>
 
     <!-- Build -->

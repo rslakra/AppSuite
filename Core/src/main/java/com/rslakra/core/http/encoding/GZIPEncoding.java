@@ -1,6 +1,6 @@
 package com.rslakra.core.http.encoding;
 
-import com.rslakra.core.rest.ContentEncoding;
+import com.rslakra.core.http.ContentEncoding;
 import org.apache.http.HttpEntity;
 import org.apache.http.client.entity.GzipDecompressingEntity;
 
@@ -8,10 +8,10 @@ import org.apache.http.client.entity.GzipDecompressingEntity;
  * @author Rohtash Lakra
  * @created 4/13/20 6:14 PM
  */
-public class GZIPEncoding extends ContentEncoding {
+public final class GZIPEncoding extends ContentEncoding {
 
     public GZIPEncoding() {
-        super(Type.GZIP);
+        super(EncodingType.GZIP);
     }
 
     /**

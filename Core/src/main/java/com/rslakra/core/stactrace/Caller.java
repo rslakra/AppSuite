@@ -38,10 +38,10 @@ public interface Caller {
     /**
      * Returns whether the given class is one of the calling classes
      *
-     * @param clazz Class to search for in callers
-     * @return true if the class clazz is a caller of this class
+     * @param classType Class to search for in callers
+     * @return true if the class classType is a caller of this class
      */
-    <T> boolean isCaller(Class<T> clazz);
+    <T> boolean isCaller(Class<T> classType);
 
     /**
      * @return

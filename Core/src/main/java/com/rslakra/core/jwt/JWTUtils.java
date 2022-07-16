@@ -11,7 +11,6 @@ import com.nimbusds.jwt.JWTClaimsSet;
 import com.nimbusds.jwt.SignedJWT;
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.PayloadBuilder;
-import com.rslakra.core.Utils;
 import org.jose4j.jwk.HttpsJwks;
 import org.jose4j.jwk.JsonWebKey;
 import org.jose4j.jws.AlgorithmIdentifiers;
@@ -168,7 +167,7 @@ public enum JWTUtils {
      */
     public Path getPath(final String pathString) {
         if (BeanUtils.isEmpty(getKeyFolderPath())) {
-            final String pkgString = Utils.toClassPathString(JWTUtils.class, pathString);
+            final String pkgString = BeanUtils.toClassPathString(JWTUtils.class, pathString);
             return Paths.get("src/main/java", pkgString);
         } else {
             return Paths.get(getKeyFolderPath(), pathString);

@@ -1,5 +1,7 @@
 package com.rslakra.core.http;
 
+import com.rslakra.core.ArrayIterator;
+
 import java.util.Iterator;
 
 /**

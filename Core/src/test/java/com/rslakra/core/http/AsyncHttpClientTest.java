@@ -10,11 +10,6 @@ import static com.xebialabs.restito.semantics.Condition.uri;
 import static java.lang.Thread.sleep;
 import static org.testng.Assert.assertEquals;
 
-import com.xebialabs.restito.builder.stub.StubHttp;
-import com.xebialabs.restito.builder.verify.VerifyHttp;
-import com.xebialabs.restito.semantics.Action;
-import com.xebialabs.restito.semantics.ActionSequence;
-import com.xebialabs.restito.semantics.Condition;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.retry.RetryConfig;
 import org.apache.http.client.config.RequestConfig;
@@ -51,7 +46,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
     @Test
     public void testSuccess() throws URISyntaxException, InterruptedException, TimeoutException, ExecutionException {
         String path = "/success";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(successAction);
+        whenHttp(server).match(get(path)).then(successAction);
 
         AtomicInteger successCallCount = new AtomicInteger(0);
         AtomicInteger failedCallCount = new AtomicInteger(0);
@@ -70,13 +65,13 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         assertEquals(successCallCount.get(), 1);
         assertEquals(failedCallCount.get(), 0);
         assertEquals(cancelledCallCount.get(), 0);
-        VerifyHttp.verifyHttp(server).times(1, Condition.uri(path));
+        verifyHttp(server).times(1, uri(path));
     }
 
     @Test
     public void testBadRequest() throws URISyntaxException, InterruptedException, TimeoutException, ExecutionException {
         String path = "/bad_request";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(Action.status(HttpStatus.BAD_REQUEST_400), Action.stringContent("fail"));
+        whenHttp(server).match(get(path)).then(status(HttpStatus.BAD_REQUEST_400), stringContent("fail"));
 
         AtomicInteger successCallCount = new AtomicInteger(0);
         AtomicInteger failedCallCount = new AtomicInteger(0);
@@ -95,14 +90,14 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         assertEquals(successCallCount.get(), 1);
         assertEquals(failedCallCount.get(), 0);
         assertEquals(cancelledCallCount.get(), 0);
-        VerifyHttp.verifyHttp(server).times(1, Condition.uri(path));
+        verifyHttp(server).times(1, uri(path));
     }
 
     @Test
     public void testServiceError()
         throws URISyntaxException, InterruptedException, TimeoutException, ExecutionException {
         String path = "/service_out";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(Action.status(HttpStatus.INTERNAL_SERVER_ERROR_500), Action.stringContent("fail"));
+        whenHttp(server).match(get(path)).then(status(HttpStatus.INTERNAL_SERVER_ERROR_500), stringContent("fail"));
 
         AtomicInteger successCallCount = new AtomicInteger(0);
         AtomicInteger failedCallCount = new AtomicInteger(0);
@@ -121,7 +116,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         assertEquals(successCallCount.get(), 1);
         assertEquals(failedCallCount.get(), 0);
         assertEquals(cancelledCallCount.get(), 0);
-        VerifyHttp.verifyHttp(server).times(1, Condition.uri(path));
+        verifyHttp(server).times(1, uri(path));
     }
 
     @Test
@@ -151,7 +146,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         throws URISyntaxException, InterruptedException, ExecutionException, TimeoutException {
 
         String path = "/timeout_and_circuit_break";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(timeoutAction);
+        whenHttp(server).match(get(path)).then(timeoutAction);
 
         AtomicInteger successCallCount = new AtomicInteger(0);
         AtomicInteger failedCallCount = new AtomicInteger(0);
@@ -187,7 +182,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
                 client.executeWithCallback(request, futureCallback);
             promise.get(5, TimeUnit.MINUTES);
         }
-        VerifyHttp.verifyHttp(server).times(5, Condition.uri(path));
+        verifyHttp(server).times(5, uri(path));
         assertEquals(successCallCount.get(), 0);
         assertEquals(failedCallCount.get(), 12);
         assertEquals(cancelledCallCount.get(), 0);
@@ -199,8 +194,8 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
 
         String path = "/timeout_then_recover";
 
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(
-            ActionSequence.sequence(timeoutAction, timeoutAction, timeoutAction, timeoutAction, timeoutAction, successAction,
+        whenHttp(server).match(get(path)).then(
+            sequence(timeoutAction, timeoutAction, timeoutAction, timeoutAction, timeoutAction, successAction,
                      successAction, successAction, successAction)
         );
 
@@ -245,7 +240,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
             client.executeWithCallback(request, futureCallback);
         promise.get(5, TimeUnit.MINUTES);
 
-        VerifyHttp.verifyHttp(server).times(6, Condition.uri(path));
+        verifyHttp(server).times(6, uri(path));
         assertEquals(successCallCount.get(), 1);
         assertEquals(failedCallCount.get(), 8);
         assertEquals(cancelledCallCount.get(), 0);
@@ -256,7 +251,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         throws URISyntaxException, InterruptedException, TimeoutException, ExecutionException {
 
         String path = "/success_at_third_time";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(ActionSequence.sequence(timeoutAction, timeoutAction, successAction));
+        whenHttp(server).match(get(path)).then(sequence(timeoutAction, timeoutAction, successAction));
 
         String url = "http://localhost:" + server.getPort() + path;
 
@@ -288,7 +283,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
 
         promise.get(5, TimeUnit.MINUTES);
         sleep(5000);    // wait for mock server to complete status
-        VerifyHttp.verifyHttp(server).times(3, Condition.uri(path));
+        verifyHttp(server).times(3, uri(path));
         assertEquals(successCallCount.get(), 1);
         assertEquals(failedCallCount.get(), 0);
         assertEquals(cancelledCallCount.get(), 0);
@@ -299,7 +294,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
         throws URISyntaxException, InterruptedException, TimeoutException, ExecutionException {
 
         String path = "/fail_for_retry";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(timeoutAction);
+        whenHttp(server).match(get(path)).then(timeoutAction);
 
         String url = "http://localhost:" + server.getPort() + path;
 
@@ -328,7 +323,7 @@ public class AsyncHttpClientTest extends AbstractHttpClientTest {
 
         promise.get(5, TimeUnit.MINUTES);
         sleep(5000);    // wait for mock server to complete status
-        VerifyHttp.verifyHttp(server).times(3, Condition.uri(path));
+        verifyHttp(server).times(3, uri(path));
         assertEquals(successCallCount.get(), 0);
         assertEquals(failedCallCount.get(), 1);
         assertEquals(cancelledCallCount.get(), 0);

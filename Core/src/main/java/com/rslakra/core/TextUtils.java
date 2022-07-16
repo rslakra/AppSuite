@@ -28,8 +28,8 @@
  *****************************************************************************/
 package com.rslakra.core;
 
-import com.devamatre.logger.LogManager;
-import com.devamatre.logger.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -54,16 +54,12 @@ import java.util.regex.Pattern;
 public enum TextUtils {
     INSTANCE;
 
-    /**
-     * <code>serialVersionUID</code>
-     */
-    private static final long serialVersionUID = 1l;
-
     /* constants */
     public static final char SPACE = '\u0020';
     public static final char SPACE_SEPARATOR = '\u00A0';
     public static final char LINE_SEPARATOR = '\u2007';
     public static final char PARAGRAPH_SEPARATOR = '\u202F';
+    //    public static String LINE_SEPARATOR = System.getProperty("line.separator");
     public static final String STR_SPACE = "" + SPACE;
     public static final String STR_LINE = "" + LINE_SEPARATOR;
     public static final String STR_PARAGRAPH = "" + PARAGRAPH_SEPARATOR;
@@ -79,6 +75,7 @@ public enum TextUtils {
     public static final char UNIT_SEPARATOR = '\u001F';
     public static final char LINE_FEED = '\n';
     public static final char CARRIAGE_RETURN = '\r';
+    public static final String NEW_LINE = "\n";
     public static final String DELIMITER = "" + HTAB;
     public static final String VER_DELIMITER = "" + VTAB;
     public static final String EMPTY_STR = "";
@@ -86,11 +83,8 @@ public enum TextUtils {
     /* valid email expression. */
     private static String VALID_EMAIL_EXPRESSION = "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 
-    /**
-     * logger
-     */
-    private static Logger logger = LogManager.getLogger(TextUtils.class);
-
+    // LOGGER.
+    private static Logger LOGGER = LoggerFactory.getLogger(TextUtils.class);
 
     /**
      * Removes leading whitespace of the specified string using expressions.
@@ -143,8 +137,8 @@ public enum TextUtils {
      * @return
      */
     public static String trim(String str, String delimiter) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("+trim(" + str + ", " + delimiter + ")");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+trim(" + str + ", " + delimiter + ")");
         }
         if (str != null && delimiter != null) {
             StringBuilder strBuilder = new StringBuilder(str);
@@ -160,8 +154,8 @@ public enum TextUtils {
             str = strBuilder.toString();
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("-trim(), str: " + str);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("-trim(), str: " + str);
         }
         return str;
     }
@@ -200,7 +194,7 @@ public enum TextUtils {
      * @return true, if string contains space, otherwise false.
      */
     public static boolean hasSpace(String str) {
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new IllegalArgumentException("Invalid String!, str: " + str);
         }
 
@@ -223,7 +217,7 @@ public enum TextUtils {
      * otherwise false.
      */
     public static boolean isNumeric(String str) {
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new IllegalArgumentException("Invalid String!, str: " + str);
         }
 
@@ -356,14 +350,15 @@ public enum TextUtils {
     }
 
     /**
-     * Returns true if either the string is null or empty otherwise false.
-     *
-     * @param str
-     * @return
+     * @param itr
      */
-    public static boolean isNullOrEmpty(String str) {
-        return (null == str || str.isEmpty() || str.trim().length() == 0);
+    public static void logIterator(final Iterator<?> itr) {
+        BeanUtils.notNull(itr, "Iterator should not be null!");
+        while (itr.hasNext()) {
+            LOGGER.debug(itr.next().toString());
+        }
     }
+
 
     /**
      * Returns the padded string. It fills your string with up to repeat
@@ -404,7 +399,7 @@ public enum TextUtils {
      * @return
      */
     public static String padCenter(String str, int repeat, String padChar) {
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new IllegalArgumentException("Invalid String!, str: " + str);
         }
 
@@ -446,7 +441,7 @@ public enum TextUtils {
      * @return
      */
     public static String truncate(String str, int start, int end) {
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new IllegalArgumentException("Invalid String!, str: " + str);
         }
 
@@ -466,7 +461,7 @@ public enum TextUtils {
      * @return
      */
     public static String toSentenceCase(String str) {
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new NullPointerException("Invalid Parameter!, str: " + str);
         }
 
@@ -478,17 +473,17 @@ public enum TextUtils {
      * @return
      */
     public static String toTitleCase(String str) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("+toTitleCase(" + str + ")");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+toTitleCase(" + str + ")");
         }
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new NullPointerException("Invalid Parameter!, str: " + str);
         }
 
         StringBuilder strBuilder = new StringBuilder();
         String[] words = str.split(" ");
         for (int index = 0; index < words.length; index++) {
-            if (!isNullOrEmpty(words[index])) {
+            if (BeanUtils.isNotEmpty(words[index])) {
                 strBuilder.append(toSentenceCase(words[index]));
                 if (index < words.length - 1) {
                     strBuilder.append(SPACE);
@@ -496,8 +491,8 @@ public enum TextUtils {
             }
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("-toTitleCase(), result: " + strBuilder.toString());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("-toTitleCase(), result: " + strBuilder.toString());
         }
         return strBuilder.toString();
     }
@@ -507,10 +502,10 @@ public enum TextUtils {
      * @return
      */
     public static String toToggleCase(String str) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("+toToggleCase(" + str + ")");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+toToggleCase(" + str + ")");
         }
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new NullPointerException("Invalid Parameter!, str: " + str);
         }
 
@@ -529,8 +524,8 @@ public enum TextUtils {
             strBuilder.append(ch);
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("-toToggleCase(), result: " + strBuilder.toString());
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("-toToggleCase(), result: " + strBuilder.toString());
         }
         return strBuilder.toString();
     }
@@ -547,7 +542,7 @@ public enum TextUtils {
     public static String join(String[] elements, String delimiter) {
         StringBuilder sBuilder = null;
         if (elements != null) {
-            if (isNullOrEmpty(delimiter)) {
+            if (BeanUtils.isEmpty(delimiter)) {
                 delimiter = STR_SPACE;
             }
             sBuilder = new StringBuilder();
@@ -584,8 +579,8 @@ public enum TextUtils {
      */
     public static String[] split(String str, String delimiter) {
         String[] elements = null;
-        if (!isNullOrEmpty(str)) {
-            if (isNullOrEmpty(delimiter)) {
+        if (!BeanUtils.isEmpty(str)) {
+            if (BeanUtils.isEmpty(delimiter)) {
                 delimiter = STR_SPACE;
             }
             StringTokenizer sTokenizer = new StringTokenizer(str, delimiter);
@@ -605,7 +600,7 @@ public enum TextUtils {
      */
     public static String[] split(String str, char delimiter) {
         String[] words = null;
-        if (!isNullOrEmpty(str)) {
+        if (!BeanUtils.isEmpty(str)) {
             List<String> segments = new LinkedList<String>();
             char[] chars = str.toCharArray();
             String newStr = null;
@@ -666,33 +661,8 @@ public enum TextUtils {
     public static void printLine(String... elements) {
         if (elements != null && elements.length > 0) {
             for (String str : elements) {
-                logger.info(str);
+                LOGGER.info(str);
             }
-        }
-    }
-
-    /**
-     * Logs the collection into the specified logger.
-     *
-     * @param <T>
-     * @param collection
-     */
-    public static <T> void print(Collection<T> collection) {
-        if (null != collection && collection.size() > 0) {
-            logger.info(collection);
-        }
-    }
-
-    /**
-     * Logs the <code>Map</code> into the specified logger.
-     *
-     * @param <K>
-     * @param <T>
-     * @param map
-     */
-    public static <K, T> void print(Map<K, T> map) {
-        if (null != map && map.size() > 0) {
-            logger.info(map);
         }
     }
 
@@ -732,11 +702,11 @@ public enum TextUtils {
      * @return
      */
     public static long countWords(String str) {
-        if (logger.isDebugEnabled()) {
-            logger.debug("+countWords(" + str + ")");
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("+countWords(" + str + ")");
         }
 
-        if (isNullOrEmpty(str)) {
+        if (BeanUtils.isEmpty(str)) {
             throw new NullPointerException("Invalid Parameter!, str: " + str);
         }
 
@@ -745,7 +715,7 @@ public enum TextUtils {
         boolean whiteSpace = true;
         while (index < str.length()) {
             char cChar = str.charAt(index++);
-            // logger.debug("cChar:" + cChar);
+            // LOGGER.debug("cChar:" + cChar);
             boolean isWhitespace = Character.isWhitespace(cChar);
             if (whiteSpace && !isWhitespace) {
                 words++;
@@ -753,8 +723,8 @@ public enum TextUtils {
             whiteSpace = isWhitespace;
         }
 
-        if (logger.isDebugEnabled()) {
-            logger.debug("-countWords(), words: " + words);
+        if (LOGGER.isDebugEnabled()) {
+            LOGGER.debug("-countWords(), words: " + words);
         }
         return words;
     }
@@ -923,15 +893,10 @@ public enum TextUtils {
      * is null or empty, it returns false.
      *
      * @param value
-     * @param bDefault
      * @return
      */
     public static boolean toBoolean(String value) {
-        boolean result = false;
-        if (!isNullOrEmpty(value)) {
-            result = Boolean.valueOf(value.trim()).booleanValue();
-        }
-        return result;
+        return (BeanUtils.isNotEmpty(value) && Boolean.valueOf(value.trim()).booleanValue());
     }
 
     /**
@@ -943,11 +908,11 @@ public enum TextUtils {
      */
     public static int toInteger(String value) {
         int result = -1;
-        if (!isNullOrEmpty(value)) {
+        if (!BeanUtils.isEmpty(value)) {
             try {
                 result = Integer.parseInt(value);
             } catch (NumberFormatException nfe) {
-                logger.error("Error parsing value: " + value, nfe);
+                LOGGER.error("Error parsing value: " + value, nfe);
             }
         }
         return result;
@@ -962,11 +927,11 @@ public enum TextUtils {
      */
     public static long toLong(String value) {
         long result = -1L;
-        if (!isNullOrEmpty(value)) {
+        if (!BeanUtils.isEmpty(value)) {
             try {
                 result = Long.parseLong(value);
             } catch (NumberFormatException nfe) {
-                logger.error("Error parsing value: " + value, nfe);
+                LOGGER.error("Error parsing value: " + value, nfe);
             }
         }
         return result;
@@ -1189,7 +1154,6 @@ public enum TextUtils {
          * <code>object</code> including all fields.
          *
          * @param object
-         * @param includeClassName
          * @return
          */
         public String toString(Object object) {

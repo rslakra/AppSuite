@@ -53,9 +53,12 @@ public class CallerByStackTrace extends AbstractCaller implements Caller {
     public <T> boolean isCaller(Class<T> classType) {
         LOGGER.debug("isCaller({})", classType);
         return Arrays.stream(Thread.currentThread().getStackTrace())
-            .anyMatch(element -> element.getClassName().equals(classType.getName()));
+                .anyMatch(element -> element.getClassName().equals(classType.getName()));
     }
 
+    /**
+     * @return
+     */
     @Override
     public Method getLastMethod() {
         return null;

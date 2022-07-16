@@ -3098,7 +3098,7 @@ public enum HTTPUtils {
      * @param inputStream
      * @throws IOException
      */
-    public void abortConnection(InputStream inputStream) throws IOException {
+    public static void abortConnection(InputStream inputStream) throws IOException {
         LOGGER.debug("abortConnection({})", inputStream);
         if (inputStream != null) {
             if (ConnectionReleaseTrigger.class.isAssignableFrom(inputStream.getClass())) {
@@ -3111,7 +3111,7 @@ public enum HTTPUtils {
      * @param inputStream
      * @throws IOException
      */
-    public void releaseConnection(final InputStream inputStream) throws IOException {
+    public static void releaseConnection(final InputStream inputStream) throws IOException {
         LOGGER.debug("releaseConnection({})", inputStream);
         if (inputStream != null) {
             abortConnection(inputStream);
@@ -3125,7 +3125,7 @@ public enum HTTPUtils {
      *
      * @param httpRequest
      */
-    public void abortRequest(HttpUriRequest httpRequest) {
+    public static void abortRequest(HttpUriRequest httpRequest) {
         if (httpRequest != null && !httpRequest.isAborted()) {
             httpRequest.abort();
         }
@@ -3134,7 +3134,7 @@ public enum HTTPUtils {
     /**
      * @param response
      */
-    public void closeResponse(org.apache.http.HttpResponse response) {
+    public static void closeResponse(org.apache.http.HttpResponse response) {
         try {
             final HttpEntity entity = response.getEntity();
             final InputStream in = entity.getContent();
@@ -3148,7 +3148,7 @@ public enum HTTPUtils {
      * @param request
      * @param response
      */
-    public void close(HttpUriRequest request, org.apache.http.HttpResponse response) {
+    public static void close(HttpUriRequest request, org.apache.http.HttpResponse response) {
         if (response != null && response.getEntity() != null) {
             closeResponse(response);
         }
@@ -3225,14 +3225,14 @@ public enum HTTPUtils {
      * @return
      */
     public static StringBuilder acceptEncodingHeader(final Header[] acceptEncodingHeaders) {
-        final StringBuilder headerBuilder = new StringBuilder();
-        if (acceptEncodingHeaders != null) {
+        final StringBuilder encodingHeaders = new StringBuilder();
+        if (BeanUtils.isNotEmpty(acceptEncodingHeaders)) {
             for (int i = 0; i < acceptEncodingHeaders.length; i++) {
-                headerBuilder.append(acceptEncodingHeaders[i].getValue());
+                encodingHeaders.append(acceptEncodingHeaders[i].getValue());
             }
         }
 
-        return headerBuilder;
+        return encodingHeaders;
     }
 
     /**
@@ -3247,7 +3247,7 @@ public enum HTTPUtils {
      * @param httpRequest
      * @return
      */
-    public static String acceptEncodingHeader(final org.apache.http.HttpRequest httpRequest, final String contentEncoding) {
+    public static String acceptEncodingHeader(final HttpRequest httpRequest, final String contentEncoding) {
         final StringBuilder headerBuilder = acceptEncodingHeader(httpRequest);
         return (headerBuilder.toString().contains(contentEncoding)
                 ? headerBuilder.toString().substring(0, headerBuilder.lastIndexOf(","))
@@ -3259,7 +3259,7 @@ public enum HTTPUtils {
      * @param contentEncoding
      * @return
      */
-    public static void setAcceptEncodingHeader(final org.apache.http.HttpRequest httpRequest, final String contentEncoding) {
+    public static void setAcceptEncodingHeader(final HttpRequest httpRequest, final String contentEncoding) {
         if (httpRequest.containsHeader(HttpHeaders.ACCEPT_ENCODING)) {
             String acceptEncodingList = HTTPUtils.acceptEncodingHeader(httpRequest, contentEncoding);
             httpRequest.setHeader(HttpHeaders.ACCEPT_ENCODING, acceptEncodingList);

@@ -3,7 +3,7 @@
  */
 package com.rslakra.core.algos;
 
-import com.rslakra.core.Numbers;
+import com.rslakra.core.MathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -108,8 +108,8 @@ public class DecimalNumbers {
             LOGGER.debug("number: " + number);
         }
 
-        int divisor = findDivisorDigit(Numbers.countDecimalDigits(number));
-        long minNumber = Numbers.firstNDigitNumber(divisor);
+        int divisor = findDivisorDigit(MathUtils.countDecimalDigits(number));
+        long minNumber = MathUtils.firstNDigitNumber(divisor);
         if (DEBUG) {
             LOGGER.debug("divisor: " + divisor + ", minNumber: " + minNumber);
         }
@@ -129,17 +129,17 @@ public class DecimalNumbers {
             LOGGER.debug("number: " + number);
         }
         final StringBuilder wordBuilder = new StringBuilder();
-        int digits = Numbers.countDecimalDigits(number);
+        int digits = MathUtils.countDecimalDigits(number);
         switch (digits) {
             case 1:
-                wordBuilder.append(UNITS[Numbers.toInt(number)]);
+                wordBuilder.append(UNITS[MathUtils.toInteger(number)]);
                 break;
             case 2:
-                wordBuilder.append(twoDigitEnglish(Numbers.toInt(number)));
+                wordBuilder.append(twoDigitEnglish(MathUtils.toInteger(number)));
                 break;
             default:
                 int divisor = findDivisorDigit(digits);
-                long minNumber = Numbers.firstNDigitNumber(divisor);
+                long minNumber = MathUtils.firstNDigitNumber(divisor);
                 if (DEBUG) {
                     LOGGER.debug("divisor: " + divisor + ", minNumber: " + minNumber);
                 }

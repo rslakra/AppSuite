@@ -1,5 +1,6 @@
 package com.rslakra.core.rest;
 
+import com.rslakra.core.BeanUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.utils.URLEncodedUtils;
 import org.apache.http.message.BasicNameValuePair;
@@ -9,13 +10,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Rohtash Lakra
@@ -25,7 +20,7 @@ public class UriBuilder implements Cloneable {
 
     public static final Charset UTF_8 = Charset.forName("utf-8");
 
-    protected URI base;
+    protected URI baseUri;
 
     /**
      * @param url
@@ -51,38 +46,8 @@ public class UriBuilder implements Cloneable {
         if (uri == null) {
             throw new IllegalArgumentException("uri must not be null!");
         } else {
-            this.base = uri;
+            this.baseUri = uri;
         }
-    }
-
-    /**
-     * @param object
-     * @return
-     */
-    public static boolean isNullOrEmpty(final Object object) {
-        if (Objects.isNull(object)) {
-            return true;
-        } else if (object instanceof CharSequence && ((CharSequence) object).length() == 0) {
-            return true;
-        } else if (object.getClass().isArray() && ((Object[]) object).length == 0) {
-            return true;
-        } else if (object instanceof Collection && ((Collection) object).size() == 0) {
-            return true;
-        } else if (object instanceof Map && ((Map) object).size() == 0) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Returns empty if null otherwise string.
-     *
-     * @param object
-     * @return
-     */
-    public static String nullCheckString(final Object object) {
-        return (Objects.isNull(object) ? "" : object.toString());
     }
 
     /**
@@ -122,7 +87,7 @@ public class UriBuilder implements Cloneable {
      */
     protected URI update(final String scheme, final String userInfo, final String host, final int port,
                          final String path, final String query, final String fragment) throws URISyntaxException {
-        final URI uri = new URI(scheme, userInfo, host, port, this.base.getPath(), (String) null, (String) null);
+        final URI uri = new URI(scheme, userInfo, host, port, this.baseUri.getPath(), (String) null, (String) null);
         final StringBuilder queryBuilder = new StringBuilder();
         if (path != null) {
             queryBuilder.append(path);
@@ -145,9 +110,9 @@ public class UriBuilder implements Cloneable {
      * @throws URISyntaxException
      */
     public UriBuilder setScheme(final String scheme) throws URISyntaxException {
-        this.base =
-            this.update(scheme, this.base.getUserInfo(), this.base.getHost(), this.base.getPort(),
-                        this.base.getRawPath(), this.base.getRawQuery(), this.base.getRawFragment());
+        this.baseUri =
+                this.update(scheme, this.baseUri.getUserInfo(), this.baseUri.getHost(), this.baseUri.getPort(),
+                        this.baseUri.getRawPath(), this.baseUri.getRawQuery(), this.baseUri.getRawFragment());
         return this;
     }
 
@@ -155,7 +120,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     public String getScheme() {
-        return this.base.getScheme();
+        return this.baseUri.getScheme();
     }
 
     /**
@@ -164,9 +129,9 @@ public class UriBuilder implements Cloneable {
      * @throws URISyntaxException
      */
     public UriBuilder setPort(int port) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), this.base.getUserInfo(), this.base.getHost(), port,
-                        this.base.getRawPath(), this.base.getRawQuery(), this.base.getRawFragment());
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), this.baseUri.getUserInfo(), this.baseUri.getHost(), port,
+                        this.baseUri.getRawPath(), this.baseUri.getRawQuery(), this.baseUri.getRawFragment());
         return this;
     }
 
@@ -174,7 +139,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     public int getPort() {
-        return this.base.getPort();
+        return this.baseUri.getPort();
     }
 
     /**
@@ -183,9 +148,9 @@ public class UriBuilder implements Cloneable {
      * @throws URISyntaxException
      */
     public UriBuilder setHost(String host) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), this.base.getUserInfo(), host, this.base.getPort(),
-                        this.base.getRawPath(), this.base.getRawQuery(), this.base.getRawFragment());
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), this.baseUri.getUserInfo(), host, this.baseUri.getPort(),
+                        this.baseUri.getRawPath(), this.baseUri.getRawQuery(), this.baseUri.getRawFragment());
         return this;
     }
 
@@ -193,7 +158,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     public String getHost() {
-        return this.base.getHost();
+        return this.baseUri.getHost();
     }
 
     /**
@@ -202,10 +167,10 @@ public class UriBuilder implements Cloneable {
      * @throws URISyntaxException
      */
     public UriBuilder setPath(String path) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), this.base.getUserInfo(), this.base.getHost(), this.base.getPort(),
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), this.baseUri.getUserInfo(), this.baseUri.getHost(), this.baseUri.getPort(),
                         (new URI((String) null, (String) null, path, (String) null, (String) null)).getRawPath(),
-                        this.base.getRawQuery(), this.base.getRawFragment());
+                        this.baseUri.getRawQuery(), this.baseUri.getRawFragment());
         return this;
     }
 
@@ -213,7 +178,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     public String getPath() {
-        return this.base.getPath();
+        return this.baseUri.getPath();
     }
 
     /**
@@ -223,19 +188,19 @@ public class UriBuilder implements Cloneable {
      */
     protected UriBuilder setQueryNameValuePair(List<NameValuePair> nameValuePairs) throws URISyntaxException {
         StringBuilder uriBuilder = new StringBuilder();
-        String path = this.base.getRawPath();
+        String path = this.baseUri.getRawPath();
         if (path != null) {
             uriBuilder.append(path);
         }
 
         uriBuilder.append('?');
         uriBuilder.append(URLEncodedUtils.format(nameValuePairs, "UTF-8"));
-        String frag = this.base.getRawFragment();
+        String frag = this.baseUri.getRawFragment();
         if (frag != null) {
             uriBuilder.append('#').append(frag);
         }
 
-        this.base = this.base.resolve(uriBuilder.toString());
+        this.baseUri = this.baseUri.resolve(uriBuilder.toString());
         return this;
     }
 
@@ -245,7 +210,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     protected final BasicNameValuePair toNameValuePair(final Object key, final Object value) {
-        return new BasicNameValuePair(key.toString(), nullCheckString(value));
+        return new BasicNameValuePair(key.toString(), BeanUtils.toString(value));
     }
 
     /**
@@ -297,9 +262,9 @@ public class UriBuilder implements Cloneable {
             }
             this.setQueryNameValuePair(nameValuePairList);
         } else {
-            this.base =
-                new URI(this.base.getScheme(), this.base.getUserInfo(), this.base.getHost(), this.base.getPort(),
-                        this.base.getPath(), (String) null, this.base.getFragment());
+            this.baseUri =
+                    new URI(this.baseUri.getScheme(), this.baseUri.getUserInfo(), this.baseUri.getHost(), this.baseUri.getPort(),
+                            this.baseUri.getPath(), (String) null, this.baseUri.getFragment());
         }
 
         return this;
@@ -311,9 +276,9 @@ public class UriBuilder implements Cloneable {
      * @throws URISyntaxException
      */
     public UriBuilder setRawQuery(String query) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), this.base.getUserInfo(), this.base.getHost(), this.base.getPort(),
-                        this.base.getRawPath(), query, this.base.getRawFragment());
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), this.baseUri.getUserInfo(), this.baseUri.getHost(), this.baseUri.getPort(),
+                        this.baseUri.getRawPath(), query, this.baseUri.getRawFragment());
         return this;
     }
 
@@ -351,7 +316,7 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     protected List<NameValuePair> getQueryNameValuePair() {
-        return (this.base.getQuery() == null ? null : newList(URLEncodedUtils.parse(this.base, UTF_8)));
+        return (this.baseUri.getQuery() == null ? null : newList(URLEncodedUtils.parse(this.baseUri, UTF_8)));
     }
 
     /**
@@ -455,38 +420,38 @@ public class UriBuilder implements Cloneable {
     }
 
     public UriBuilder setFragment(String fragment) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), this.base.getUserInfo(), this.base.getHost(), this.base.getPort(),
-                        this.base.getRawPath(), this.base.getRawQuery(),
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), this.baseUri.getUserInfo(), this.baseUri.getHost(), this.baseUri.getPort(),
+                        this.baseUri.getRawPath(), this.baseUri.getRawQuery(),
                         (new URI((String) null, (String) null, (String) null, fragment)).getRawFragment());
         return this;
     }
 
     public String getFragment() {
-        return this.base.getFragment();
+        return this.baseUri.getFragment();
     }
 
     public UriBuilder setUserInfo(String userInfo) throws URISyntaxException {
-        this.base =
-            this.update(this.base.getScheme(), userInfo, this.base.getHost(), this.base.getPort(),
-                        this.base.getRawPath(), this.base.getRawQuery(), this.base.getRawFragment());
+        this.baseUri =
+                this.update(this.baseUri.getScheme(), userInfo, this.baseUri.getHost(), this.baseUri.getPort(),
+                        this.baseUri.getRawPath(), this.baseUri.getRawQuery(), this.baseUri.getRawFragment());
         return this;
     }
 
     public String getUserInfo() {
-        return this.base.getUserInfo();
+        return this.baseUri.getUserInfo();
     }
 
     public String toString() {
-        return this.base.toString();
+        return this.baseUri.toString();
     }
 
     public URL toURL() throws MalformedURLException {
-        return this.base.toURL();
+        return this.baseUri.toURL();
     }
 
     public URI toURI() {
-        return this.base;
+        return this.baseUri;
     }
 
     /**
@@ -507,7 +472,7 @@ public class UriBuilder implements Cloneable {
     }
 
     protected UriBuilder clone() {
-        return new UriBuilder(this.base);
+        return new UriBuilder(this.baseUri);
     }
 
     /**
@@ -515,6 +480,6 @@ public class UriBuilder implements Cloneable {
      * @return
      */
     public boolean equals(Object object) {
-        return !(object instanceof UriBuilder) ? false : this.base.equals(((UriBuilder) object).toURI());
+        return !(object instanceof UriBuilder) ? false : this.baseUri.equals(((UriBuilder) object).toURI());
     }
 }

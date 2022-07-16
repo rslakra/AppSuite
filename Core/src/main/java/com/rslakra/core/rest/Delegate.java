@@ -12,9 +12,9 @@ import java.lang.annotation.RetentionPolicy;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @java.lang.annotation.Target({ElementType.PARAMETER})
-public @interface Delegates {
+public @interface Delegate {
 
-    Class value() default Delegates.Target.class;
+    Class value() default Delegate.Target.class;
 
     int strategy() default 0;
 

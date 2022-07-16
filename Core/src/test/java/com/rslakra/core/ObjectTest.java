@@ -27,17 +27,17 @@ public class ObjectTest {
 
         ObjectTest str = new ObjectTest();
         string = "Hello";
-        byte[] result = Utils.INSTANCE.toBytes(string);
+        byte[] result = BeanUtils.toBytes(string);
         LOGGER.debug("string: " + string + ", result: " + result);
 
         //
         string = "Hello!";
-        result = Utils.INSTANCE.toBytes(string);
+        result = BeanUtils.toBytes(string);
         LOGGER.debug("string: " + string + ", result: " + result);
 
         //
         string = "HelloWorld";
-        result = Utils.INSTANCE.toBytes(string);
+        result = BeanUtils.toBytes(string);
         LOGGER.debug("string: " + string + ", result: " + result);
 
         final byte[] keyAndIvGenerationSalt = new byte[]{76, 97, 0, 107, 114, -127, 97, -27};

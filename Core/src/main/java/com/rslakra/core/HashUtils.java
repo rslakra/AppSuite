@@ -39,6 +39,22 @@ public enum HashUtils {
     }
 
     /**
+     * @param objects
+     * @return
+     */
+    public static long hashCode(final Object... objects) {
+        return Objects.hashCode(objects);
+    }
+
+    /**
+     * @param objects
+     * @return
+     */
+    public static int hashCodePositive(final Object... objects) {
+        return (Objects.hash(objects) & 0x7FFFFFFF);
+    }
+
+    /**
      * @param value
      * @return
      */
@@ -61,8 +77,8 @@ public enum HashUtils {
      * @return
      */
     public static <T> int getHashIndex(final T key, final int capacity) {
-        /** Refer https://stackoverflow.com/questions/33219638/how-to-make-a-hashcodeinteger-value-positive */
-        return ((Objects.hashCode(key) & 0x7FFFFFFF) % capacity);
+        /** hash-code can be negative and dictionary can throw ArrayIndexOutOfBoundException, so always use the positive hash-code for HashTable. */
+        return (hashCodePositive(key) % capacity);
     }
 
 }

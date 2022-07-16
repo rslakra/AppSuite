@@ -66,6 +66,8 @@ public enum IOUtils {
     private static Logger LOGGER = LoggerFactory.getLogger(IOUtils.class);
     public static final String APPLICATION_JSON = "application/json";
     public static final String CONTENT_TYPE = "Content-Type";
+    public static final String TARGET = "target";
+    public static final String BUILD = "build";
 
     /**
      * BUFFER_1K
@@ -157,10 +159,18 @@ public enum IOUtils {
     }
 
     /**
+     * @param pathSegments
      * @return
      */
-    public static String getBuildDir() {
-        return String.format("%s/%s", getUserDir(), "target");
+    public static String getBuildDir(final String... pathSegments) {
+        final StringBuilder pathBuilder = new StringBuilder(getUserDir());
+        if (BeanUtils.isNotEmpty(pathSegments)) {
+            for (int index = 0; index < pathSegments.length; index++) {
+                pathBuilder.append(File.separator).append(pathSegments[index]);
+            }
+        }
+
+        return pathBuilder.toString();
     }
 
     /**
@@ -2100,7 +2110,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the bytes of the specified input stream.
+     * Reads the <code>inputStream</code> as bytes.
      *
      * @param inputStream
      * @return
@@ -2257,13 +2267,13 @@ public enum IOUtils {
 
             // 6. Get the response
             int responseCode = connection.getResponseCode();
-            System.out.println(String.format("\nSending '%s' request to URL:%s", connection.getRequestMethod(),
+            LOGGER.debug(String.format("\nSending '%s' request to URL:%s", connection.getRequestMethod(),
                     connection.getURL().toExternalForm()));
-            System.out.println("responseCode:" + responseCode);
+            LOGGER.debug("responseCode:" + responseCode);
             // 7. Read result
             response = readStream(connection.getInputStream());
             // 8. Print result
-            System.out.println(response.toString());
+            LOGGER.debug(response.toString());
         } catch (IOException ex) {
             ex.printStackTrace();
         }

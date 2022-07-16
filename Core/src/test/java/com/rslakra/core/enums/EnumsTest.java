@@ -1,9 +1,6 @@
 package com.rslakra.core.enums;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.rslakra.core.Utils;
+import com.rslakra.core.BeanUtils;
 import com.rslakra.core.entity.AllCountryAndCurrencyResponse;
 import com.rslakra.core.json.JSONUtils;
 import org.junit.Assert;
@@ -21,25 +18,23 @@ import java.util.Set;
  * @author Rohtash Lakra
  * @created 5/8/20 11:25 AM
  */
-public class ENumsTest {
+public class EnumsTest {
 
     // LOGGER
-    private static final Logger LOGGER = LoggerFactory.getLogger(ENumsTest.class);
-
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private static final Logger LOGGER = LoggerFactory.getLogger(EnumsTest.class);
 
     @Test
     public void testFindEnums() {
         WeekDays weekDays = WeekDays.findByName(WeekDays.SUNDAY.name());
         Assert.assertEquals(WeekDays.SUNDAY, weekDays);
 
-        WeekDays nullEnum = Utils.findEnumByClass(WeekDays.class, "thrursday");
+        WeekDays nullEnum = BeanUtils.findEnumByClass(WeekDays.class, "thrursday");
         Assert.assertNull(nullEnum);
 
-        WeekDays weekDayByClass = Utils.findEnumByClass(WeekDays.class, WeekDays.MONDAY.name());
+        WeekDays weekDayByClass = BeanUtils.findEnumByClass(WeekDays.class, WeekDays.MONDAY.name());
         Assert.assertEquals(WeekDays.MONDAY, weekDayByClass);
 
-        nullEnum = Utils.findEnumByClass(WeekDays.class, "friday");
+        nullEnum = BeanUtils.findEnumByClass(WeekDays.class, "friday");
         Assert.assertNull(nullEnum);
     }
 
@@ -49,7 +44,7 @@ public class ENumsTest {
         EnumSet<Currency> currencies = EnumSet.allOf(Currency.class);
         String json = null;
         try {
-            json = JSONUtils.INSTANCE.toJson(currencies);
+            json = JSONUtils.toJson(currencies);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -60,32 +55,29 @@ public class ENumsTest {
         String jsonExtra = "[\"INR\",\"TWD\",\"USD\",\"EUR\"]";
         List<Currency> extraCurrencies = null;
         try {
-            extraCurrencies = Arrays.asList(JSONUtils.INSTANCE.fromJson(jsonExtra, Currency[].class));
+            extraCurrencies = Arrays.asList(JSONUtils.fromJson(jsonExtra, Currency[].class));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
 
         LOGGER.debug("extraCurrencies:{}\n", extraCurrencies);
 
-        //
         Set<Currency> setCurrencies = null;
         try {
-            setCurrencies = objectMapper.readValue(jsonExtra, new TypeReference<Set<Currency>>() {
-            });
-        } catch (JsonProcessingException e) {
+            setCurrencies = JSONUtils.fromJson(jsonExtra, Set.class);
+        } catch (IOException e) {
             e.printStackTrace();
         }
 
         LOGGER.debug("setCurrencies:{}", setCurrencies);
     }
 
-
     @Test
     public void testCountry() {
         EnumSet<Country> countries = EnumSet.allOf(Country.class);
         String json = null;
         try {
-            json = JSONUtils.INSTANCE.toJson(countries);
+            json = JSONUtils.toJson(countries);
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -96,7 +88,7 @@ public class ENumsTest {
         String jsonExtra = "[\"IN\",\"TW\",\"US\"]";
         List<Country> extraCountries = null;
         try {
-            extraCountries = Arrays.asList(JSONUtils.INSTANCE.fromJson(jsonExtra, Country[].class));
+            extraCountries = Arrays.asList(JSONUtils.fromJson(jsonExtra, Country[].class));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
@@ -107,10 +99,9 @@ public class ENumsTest {
         jsonExtra = "[\"IN\",\"TW\",\"US\",\"CA\"]";
         Set<Country> setCountries = null;
         try {
-            setCountries = objectMapper.readValue(jsonExtra, new TypeReference<Set<Country>>() {
-            });
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
+            setCountries = JSONUtils.fromJson(jsonExtra, Set.class);
+        } catch (IOException ex) {
+            ex.printStackTrace();
         }
 
         LOGGER.debug("{}", setCountries);
@@ -119,7 +110,7 @@ public class ENumsTest {
 
     @Test
     public void testXmlCountryAndCurrency() {
-        String xmlData = Utils.INSTANCE.readFile("CountryAndCurrencies.xml");
+        String xmlData = BeanUtils.readFile("CountryAndCurrencies.xml");
         LOGGER.debug(xmlData);
 
 //        AllCountryAndCurrencyResponse response = null;
@@ -136,14 +127,14 @@ public class ENumsTest {
 
     @Test
     public void testJsonCountryAndCurrency() {
-        String jsonData = Utils.INSTANCE.readFile("CountryAndCurrencies.json");
+        String jsonData = BeanUtils.readFile("CountryAndCurrencies.json");
         LOGGER.debug("jsonData:" + jsonData);
 
         AllCountryAndCurrencyResponse response = null;
         //Using Gson Parser (if the json contains values that enum does not contain)
 //        response = JsonUtility.INSTANCE.fromJSONString(jsonData, AllCountryAndCurrencyResponse.class);
         try {
-            response = JSONUtils.INSTANCE.fromJson(jsonData, AllCountryAndCurrencyResponse.class);
+            response = JSONUtils.fromJson(jsonData, AllCountryAndCurrencyResponse.class);
         } catch (IOException e) {
             e.printStackTrace();
         }

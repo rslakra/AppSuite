@@ -5,6 +5,9 @@ import static com.xebialabs.restito.semantics.Action.delay;
 import static com.xebialabs.restito.semantics.Action.status;
 import static com.xebialabs.restito.semantics.Action.stringContent;
 
+import com.rslakra.core.http.HttpClientBuilder;
+import com.rslakra.core.http.HttpMethod;
+import com.rslakra.core.http.Request;
 import com.xebialabs.restito.semantics.Action;
 import com.xebialabs.restito.server.StubServer;
 import org.glassfish.grizzly.http.util.HttpStatus;
@@ -36,14 +39,14 @@ public abstract class AbstractHttpClientTest {
     @BeforeClass
     public synchronized void initServer() {
         server = new StubServer().run();
-        timeoutAction = Action.composite(
-            Action.delay(1000),
-            Action.status(HttpStatus.OK_200),
-            Action.stringContent("success")
+        timeoutAction = composite(
+            delay(1000),
+            status(HttpStatus.OK_200),
+            stringContent("success")
         );
-        successAction = Action.composite(
-            Action.status(HttpStatus.OK_200),
-            Action.stringContent("success")
+        successAction = composite(
+            status(HttpStatus.OK_200),
+            stringContent("success")
         );
     }
 

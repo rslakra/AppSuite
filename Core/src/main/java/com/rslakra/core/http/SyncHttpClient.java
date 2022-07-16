@@ -21,6 +21,7 @@ import java.util.function.Supplier;
  */
 public final class SyncHttpClient extends AbstractHttpClient implements AutoCloseable {
 
+    // LOGGER
     private static final Logger LOGGER = LoggerFactory.getLogger(SyncHttpClient.class);
     private CloseableHttpClient httpSyncClient;
 
@@ -29,7 +30,7 @@ public final class SyncHttpClient extends AbstractHttpClient implements AutoClos
      */
     protected SyncHttpClient(final HttpClientBuilder builder) {
         super(builder);
-        this.httpSyncClient = builder.httpSyncClient;
+        this.httpSyncClient = builder.getHttpSyncClient();
     }
 
     /**

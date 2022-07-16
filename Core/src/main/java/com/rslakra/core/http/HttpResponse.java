@@ -28,7 +28,7 @@ package com.rslakra.core.http;
 
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.IOUtils;
-import com.rslakra.core.JSONUtils;
+import com.rslakra.core.json.JSONUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -355,7 +355,7 @@ public class HttpResponse implements Cloneable {
 //        public void setResponseHeaders(final Map<String, List<String>> responseHeaders) {
 //            System.out.println("responseHeaders:" + responseHeaders);
 //            this.responseHeaders = responseHeaders;
-//            if (!BeanUtils.isNullOrEmpty(responseHeaders)) {
+//            if (!BeanUtils.BeanUtils.isEmpty(responseHeaders)) {
 //                jsonResponseHeaders = JSONUtils.toJSONString(responseHeaders);
 //            }
 //        }
@@ -373,7 +373,7 @@ public class HttpResponse implements Cloneable {
 //         * @param jsonResponseHeaders the responseHeaders to set
 //         */
 //        public void setJsonResponseHeaders(byte[] jsonResponseHeaders) {
-//            if (!BeanUtils.isNullOrEmpty(jsonResponseHeaders)) {
+//            if (!BeanUtils.BeanUtils.isEmpty(jsonResponseHeaders)) {
 //                String jsonResponseHeader = IOUtils.toUTF8String(jsonResponseHeaders);
 //                this.responseHeaders = JSONUtils.jsonHeadersAsMap(jsonResponseHeader);
 //            }

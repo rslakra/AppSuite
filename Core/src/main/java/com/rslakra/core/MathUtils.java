@@ -11,11 +11,36 @@ import java.util.List;
  * @author Rohtash Lakra (work.lakra@gmail.com)
  * @since 09/16/2019 11:56:31 AM
  */
-public enum Numbers {
+public enum MathUtils {
     INSTANCE;
 
     // LOGGER
-    private static Logger LOGGER = LoggerFactory.getLogger(Numbers.class);
+    private static Logger LOGGER = LoggerFactory.getLogger(MathUtils.class);
+
+
+    /**
+     * Returns the <code>number</code> after right shifting the <code>number</code> to the given <code>rightShift</code>
+     * values.
+     *
+     * @param number
+     * @param rightShift
+     * @return
+     */
+    public static final int rightShift(int number, int rightShift) {
+        return (number / Double.valueOf(Math.pow(2, rightShift)).intValue());
+    }
+
+    /**
+     * Returns the <code>number</code> after right shifting the <code>number</code> to the given <code>leftShift</code>
+     * values.
+     *
+     * @param number
+     * @param leftShift
+     * @return
+     */
+    public static final int leftShift(int number, int leftShift) {
+        return (number * Double.valueOf(Math.pow(2, leftShift)).intValue());
+    }
 
     /**
      * Approach - 1
@@ -68,10 +93,8 @@ public enum Numbers {
      */
     public static int countDigitsNaive(final long number) {
         LOGGER.debug("+countDigitsNaive({})", number);
-
-        int digits = (int) (Math.log10(number) + 1);
-
-        LOGGER.debug("-countDigitsNaiveApproach2(), {} has {} digit(s).", number, digits);
+        int digits = Double.valueOf(Math.log10(number) + 1).intValue();
+        LOGGER.debug("-countDigitsNaive(), {} has {} digit(s).", number, digits);
         return digits;
     }
 
@@ -85,9 +108,9 @@ public enum Numbers {
         LOGGER.debug("countDigits({}, {})", number, base);
         /* Calculating log using base changing the property and then taking it floor and then adding 1. */
         if (base == 10) {
-            return (number == 0 ? 1 : (int) Math.log10(number) + 1);
+            return (number == 0 ? 1 : Double.valueOf(Math.log10(number) + 1).intValue());
         } else {
-            return (int) (Math.floor(Math.log(number) / Math.log(base)) + 1);
+            return Double.valueOf(Math.floor(Math.log(number) / Math.log(base)) + 1).intValue();
         }
     }
 
@@ -118,15 +141,25 @@ public enum Numbers {
      * @return
      */
     public static long firstNDigitNumber(final int digits) {
-        return (long) Math.pow(10, digits - 1);
+        return Double.valueOf(Math.pow(10, digits - 1)).longValue();
     }
 
     /**
      * @param number
      * @return
      */
-    public static int toInt(long number) {
+    public static int toInteger(long number) {
         return Long.valueOf(number).intValue();
+    }
+
+    /**
+     * Returns the integer equivalent.
+     *
+     * @param numString
+     * @return
+     */
+    public static int toInteger(final String numString) {
+        return Integer.parseInt(numString);
     }
 
     /**
@@ -183,15 +216,26 @@ public enum Numbers {
         return evenNumbers;
     }
 
+    /**
+     * @param numbers
+     * @return
+     */
     public static boolean isEvenCheckUsingModulus(int numbers) {
         return (numbers % 2 == 0);
     }
 
+    /**
+     * @param numbers
+     * @return
+     */
     public static boolean isEvenCheckUsingOperators(int numbers) {
-        int quotient = numbers / 2;
-        return (quotient * 2 == numbers);
+        return ((numbers / 2) /* quotient */ * 2 == numbers);
     }
 
+    /**
+     * @param numbers
+     * @return
+     */
     public static boolean isEvenCheckUsingBit(int numbers) {
         return ((numbers & 1) == 0);
     }
@@ -203,7 +247,7 @@ public enum Numbers {
     public static boolean hasEvenNumbers(List<Integer> listNumbers) {
         listNumbers.forEach(num -> {
             if (!isEvenCheckUsingBit(num)) {
-                throw new RuntimeException("Numbers are not even!");
+                throw new RuntimeException("MathUtils are not even!");
             }
         });
 
@@ -218,7 +262,7 @@ public enum Numbers {
         final List<Integer> evenNumbers = new ArrayList<>(listNumbers.size());
         listNumbers.forEach(num -> {
             if (!isEvenCheckUsingBit(num)) {
-                throw new RuntimeException("Numbers are not even!");
+                throw new RuntimeException("MathUtils are not even!");
             }
 
             evenNumbers.add(num);

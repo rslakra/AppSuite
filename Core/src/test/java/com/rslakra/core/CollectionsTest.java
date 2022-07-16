@@ -4,14 +4,7 @@ import com.rslakra.core.entity.Color;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -21,7 +14,7 @@ import java.util.stream.Collectors;
 public class CollectionsTest {
 
     // LOGGER
-    private static final Logger LOGGER = LoggerFactory.getLogger(ListTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(CollectionsTest.class);
 
     void testListVsMap() {
         List<Color> listColors = Arrays.asList(new Color(1, "Red"), new Color(2, "Green"), new Color(3, "Blue"));
@@ -71,36 +64,36 @@ public class CollectionsTest {
     public void convertToMapFromObjectArrayList() {
         LOGGER.debug("convertToMapFromObjectArrayList");
         Object[] objects = new Object[]{
-            new Object[]{Long.valueOf(1), Integer.valueOf(10)}
+                new Object[]{Long.valueOf(1), Integer.valueOf(10)}
         };
 
         List<Object[]> listObjects = Arrays.stream(objects).map(entry -> (Object[]) entry).collect(Collectors.toList());
         Map<Long, Integer>
-            records =
-            listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
-                                                          value -> Integer.valueOf(value[1].toString())));
+                records =
+                listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
+                        value -> Integer.valueOf(value[1].toString())));
         LOGGER.debug("{}", records);
 
         //multi-records
         objects = new Object[]{
-            new Object[]{Long.valueOf(333533902L), Integer.valueOf(2)},
-            new Object[]{Long.valueOf(7308537810L), Integer.valueOf(1)},
-            new Object[]{Long.valueOf(333533993L), Integer.valueOf(2)},
-            };
+                new Object[]{Long.valueOf(333533902L), Integer.valueOf(2)},
+                new Object[]{Long.valueOf(7308537810L), Integer.valueOf(1)},
+                new Object[]{Long.valueOf(333533993L), Integer.valueOf(2)},
+        };
 
         listObjects = Arrays.stream(objects).map(entry -> (Object[]) entry).collect(Collectors.toList());
 
         records =
-            listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
-                                                          value -> Integer.valueOf(value[1].toString())));
+                listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
+                        value -> Integer.valueOf(value[1].toString())));
         LOGGER.debug("{}", records);
 
         // no records
         objects = new Object[0];
         listObjects = Arrays.stream(objects).map(entry -> (Object[]) entry).collect(Collectors.toList());
         records =
-            listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
-                                                          value -> Integer.valueOf(value[1].toString())));
+                listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[0].toString()),
+                        value -> Integer.valueOf(value[1].toString())));
         LOGGER.debug("{}", records);
     }
 
@@ -117,16 +110,16 @@ public class CollectionsTest {
         listObjects.add(new Object[]{"WOEID", "CAMPAIGN", 333533993L, Integer.valueOf(2)});
 
         Map<Long, Integer>
-            records =
-            listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[2].toString()),
-                                                          value -> Integer.valueOf(value[3].toString())));
+                records =
+                listObjects.stream().collect(Collectors.toMap(key -> Long.valueOf(key[2].toString()),
+                        value -> Integer.valueOf(value[3].toString())));
         LOGGER.debug("{}", records);
 
         Map<String, Integer>
-            keyRecords =
-            listObjects.stream().collect(
-                Collectors.toMap(key -> toKey(key[0].toString(), key[1].toString(), Long.valueOf(key[2].toString())),
-                                 value -> Integer.valueOf(value[3].toString())));
+                keyRecords =
+                listObjects.stream().collect(
+                        Collectors.toMap(key -> toKey(key[0].toString(), key[1].toString(), Long.valueOf(key[2].toString())),
+                                value -> Integer.valueOf(value[3].toString())));
         LOGGER.debug("{}", keyRecords);
     }
 

@@ -1,6 +1,6 @@
 package com.rslakra.java;
 
-import com.rslakra.core.Numbers;
+import com.rslakra.core.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +32,7 @@ public class ExceptionTest {
     @Test
     public void testListEvenNumbers() {
         int count = 5;
-        List<Integer> evenNumbers = Numbers.listEvenNumbers(count);
+        List<Integer> evenNumbers = MathUtils.listEvenNumbers(count);
         Assert.assertEquals(count, evenNumbers.size());
     }
 
@@ -41,9 +41,9 @@ public class ExceptionTest {
         List<Integer> validEvenNumbers = null;
         try {
             int numbers = 5;
-            List<Integer> evenNumbers = Numbers.listEvenNumbers(numbers);
+            List<Integer> evenNumbers = MathUtils.listEvenNumbers(numbers);
             evenNumbers.add(5);
-            validEvenNumbers = Numbers.filterEvenNumbers(evenNumbers);
+            validEvenNumbers = MathUtils.filterEvenNumbers(evenNumbers);
         } catch (RuntimeException ex) {
             Assert.assertEquals(null, validEvenNumbers);
         }

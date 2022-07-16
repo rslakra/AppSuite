@@ -35,7 +35,7 @@ public abstract class AbstractSearchable implements Searchable {
     }
 
     protected void logTimeTaken() {
-        stopWatch.endTimer();
+        stopWatch.stopTimer();
         LOGGER.debug("{}", stopWatch);
     }
 

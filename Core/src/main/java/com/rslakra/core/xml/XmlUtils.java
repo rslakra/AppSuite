@@ -4,8 +4,6 @@ import com.rslakra.core.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayOutputStream;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -13,13 +11,13 @@ import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerFactory;
+import java.io.ByteArrayOutputStream;
 
 /**
  * @author Rohtash Lakra
  * @created 5/19/20 4:18 PM
  */
 public enum XmlUtils {
-
     INSTANCE;
 
     // LOGGER
@@ -52,11 +50,13 @@ public enum XmlUtils {
      * @throws TransformerConfigurationException
      */
     public Transformer newTransformer(final String encoding) throws TransformerConfigurationException {
+        LOGGER.debug("+newTransformer({})", encoding);
         final Transformer transformer = TransformerFactory.newInstance().newTransformer();
         if (BeanUtils.isNotEmpty(encoding)) {
             transformer.setOutputProperty(OutputKeys.ENCODING, encoding);
         }
 
+        LOGGER.debug("-newTransformer(), transformer:{}", transformer);
         return transformer;
     }
 

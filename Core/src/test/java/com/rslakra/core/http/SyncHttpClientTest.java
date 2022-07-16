@@ -1,23 +1,7 @@
 package com.rslakra.core.http;
 
-import static com.xebialabs.restito.builder.stub.StubHttp.whenHttp;
-import static com.xebialabs.restito.builder.verify.VerifyHttp.verifyHttp;
-import static com.xebialabs.restito.semantics.Action.stringContent;
-import static com.xebialabs.restito.semantics.ActionSequence.sequence;
-import static com.xebialabs.restito.semantics.Condition.get;
-import static com.xebialabs.restito.semantics.Condition.uri;
-import static java.lang.Thread.sleep;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
-import static org.testng.Assert.assertNotSame;
-
 import com.rslakra.core.IOUtils;
 import com.rslakra.core.json.JSONUtils;
-import com.xebialabs.restito.builder.stub.StubHttp;
-import com.xebialabs.restito.builder.verify.VerifyHttp;
-import com.xebialabs.restito.semantics.Action;
-import com.xebialabs.restito.semantics.ActionSequence;
-import com.xebialabs.restito.semantics.Condition;
 import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig;
 import io.github.resilience4j.circuitbreaker.CircuitBreakerConfig.SlidingWindowType;
@@ -32,22 +16,34 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.time.Duration;
 
+import static com.xebialabs.restito.builder.stub.StubHttp.whenHttp;
+import static com.xebialabs.restito.builder.verify.VerifyHttp.verifyHttp;
+import static com.xebialabs.restito.semantics.Action.stringContent;
+import static com.xebialabs.restito.semantics.ActionSequence.sequence;
+import static com.xebialabs.restito.semantics.Condition.get;
+import static com.xebialabs.restito.semantics.Condition.uri;
+import static java.lang.Thread.sleep;
+import static org.testng.Assert.*;
+
 public class SyncHttpClientTest extends AbstractHttpClientTest {
 
     public SyncHttpClientTest(String name) {
         super(name);
     }
 
+    /**
+     * @return
+     */
     private SyncHttpClient newSyncHttpClient() {
         return new HttpClientBuilder("SyncHttpClientTest")
-            .buildSyncClient();
+                .buildSyncClient();
     }
 
     @Test
     public void testSuccessWithoutHandler() throws Exception {
 
         String path = "/success";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(successAction);
+        whenHttp(server).match(get(path)).then(successAction);
 
         SyncHttpClient client = newSyncHttpClient();
         String url = "http://localhost:" + server.getPort() + path;
@@ -61,7 +57,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         assertNotNull(response.getPayload());
         assertEquals(response.getPayload(), "success");
 
-        VerifyHttp.verifyHttp(server).once(Condition.uri(path));
+        verifyHttp(server).once(uri(path));
     }
 
     private MockObject newMockObject() {
@@ -81,7 +77,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         MockObject mockObject = newMockObject();
         String json = JSONUtils.toJson(mockObject);
         String path = "/success_handler";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(Action.stringContent(json));
+        whenHttp(server).match(get(path)).then(stringContent(json));
         String url = "http://localhost:" + server.getPort() + path;
 
         ResponseHandler<MockObject> responseHandler = new ResponseHandler<MockObject>() {
@@ -104,7 +100,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         assertEquals(response.getStatusLine().getStatusCode(), 200);
         assertNotNull(response.getPayload());
         assertEquals(response.getPayload().toString(), mockObject.toString());
-        VerifyHttp.verifyHttp(server).once(Condition.uri(path));
+        verifyHttp(server).once(uri(path));
     }
 
     @Test
@@ -112,27 +108,27 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
 
         String path = "/timeout_circuit_breaker";
 
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(timeoutAction);
+        whenHttp(server).match(get(path)).then(timeoutAction);
 
         RequestConfig requestConfig = RequestConfig.custom()
-            .setSocketTimeout(500)
-            .setConnectionRequestTimeout(30000)
-            .setConnectTimeout(10000)
-            .build();
+                .setSocketTimeout(500)
+                .setConnectionRequestTimeout(30000)
+                .setConnectTimeout(10000)
+                .build();
 
         CircuitBreakerConfig cbConfig = CircuitBreakerConfig.custom()
-            .failureRateThreshold(50)
-            .slidingWindowType(SlidingWindowType.COUNT_BASED)
-            .slidingWindowSize(10)
-            .minimumNumberOfCalls(5) // will throw CallNotPermittedException after 5 failures
-            .build();
+                .failureRateThreshold(50)
+                .slidingWindowType(SlidingWindowType.COUNT_BASED)
+                .slidingWindowSize(10)
+                .minimumNumberOfCalls(5) // will throw CallNotPermittedException after 5 failures
+                .build();
 
         SyncHttpClient client =
-            new HttpClientBuilder("SyncHttpClientTest")
-                .requestConfig(requestConfig)
-                .circuitBreakerConfig(cbConfig)
-                .turnOffRetry()
-                .buildSyncClient();
+                new HttpClientBuilder("SyncHttpClientTest")
+                        .requestConfig(requestConfig)
+                        .circuitBreakerConfig(cbConfig)
+                        .turnOffRetry()
+                        .buildSyncClient();
 
         String url = "http://localhost:" + server.getPort() + path;
         Request request = newRequest(url, HttpMethod.GET);
@@ -156,7 +152,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         sleep(2000);
         assertEquals(circuitBreakerExceptionCount, 12 - 5);
         assertEquals(nonCircuitBreakerExceptionCount, 5);
-        VerifyHttp.verifyHttp(server).times(5, Condition.uri(path));
+        verifyHttp(server).times(5, uri(path));
     }
 
     @Test
@@ -164,31 +160,31 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
 
         String path = "/timeout_then_recover";
 
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(
-            ActionSequence.sequence(timeoutAction, timeoutAction, timeoutAction, timeoutAction, timeoutAction, successAction,
-                     successAction, successAction, successAction)
+        whenHttp(server).match(get(path)).then(
+                sequence(timeoutAction, timeoutAction, timeoutAction, timeoutAction, timeoutAction, successAction,
+                        successAction, successAction, successAction)
         );
 
         RequestConfig requestConfig = RequestConfig.custom()
-            .setSocketTimeout(500)
-            .setConnectionRequestTimeout(30000)
-            .setConnectTimeout(10000)
-            .build();
+                .setSocketTimeout(500)
+                .setConnectionRequestTimeout(30000)
+                .setConnectTimeout(10000)
+                .build();
 
         CircuitBreakerConfig cbConfig = CircuitBreakerConfig.custom()
-            .failureRateThreshold(5)
-            .slidingWindowType(SlidingWindowType.COUNT_BASED)
-            .slidingWindowSize(5)
-            .waitDurationInOpenState(Duration.ofMillis(1000))
-            .minimumNumberOfCalls(5) // will throw CallNotPermittedException after 5 failures
-            .build();
+                .failureRateThreshold(5)
+                .slidingWindowType(SlidingWindowType.COUNT_BASED)
+                .slidingWindowSize(5)
+                .waitDurationInOpenState(Duration.ofMillis(1000))
+                .minimumNumberOfCalls(5) // will throw CallNotPermittedException after 5 failures
+                .build();
 
         SyncHttpClient
-            client = new HttpClientBuilder("SyncHttpClientTest")
-            .requestConfig(requestConfig)
-            .circuitBreakerConfig(cbConfig)
-            .turnOffRetry()
-            .buildSyncClient();
+                client = new HttpClientBuilder("SyncHttpClientTest")
+                .requestConfig(requestConfig)
+                .circuitBreakerConfig(cbConfig)
+                .turnOffRetry()
+                .buildSyncClient();
 
         String url = "http://localhost:" + server.getPort() + path;
         Request request = newRequest(url, HttpMethod.GET);
@@ -214,7 +210,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         assertEquals(nonCircuitBreakerExceptionCount, 5);
 
         Response<?> response = client.execute(request);
-        VerifyHttp.verifyHttp(server).times(6, Condition.uri(path));
+        verifyHttp(server).times(6, uri(path));
         assertEquals(response.getStatusLine().getStatusCode(), 200);
     }
 
@@ -222,24 +218,24 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
     public void testRetrySuccessAtThirdTime() throws Exception {
 
         String path = "/success_at_third";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(ActionSequence.sequence(timeoutAction, timeoutAction, successAction));
+        whenHttp(server).match(get(path)).then(sequence(timeoutAction, timeoutAction, successAction));
 
         RetryConfig retryConfig = RetryConfig.custom()
-            .maxAttempts(3) // 3 retries per call
-            .build();
+                .maxAttempts(3) // 3 retries per call
+                .build();
 
         RequestConfig requestConfig = RequestConfig.custom()
-            .setSocketTimeout(500)
-            .setConnectionRequestTimeout(30000)
-            .setConnectTimeout(10000)
-            .build();
+                .setSocketTimeout(500)
+                .setConnectionRequestTimeout(30000)
+                .setConnectTimeout(10000)
+                .build();
 
         SyncHttpClient
-            client = new HttpClientBuilder("SyncHttpClientTest")
-            .turnOffCircuitBreaker()
-            .retryConfig(retryConfig)
-            .requestConfig(requestConfig)
-            .buildSyncClient();
+                client = new HttpClientBuilder("SyncHttpClientTest")
+                .turnOffCircuitBreaker()
+                .retryConfig(retryConfig)
+                .requestConfig(requestConfig)
+                .buildSyncClient();
 
         String url = "http://localhost:" + server.getPort() + path;
 
@@ -256,7 +252,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         // The server adds its called times after delay while our call is back when socket time out
         // So sleep is needed to wait for the server to add to its called count
         sleep(2000);
-        VerifyHttp.verifyHttp(server).times(3, Condition.uri(path));
+        verifyHttp(server).times(3, uri(path));
         assertEquals(failedCallCount, 0);
     }
 
@@ -264,23 +260,23 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
     public void testRetryServerStillFail() throws Exception {
 
         String path = "/retry_still_fail";
-        StubHttp.whenHttp(server).match(Condition.get(path)).then(timeoutAction);
+        whenHttp(server).match(get(path)).then(timeoutAction);
 
         RetryConfig retryConfig = RetryConfig.custom()
-            .maxAttempts(3) // 3 retries per call
-            .build();
+                .maxAttempts(3) // 3 retries per call
+                .build();
 
         RequestConfig requestConfig = RequestConfig.custom()
-            .setSocketTimeout(500)
-            .setConnectionRequestTimeout(30000)
-            .setConnectTimeout(10000)
-            .build();
+                .setSocketTimeout(500)
+                .setConnectionRequestTimeout(30000)
+                .setConnectTimeout(10000)
+                .build();
 
         SyncHttpClient client = new HttpClientBuilder("SyncHttpClientTest")
-            .turnOffCircuitBreaker()
-            .retryConfig(retryConfig)
-            .requestConfig(requestConfig)
-            .buildSyncClient();
+                .turnOffCircuitBreaker()
+                .retryConfig(retryConfig)
+                .requestConfig(requestConfig)
+                .buildSyncClient();
 
         String url = "http://localhost:" + server.getPort() + path;
         Request request = newRequest(url, HttpMethod.GET);
@@ -294,7 +290,7 @@ public class SyncHttpClientTest extends AbstractHttpClientTest {
         // The server adds its called times after delay while our call is back when socket time out
         // So sleep is needed to wait for the server to add to its called count
         sleep(2000);
-        VerifyHttp.verifyHttp(server).times(3, Condition.uri(path));
+        verifyHttp(server).times(3, uri(path));
         assertEquals(failedCallCount, 1);
     }
 }

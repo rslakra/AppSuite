@@ -9,7 +9,6 @@
         <artifactId>dAppSuite</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <groupId>com.rslakra.dAppSuite</groupId>
     <artifactId>HttpServer</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -17,13 +16,17 @@
 
     <!-- Properties -->
     <properties>
-
+        <core.version>1.0-SNAPSHOT</core.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
-
-
+        <!-- Core -->
+        <dependency>
+            <groupId>com.rslakra</groupId>
+            <artifactId>Core</artifactId>
+            <version>${core.version}</version>
+        </dependency>
     </dependencies>
 
     <!-- Build -->

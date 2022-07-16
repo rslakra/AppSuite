@@ -10,11 +10,7 @@ import org.apache.http.impl.nio.client.CloseableHttpAsyncClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.concurrent.CancellationException;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.CompletionStage;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
@@ -23,7 +19,8 @@ import java.util.function.Supplier;
  */
 public class AsyncHttpClient extends AbstractHttpClient implements AutoCloseable {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(SyncHttpClient.class);
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncHttpClient.class);
     private final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(3);
     private CloseableHttpAsyncClient httpAsyncClient;
 
@@ -34,7 +31,7 @@ public class AsyncHttpClient extends AbstractHttpClient implements AutoCloseable
      */
     protected AsyncHttpClient(final HttpClientBuilder builder) {
         super(builder);
-        this.httpAsyncClient = builder.httpAsyncClient;
+        this.httpAsyncClient = builder.getHttpAsyncClient();
     }
 
     /**
@@ -109,22 +106,22 @@ public class AsyncHttpClient extends AbstractHttpClient implements AutoCloseable
             decoratedSupplier.withRetry(getRetry(), scheduler);
         }
         return decoratedSupplier.get().thenApply(
-            httpResponse -> {
-                StatusLine statusLine = httpResponse.getStatusLine();
-                T payload = null;
-                Response<T> response = null;
-                try {
-                    payload = responseHandler.handleResponse(httpResponse);
-                    response = Response.of(statusLine, payload);
-                    futureCallback.completed(response);
-                    return response;
-                } catch (Throwable t) {
-                    LOGGER.error("execute() - handle response failed for name=%s", getClientName(), t);
-                    response = Response.of(statusLine);
-                    futureCallback.completed(response);
-                    return response;
-                }
-            }).exceptionally(throwable -> {
+                httpResponse -> {
+                    StatusLine statusLine = httpResponse.getStatusLine();
+                    T payload = null;
+                    Response<T> response = null;
+                    try {
+                        payload = responseHandler.handleResponse(httpResponse);
+                        response = Response.of(statusLine, payload);
+                        futureCallback.completed(response);
+                        return response;
+                    } catch (Throwable t) {
+                        LOGGER.error("execute() - handle response failed for name=%s", getClientName(), t);
+                        response = Response.of(statusLine);
+                        futureCallback.completed(response);
+                        return response;
+                    }
+                }).exceptionally(throwable -> {
             if (throwable instanceof CancellationException) {
                 futureCallback.cancelled();
             } else if (throwable instanceof Exception) {
