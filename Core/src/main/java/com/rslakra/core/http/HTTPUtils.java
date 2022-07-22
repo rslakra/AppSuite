@@ -30,7 +30,7 @@ package com.rslakra.core.http;
 
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.IOUtils;
-import com.rslakra.core.SecurityUtils;
+import com.rslakra.core.security.GuardUtils;
 import org.apache.http.HttpRequest;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
@@ -1284,7 +1284,7 @@ public enum HTTPUtils {
             }
 
             // add device-id in request.
-            urlConnection.addRequestProperty(DEVICE_ID, SecurityUtils.uniqueDeviceIdString());
+            urlConnection.addRequestProperty(DEVICE_ID, GuardUtils.uniqueDeviceIdString());
             // user-agent (default string generated for Android)
             urlConnection.addRequestProperty(Headers.USER_AGENT, getUserAgentString());
             // other default properties
@@ -1434,7 +1434,7 @@ public enum HTTPUtils {
                 }
 
                 String value = String.valueOf(requestParameters.get(key));
-                value = SecurityUtils.encodeWithURLEncoder(value, IOUtils.UTF_8);
+                value = GuardUtils.encodeWithURLEncoder(value, IOUtils.UTF_8);
                 aueryString.append(key).append("=").append(value);
             }
 
@@ -1491,7 +1491,7 @@ public enum HTTPUtils {
     public static Map<String, Object> toRequestParameters(String encodedParameters) {
         Map<String, Object> requestParameters = new LinkedHashMap<String, Object>();
         if (BeanUtils.isNotEmpty(encodedParameters)) {
-            String decodedParameters = SecurityUtils.decodeWithURLDecoder(encodedParameters);
+            String decodedParameters = GuardUtils.decodeWithURLDecoder(encodedParameters);
             String[] paramTokens = decodedParameters.split("&");
             if (!BeanUtils.isEmpty(paramTokens)) {
                 for (int i = 0; i < paramTokens.length; i++) {
@@ -2058,7 +2058,7 @@ public enum HTTPUtils {
             removeExcludedParameters(sortedParameters);
 
             String paramValuesAsString = paramValuesAsString(sortedParameters);
-            valuesAsHashString = SecurityUtils.paramValueAsHashString(paramValuesAsString);
+            valuesAsHashString = GuardUtils.paramValueAsHashString(paramValuesAsString);
         }
 
         return valuesAsHashString;
@@ -2844,7 +2844,7 @@ public enum HTTPUtils {
             }};
 
             // Create an SSLContext that uses our TrustManager
-            SSLContext sslContext = getSSLContext("TLS", trustEveryone, SecurityUtils.newSecureRandom());
+            SSLContext sslContext = getSSLContext("TLS", trustEveryone, GuardUtils.newSecureRandom());
 
             // use a SocketFactory from our SSLContext
             return sslContext.getSocketFactory();
@@ -2899,7 +2899,7 @@ public enum HTTPUtils {
          * @throws Exception
          */
         private SSLSocketFactory createTrustSSLSocketFactory(InputStream certInputStream, SecureRandom secureRandom) throws Exception {
-            X509Certificate certificate = SecurityUtils.newX509Certificate(certInputStream, true);
+            X509Certificate certificate = GuardUtils.newX509Certificate(certInputStream, true);
 
             // Create a KeyStore containing our trusted CAs
             String keyStoreType = KeyStore.getDefaultType();
@@ -3082,7 +3082,7 @@ public enum HTTPUtils {
             byte[] pemDecodedBytes = loadPEMCertificate(new ByteArrayInputStream(certificateString.getBytes()));
             ByteArrayInputStream derInputStream = new ByteArrayInputStream(pemDecodedBytes);
 
-            X509Certificate x509Certificate = SecurityUtils.newX509Certificate(derInputStream, true);
+            X509Certificate x509Certificate = GuardUtils.newX509Certificate(derInputStream, true);
             KeyStore trustStore = KeyStore.getInstance(KeyStore.getDefaultType());
             trustStore.load(null);
             String alias = x509Certificate.getSubjectX500Principal().getName();

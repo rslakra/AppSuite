@@ -26,8 +26,10 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.core;
+package com.rslakra.core.security;
 
+import com.rslakra.core.BeanUtils;
+import com.rslakra.core.IOUtils;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import javax.crypto.*;
@@ -60,8 +62,7 @@ import java.util.UUID;
  * @version 1.0.0
  * @since Jul 17, 2015 10:31:46 AM
  */
-public enum SecurityUtils {
-
+public enum GuardUtils {
     INSTANCE;
 
     public static final String EMPTY_STRING = "";
@@ -135,7 +136,7 @@ public enum SecurityUtils {
      */
     private static PBKDF2Generator getPBKDF2Generator() {
         if (pbkdf2Generator == null) {
-            synchronized (SecurityUtils.class) {
+            synchronized (GuardUtils.class) {
                 if (pbkdf2Generator == null) {
                     /* pbkdf2Params */
                     pbkdf2Params = new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."), PBKDF2Generator.ITERATIONS);
@@ -160,7 +161,7 @@ public enum SecurityUtils {
     public static byte[] uniqueDeviceIdBytes(String parentFolder) {
         byte[] deviceIDBytes = null;
         if (BeanUtils.isEmpty(uniqueDeviceUUID)) {
-            synchronized (SecurityUtils.class) {
+            synchronized (GuardUtils.class) {
                 if (BeanUtils.isEmpty(uniqueDeviceUUID)) {
                     File installation = new File(parentFolder, INSTALLATION);
                     try {
