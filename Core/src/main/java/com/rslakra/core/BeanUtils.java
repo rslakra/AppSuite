@@ -175,7 +175,7 @@ public enum BeanUtils {
                 return true;
             } else if (object.getClass().isArray()) {
                 return true;
-            } else if (object instanceof Class) {
+            } else if (isTypeOf(object, Class.class)) {
                 LOGGER.debug("object:{}", object);
                 final Class classType = (Class) object;
                 return (classType.isArray() || Array.class.isAssignableFrom(classType));
@@ -277,7 +277,6 @@ public enum BeanUtils {
     public static boolean isTypeOfEnumeration(final Object object) {
         return (isTypeOf(object, Enumeration.class) || isAssignableFrom(object, Enumeration.class));
     }
-
 
     /**
      * Returns true if the <code>object</code> is a type of <code>CharSequence</code> otherwise false.
@@ -402,11 +401,11 @@ public enum BeanUtils {
             result = true;
         } else if (isTypeOfCollection(object) && getLength(object) == 0) {
             result = true;
-        } else if (isTypeOfIterator(object) && sizeIterator((Iterator<?>) object) == 0) {
+        } else if (isTypeOfIterator(object) && getLength(object) == 0) {
             result = true;
-        } else if (isTypeOfIterable(object) && sizeIterable((Iterable<?>) object) == 0) {
+        } else if (isTypeOfIterable(object) && getLength(object) == 0) {
             result = true;
-        } else if (isTypeOfEnumeration(object) && sizeEnumeration((Enumeration<?>) object) == 0) {
+        } else if (isTypeOfEnumeration(object) && getLength(object) == 0) {
             result = true;
         } else if (isTypeOfCharSequence(object) && getLength(object) == 0) {
             result = true;

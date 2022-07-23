@@ -1,4 +1,4 @@
-package com.rslakra.core;
+package com.rslakra.core.text;
 
 import org.junit.Assert;
 import org.slf4j.Logger;
@@ -17,7 +17,7 @@ public class LineIterableTest {
     private static Logger LOGGER = LoggerFactory.getLogger(LineIterableTest.class);
 
     @Test
-    public void testArrayIterator() {
+    public void testLineIterable() {
         String value = "Lakra";
         LOGGER.debug(value.toString());
         Iterator<Character> itr = new LineIterable(value).iterator();

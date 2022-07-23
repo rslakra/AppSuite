@@ -26,8 +26,9 @@
  * Devamatre reserves the right to modify the technical specifications and or 
  * features without any prior notice.
  *****************************************************************************/
-package com.rslakra.core;
+package com.rslakra.core.text;
 
+import com.rslakra.core.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -40,13 +41,7 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.LinkedHashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
-import java.util.StringTokenizer;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -98,7 +93,7 @@ public enum TextUtils {
      * @param str
      * @return
      */
-    public static String lTrim(String str) {
+    public static String lTrim(final String str) {
         return str.replaceAll("^\\s+", "");
     }
 
@@ -108,7 +103,7 @@ public enum TextUtils {
      * @param str
      * @return
      */
-    public static String rTrim(String str) {
+    public static String rTrim(final String str) {
         return str.replaceAll("\\s+$", "");
     }
 
@@ -119,7 +114,7 @@ public enum TextUtils {
      * @param str
      * @return
      */
-    public static String iTrim(String str) {
+    public static String iTrim(final String str) {
         return str.replaceAll("\\b\\s{2,}\\b", " ");
     }
 
@@ -130,7 +125,7 @@ public enum TextUtils {
      * @param str
      * @return String
      */
-    public static String trim(String str) {
+    public static String trim(final String str) {
         return iTrim(lTrim(rTrim(str)));
     }
 
@@ -146,7 +141,8 @@ public enum TextUtils {
         if (LOGGER.isDebugEnabled()) {
             LOGGER.debug("+trim(" + str + ", " + delimiter + ")");
         }
-        if (str != null && delimiter != null) {
+
+        if (BeanUtils.isNotEmpty(str, delimiter)) {
             StringBuilder strBuilder = new StringBuilder(str);
             int index = strBuilder.indexOf(delimiter);
             while (index != -1 && index < strBuilder.length()) {
@@ -172,22 +168,18 @@ public enum TextUtils {
      * @param str
      * @return returns a String
      */
-    public String trims(String str) {
+    public static String trims(final String str) {
         String orignal = str;
-        if (str != null) {
-            orignal = new String(str.trim());
-            String result = new String();
+        if (BeanUtils.isNotEmpty(str)) {
+            orignal = str.trim();
             String search = "  ";
-            int i = 0;
+            int index = 0;
             do {
-                i = orignal.indexOf(search);
-                if (i != -1) {
-                    result = orignal.substring(0, i);
-                    result += " ";
-                    result += orignal.substring(i + search.length());
-                    orignal = result;
+                index = orignal.indexOf(search);
+                if (index != -1) {
+                    orignal = orignal.substring(0, index) + " " + orignal.substring(index + search.length());
                 }
-            } while (i != -1);
+            } while (index != -1);
         }
 
         return orignal;
@@ -338,7 +330,7 @@ public enum TextUtils {
      * @param eMailAddress
      * @return
      */
-    public static boolean isValidEmail(String eMailAddress) {
+    public static boolean isValidEmail(final String eMailAddress) {
         Pattern pattern = Pattern.compile(VALID_EMAIL_EXPRESSION);
         Matcher matcher = pattern.matcher(VALID_EMAIL_EXPRESSION);
         return matcher.find();

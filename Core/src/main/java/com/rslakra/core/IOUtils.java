@@ -35,33 +35,11 @@ import com.google.gson.JsonPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.Closeable;
-import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileFilter;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.PrintWriter;
-import java.io.RandomAccessFile;
-import java.net.HttpURLConnection;
-import java.net.ServerSocket;
-import java.net.Socket;
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.net.URL;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
+import java.io.*;
+import java.net.*;
 import java.nio.charset.Charset;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -70,22 +48,9 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.EnumSet;
-import java.util.Enumeration;
-import java.util.List;
-import java.util.Objects;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
-
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
 
 /**
  * This class handles the file handling operations.
@@ -1260,7 +1225,7 @@ public enum IOUtils {
         if (BeanUtils.isNotEmpty(bytes)) {
             try {
                 bytesAsString =
-                    BeanUtils.isNull(charSets) ? new String(bytes) : new String(bytes, charSets.toCharset());
+                        BeanUtils.isNull(charSets) ? new String(bytes) : new String(bytes, charSets.toCharset());
             } catch (Exception ex) {
                 LOGGER.error(ex.getLocalizedMessage(), ex);
                 bytesAsString = Objects.toString(bytes);
@@ -1301,7 +1266,7 @@ public enum IOUtils {
      * @param bytes
      * @return
      */
-    public static String toHexString(byte[] bytes) {
+    public static String toHexString(final byte[] bytes) {
         String hexString = null;
         if (!BeanUtils.isEmpty(bytes)) {
             StringBuilder hexBuilder = new StringBuilder(bytes.length * 2);
@@ -1327,7 +1292,7 @@ public enum IOUtils {
      * @param hexString
      * @return
      */
-    public static byte[] toHexBytes(String hexString) {
+    public static byte[] toHexBytes(final String hexString) {
         byte[] hexBytes = null;
         if (!BeanUtils.isEmpty(hexString)) {
             int length = hexString.length() / 2;
@@ -1346,7 +1311,7 @@ public enum IOUtils {
      * @param fileName
      * @return
      */
-    public static byte[] readBytes(String fileName) throws IOException {
+    public static byte[] readBytes(final String fileName) throws IOException {
         return readBytes(newFileInputStream(fileName), true);
     }
 
@@ -1379,7 +1344,7 @@ public enum IOUtils {
      * @param bytes
      * @return StringBuilder
      */
-    public static StringBuilder getBytesAsStringBuilder(byte... bytes) {
+    public static StringBuilder getBytesAsStringBuilder(final byte... bytes) {
         StringBuilder sBuilder = new StringBuilder();
         if (bytes != null) {
             BufferedReader bufferedReader = null;
@@ -1408,7 +1373,7 @@ public enum IOUtils {
      * @throws IOException
      */
     public static boolean copyFile(String sourceFilePath, String targetFilePath) throws IOException {
-        System.out.println("+copyFile(" + sourceFilePath + ", " + targetFilePath + ")");
+        LOGGER.debug("+copyFile({}, {})", sourceFilePath, targetFilePath);
         boolean copied = false;
         if (!BeanUtils.isEmpty(sourceFilePath) && !BeanUtils.isEmpty(targetFilePath)) {
             File srcFile = new File(sourceFilePath);
@@ -1416,7 +1381,7 @@ public enum IOUtils {
                 int fileSize = copyFile(new FileInputStream(srcFile), new FileOutputStream(targetFilePath), true);
                 if (fileSize > 0) {
                     copied = true;
-                    System.out.println("File [" + sourceFilePath + "] copied successfully! fileSize:" + fileSize);
+                    LOGGER.debug("File [{}] copied successfully! fileSize:{}", sourceFilePath, fileSize);
                 }
             } else {
                 System.out.println("File [" + sourceFilePath + "] does not exist!");
