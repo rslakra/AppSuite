@@ -1,7 +1,5 @@
 package com.rslakra.core;
 
-import org.apache.commons.lang3.builder.CompareToBuilder;
-
 import java.io.Serializable;
 import java.util.Map;
 import java.util.Objects;
@@ -21,7 +19,7 @@ public final class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>
      * @param left
      * @param right
      */
-    private Pair(L left, R right) {
+    private Pair(final L left, final R right) {
         this.left = left;
         this.right = right;
     }
@@ -61,9 +59,14 @@ public final class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>
      * @return
      */
     @Override
-    public int compareTo(Pair<L, R> other) {
-        return (new CompareToBuilder()).append(this.getLeft(), other.getLeft())
-                .append(this.getRight(), other.getRight()).toComparison();
+    public int compareTo(final Pair<L, R> other) {
+        int result = ((Comparable) this.getLeft()).compareTo(other.getLeft());
+        if (result == 0) {
+            result = ((Comparable) this.getRight()).compareTo(other.getRight());
+        }
+//        return (new CompareToBuilder()).append(this.getLeft(), other.getLeft())
+//            .append(this.getRight(), other.getRight()).toComparison();
+        return result;
     }
 
     /**
@@ -72,13 +75,13 @@ public final class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>
      */
     @Override
     public boolean equals(final Object object) {
-        if (object == this) {
+        if (Objects.isNull(object)) {
             return true;
-        } else if (object == null || !(object instanceof Map.Entry)) {
+        } else if (Objects.isNull(object) || !(object instanceof Map.Entry)) {
             return false;
         } else {
             Map.Entry<?, ?> other = (Map.Entry) object;
-            return Objects.equals(this.getKey(), other.getKey()) && Objects.equals(this.getValue(), other.getValue());
+            return Objects.equals(getKey(), other.getKey()) && Objects.equals(getValue(), other.getValue());
         }
     }
 
@@ -95,14 +98,17 @@ public final class Pair<L, R> implements Map.Entry<L, R>, Comparable<Pair<L, R>>
      */
     @Override
     public String toString() {
-        return "(" + this.getLeft() + ',' + this.getRight() + ')';
+        return toString("(%s, %s)");
+//        return "(" + this.getLeft() + ',' + this.getRight() + ')';
     }
 
     /**
+     * Returns the <code>Pair</code> object formatted with the provided pattern.
+     *
      * @param format
      * @return
      */
-    public String toString(String format) {
+    public String toString(final String format) {
         return String.format(format, this.getLeft(), this.getRight());
     }
 

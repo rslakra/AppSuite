@@ -29,9 +29,10 @@
 package com.rslakra.core.http;
 
 import com.rslakra.core.BeanUtils;
+import com.rslakra.core.CharSets;
 import com.rslakra.core.IOUtils;
+import com.rslakra.core.StopWatch;
 import com.rslakra.core.security.GuardUtils;
-import org.apache.http.HttpRequest;
 import org.apache.http.*;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
@@ -59,6 +60,7 @@ import java.security.*;
 import java.security.cert.*;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.stream.Collectors;
 
 /**
  * @Author Rohtash Lakra
@@ -70,45 +72,20 @@ public enum HTTPUtils {
     // LOGGER
     private static final Logger LOGGER = LoggerFactory.getLogger(HTTPUtils.class);
     public static final String REQUEST_TRACER = "Request-Tracer";
-    public static final String CONTENT_TYPE = "Content-Type";
+    public static final String DEVICE_ID = "deviceId";
     public static final String SEPARATOR_HASH = "#";
     public static final String COLON_DOUBLE_SLASH = "://";
     public static final String ACCEPT_LANGUAGE_VALUE = "en-US,en;q=0.5";
     public static final String KEEP_ALIVE = "keep-alive";
     public static final String WILDCARD = "*/*";
+    public static final int MAX_RETRY = 3;
+    public static final int RETRY_INTERVAL = 1000;
+
     public static final List<BasicHeader> DEFAULT_HEADERS = Arrays.asList(
             new BasicHeader(HttpHeaders.ACCEPT, WILDCARD),
             new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, ACCEPT_LANGUAGE_VALUE),
             new BasicHeader(HttpHeaders.CONNECTION, KEEP_ALIVE)
     );
-    /* CUSTOM Constants. */
-    public static final String METHOD_NAME = "methodName";
-    public static final String DEVICE_ID = "deviceId";
-
-    /**
-     * @author Rohtash Singh Lakra
-     * @date 03/15/2017 01:58:44 PM
-     */
-    interface Headers {
-        String ACCEPT = "Accept";
-        String ACCEPT_ENCODING = "Accept-Encoding";
-        String ACCEPT_LANGUAGE = "Accept-Language";
-        String CONTENT_TYPE = "Content-Type";
-        String CONTENT_LENGTH = "Content-Length";
-
-        String EXPIRES = "Expires";
-        String PRAGMA = "Pragma";
-        String PRAGMA_PUBLIC = "public";
-        String CACHE_CONTROL = "Cache-Control";
-        String USER_AGENT = "User-Agent";
-        String CONTENT_DISPOSITION = "Content-Disposition";
-
-        String SET_COOKIE = "Set-Cookie";
-        String COOKIE = "Cookie";
-        String LOCATION = "Location";
-        String SERVER = "Server";
-        String TRANSFER_ENCODING = "Transfer-Encoding";
-    }
 
     interface Values {
 
@@ -133,25 +110,8 @@ public enum HTTPUtils {
         // ContentDisposition
         String FILE_NAME_EQUAL = "fileName=";
 
-        // ContentType
-        String CONTENT_TYPE_FORM_URLENCODED = "application/x-www-form-urlencoded";
-        String CONTENT_TYPE_FORM_URLENCODED_UTF8 = "application/x-www-form-urlencoded;charset=UTF-8";
-        String CONTENT_TYPE_APPLICATION_JAVA_X_SERIALIZED_OBJECT = "application/x-java-serialized-object";
-        String CONTENT_TYPE_MULTIPART_FORM_DATA = "multipart/form-data";
-        String CONTENY_TYPE_JSON = "application/json";
-
         // Pragma
         String NO_CACHE = "no-cache";
-    }
-
-    interface Methods {
-        String HEAD = "HEAD";
-        String GET = "GET";
-        String POST = "POST";
-        String OPTIONS = "OPTIONS";
-        String PUT = "PUT";
-        String DELETE = "DELETE";
-        String TRACE = "TRACE";
     }
 
     /* Enables cookies at application level. */
@@ -204,8 +164,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the value from of the selected index, if the map is null
-     * otherwise null.
+     * Returns the value from of the selected index, if the map is null otherwise null.
      *
      * @param map
      * @param keyIndex
@@ -229,15 +188,21 @@ public enum HTTPUtils {
     /**
      * Returns the new instance of the specified class type.
      *
-     * @param type
+     * @param dataType
      * @param className
+     * @param <T>
      * @return
      * @throws Exception
      */
     @SuppressWarnings("unchecked")
-    public static <T> T newInstance(Class<T> type, String className) throws Exception {
-        Class<?> klass = Class.forName(className);
-        return (T) (klass == null ? null : klass.newInstance());
+    public static <T> T newInstance(final Class<T> dataType, String className) throws Exception {
+        T objectType = null;
+        if (BeanUtils.isNotEmpty(className)) {
+            final Class<?> classType = Class.forName(className);
+            objectType = (T) (BeanUtils.isNotNull(classType) ? classType.getConstructor().newInstance() : null);
+        }
+
+        return objectType;
     }
 
     /**
@@ -256,8 +221,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true of the collection contains the specified value otherwise
-     * false.
+     * Returns true of the collection contains the specified value otherwise false.
      *
      * @param collection
      * @param value
@@ -280,8 +244,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Converts the string to set after splitting the string with the specified
-     * delimiter.
+     * Converts the string to set after splitting the string with the specified delimiter.
      *
      * @param valueString
      * @param delimiter
@@ -1032,32 +995,13 @@ public enum HTTPUtils {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Returns the methodName extracted from the request parameters.
-     *
-     * @param servletRequest
-     * @return
-     */
-    public static String getRequestMethodName(HttpServletRequest servletRequest) {
-        String requestMethodName = null;
-        if (BeanUtils.isNotNull(servletRequest)) {
-            String[] paramValue = (String[]) servletRequest.getParameterMap().get(METHOD_NAME);
-            if (!BeanUtils.isEmpty(paramValue)) {
-                requestMethodName = paramValue[0].toString();
-            }
-        }
-
-        return requestMethodName;
-    }
-
-    /**
-     * Returns the request headers as the <code>Map<String, Object></code>
-     * object after sorts based on the name.
+     * Returns the request headers as the <code>Map<String, Object></code> object after sorts based on the name.
      *
      * @param servletRequest
      * @return
      * @throws IOException
      */
-    public static Map<String, String> getRequestHeaders(HttpServletRequest servletRequest) {
+    public static Map<String, String> getRequestHeaders(final HttpServletRequest servletRequest) {
         Map<String, String> requestHeaders = new TreeMap<String, String>();
         if (BeanUtils.isNotNull(servletRequest)) {
             try {
@@ -1267,19 +1211,16 @@ public enum HTTPUtils {
         if (BeanUtils.isNotNull(urlConnection)) {
             // set connection timeout properties.
             setConnectTimeoutProperties(urlConnection);
-
-            /*
-             * Sets the flag indicating whether this URLConnection allows input.
-             * It cannot be set after the connection is established.
-             */
-            urlConnection.setDoInput(true);
-
             // request method (i.e GET/POST/PUT etc)
             if (BeanUtils.isNotEmpty(requestMethod)) {
                 urlConnection.setRequestMethod(requestMethod);
-                urlConnection.setDoOutput(Methods.POST.equalsIgnoreCase(requestMethod));
+                /*
+                 * Sets the flag indicating whether this URLConnection allows input.
+                 * It cannot be set after the connection is established.
+                 */
+                urlConnection.setDoOutput(HttpMethod.POST.name().equalsIgnoreCase(requestMethod));
             } else {
-                urlConnection.setRequestMethod(Methods.POST);
+                urlConnection.setRequestMethod(HttpMethod.POST.name());
                 urlConnection.setDoOutput(true);
             }
 
@@ -1421,7 +1362,7 @@ public enum HTTPUtils {
      * @param requestParameters
      * @return
      */
-    public static String toUrlQueryString(Map<String, Object> requestParameters) {
+    public static String toUrlQueryString(final Map<String, Object> requestParameters) {
         String urlQueryString = null;
         if (!BeanUtils.isEmpty(requestParameters)) {
             StringBuilder aueryString = new StringBuilder();
@@ -1434,7 +1375,7 @@ public enum HTTPUtils {
                 }
 
                 String value = String.valueOf(requestParameters.get(key));
-                value = GuardUtils.encodeWithURLEncoder(value, IOUtils.UTF_8);
+                value = GuardUtils.encodeWithUrlEncoder(value, CharSets.UTF_8);
                 aueryString.append(key).append("=").append(value);
             }
 
@@ -1452,8 +1393,8 @@ public enum HTTPUtils {
      * @param urlConnection
      * @return
      */
-    public static boolean isGetRequest(HttpURLConnection urlConnection) {
-        return (Methods.GET.equalsIgnoreCase(urlConnection.getRequestMethod()));
+    public static boolean isGetRequest(final HttpURLConnection urlConnection) {
+        return (HttpMethod.GET.isEquals(urlConnection.getRequestMethod()));
     }
 
     /**
@@ -1517,7 +1458,7 @@ public enum HTTPUtils {
         if (BeanUtils.isNotNull(urlConnection) && !BeanUtils.isEmpty(requestHeaders)) {
             for (String headerKey : requestHeaders.keySet()) {
                 String headerValue = requestHeaders.get(headerKey);
-                System.out.println("headerKey:" + headerKey + ", headerValue:" + headerValue);
+                LOGGER.debug("headerKey:{}, headerValue:{}", headerKey, headerValue);
                 if (BeanUtils.isNotEmpty(headerValue)) {
                     if (equals(Headers.COOKIE, headerKey)) {
                         String currentValue = urlConnection.getHeaderField(Headers.COOKIE);
@@ -1545,19 +1486,23 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executeRequest(final String urlString, final String httpMethod, final Map<String, String> requestHeaders, final Map<String, Object> requestParameters, final boolean closeStream) {
-        System.out.println("+executeRequest(" + urlString + ", " + httpMethod + ", " + requestHeaders + ", " + requestParameters + ", " + closeStream + ")");
-        long startTime = System.currentTimeMillis();
-        HttpResponse httpResponse = new HttpResponse();
+    public static Response executeRequest(final String urlString, final HttpMethod httpMethod,
+                                          final Map<String, String> requestHeaders,
+                                          final Map<String, Object> requestParameters, final boolean closeStream) {
+        LOGGER.debug("+executeRequest({}, {}, {}, {}, {})", urlString, httpMethod, requestHeaders, requestParameters,
+                closeStream);
+        final StopWatch stopWatch = new StopWatch();
+        Response httpResponse = null;
         HttpURLConnection urlConnection = null;
 
         try {
+            stopWatch.startTimer();
             if (BeanUtils.isEmpty(urlString)) {
                 throw new IllegalArgumentException("Server URL must provide!");
             }
 
             // open connection and set default header values.
-            if (Methods.GET.equalsIgnoreCase(httpMethod)) {
+            if (HttpMethod.GET.isEquals(httpMethod)) {
                 StringBuilder requestBuilder = new StringBuilder(urlString);
                 String queryString = toUrlQueryString(requestParameters);
                 if (BeanUtils.isNotEmpty(queryString)) {
@@ -1570,7 +1515,7 @@ public enum HTTPUtils {
 
             setConnectionInputAndOutput(urlConnection);
             setConnectionUseCaches(urlConnection);
-            setConnectionDefaultProperties(urlConnection, httpMethod);
+            setConnectionDefaultProperties(urlConnection, httpMethod.name());
 
             // // add default cookies, if any
             // String urlCookies = CookieManager.getDefault().get(urlString,
@@ -1591,23 +1536,24 @@ public enum HTTPUtils {
 
             // encode parameters, if any
             setRequestParameters(urlConnection, requestParameters);
+            httpResponse = Response.of(urlConnection.getURL().getProtocol(), urlConnection.getResponseCode(), null);
 
             // Connect and get the response.
-            httpResponse.setResponseCode(urlConnection.getResponseCode());
-            httpResponse.setResponseHeaders(urlConnection.getHeaderFields());
-            if (httpResponse.getResponseCode() == 200) {
+            httpResponse.addRequestHeaders(requestHeaders);
+            httpResponse.addResponseHeaders(urlConnection.getHeaderFields());
+            if (httpResponse.isSuccess()) {
                 byte[] dataBytes = IOUtils.readBytes(urlConnection.getInputStream(), closeStream);
                 httpResponse.setDataBytes(dataBytes);
                 // Final cleanup:
                 dataBytes = null;
             }
         } catch (Throwable throwable) {
-            System.err.println(throwable);
+            LOGGER.error(throwable.getLocalizedMessage(), throwable);
             httpResponse.setError(throwable);
         } finally {
+            stopWatch.stopTimer();
             close(urlConnection);
-            long diff = System.currentTimeMillis() - startTime;
-            System.out.println("-executeRequest(), CALL took " + diff + " ms.");
+            LOGGER.info("-executeRequest() took {}", stopWatch);
         }
 
         return httpResponse;
@@ -1626,7 +1572,8 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executeRequest(final String urlString, final String httpMethod, final Map<String, Object> requestParameters, final boolean closeStream) {
+    public static Response executeRequest(final String urlString, final HttpMethod httpMethod,
+                                          final Map<String, Object> requestParameters, final boolean closeStream) {
         return executeRequest(urlString, httpMethod, null, requestParameters, closeStream);
     }
 
@@ -1643,8 +1590,9 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executeGetRequest(final String urlString, final Map<String, String> requestHeaders, final Map<String, Object> requestParameters, final boolean closeStream) {
-        return executeRequest(urlString, Methods.GET, requestHeaders, requestParameters, closeStream);
+    public static Response executeGetRequest(final String urlString, final Map<String, String> requestHeaders,
+                                             final Map<String, Object> requestParameters, final boolean closeStream) {
+        return executeRequest(urlString, HttpMethod.GET, requestHeaders, requestParameters, closeStream);
     }
 
     /**
@@ -1659,7 +1607,8 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executeGetRequest(final String urlString, final Map<String, Object> requestParameters, final boolean closeStream) {
+    public static Response executeGetRequest(final String urlString, final Map<String, Object> requestParameters,
+                                             final boolean closeStream) {
         return executeGetRequest(urlString, null, requestParameters, closeStream);
     }
 
@@ -1676,8 +1625,9 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executePostRequest(final String urlString, final Map<String, String> requestHeaders, final Map<String, Object> requestParameters, final boolean closeStream) {
-        return executeRequest(urlString, Methods.POST, requestHeaders, requestParameters, closeStream);
+    public static Response executePostRequest(final String urlString, final Map<String, String> requestHeaders,
+                                              final Map<String, Object> requestParameters, final boolean closeStream) {
+        return executeRequest(urlString, HttpMethod.POST, requestHeaders, requestParameters, closeStream);
     }
 
     /**
@@ -1692,7 +1642,8 @@ public enum HTTPUtils {
      * @param closeStream
      * @return
      */
-    public static HttpResponse executePostRequest(final String urlString, final Map<String, Object> requestParameters, final boolean closeStream) {
+    public static Response executePostRequest(final String urlString, final Map<String, Object> requestParameters,
+                                              final boolean closeStream) {
         return executePostRequest(urlString, null, requestParameters, closeStream);
     }
 
@@ -1705,30 +1656,19 @@ public enum HTTPUtils {
      * @param key
      * @return
      */
-    public static String getHeader(Map<String, List<String>> headers, String key) {
+    public static String getHeader(final Map<String, List<String>> headers, final String key) {
         // System.out.println("+getHeader(" + headers + ", " + key +
         // ")");
         String value = null;
-        if (!BeanUtils.isEmpty(headers)) {
+        if (BeanUtils.isNotEmpty(headers)) {
             List<String> headerValues = headers.get(key);
-            // System.out.println("headerValues:" + headerValues);
-            if (!BeanUtils.isEmpty(headerValues)) {
+            if (BeanUtils.isNotEmpty(headerValues)) {
                 value = headerValues.get(0);
             }
         }
 
         System.out.println("-getHeader(" + key + "), value:" + value);
         return value;
-    }
-
-    /**
-     * Returns the headers of the specified operationResult.
-     *
-     * @param httpResponse
-     * @return
-     */
-    public static Map<String, List<String>> getHeaders(HttpResponse httpResponse) {
-        return (BeanUtils.isNull(httpResponse) ? null : httpResponse.getResponseHeaders());
     }
 
     /**
@@ -1811,8 +1751,18 @@ public enum HTTPUtils {
      * @param key
      * @return
      */
-    public static String getHeader(HttpResponse httpResponse, String key) {
-        return getHeader(getHeaders(httpResponse), key);
+    public static String getHeader(final HttpResponse httpResponse, final String key) {
+        String value = null;
+        final Header[] allHeaders = httpResponse.getHeaders(key);
+        if (BeanUtils.isNotEmpty(allHeaders)) {
+            if (allHeaders.length > 1) {
+                value = Arrays.stream(allHeaders).map(header -> header.getValue()).collect(Collectors.joining(";"));
+            } else {
+                value = allHeaders[0].getValue();
+            }
+        }
+
+        return value;
     }
 
     /**
@@ -2360,27 +2310,6 @@ public enum HTTPUtils {
         }
 
         return result;
-    }
-
-    /**
-     * Returns the stack trace as string.
-     *
-     * @param error
-     * @return
-     */
-    public static String toString(Throwable error) {
-        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-        try {
-            PrintWriter writer = new PrintWriter(outputStream);
-            error.printStackTrace(writer);
-            writer.flush();
-            writer.close();
-            outputStream.close();
-        } catch (Exception ex) {
-            System.err.println(ex);
-        }
-
-        return new String(outputStream.toByteArray());
     }
 
     /**
@@ -3204,7 +3133,8 @@ public enum HTTPUtils {
      */
     public static String getContentType(final HttpMessage httpMessage) {
         return (BeanUtils.isNull(httpMessage) ? null
-                : httpMessage.getFirstHeader(CONTENT_TYPE.toLowerCase()).getValue());
+                : httpMessage.getFirstHeader(Headers.CONTENT_TYPE.toLowerCase())
+                .getValue());
     }
 
     /**

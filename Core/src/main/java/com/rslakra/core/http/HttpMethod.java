@@ -2,7 +2,15 @@ package com.rslakra.core.http;
 
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.ToString;
-import org.apache.http.client.methods.*;
+import org.apache.http.client.methods.HttpDelete;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpHead;
+import org.apache.http.client.methods.HttpOptions;
+import org.apache.http.client.methods.HttpPatch;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.HttpPut;
+import org.apache.http.client.methods.HttpRequestBase;
+import org.apache.http.client.methods.HttpTrace;
 
 import java.util.Arrays;
 import java.util.Objects;
@@ -15,6 +23,7 @@ public enum HttpMethod {
     HEAD(HttpHead.class),
     PATCH(HttpPatch.class),
     OPTIONS(HttpOptions.class),
+    TRACE(HttpTrace.class),
     GET(HttpGet.class),
     POST(HttpPost.class),
     PUT(HttpPut.class),
@@ -59,10 +68,23 @@ public enum HttpMethod {
      * Returns true if the method equals the <code>httpMethodName</code> otherwise false.
      *
      * @param httpMethodName
+     * @param httpMethods
+     * @return
+     */
+    public static boolean isEquals(final String httpMethodName, final HttpMethod... httpMethods) {
+        return (BeanUtils.isNotEmpty(httpMethodName) && BeanUtils.isNotEmpty(httpMethods)
+                && Arrays.stream(httpMethods)
+                    .anyMatch(httpMethod -> httpMethod.name().equalsIgnoreCase(httpMethodName)));
+    }
+
+    /**
+     * Returns true if the method equals the <code>httpMethodName</code> otherwise false.
+     *
+     * @param httpMethodName
      * @return
      */
     public static boolean isEquals(final String httpMethodName) {
-        return (Objects.nonNull(httpMethodName) && Arrays.stream(HttpMethod.values()).anyMatch(httpMethod -> httpMethod.name().equals(httpMethodName)));
+        return isEquals(httpMethodName, HttpMethod.values());
     }
 
     /**

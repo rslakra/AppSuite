@@ -28,8 +28,8 @@ import java.util.stream.Stream;
  * @created 8/2/21 10:38 AM
  */
 public enum TimeUtils {
-
     INSTANCE;
+
     // LOGGER
     private static Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
     public static final String DATE_ONLY_FORMAT = "dd-MMM-yy";

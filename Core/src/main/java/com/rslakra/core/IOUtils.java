@@ -35,11 +35,33 @@ import com.google.gson.JsonPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.Closeable;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -48,9 +70,22 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 
 /**
  * This class handles the file handling operations.
@@ -95,21 +130,9 @@ public enum IOUtils {
      */
     public static final String NEWLINE = "\n";
     /**
-     * UTF-8
-     */
-    public static final String UTF_8 = "UTF-8";
-    /**
-     * ISO-8859-1
-     */
-    public static final String ISO_8859_1 = "ISO-8859-1";
-    /**
      * HEX_DIGIT_CHARS
      */
-    public static final String HEX_DIGITS = "0123456789abcdef";
-    /**
-     * EMPTY_STRING
-     */
-    public static final String EMPTY_STRING = "";
+    public static final String HEX_DIGITS = "0123456789ABCDEF";
 
     /**
      * imageTypes
@@ -1108,12 +1131,12 @@ public enum IOUtils {
      * <code>bytes</code>.
      *
      * @param bytes
-     * @param replaceNonDigitCharacters
+     * @param replaceNonDigitChars
      * @return
      */
-    public static String toUTF8String(byte[] bytes, boolean replaceNonDigitCharacters) {
-        String utf8String = toString(bytes, UTF_8);
-        if (replaceNonDigitCharacters && BeanUtils.isNotEmpty(utf8String)) {
+    public static String toUTF8String(byte[] bytes, boolean replaceNonDigitChars) {
+        String utf8String = toString(bytes, CharSets.UTF_8);
+        if (replaceNonDigitChars && BeanUtils.isNotEmpty(utf8String)) {
             utf8String = utf8String.replaceAll("\\D+", "");
         }
 
@@ -1147,25 +1170,25 @@ public enum IOUtils {
      * @param bytes
      * @return
      */
-    public static String toISOString(byte[] bytes) {
-        return toString(bytes, ISO_8859_1);
+    public static String toISOString(final byte[] bytes) {
+        return toString(bytes, CharSets.ISO_8859_1);
     }
 
     /**
      * Converts the specified <code>string</code> into bytes using the specified
-     * <code>charsetName</code>.
+     * <code>charset</code>.
      *
      * @param string
-     * @param charsetName
+     * @param charSets
      * @return
      */
-    public static byte[] toBytes(String string, String charsetName) {
+    public static byte[] toBytes(final String string, final CharSets charSets) {
         byte[] stringAsBytes = null;
         if (BeanUtils.isNotNull(string)) {
             try {
-                stringAsBytes = BeanUtils.isEmpty(charsetName) ? string.getBytes() : string.getBytes(charsetName);
+                stringAsBytes = BeanUtils.isNull(charSets) ? string.getBytes() : string.getBytes(charSets.toCharset());
             } catch (Exception ex) {
-                System.err.println(ex);
+                LOGGER.error(ex.getLocalizedMessage(), ex);
             }
         }
 
@@ -1188,8 +1211,8 @@ public enum IOUtils {
      * @param string
      * @return
      */
-    public static byte[] toUTF8Bytes(String string) {
-        return toBytes(string, UTF_8);
+    public static byte[] toUTF8Bytes(final String string) {
+        return toBytes(string, CharSets.UTF_8);
     }
 
     /**
@@ -1198,8 +1221,8 @@ public enum IOUtils {
      * @param string
      * @return
      */
-    public static byte[] toISOBytes(String string) {
-        return toBytes(string, ISO_8859_1);
+    public static byte[] toISOBytes(final String string) {
+        return toBytes(string, CharSets.ISO_8859_1);
     }
 
     /**
@@ -1220,7 +1243,7 @@ public enum IOUtils {
      * @param charsetName
      * @return
      */
-    public static String defaultCharset(String charsetName) {
+    public static String defaultCharset(final String charsetName) {
         return (BeanUtils.isEmpty(charsetName) ? Charset.defaultCharset().displayName() : charsetName);
     }
 
@@ -1229,21 +1252,18 @@ public enum IOUtils {
      * <code>charsetName</code> String.
      *
      * @param bytes
-     * @param charsetName
+     * @param charSets
      * @return
      */
-    public static String toString(byte[] bytes, String charsetName) {
+    public static String toString(final byte[] bytes, final CharSets charSets) {
         String bytesAsString = null;
-        if (!BeanUtils.isEmpty(bytes)) {
+        if (BeanUtils.isNotEmpty(bytes)) {
             try {
-                if (BeanUtils.isEmpty(charsetName)) {
-                    bytesAsString = new String(bytes);
-                } else {
-                    bytesAsString = new String(bytes, charsetName);
-                }
+                bytesAsString =
+                    BeanUtils.isNull(charSets) ? new String(bytes) : new String(bytes, charSets.toCharset());
             } catch (Exception ex) {
-                System.err.println(ex);
-                bytesAsString = (BeanUtils.isNull(bytes) ? null : bytes.toString());
+                LOGGER.error(ex.getLocalizedMessage(), ex);
+                bytesAsString = Objects.toString(bytes);
             }
         }
 
@@ -1256,7 +1276,7 @@ public enum IOUtils {
      * @param strings
      * @return
      */
-    public static String toString(String... strings) {
+    public static String toString(final String... strings) {
         StringBuilder sBuilder = new StringBuilder();
         if (BeanUtils.isEmpty(strings)) {
             sBuilder.append("[]");

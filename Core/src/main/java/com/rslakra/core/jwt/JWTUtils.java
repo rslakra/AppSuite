@@ -300,27 +300,35 @@ public enum JWTUtils {
      * Returns the <code>PublicKey</code> for the <code>pathString</code>.
      *
      * @param pathString
+     * @param keyAlgo
      * @return
      * @throws Exception
      */
-    public PublicKey loadPublicKey(final String pathString) throws Exception {
+    public PublicKey loadPublicKey(final String pathString, final String keyAlgo) throws Exception {
         PublicKey publicKey = null;
-        final KeyFactory keyFactory = getKeyFactory(ALGO_RSA);
+        final KeyFactory keyFactory = getKeyFactory(keyAlgo);
         final List<String> keyLines = Files.readAllLines(getPath(pathString));
         final String keyContents = toString(keyLines, true);
-//        keyContents = keyContents.replaceAll("(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)", "");
-//        keyContents = keyContents.replace("\\s+", "");
+// keyContents = keyContents.replaceAll("(-+BEGIN PUBLIC KEY-+\\r?\\n|-+END PUBLIC KEY-+\\r?\\n?)", "");
+// keyContents = keyContents.replace("\\s+", "");
         byte[] keyBytes = Base64.getDecoder().decode(keyContents);
-        X509EncodedKeySpec keySpec = new X509EncodedKeySpec(keyBytes);
-        return keyFactory.generatePublic(keySpec);
+        return keyFactory.generatePublic(new X509EncodedKeySpec(keyBytes));
     }
 
     /**
      * @return
      * @throws Exception
      */
-    public PublicKey loadPublicKey() throws Exception {
-        return loadPublicKey(getPublicKeyFile());
+    public PublicKey loadPublicKey(final String keyAlgo) throws Exception {
+        return loadPublicKey(getPublicKeyFile(), keyAlgo);
+    }
+
+    /**
+     * @return
+     * @throws Exception
+     */
+    public static PublicKey loadRSAPublicKey() throws Exception {
+        return INSTANCE.loadPublicKey(ALGO_RSA);
     }
 
     /**
@@ -329,7 +337,7 @@ public enum JWTUtils {
      * @param date
      * @param days
      */
-    public Date addDays(final Date date, final int days) {
+    public static Date addDays(final Date date, final int days) {
         final Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.DAY_OF_MONTH, days);
@@ -346,7 +354,7 @@ public enum JWTUtils {
     /**
      * @return
      */
-    public RSAKey getRSAKey() {
+    private RSAKey getRSAKey() {
         return rsaKey;
     }
 
@@ -382,7 +390,7 @@ public enum JWTUtils {
      *
      * @throws JOSEException
      */
-    public void setRSAKey() throws JOSEException {
+    private void setRSAKey() throws JOSEException {
         if (Objects.isNull(getRSAKey())) {
             try {
 //                PrivateKey privateKey = loadPrivateKey(getPrivateKeyFile());
@@ -412,7 +420,7 @@ public enum JWTUtils {
      * }
      * </pre>
      */
-    public JWSHeader createJWSHeader(final JWSAlgorithm algorithm, final JOSEObjectType type) {
+    private JWSHeader jwtHeader(final JWSAlgorithm algorithm, final JOSEObjectType type) {
         return new JWSHeader.Builder(algorithm).type(type).build();
     }
 
@@ -436,25 +444,25 @@ public enum JWTUtils {
      * @param expiredOn
      * @return
      */
-    public JWTClaimsSet createJWTClaimsSet(final String keyId, final String audience, final String issuer,
-                                           final String subject, final Date issuedAt, final Date expiredOn) {
+    public static JWTClaimsSet jwtClaimsSet(final String keyId, final String audience, final String issuer,
+                                            final String subject, final Date issuedAt, final Date expiredOn) {
         // Prepare JWT with claims set
-        final JWTClaimsSet.Builder payloadBuilder = new JWTClaimsSet.Builder();
+        final JWTClaimsSet.Builder jwtClaimsBuilder = new JWTClaimsSet.Builder();
         if (audience != null) {
-            payloadBuilder.audience(audience);
+            jwtClaimsBuilder.audience(audience);
         }
-        payloadBuilder.issuer(issuer);
-        payloadBuilder.subject(subject);
+        jwtClaimsBuilder.issuer(issuer);
+        jwtClaimsBuilder.subject(subject);
         if (keyId != null) {
-            payloadBuilder.claim("cli", keyId);
+            jwtClaimsBuilder.claim("cli", keyId);
         }
-//        Date issueTime = Date.from(Instant.ofEpochSecond(issuedAt.getTime()));
-//        LOGGER.debug("issueTime:" + issueTime);
-//        Date expiryTime = Date.from(Instant.ofEpochMilli(Instant.now().plusMillis(60 * 1000).toEpochMilli()));
-//        LOGGER.debug("expiryTime:" + expiryTime);
-        payloadBuilder.issueTime(issuedAt);
-        payloadBuilder.expirationTime(new Date(expiredOn.getTime() + 60 * 1000));
-        return payloadBuilder.build();
+// Date issueTime = Date.from(Instant.ofEpochSecond(issuedAt.getTime()));
+// LOGGER.debug("issueTime:" + issueTime);
+// Date expiryTime = Date.from(Instant.ofEpochMilli(Instant.now().plusMillis(60 * 1000).toEpochMilli()));
+// LOGGER.debug("expiryTime:" + expiryTime);
+        jwtClaimsBuilder.issueTime(issuedAt);
+        jwtClaimsBuilder.expirationTime(new Date(expiredOn.getTime() + 60 * 1000));
+        return jwtClaimsBuilder.build();
     }
 
     /**
@@ -474,10 +482,9 @@ public enum JWTUtils {
      * @param subject
      * @return
      */
-    public JWTClaimsSet createJWTClaimsSet(final String audience, final String issuer, final String subject) {
-        return createJWTClaimsSet(null, audience, issuer, subject, new Date(), addDays(new Date(), 1));
+    public static JWTClaimsSet jwtClaimsSet(final String audience, final String issuer, final String subject) {
+        return jwtClaimsSet(null, audience, issuer, subject, new Date(), addDays(new Date(), 1));
     }
-
 
     /**
      * JWT Header
@@ -505,14 +512,13 @@ public enum JWTUtils {
      * @param clientSecret
      * @throws JOSEException
      */
-    public String createJWTToken(final String audience, final String issuer, final String subject,
-                                 final String clientSecret) throws JOSEException {
-        final JWSHeader jwsHeader = createJWSHeader(JWSAlgorithm.HS256, JOSEObjectType.JWT);
+    public static String jwtMACSignedToken(final String audience, final String issuer, final String subject,
+                                           final String clientSecret) throws JOSEException {
+        final JWSHeader jwsHeader = INSTANCE.jwtHeader(JWSAlgorithm.HS256, JOSEObjectType.JWT);
         // Prepare JWT with claims set
-        final JWTClaimsSet jwtClaimsSet = createJWTClaimsSet(audience, issuer, subject);
+        final JWTClaimsSet jwtClaimsSet = jwtClaimsSet(audience, issuer, subject);
         // Create the signed JWT.
-        final SignedJWT signedJwt = new SignedJWT(jwsHeader, jwtClaimsSet);
-        signedJwt.sign(new MACSigner(clientSecret));
+        final SignedJWT signedJwt = jwtMACSigned(jwsHeader, jwtClaimsSet, clientSecret);
         // To serialize to compact form
         return signedJwt.serialize();
     }
@@ -542,9 +548,92 @@ public enum JWTUtils {
      * @param clientSecret
      * @throws JOSEException
      */
-    public String createJWTToken(final String audience, final String clientId, final String clientSecret)
+    public static String jwtMACSignedToken(final String audience, final String clientId, final String clientSecret)
             throws JOSEException {
-        return createJWTToken(audience, clientId, clientId, clientSecret);
+        return jwtMACSignedToken(audience, clientId, clientId, clientSecret);
+    }
+
+    /**
+     * @param jwtHeaders
+     * @param jwtClaims
+     * @param jwtSigner
+     * @return
+     */
+    private SignedJWT jwtSigned(final JWSHeader jwtHeaders, final JWTClaimsSet jwtClaims, final JWSSigner jwtSigner)
+            throws JOSEException {
+        // create signed JWT with jwsHeader and jwtClaims
+        SignedJWT jwtSigned = new SignedJWT(jwtHeaders, jwtClaims);
+        // Compute the signature
+        jwtSigned.sign(jwtSigner);
+
+        return jwtSigned;
+    }
+
+    /**
+     * @param jwtHeaders
+     * @param jwtClaims
+     * @param rsaKey
+     * @return
+     * @throws JOSEException
+     */
+    public static SignedJWT jwtRSASigned(final JWSHeader jwtHeaders, final JWTClaimsSet jwtClaims, final RSAKey rsaKey)
+            throws JOSEException {
+        // create signed JWT with jwsHeader and jwtClaims and compute signature
+        return INSTANCE.jwtSigned(jwtHeaders, jwtClaims, new RSASSASigner(rsaKey));
+    }
+
+    /**
+     * @param jwtHeaders
+     * @param jwtClaims
+     * @param clientSecret
+     * @return
+     * @throws JOSEException
+     */
+    public static SignedJWT jwtMACSigned(final JWSHeader jwtHeaders, final JWTClaimsSet jwtClaims,
+                                         final String clientSecret)
+            throws JOSEException {
+        // create signed JWT with jwsHeader and jwtClaims and compute signature
+        return INSTANCE.jwtSigned(jwtHeaders, jwtClaims, new MACSigner(clientSecret));
+    }
+
+
+    /**
+     * Returns the parsed <code>jwtToken</code>.
+     *
+     * @param jwtToken
+     * @return
+     * @throws ParseException
+     */
+    private SignedJWT jwtSigned(final String jwtToken) throws ParseException {
+        // parse the jwtToken
+        return SignedJWT.parse(jwtToken);
+    }
+
+    /**
+     * @param jwtToken
+     * @return
+     * @throws ParseException
+     * @throws JOSEException
+     */
+    public JWSHeader jwtHeaders(final String jwtToken) throws ParseException {
+        // parse the JWS and verify its signature
+        return jwtSigned(jwtToken).getHeader();
+    }
+
+    /**
+     * Parse the JWT and verify with client secret.
+     *
+     * @param jwtToken
+     * @param jwsVerifier
+     * @return
+     * @throws ParseException
+     * @throws JOSEException
+     */
+    private JWTClaimsSet jwtVerifiedClaims(final String jwtToken, final JWSVerifier jwsVerifier)
+            throws ParseException, JOSEException {
+        // parse the JWS and verify its signature
+        SignedJWT signedJwt = jwtSigned(jwtToken);
+        return signedJwt.verify(jwsVerifier) ? signedJwt.getJWTClaimsSet() : null;
     }
 
     /**
@@ -552,16 +641,73 @@ public enum JWTUtils {
      *
      * @param jwtToken
      * @param clientSecret
+     * @return
+     * @throws ParseException
+     * @throws JOSEException
+     */
+    public static JWTClaimsSet jwtMACVerifiedClaims(final String jwtToken, final String clientSecret)
+            throws ParseException, JOSEException {
+        // parse the JWT Token and verify its signature
+        return INSTANCE.jwtVerifiedClaims(jwtToken, new MACVerifier(clientSecret));
+    }
+
+    /**
+     * On the consumer side, parse the JWS and verify its RSA signature
+     *
+     * @param jwtToken
+     * @param rsaPublicKey
+     * @return
+     * @throws JOSEException
      * @throws ParseException
      */
-    public SignedJWT verifyJWTToken(final String jwtToken, final String clientSecret) throws ParseException,
-            JOSEException {
-        // parse the JWS and
-        SignedJWT signedJwt = SignedJWT.parse(jwtToken);
-        // verify its RSA signature
-        JWSVerifier verifier = new MACVerifier(clientSecret);
-        signedJwt.verify(verifier);
-        return signedJwt;
+    public static JWTClaimsSet jwtRSASSAVerifiedClaims(final String jwtToken, final RSAKey rsaPublicKey)
+            throws JOSEException, ParseException {
+        return INSTANCE.jwtVerifiedClaims(jwtToken, new RSASSAVerifier(rsaPublicKey));
+    }
+
+    /**
+     * Parse the JWT and verify with client secret.
+     *
+     * @param jwtToken
+     * @param jwsVerifier
+     * @return
+     * @throws ParseException
+     * @throws JOSEException
+     */
+    private boolean jwtVerified(final String jwtToken, final JWSVerifier jwsVerifier)
+            throws ParseException, JOSEException {
+        // parse the JWS and verify its signature
+        return jwtSigned(jwtToken).verify(jwsVerifier);
+    }
+
+    /**
+     * Parse the JWT and verify with client secret.
+     *
+     * @param jwtToken
+     * @param clientSecret
+     * @return
+     * @throws ParseException
+     * @throws JOSEException
+     */
+    public static boolean jwtMACVerified(final String jwtToken, final String clientSecret)
+            throws ParseException, JOSEException {
+        // parse the JWT Token and verify its signature
+        return INSTANCE.jwtVerified(jwtToken, new MACVerifier(clientSecret));
+    }
+
+    /**
+     * On the consumer side, parse the JWS and verify its RSA signature
+     *
+     * @param jwtToken
+     * @param rsaPublicKey
+     * @return
+     * @throws JOSEException
+     * @throws ParseException
+     */
+    public static boolean jwtRSASSAVerified(final String jwtToken, final RSAKey rsaPublicKey)
+            throws JOSEException, ParseException {
+        // parse the JWT Token and verify its signature
+        return INSTANCE.jwtVerified(jwtToken, new RSASSAVerifier(rsaPublicKey));
     }
 
     /**
@@ -589,69 +735,28 @@ public enum JWTUtils {
      * @param issuer
      * @throws JOSEException
      */
-    public void createJWTToken(final String keyId, final String audience, final String issuer, final String subject,
-                               final Date issuedAt, final Date expiredOn)
+    public static String jwtRSASignedToken(final String keyId, final String audience, final String issuer,
+                                           final String subject, final Date issuedAt, final Date expiredOn)
             throws JOSEException {
         //RSA signatures require a public and private RSA key pair, the public key
         // must be made known to the JWS recipient in order to verify the signatures
-//        setRSAKey(keySize, keyId);
-        setRSAKey();
+// setRSAKey(keySize, keyId);
+        INSTANCE.setRSAKey();
 
         // prepare header
-        final JWSHeader jwsHeader = createJWSHeader(JWSAlgorithm.RS256, JOSEObjectType.JWT);
+        final JWSHeader jwsHeader = INSTANCE.jwtHeader(JWSAlgorithm.RS256, JOSEObjectType.JWT);
         // Prepare JWT with claims set
-        final JWTClaimsSet
-                jwtClaimsSet =
-                createJWTClaimsSet(keyId, audience, issuer, subject, issuedAt, new Date(expiredOn.getTime() + 60 * 1000));
-        signedJWT = new SignedJWT(jwsHeader, jwtClaimsSet);
-
-        // Create RSA-signer with the private key
-        final JWSSigner signer = new RSASSASigner(getRSAKey());
-        // Compute the RSA signature
-        signedJWT.sign(signer);
+        final JWTClaimsSet jwtClaimsSet = INSTANCE.jwtClaimsSet(keyId, audience, issuer, subject, issuedAt, expiredOn);
+        // Create RSA-signer with the private key, compute the signature
+        INSTANCE.signedJWT = jwtRSASigned(jwsHeader, jwtClaimsSet, INSTANCE.getRSAKey());
 
         /**
          * To serialize to compact form, produces something like
          *
          * eyJhbGciOiJSUzI1NiJ9.SW4gUlNBIHdlIHRydXN0IQ.IRMQENi4nJyp4er2LmZq3ivwoAjqa1uUkSBKFIX7ATndFF5ivnt-m8uApHO4kfIFOrW7w2Ezmlg3QdmaXlS9DhN0nUk_hGI3amEjkKd0BWYCB8vfUbUv0XGjQip78AI4z1PrFRNidm7-jPDm5Iq0SZnjKjCNS5Q15fokXZc8u0A
          */
-//        String s = signedJWT.serialize();
-
-//        // On the consumer side, parse the JWS and verify its RSA signature
-//        signedJWT = SignedJWT.parse(s);
-
-//        JWSVerifier verifier = new RSASSAVerifier(rsaPublicJWK);
-//        assertTrue(signedJWT.verify(verifier));
-//
-//// Retrieve / verify the JWT claims according to the app requirements
-//        assertEquals("alice", signedJWT.getJWTClaimsSet().getSubject());
-//        assertEquals("https://c2id.com", signedJWT.getJWTClaimsSet().getIssuer());
-//        assertTrue(new Date().before(signedJWT.getJWTClaimsSet().getExpirationTime()));
+        return INSTANCE.signedJWT.serialize();
     }
-
-    /**
-     * @return
-     * @throws JOSEException
-     * @throws ParseException
-     */
-    public String serialize() {
-        return signedJWT.serialize();
-    }
-
-    /**
-     * On the consumer side, parse the JWS and verify its RSA signature
-     *
-     * @param jwtToken
-     * @param rsaPublicKey
-     * @return
-     * @throws JOSEException
-     */
-    public boolean verify(final String jwtToken, final RSAKey rsaPublicKey) throws JOSEException, ParseException {
-        JWSVerifier verifier = new RSASSAVerifier(rsaPublicKey);
-        final SignedJWT jwtSigned = SignedJWT.parse(jwtToken);
-        return jwtSigned.verify(verifier);
-    }
-
 
     /**
      * Fetches the public key from the <code>urlJWKSFilePath</code>.
@@ -706,8 +811,8 @@ public enum JWTUtils {
      * @param clientSecret
      * @return
      */
-    public static String encodedClientIdAndSecret(final String clientId, final String clientSecret) {
-        LOGGER.debug("encodedClientIdAndSecret({}, {})", clientId, clientId);
+    public static String encodeClientIdAndSecret(final String clientId, final String clientSecret) {
+        LOGGER.debug("encodeClientIdAndSecret({}, {})", clientId, clientId);
         final Charset defaultCharset = Charset.defaultCharset();
         final byte[] dataBytes = (clientId.trim() + ":" + clientSecret.trim()).getBytes(defaultCharset);
         return new String(Base64.getEncoder().encode(dataBytes), defaultCharset);
@@ -731,9 +836,9 @@ public enum JWTUtils {
      * @param withJwtId
      * @return
      */
-    public static String createJwtToken(final String clientId, final String clientSecret, String audience,
-                                        int expirationTimeInMinutes, boolean withJwtId) {
-        LOGGER.debug("+createJwtToken({}, {}, {})", clientId, clientId, audience);
+    public static String jwtToken(final String clientId, final String clientSecret, String audience,
+                                  int expirationTimeInMinutes, boolean withJwtId) {
+        LOGGER.debug("+jwtToken({}, {}, {}, {})", clientId, audience, expirationTimeInMinutes, withJwtId);
         String jwtString;
         final JwtClaims jwtClaims = new JwtClaims();
         jwtClaims.setIssuedAt(NumericDate.now());
@@ -759,7 +864,7 @@ public enum JWTUtils {
             throw new RuntimeException("JWT Generation is failed", ex);
         }
 
-        LOGGER.debug("-createJWTToken(), jwtString={}", jwtString);
+        LOGGER.debug("-jwtToken(), jwtString={}", jwtString);
         return jwtString;
     }
 
@@ -767,8 +872,8 @@ public enum JWTUtils {
      * @param jwtRequest
      * @return
      */
-    public static String createJwtToken(final JwtRequest jwtRequest) {
-        return createJwtToken(jwtRequest.getClientId(), jwtRequest.getClientSecret(), getAudienceUrl(jwtRequest),
+    public static String jwtToken(final JwtRequest jwtRequest) {
+        return jwtToken(jwtRequest.getClientId(), jwtRequest.getClientSecret(), getAudienceUrl(jwtRequest),
                 jwtRequest.getExpirationTimeInMinutes(), jwtRequest.isWithJwtId());
     }
 
@@ -776,11 +881,11 @@ public enum JWTUtils {
      * @param jwtToken
      * @return
      */
-    public static boolean isValidToken(final String jwtToken) {
+    public static boolean isTokenExpired(final String jwtToken) {
         try {
             // parse the JWS and
-            final SignedJWT signedJWT = SignedJWT.parse(jwtToken);
-            return !signedJWT.getJWTClaimsSet().getExpirationTime().before(new Date());
+            final JWTClaimsSet jwtClaims = INSTANCE.jwtSigned(jwtToken).getJWTClaimsSet();
+            return !jwtClaims.getExpirationTime().before(new Date());
         } catch (Exception ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             return false;

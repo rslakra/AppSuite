@@ -1,11 +1,18 @@
 #!/bin/bash
+#Author: Rohtash Lakra
 echo
-rm -rf Core/target
-rm -rf HBase/target
-rm -rf Identity/target
-rm -rf Jdk/target
-rm -rf Metrics/target
-rm -rf Patterns/target
-rm -rf Questions/target
+HOME_DIR="${PWD}"
+#echo "Working at ${HOME_DIR}"
+echo
+MODULES=("Core" "Gemini" "HBase" "Identity" "Jdk" "Metrics" "Patterns" "Questions")
+for entry in "${MODULES[@]}" 
+do
+  curEntry="${HOME_DIR}/${entry}/target"
+  echo "Cleaning ... ${curEntry}"
+  rm -rf $curEntry
+  echo
+done
+# move to home dir
+cd $HOME_DIR
 echo
 

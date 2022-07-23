@@ -16,7 +16,6 @@ import java.util.Set;
  * @Since 3/19/20 1:35 PM
  */
 public enum Sets {
-
     INSTANCE;
 
     // LOGGER

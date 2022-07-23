@@ -24,7 +24,7 @@ public class StopWatch {
     /**
      *
      */
-    public void startTimer() {
+    public final void startTimer() {
         startTime = Instant.now();
         LOGGER.debug("startTimer()");
     }
@@ -32,7 +32,7 @@ public class StopWatch {
     /**
      *
      */
-    public void stopTimer() {
+    public final void stopTimer() {
         stopTime = Instant.now();
         duration = Duration.between(startTime, stopTime);
         LOGGER.debug("stopTimer()");
@@ -44,6 +44,13 @@ public class StopWatch {
     private String timeTaken() {
         return String.format("%dD, %02d:%02d:%02d.%04d", duration.toDays(), duration.toHours(), duration.toMinutes(),
                 duration.getSeconds(), duration.toMillis());
+    }
+
+    /**
+     * @return
+     */
+    public final String took() {
+        return timeTaken();
     }
 
     /**

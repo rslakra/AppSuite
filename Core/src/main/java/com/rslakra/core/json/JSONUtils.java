@@ -31,7 +31,14 @@ package com.rslakra.core.json;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.IOUtils;
@@ -230,32 +237,7 @@ public enum JSONUtils {
      * @return
      */
     public static <T> T fromJSONString(final String jsonString, final Class<T> responseType) {
-        return INSTANCE.createGson(true).fromJson(jsonString, responseType);
-    }
-
-    /**
-     * Returns the Map object from the given data bytes.
-     *
-     * @param dataBytes
-     * @return
-     */
-    public static Map<String, Object> jsonBytesAsMap(final byte[] dataBytes) {
-        TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
-        };
-        String jsonString = IOUtils.toUTF8String(dataBytes);
-        return INSTANCE.createGson().fromJson(jsonString, typeToken.getType());
-    }
-
-    /**
-     * Returns the Map object from the given string.
-     *
-     * @param jsonString
-     * @return
-     */
-    public static Map<String, List<String>> jsonHeadersAsMap(String jsonString) {
-        TypeToken<Map<String, List<String>>> typeToken = new TypeToken<Map<String, List<String>>>() {
-        };
-        return INSTANCE.createGson().fromJson(jsonString, typeToken.getType());
+        return INSTANCE.createGson().fromJson(jsonString, responseType);
     }
 
     /**
@@ -271,33 +253,12 @@ public enum JSONUtils {
     }
 
     /**
-     * Returns the value for the given key from the given jsonString.
-     *
-     * @param jsonString
-     * @param key
-     * @return
-     */
-    public static String valueForKeyAsString(String jsonString, String key) {
-        return (String) valueForKey(jsonString, key);
-    }
-
-    /**
      * @param jsonObject
-     * @param propertName
+     * @param propertyName
      * @return
      */
-    public static String valueForKey(JsonObject jsonObject, String propertName) {
-        JsonElement jsonElement = jsonObject.get(propertName);
-        return (jsonElement == null ? null : jsonElement.getAsString());
-    }
-
-    /**
-     * @param jsonObject
-     * @param propertName
-     * @return
-     */
-    public static Integer valueForKeyAsInteger(JsonObject jsonObject, String propertName) {
-        JsonElement jsonElement = jsonObject.get(propertName);
+    public static Integer valueForKeyAsInteger(final JsonObject jsonObject, final String propertyName) {
+        JsonElement jsonElement = jsonObject.get(propertyName);
         return (jsonElement == null ? null : jsonElement.getAsInt());
     }
 
@@ -380,18 +341,19 @@ public enum JSONUtils {
      * @param jsonString
      * @return
      */
-    public static boolean isValidJSONString(String jsonString) {
-        if (jsonString == null) {
-            return false;
-        } else {
+    public static boolean isValidJSONString(final String jsonString) {
+        if (BeanUtils.isNotEmpty(jsonString)) {
             try {
                 JsonParser.parseString(jsonString);
             } catch (JsonSyntaxException ex) {
+                LOGGER.error(ex.getLocalizedMessage(), ex);
                 return false;
             }
 
             return true;
         }
+
+        return false;
     }
 
     /**
@@ -429,6 +391,28 @@ public enum JSONUtils {
         TypeToken<Map<String, Object>> typeToken = new TypeToken<Map<String, Object>>() {
         };
         return INSTANCE.createGson().fromJson(jsonString, typeToken.getType());
+    }
+
+    /**
+     * Returns the Map object from the given string.
+     *
+     * @param jsonString
+     * @return
+     */
+    public static Map<String, List<String>> asHeaders(final String jsonString) {
+        TypeToken<Map<String, List<String>>> typeToken = new TypeToken<Map<String, List<String>>>() {
+        };
+        return INSTANCE.createGson().fromJson(jsonString, typeToken.getType());
+    }
+
+    /**
+     * @param dataBytes
+     * @return
+     */
+    public static Map<String, List<String>> asHeaders(final byte[] dataBytes) {
+        TypeToken<Map<String, List<String>>> typeToken = new TypeToken<Map<String, List<String>>>() {
+        };
+        return INSTANCE.createGson().fromJson(IOUtils.toUTF8String(dataBytes), typeToken.getType());
     }
 
     /**
@@ -476,12 +460,14 @@ public enum JSONUtils {
     }
 
     /**
+     * Returns true if the <code>jsonObject</code> contains the <code>key</code> otherwise false.
+     *
      * @param jsonObject
      * @param key
      * @return
      */
-    public static JsonElement getElement(final JsonObject jsonObject, String key) {
-        return (BeanUtils.isNotNull(jsonObject) && BeanUtils.isNotEmpty(key) ? jsonObject.get(key) : null);
+    public static boolean hasElement(final JsonObject jsonObject, final String key) {
+        return (BeanUtils.isNotNull(jsonObject) && BeanUtils.isNotEmpty(key) && jsonObject.has(key));
     }
 
     /**
@@ -489,9 +475,17 @@ public enum JSONUtils {
      * @param key
      * @return
      */
-    public static String getAsString(JsonObject jsonObject, String key) {
-        final JsonElement jsonElement = getElement(jsonObject, key);
-        return (jsonElement != null ? jsonElement.getAsString() : null);
+    public static JsonElement getElement(final JsonObject jsonObject, final String key) {
+        return (hasElement(jsonObject, key) ? jsonObject.get(key) : null);
+    }
+
+    /**
+     * @param jsonObject
+     * @param key
+     * @return
+     */
+    public static String getAsString(final JsonObject jsonObject, final String key) {
+        return (hasElement(jsonObject, key) ? jsonObject.get(key).getAsString() : null);
     }
 
     /**
@@ -501,12 +495,12 @@ public enum JSONUtils {
      * @param key
      * @return
      */
-    public static String valueForKeyAsString(JsonArray jsonArray, String key) {
+    public static String valueForKeyAsString(final JsonArray jsonArray, String key) {
         String value = null;
-        if (jsonArray != null && !BeanUtils.isEmpty(key)) {
+        if (BeanUtils.isNotEmpty(jsonArray) && BeanUtils.isNotEmpty(key)) {
             for (int i = 0; i < jsonArray.size(); i++) {
                 JsonObject jsonObject = (JsonObject) jsonArray.get(i);
-                if (jsonObject != null && getAsString(jsonObject, "name").equals(key)) {
+                if (hasElement(jsonObject, "name") && getAsString(jsonObject, "name").equals(key)) {
                     value = getAsString(jsonObject, "value");
                     break;
                 }

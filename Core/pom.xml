@@ -11,17 +11,16 @@
     </parent>
     <!-- Core Module -->
     <artifactId>Core</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>The ${project.artifactId} Project</name>
-
     <!-- Properties -->
     <properties>
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+        <!--<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>-->
         <jackson-databind.version>2.13.3</jackson-databind.version>
         <jackson-core.version>2.13.3</jackson-core.version>
         <resilience4j.version>1.3.1</resilience4j.version>
         <httpcore.version>4.4.15</httpcore.version>
         <httpclient.version>4.5.13</httpclient.version>
+        <nimbus-jose-jwt.version>9.23</nimbus-jose-jwt.version>
     </properties>
 
     <!-- Repository -->
@@ -49,10 +48,11 @@
         </dependency>
 
         <!-- https://connect2id.com/products/nimbus-jose-jwt -->
+        <!-- https://mvnrepository.com/artifact/com.nimbusds/nimbus-jose-jwt -->
         <dependency>
             <groupId>com.nimbusds</groupId>
             <artifactId>nimbus-jose-jwt</artifactId>
-            <version>8.3</version>
+            <version>${nimbus-jose-jwt.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
@@ -186,17 +186,6 @@
     <build>
         <finalName>${project.artifactId}-${project.version}</finalName>
 
-        <!-- To use the plugin goals in your POM or parent POM -->
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
 
 </project>

@@ -14,7 +14,10 @@ public enum ContentType {
     JSON(new String[]{"application/json", "application/javascript", "text/javascript"}),
     XML(new String[]{"application/xml", "text/xml", "application/xhtml+xml", "application/atom+xml"}),
     HTML(new String[]{"text/html"}),
-    URL_ENCODED(new String[]{"application/x-www-form-urlencoded"}),
+    FORM_URL_ENCODED(
+        new String[]{"application/x-www-form-urlencoded, application/x-www-form-urlencoded;charset=UTF-8"}),
+    X_JAVA_SERIALIZED_OBJECT(new String[]{"application/x-java-serialized-object"}),
+    MULTIPART_FORM_DATA(new String[]{"multipart/form-data"}),
     BINARY(new String[]{"application/octet-stream"});
 
     private final String[] contentTypes;

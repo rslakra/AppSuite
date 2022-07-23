@@ -6,4 +6,5 @@ package com.rslakra.core.bos;
  */
 public class AnyUri {
 
+    private String uri;
 }

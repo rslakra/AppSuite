@@ -5,4 +5,5 @@ package com.rslakra.core.bos;
  * @created 1/27/22 10:34 AM
  */
 public enum UnitType {
+    SUITE;
 }

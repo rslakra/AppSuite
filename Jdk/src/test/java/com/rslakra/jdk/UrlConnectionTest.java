@@ -30,7 +30,7 @@ package com.rslakra.jdk;
 
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.http.HTTPUtils;
-import com.rslakra.core.http.HttpResponse;
+import com.rslakra.core.http.Response;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;
@@ -44,7 +44,7 @@ public class UrlConnectionTest {
 
     public static void main(String[] args) {
         String urlString = "https://devamatre.com/";
-        HttpResponse httpResponse = HTTPUtils.executeGetRequest(urlString, null, true);
+        Response httpResponse = HTTPUtils.executeGetRequest(urlString, null, true);
         System.out.println(httpResponse.getRequestHeaders());
 
         String formActionValue = extractFormActionValue(httpResponse.getDataBytes());

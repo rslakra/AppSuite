@@ -1,9 +1,14 @@
 package com.rslakra.core.http;
 
 import com.rslakra.core.BeanUtils;
+import org.apache.http.Header;
+import org.apache.http.HeaderElement;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpRequest;
+import org.apache.http.HttpRequestInterceptor;
 import org.apache.http.HttpResponse;
-import org.apache.http.*;
+import org.apache.http.HttpResponseInterceptor;
 import org.apache.http.protocol.HttpContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -131,7 +136,7 @@ public abstract class ContentEncoding {
          * @param encodingType
          * @return
          */
-        public static EncodingType of(final String encodingType) {
+        public static EncodingType forName(final String encodingType) {
             return (BeanUtils.isNull(encodingType) ? null : EncodingType.valueOf(encodingType.toUpperCase()));
         }
     }

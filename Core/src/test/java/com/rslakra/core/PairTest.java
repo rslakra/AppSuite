@@ -2,6 +2,7 @@ package com.rslakra.core;
 
 import static org.testng.Assert.assertEquals;
 import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -44,7 +45,7 @@ public class PairTest {
 
     @Test(dataProvider = "pairData")
     public void testPair(Pair pair, Boolean isSame) {
-        LOGGER.debug("+testPair({}, {})", pair, isSame);
+        LOGGER.debug("testPair({}, {})", pair, isSame);
         if (isSame) {
             assertEquals(pair.getKey(), pair.getValue());
             assertEquals(pair.getLeft(), pair.getRight());
@@ -52,6 +53,20 @@ public class PairTest {
             assertNotEquals(pair.getKey(), pair.getValue());
             assertNotEquals(pair.getLeft(), pair.getRight());
         }
-        LOGGER.debug("-testPair()");
+    }
+
+    @Test
+    public void testCompareTo() {
+        Pair leftPair = Pair.of("firstName", "lastName");
+        LOGGER.debug("leftPair:{}", leftPair);
+        assertEquals(0, leftPair.compareTo(leftPair));
+
+        Pair nextPair = Pair.of("firstName", "name");
+        LOGGER.debug("leftPair:{}, nextPair:{}", leftPair, nextPair);
+        assertTrue(leftPair.compareTo(nextPair) < 0);
+
+        Pair rightPair = Pair.of("eachName", "lastName");
+        LOGGER.debug("leftPair:{}, rightPair:{}", leftPair, rightPair);
+        assertTrue(leftPair.compareTo(rightPair) > 0);
     }
 }

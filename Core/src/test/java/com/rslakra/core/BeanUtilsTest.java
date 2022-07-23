@@ -1,5 +1,10 @@
 package com.rslakra.core;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+
 import com.rslakra.core.dto.StateDTO;
 import com.rslakra.core.dto.UserDTO;
 import com.rslakra.core.entity.MockEntity;
@@ -13,10 +18,22 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static org.testng.Assert.*;
 
 /**
  * @author Rohtash Lakra
@@ -225,15 +242,18 @@ public class BeanUtilsTest {
         Assert.assertFalse(BeanUtils.isNotEmpty(""));
         Assert.assertTrue(BeanUtils.isNotEmpty(" "));
         Assert.assertTrue(BeanUtils.isNotEmpty(" rsl"));
+        Assert.assertTrue(BeanUtils.isNotEmpty(new String("Lakra")));
         Assert.assertTrue(BeanUtils.isNotEmpty(new Object()));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new Class[1]));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new Object[1]));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new String[1]));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new Map[1]));
+        Assert.assertTrue(BeanUtils.isNotEmpty(new Object(), new String("RS")));
+        Assert.assertTrue(BeanUtils.isNotEmpty(new Class[]{BeanUtils.class}));
+        Assert.assertTrue(BeanUtils.isNotEmpty(new Class[1], new Class[1]));
+        Assert.assertFalse(BeanUtils.isNotEmpty(new Object[1]));
+        Assert.assertFalse(BeanUtils.isNotEmpty(new String[1]));
+        Assert.assertFalse(BeanUtils.isNotEmpty(new Map[1]));
         Assert.assertFalse(BeanUtils.isNotEmpty(new HashMap<>()));
         Assert.assertFalse(BeanUtils.isNotEmpty(new Hashtable<>()));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new List[1]));
-        Assert.assertTrue(BeanUtils.isNotEmpty(new Set[1]));
+        Assert.assertFalse(BeanUtils.isNotEmpty(new List[1]));
+        Assert.assertFalse(BeanUtils.isNotEmpty(new Set[1]));
     }
 
     @Test

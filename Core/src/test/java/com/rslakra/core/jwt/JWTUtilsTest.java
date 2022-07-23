@@ -6,13 +6,11 @@ import com.nimbusds.jose.JWSAlgorithm;
 import com.nimbusds.jose.JWSHeader;
 import com.nimbusds.jose.jwk.RSAKey;
 import com.nimbusds.jwt.JWTClaimsSet;
-import com.nimbusds.jwt.SignedJWT;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.nio.charset.StandardCharsets;
 import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.text.ParseException;
@@ -34,11 +32,10 @@ public class JWTUtilsTest {
     @Test
     public void testAddDays() {
         final Date issuedAt = new Date();
-        LOGGER.debug("issuedAt: " + issuedAt);
-        final Date expiredOn = JWTUtils.INSTANCE.addDays(issuedAt, 5);
-        LOGGER.debug("expiredOn: " + expiredOn);
+        LOGGER.debug("issuedAt:{}", issuedAt);
+        final Date expiredOn = JWTUtils.addDays(issuedAt, 5);
+        LOGGER.debug("expiredOn:{}", expiredOn);
     }
-
 
     /**
      * JWT Header
@@ -50,11 +47,14 @@ public class JWTUtilsTest {
      * </pre>
      */
     @Test
-    public void testCreateJWSHeader() {
-        JWSHeader jwsHeader = JWTUtils.INSTANCE.createJWSHeader(JWSAlgorithm.RS256, JOSEObjectType.JWT);
-        Assert.assertNotNull(jwsHeader);
-        Assert.assertEquals(JWSAlgorithm.RS256, jwsHeader.getAlgorithm());
-        Assert.assertEquals(JOSEObjectType.JWT, jwsHeader.getType());
+    public void testJwtClaims() {
+        String audience = "http://localhost/identity/oauth2/access_token?realm=lakra";
+        String clientId = "helloClient";
+        final JWTClaimsSet jwtClaims = JWTUtils.jwtClaimsSet(audience, clientId, clientId);
+        Assert.assertNotNull(jwtClaims);
+        Assert.assertEquals(audience, jwtClaims.getAudience().get(0));
+        Assert.assertEquals(clientId, jwtClaims.getSubject());
+        Assert.assertEquals(clientId, jwtClaims.getIssuer());
     }
 
     /**
@@ -70,52 +70,59 @@ public class JWTUtilsTest {
      * </pre>
      */
     @Test
-    public void testCreateJWTClaims() {
+    public void testJwtClaimsSet() {
         String audience = "http://localhost/identity/oauth2/access_token?realm=lakra";
         String clientId = "helloClient";
-        final JWTClaimsSet jwtClaims = JWTUtils.INSTANCE.createJWTClaimsSet(audience, clientId, clientId);
+        final JWTClaimsSet jwtClaims = JWTUtils.jwtClaimsSet(audience, clientId, clientId);
         Assert.assertNotNull(jwtClaims);
         Assert.assertEquals(audience, jwtClaims.getAudience().get(0));
         Assert.assertEquals(clientId, jwtClaims.getSubject());
         Assert.assertEquals(clientId, jwtClaims.getIssuer());
     }
 
+    /**
+     *
+     */
     @Test
     public void testCreateJWTToken() {
         String audience = "http://localhost/identity/oauth2/access_token?realm=lakra";
         String clientId = "helloClient";
         String clientSecret = UUID.randomUUID().toString();
         String jwtToken = null;
-        SignedJWT signedJwt = null;
+        JWSHeader jwtHeader = null;
         JWTClaimsSet jwtClaims = null;
         try {
-            jwtToken = JWTUtils.INSTANCE.createJWTToken(audience, clientId, clientSecret);
+            // HMAC with SHA256
+            jwtToken = JWTUtils.jwtMACSignedToken(audience, clientId, clientSecret);
             LOGGER.debug(jwtToken);
-            signedJwt = JWTUtils.INSTANCE.verifyJWTToken(jwtToken, clientSecret);
-            jwtClaims = signedJwt.getJWTClaimsSet();
+            jwtHeader = JWTUtils.INSTANCE.jwtHeaders(jwtToken);
+            jwtClaims = JWTUtils.jwtMACVerifiedClaims(jwtToken, clientSecret);
         } catch (JOSEException | ParseException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             ex.printStackTrace();
         }
 
         Assert.assertNotNull(jwtToken);
-        Assert.assertNotNull(signedJwt);
+        // assert headers
+        Assert.assertNotNull(jwtHeader);
+        Assert.assertEquals(JWSAlgorithm.HS256, jwtHeader.getAlgorithm());
+        Assert.assertEquals(JOSEObjectType.JWT, jwtHeader.getType());
+        // assert claims
         Assert.assertNotNull(jwtClaims);
         Assert.assertEquals(audience, jwtClaims.getAudience().get(0));
         Assert.assertEquals(clientId, jwtClaims.getSubject());
         Assert.assertEquals(clientId, jwtClaims.getIssuer());
     }
 
-
     @Test
-    public void testIsValidToken() {
+    public void testIsTokenExpired() {
         String audience = "http://localhost/identity/oauth2/access_token?realm=lakra";
         String clientId = "testClient";
         String clientSecret = UUID.randomUUID().toString();
         try {
-            String jwtToken = JWTUtils.INSTANCE.createJWTToken(audience, clientId, clientSecret);
+            String jwtToken = JWTUtils.jwtMACSignedToken(audience, clientId, clientSecret);
             Assert.assertNotNull(jwtToken);
-            Assert.assertTrue(JWTUtils.isValidToken(jwtToken));
+            Assert.assertTrue(JWTUtils.isTokenExpired(jwtToken));
         } catch (JOSEException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             ex.printStackTrace();
@@ -143,24 +150,23 @@ public class JWTUtilsTest {
         final Date issuedAt = new Date();
         final String keyFolderPath = "~/Documents/ePay";
         final String serviceName = "payment-service";
-//        final String serviceName = "ePayService";
 
         JWTUtils.INSTANCE.setKeyFolderPath(keyFolderPath);
         JWTUtils.INSTANCE.setService(serviceName);
-        final Date expiredOn = JWTUtils.INSTANCE.addDays(issuedAt, 10);
+        final Date expiredOn = JWTUtils.addDays(issuedAt, 10);
         try {
-            JWTUtils.INSTANCE.createJWTToken(keyId, audience, issuer, subject, issuedAt, expiredOn);
-            final String jwtToken = JWTUtils.INSTANCE.serialize();
+            final String jwtToken = JWTUtils.jwtRSASignedToken(keyId, audience, issuer, subject, issuedAt, expiredOn);
             LOGGER.debug("jwtToken:{}", jwtToken);
             final RSAKey publicKey = JWTUtils.INSTANCE.getRSAPublicKey();
-            final boolean isVerified = JWTUtils.INSTANCE.verify(jwtToken, publicKey);
+            final boolean isVerified = JWTUtils.jwtRSASSAVerified(jwtToken, publicKey);
             Assert.assertTrue(isVerified);
 
             // Retrieve / verify the JWT claims according to the app requirements
-            final JWTClaimsSet jwtClaims = JWTUtils.INSTANCE.getSignedJWT().getJWTClaimsSet();
+            final JWTClaimsSet jwtClaims = JWTUtils.jwtRSASSAVerifiedClaims(jwtToken, publicKey);
             Assert.assertEquals(subject, jwtClaims.getSubject());
             Assert.assertEquals(issuer, jwtClaims.getIssuer());
-            Assert.assertTrue(new Date().before(jwtClaims.getExpirationTime()));
+            Assert.assertFalse(JWTUtils.isTokenExpired(jwtToken));
+//            Assert.assertTrue(new Date().before(jwtClaims.getExpirationTime()));
         } catch (ParseException | JOSEException ex) {
             ex.printStackTrace();
         }
@@ -171,12 +177,12 @@ public class JWTUtilsTest {
         try {
             String text = "Rohtash Singh Lakra";
             LOGGER.debug("text:{}", text);
-            LOGGER.debug("text length:{}", text.getBytes(StandardCharsets.UTF_8).length);
+            LOGGER.debug("text length:{}", text.getBytes(JWTUtils.UTF_8).length);
             //encrypt the text.
             Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
-            PublicKey publicKey = JWTUtils.INSTANCE.loadPublicKey();
+            PublicKey publicKey = JWTUtils.loadRSAPublicKey();
             cipher.init(Cipher.ENCRYPT_MODE, publicKey);
-            byte[] encrypted = cipher.doFinal(text.getBytes(StandardCharsets.UTF_8));
+            byte[] encrypted = cipher.doFinal(text.getBytes(JWTUtils.UTF_8));
             LOGGER.debug("Encrypted length:{}", encrypted.length);
             LOGGER.debug("Encrypted:{}", Base64.getEncoder().encodeToString(encrypted));
             //decrypt the encrypted text.
@@ -195,20 +201,17 @@ public class JWTUtilsTest {
         String clientId = "fd1184da-63a7-4622-b5c9-4cb3d6eb9a4f";
         String clientSecret = "eAJhm2JrmavRKKfuk5oB2gslT8lDukGWfgdZ6W2u7jGc2sZoPA";
         String jwtToken = null;
-        SignedJWT signedJwt = null;
         JWTClaimsSet jwtClaims = null;
         try {
-            jwtToken = JWTUtils.INSTANCE.createJWTToken(audience, clientId, clientSecret);
+            jwtToken = JWTUtils.jwtMACSignedToken(audience, clientId, clientSecret);
             LOGGER.debug(jwtToken);
-            signedJwt = JWTUtils.INSTANCE.verifyJWTToken(jwtToken, clientSecret);
-            jwtClaims = signedJwt.getJWTClaimsSet();
+            jwtClaims = JWTUtils.jwtMACVerifiedClaims(jwtToken, clientSecret);
         } catch (JOSEException | ParseException ex) {
             LOGGER.error(ex.getLocalizedMessage(), ex);
             ex.printStackTrace();
         }
 
         Assert.assertNotNull(jwtToken);
-        Assert.assertNotNull(signedJwt);
         Assert.assertNotNull(jwtClaims);
         Assert.assertEquals(audience, jwtClaims.getAudience().get(0));
         Assert.assertEquals(clientId, jwtClaims.getSubject());

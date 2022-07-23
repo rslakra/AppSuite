@@ -31,13 +31,27 @@ package com.rslakra.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.Closeable;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManagerFactory;
 
 /**
  * @author Rohtash Singh Lakra
@@ -68,14 +82,16 @@ public enum SSLUtils {
      * @throws IOException
      */
     public static TrustManagerFactory newTrustManagerFactory(final KeyStore loadedKeyStore) throws Exception {
+        LOGGER.debug("+newTrustManagerFactory({})", loadedKeyStore);
         TrustManagerFactory trustManagerFactory = null;
-        if (loadedKeyStore != null) {
+        if (BeanUtils.isNotNull(loadedKeyStore)) {
             // Create a TrustManager that trusts the CAs in our KeyStore
             String defaultAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
             trustManagerFactory = TrustManagerFactory.getInstance(defaultAlgorithm);
             trustManagerFactory.init(loadedKeyStore);
         }
 
+        LOGGER.debug("newTrustManagerFactory(), trustManagerFactory:{}", trustManagerFactory);
         return trustManagerFactory;
     }
 

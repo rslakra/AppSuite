@@ -5,4 +5,8 @@ package com.rslakra.core.bos;
  * @created 1/27/22 10:17 AM
  */
 public enum ActorType {
+    CAMEO,
+    VOICE,
+    FEATURED,
+    GUEST_STAR;
 }

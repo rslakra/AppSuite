@@ -1,13 +1,18 @@
 package com.rslakra.core.http;
 
+import com.rslakra.core.BeanUtils;
 import com.rslakra.core.ToString;
 import org.apache.http.HttpEntity;
+import org.apache.http.client.ResponseHandler;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @author Rohtash Lakra (rlakra)
@@ -17,10 +22,10 @@ public class Request {
 
     // LOGGER
     private static final Logger LOGGER = LoggerFactory.getLogger(Request.class);
-    // avoid NullPointerException
-    private final Map<String, String> headers = new HashMap<String, String>();
+    private final Map<String, String> headers = new LinkedHashMap<String, String>();
     private URI uri;
     private HttpMethod httpMethod;
+    private final Map<String, Object> parameters = new LinkedHashMap<>();
     private HttpEntity payload;
 
     /**
@@ -31,6 +36,7 @@ public class Request {
         this.uri = builder.uri;
         this.httpMethod = builder.httpMethod;
         this.payload = builder.payload;
+        this.parameters.putAll(builder.parameters);
     }
 
     /**
@@ -56,6 +62,25 @@ public class Request {
         this.headers.put(key, value);
     }
 
+    /**
+     * @param key
+     * @param values
+     */
+    public final void addHeader(final String key, final List<String> values) {
+        if (BeanUtils.isNotEmpty(values)) {
+            String value = getHeader(key);
+            if (BeanUtils.isNotEmpty(value)) {
+                values.add(value);
+            }
+            value = values.stream().collect(Collectors.joining(";"));
+            LOGGER.debug("addHeader() key:{}, value:{}", key, value);
+            this.headers.put(key, value);
+        }
+    }
+
+    /**
+     * @return
+     */
     public final URI getUri() {
         return uri;
     }
@@ -97,16 +122,34 @@ public class Request {
         return new RequestBuilder();
     }
 
+
+    /**
+     * Executes the request and calls the <code>responseHandler</code>, it not null.
+     *
+     * @param responseHandler
+     */
+    public void execute(final ResponseHandler responseHandler) {
+
+    }
+
+    /**
+     * Executes the request.
+     */
+    public void execute() {
+
+    }
+
+
     /**
      *
      */
     public static class RequestBuilder {
 
-        // avoid NP
         private final Map<String, String> headers = new HashMap<String, String>();
         private URI uri;
         private HttpMethod httpMethod;
         private HttpEntity payload;
+        private final Map<String, Object> parameters = new LinkedHashMap<>();
 
         private RequestBuilder() {
         }
@@ -156,6 +199,26 @@ public class Request {
             this.headers.putAll(headers);
             return this;
         }
+
+        /**
+         * @param key
+         * @param value
+         * @return
+         */
+        public RequestBuilder addParameter(final String key, final Object value) {
+            this.parameters.put(key, value);
+            return this;
+        }
+
+        /**
+         * @param parameters
+         * @return
+         */
+        public RequestBuilder addParameters(final Map<String, Object> parameters) {
+            this.parameters.putAll(parameters);
+            return this;
+        }
+
 
         /**
          * @return

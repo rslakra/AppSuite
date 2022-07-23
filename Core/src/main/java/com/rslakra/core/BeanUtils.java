@@ -255,6 +255,31 @@ public enum BeanUtils {
     }
 
     /**
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfIterable(final Object object) {
+        return (isTypeOf(object, Iterable.class) || isAssignableFrom(object, Iterable.class));
+    }
+
+    /**
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfIterator(final Object object) {
+        return (isTypeOf(object, Iterator.class) || isAssignableFrom(object, Iterator.class));
+    }
+
+    /**
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfEnumeration(final Object object) {
+        return (isTypeOf(object, Enumeration.class) || isAssignableFrom(object, Enumeration.class));
+    }
+
+
+    /**
      * Returns true if the <code>object</code> is a type of <code>CharSequence</code> otherwise false.
      *
      * @param object
@@ -285,6 +310,54 @@ public enum BeanUtils {
     }
 
     /**
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfThrowable(final Object object) {
+        return (isTypeOf(object, Throwable.class) || isAssignableFrom(object, Throwable.class));
+    }
+
+    /**
+     * @param iterator
+     * @return
+     */
+    public static int sizeIterator(final Iterator<?> iterator) {
+        int size = 0;
+        if (iterator != null) {
+            while (iterator.hasNext()) {
+                iterator.next();
+                size++;
+            }
+        }
+
+        return size;
+    }
+
+    /**
+     * @param iterable
+     * @return
+     */
+    public static int sizeIterable(final Iterable<?> iterable) {
+        return (isNotNull(iterable) ? sizeIterator(iterable.iterator()) : 0);
+    }
+
+    /**
+     * @param enumeration
+     * @return
+     */
+    public static int sizeEnumeration(final Enumeration<?> enumeration) {
+        int size = 0;
+        if (enumeration != null) {
+            while (enumeration.hasMoreElements()) {
+                enumeration.nextElement();
+                size++;
+            }
+        }
+
+        return size;
+    }
+
+    /**
      * Returns the length of the object.
      *
      * @param object
@@ -298,6 +371,12 @@ public enum BeanUtils {
                 return ((Map) object).size();
             } else if (isTypeOfCollection(object)) {
                 return ((Collection) object).size();
+            } else if (isTypeOfIterator(object)) {
+                return sizeIterator((Iterator<?>) object);
+            } else if (isTypeOfIterable(object)) {
+                return sizeIterable((Iterable) object);
+            } else if (isTypeOfEnumeration(object)) {
+                return sizeEnumeration((Enumeration<?>) object);
             } else if (isTypeOfCharSequence(object)) {
                 return ((CharSequence) object).length();
             }
@@ -323,6 +402,12 @@ public enum BeanUtils {
             result = true;
         } else if (isTypeOfCollection(object) && getLength(object) == 0) {
             result = true;
+        } else if (isTypeOfIterator(object) && sizeIterator((Iterator<?>) object) == 0) {
+            result = true;
+        } else if (isTypeOfIterable(object) && sizeIterable((Iterable<?>) object) == 0) {
+            result = true;
+        } else if (isTypeOfEnumeration(object) && sizeEnumeration((Enumeration<?>) object) == 0) {
+            result = true;
         } else if (isTypeOfCharSequence(object) && getLength(object) == 0) {
             result = true;
         }
@@ -334,11 +419,21 @@ public enum BeanUtils {
     /**
      * Returns true if the <code>object</code> is null or empty otherwise false.
      *
-     * @param object
+     * @param objects
      * @return
      */
-    public static boolean isNotEmpty(final Object object) {
-        return (!isEmpty(object));
+    public static boolean isNotEmpty(final Object... objects) {
+        if (isNotNull(objects) && getLength(objects) > 0) {
+            for (int index = 0; index < objects.length; index++) {
+                if (isEmpty(objects[index])) {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -1304,10 +1399,23 @@ public enum BeanUtils {
     public static String toString(final Object object) {
         if (isTypeOfBigDecimal(object)) {
             return ((BigDecimal) object).toPlainString();
+        } else if (isTypeOfThrowable(object)) {
+            Throwable error = (Throwable) object;
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            try {
+                PrintWriter printWriter = new PrintWriter(outputStream);
+                error.printStackTrace(printWriter);
+                printWriter.flush();
+                printWriter.close();
+                outputStream.close();
+            } catch (Exception ex) {
+                LOGGER.error(ex.getLocalizedMessage(), ex);
+            }
+
+            return new String(outputStream.toByteArray());
         }
 
         return Objects.toString(object);
     }
-
 
 }
