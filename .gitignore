@@ -1,7 +1,7 @@
 /**/.DS_Store
 /**/bin
-/**/classes/
-/**/release-v*/
+/**/classes
+/**/release-v*
 /**/build
 /**/target
 /**/*.iml
