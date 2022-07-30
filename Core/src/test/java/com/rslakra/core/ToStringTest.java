@@ -62,9 +62,9 @@ public class ToStringTest {
 
         //test key/value
         str = ToString.of()
-            .add("firstName", "Rohtash")
-            .add("lastName", "Lakra")
-            .toString();
+                .add("firstName", "Rohtash")
+                .add("lastName", "Lakra")
+                .toString();
         LOGGER.debug(str);
         Assert.assertNotNull(str);
         Assert.assertTrue(str.contains("firstName="));

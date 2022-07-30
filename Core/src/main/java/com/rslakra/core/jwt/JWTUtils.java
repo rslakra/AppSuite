@@ -167,7 +167,7 @@ public enum JWTUtils {
      */
     public Path getPath(final String pathString) {
         if (BeanUtils.isEmpty(getKeyFolderPath())) {
-            final String pkgString = BeanUtils.toClassPathString(JWTUtils.class, pathString);
+            final String pkgString = BeanUtils.getClassPath(JWTUtils.class, pathString);
             return Paths.get("src/main/java", pkgString);
         } else {
             return Paths.get(getKeyFolderPath(), pathString);
@@ -224,7 +224,7 @@ public enum JWTUtils {
      * @throws IOException
      */
     public String readContents(final InputStream inputStream, final boolean addNewLines)
-            throws IOException {
+        throws IOException {
         final StringBuilder sBuilder = new StringBuilder();
         try (BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream))) {
             String line = null;
@@ -242,20 +242,20 @@ public enum JWTUtils {
         return sBuilder.toString();
     }
 
-//    /**
+// /**
 //     * Returns the <code>PrivateKey</code> for the <code>pathString</code>.
 //     *
 //     * @param pathString
 //     * @return
 //     * @throws Exception
 //     */
-//    public PrivateKey loadPrivateKey(final String pathString) throws Exception {
-//        PrivateKey privateKey = null;
-//        final KeyFactory keyFactory = getKeyFactory(ALGO_RSA);
-//        final List<String> keyLines = Files.readAllLines(getPath(pathString));
-//        final String keyContents = toString(keyLines, true);
-//        byte[] keyBytes = Base64.getDecoder().decode(keyContents);
-//        /*
+// public PrivateKey loadPrivateKey(final String pathString) throws Exception {
+// PrivateKey privateKey = null;
+// final KeyFactory keyFactory = getKeyFactory(ALGO_RSA);
+// final List<String> keyLines = Files.readAllLines(getPath(pathString));
+// final String keyContents = toString(keyLines, true);
+// byte[] keyBytes = Base64.getDecoder().decode(keyContents);
+// /*
 //         * PKCS#! has the 'BEGIN RSA PRIVATE KEY' header, and
 //         * PKCS#8 has the 'BEGIN PRIVATE KEY' header.
 //         */

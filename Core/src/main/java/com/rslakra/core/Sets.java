@@ -4,12 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.AbstractSet;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author Rohtash Lakra
@@ -45,23 +40,17 @@ public enum Sets {
     /**
      * @param <E>
      */
-    private final class ArraySet<E> extends AbstractSet implements Serializable {
+    private final class ArraySet<E> extends AbstractSet<E> implements Serializable {
 
         // unique set of values.
-        private final List<E> values;
+        private final Set<E> values;
 
         /**
          * @param values
          */
-        private ArraySet(E[] values) {
+        private ArraySet(final E[] values) {
             LOGGER.debug("ArraySet({})", Arrays.toString(values));
-            final List<E> tempList = Arrays.asList(values);
-            this.values = new ArrayList<>(tempList.size());
-            tempList.forEach(item -> {
-                if (!this.values.contains(item)) {
-                    this.values.add(item);
-                }
-            });
+            this.values = new HashSet<>(Arrays.asList(values));
         }
 
         /**

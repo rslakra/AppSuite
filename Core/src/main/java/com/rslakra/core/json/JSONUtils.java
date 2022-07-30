@@ -31,14 +31,7 @@ package com.rslakra.core.json;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.FieldNamingPolicy;
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.google.gson.JsonSyntaxException;
+import com.google.gson.*;
 import com.google.gson.reflect.TypeToken;
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.IOUtils;
@@ -248,7 +241,7 @@ public enum JSONUtils {
      * @return
      */
     @SuppressWarnings("unchecked")
-    public static <T> T valueForKey(String jsonString, String key) {
+    public static <T> T valueForKey(final String jsonString, final String key) {
         return (T) fromJSONString(jsonString, Map.class).get(key);
     }
 
@@ -318,22 +311,16 @@ public enum JSONUtils {
      * @param jsonString
      * @return
      */
-    public static JsonArray toJSONArray(String jsonString) {
-        JsonArray array = null;
-        JsonElement jsonElement = jsonElement(jsonString);
-        if (jsonElement.isJsonArray()) {
-            array = jsonElement.getAsJsonArray();
-        }
-
-        return array;
-
+    public static JsonArray toJSONArray(final String jsonString) {
+        final JsonElement jsonElement = toJsonElement(jsonString);
+        return (jsonElement.isJsonArray() ? jsonElement.getAsJsonArray() : null);
     }
 
     /**
      * @param jsonString
      * @return
      */
-    public static JsonElement jsonElement(String jsonString) {
+    public static JsonElement toJsonElement(final String jsonString) {
         return JsonParser.parseString(jsonString);
     }
 

@@ -532,12 +532,12 @@ public enum BeanUtils {
     }
 
     /**
-     * @param klass
+     * @param classType
      * @return
      */
-    public static String toClassPathString(final Class<?> klass) {
-        assert klass != null;
-        return klass.getPackage().getName().replace(".", "/");
+    public static String getClassPath(final Class<?> classType) {
+        assert classType != null;
+        return classType.getPackage().getName().replace(".", "/");
     }
 
     /**
@@ -545,8 +545,8 @@ public enum BeanUtils {
      * @param pathString
      * @return
      */
-    public static String toClassPathString(final Class<?> klass, final String pathString) {
-        String classPath = toClassPathString(klass);
+    public static String getClassPath(final Class<?> klass, final String pathString) {
+        String classPath = getClassPath(klass);
         if (BeanUtils.isNotEmpty(pathString)) {
             classPath += (pathString.startsWith(File.separator) ? "" : File.separator) + pathString;
         }
@@ -555,67 +555,41 @@ public enum BeanUtils {
     }
 
     /**
-     * @param inputList
-     * @param size
+     * @param inputValues
+     * @param partitionSize
      * @param <T>
      * @return
      */
-    public static final <T> Collection<List<T>> partitionListBySize(final List<T> inputList, final int size) {
-        if (isEmpty(inputList) || size <= 0) {
+    public static <T> List<List<T>> partitionBySize(final List<T> inputValues, final int partitionSize) {
+        if (isEmpty(inputValues) || partitionSize <= 0) {
             return Collections.emptyList();
-        } else if (inputList.size() <= size) {
-            return Collections.singletonList(inputList);
-        } else {
-            final AtomicInteger counter = new AtomicInteger(0);
-            return inputList.stream().collect(Collectors.groupingBy(s -> counter.getAndIncrement() / size)).values();
-        }
-    }
-
-//    /**
-//     * @param inputSet
-//     * @param size
-//     * @param <T>
-//     * @return
-//     */
-//    public final <T> Collection<Set<T>> partitionSetBySize(final Set<T> inputSet, final int size) {
-//        if (inputSet == null || inputSet.isEmpty() || size <= 0) {
-//            return Collections.emptyList();
-//        } else if (inputSet.size() <= size) {
-//            return Collections.singletonList(inputSet);
-//        } else {
-//            final AtomicInteger counter = new AtomicInteger(0);
-//            return inputSet.stream()
-//                .collect(Collectors.toSet()).values();
-//        }
-//    }
-
-
-    /**
-     * @param values
-     * @param size
-     * @param <T>
-     * @return
-     */
-    public static <T> List<List<T>> partitionBySize(final Collection<T> values, final int size) {
-        if (BeanUtils.isEmpty(values) || size <= 0) {
-            return Collections.emptyList();
+        } else if (inputValues.size() <= partitionSize) {
+            return Collections.singletonList(inputValues);
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
             return new ArrayList<>(
-                    values.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / size)).values());
-//        } else {
-//            final List<List<T>> partitionList = new ArrayList<>(values.size() / size + 1);
-//            List<T> current = new LinkedList<>();
-//            partitionList.add(current);
-//
-//            for (Iterator<T> itr = values.iterator(); itr.hasNext(); current.add(itr.next())) {
-//                if (current.size() == size) {
-//                    current = new LinkedList();
-//                    partitionList.add(current);
-//                }
-//            }
-//
-//            return partitionList;
+                    inputValues.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize))
+                            .values());
+        }
+    }
+
+    /**
+     * @param inputValues
+     * @param partitionSize
+     * @param <T>
+     * @return
+     */
+    public static <T> Set<Set<T>> partitionBySize(final Set<T> inputValues, final int partitionSize) {
+        if (isEmpty(inputValues) || partitionSize <= 0) {
+            return Collections.emptySet();
+        } else if (inputValues.size() <= partitionSize) {
+            return Collections.singleton(inputValues);
+        } else {
+            final AtomicInteger counter = new AtomicInteger(0);
+            final Collection<Set<T>> partitions = inputValues.stream()
+                    .collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize, Collectors.toSet()))
+                    .values();
+            return new HashSet<>(partitions);
         }
     }
 
@@ -1360,33 +1334,47 @@ public enum BeanUtils {
     }
 
     /**
-     * @param charSequence
+     * @param text
      * @return
      */
-    public static String upperCaseFirstLetter(final CharSequence charSequence) {
-        if (isNull(charSequence)) {
+    public static String toSentenceCase(final CharSequence text) {
+        if (isNull(text)) {
             return null;
-        } else {
-
         }
-        int firstLetterIndex = 0;
 
-        for (int limit = charSequence.length() - 1;
-             !Character.isLetter(charSequence.charAt(firstLetterIndex)) && firstLetterIndex < limit;
+        int firstLetterIndex = 0;
+        for (int limit = text.length() - 1;
+             !Character.isLetter(text.charAt(firstLetterIndex)) && firstLetterIndex < limit;
              ++firstLetterIndex) {
             // do nothing
         }
 
-        char firstLetter = charSequence.charAt(firstLetterIndex);
+        char firstLetter = text.charAt(firstLetterIndex);
         if (Character.isUpperCase(firstLetter)) {
-            return charSequence.toString();
+            return text.toString();
         } else {
-            final String fullString = charSequence.toString();
-            char upperCasedFirstLetter = Character.toUpperCase(firstLetter);
-            return (firstLetterIndex == 0 ? upperCasedFirstLetter + fullString.substring(1)
-                    : fullString.substring(0, firstLetterIndex) + upperCasedFirstLetter
+            final String fullString = text.toString();
+            char upperCaseLetter = Character.toUpperCase(firstLetter);
+            return (firstLetterIndex == 0 ? upperCaseLetter + fullString.substring(1)
+                    : fullString.substring(0, firstLetterIndex) + upperCaseLetter
                     + fullString.substring(firstLetterIndex + 1));
         }
+    }
+
+    /**
+     * Returns empty if null otherwise string.
+     *
+     * @param object
+     * @return
+     */
+    public static String toString(final Throwable throwable) {
+        if (isNull(throwable)) {
+            return EMPTY_STR;
+        }
+
+        final StringWriter strWriter = new StringWriter();
+        throwable.printStackTrace(new PrintWriter(strWriter));
+        return strWriter.toString();
     }
 
     /**
@@ -1399,19 +1387,7 @@ public enum BeanUtils {
         if (isTypeOfBigDecimal(object)) {
             return ((BigDecimal) object).toPlainString();
         } else if (isTypeOfThrowable(object)) {
-            Throwable error = (Throwable) object;
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-            try {
-                PrintWriter printWriter = new PrintWriter(outputStream);
-                error.printStackTrace(printWriter);
-                printWriter.flush();
-                printWriter.close();
-                outputStream.close();
-            } catch (Exception ex) {
-                LOGGER.error(ex.getLocalizedMessage(), ex);
-            }
-
-            return new String(outputStream.toByteArray());
+            return toString((Throwable) object);
         }
 
         return Objects.toString(object);

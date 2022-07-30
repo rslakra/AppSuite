@@ -11,7 +11,7 @@ public final class ToString {
 
     public static final String EMPTY_STR = "";
     public static final String DELIMITER = ", ";
-    public static final String PREFIX = " <";
+    public static final String PREFIX = "<";
     public static final String SUFFIX = ">";
     public static final String SEPARATOR = "=";
 
@@ -93,7 +93,7 @@ public final class ToString {
      * @return
      */
     public static <T> ToString of(final Class<T> classType) {
-        return new ToString(DELIMITER, classType.getSimpleName() + PREFIX, SUFFIX);
+        return new ToString(DELIMITER, classType != null ? classType.getSimpleName() + " " + PREFIX : PREFIX, SUFFIX);
     }
 
     /**
@@ -101,7 +101,7 @@ public final class ToString {
      * @return
      */
     public static <T> ToString of() {
-        return new ToString(DELIMITER, PREFIX, SUFFIX);
+        return of(null);
     }
 
     /**
@@ -242,7 +242,7 @@ public final class ToString {
      */
     public int length() {
         return (size == 0 && emptyValue != null) ? emptyValue.length() :
-               length + prefix.length() + suffix.length();
+                length + prefix.length() + suffix.length();
     }
 
 }

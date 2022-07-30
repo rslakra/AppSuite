@@ -94,11 +94,11 @@ public class JSONUtilsTest {
         LOGGER.info("tempDictionary: {}", tempDictionary);
         Assert.assertNotNull(tempDictionary);
         Dictionary<String, String> pairs = tempDictionary.getDictionary("name");
+        LOGGER.info("pairs: {}", pairs);
         Assert.assertEquals(2, pairs.size());
         Assert.assertEquals("Rohtash Singh", pairs.get("firstName"));
         Assert.assertEquals("Lakra", pairs.get("lastName"));
     }
-
 
     @Test
     public void testSetFieldNamingPolicy() {

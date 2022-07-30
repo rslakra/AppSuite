@@ -36,27 +36,19 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import javax.crypto.*;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import java.io.*;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.security.InvalidKeyException;
-import java.security.Key;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.KeyPairGenerator;
-import java.security.KeyStore;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
-import java.security.PublicKey;
-import java.security.SecureRandom;
-import java.security.Security;
+import java.security.*;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -66,20 +58,6 @@ import java.util.Arrays;
 import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
-
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.KeyGenerator;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.SecretKey;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
 
 /**
  * This class handles the security.
@@ -376,7 +354,7 @@ public enum GuardUtils {
      * @return
      */
     public static String validateHashString(String hashString) {
-        if (!BeanUtils.isEmpty(hashString)) {
+        if (BeanUtils.isNotEmpty(hashString)) {
             hashString = hashString.replace('/', '_');
             hashString = hashString.replace(' ', '_');
             hashString = hashString.replace('+', '_');
@@ -392,16 +370,16 @@ public enum GuardUtils {
     /**
      * Encrypt the specified string with the provided key.
      *
-     * @param plainString
+     * @param rawText
      * @param encryptionPublicKey
      * @return
      */
-    private static String encryptWithPublicKey(String plainString, PublicKey encryptionPublicKey) {
+    private static String encryptWithPublicKey(final String rawText, PublicKey encryptionPublicKey) {
         String encryptedWithKey = null;
         try {
             Cipher cipher = Cipher.getInstance(ALGO_RSA_NONE_NOPADDING, PROVIDER_BC);
             cipher.init(Cipher.ENCRYPT_MODE, encryptionPublicKey);
-            byte[] plainStringBytes = IOUtils.toUTF8Bytes(plainString);
+            byte[] plainStringBytes = IOUtils.toUTF8Bytes(rawText);
             byte[] cipherBytes = cipher.doFinal(plainStringBytes);
             encryptedWithKey = encodeToBase64String(cipherBytes);
         } catch (Exception ex) {
@@ -412,13 +390,13 @@ public enum GuardUtils {
     }
 
     /**
-     * Encrypts the given plainString using the public key.
+     * Encrypts the given rawText using the public key.
      *
-     * @param plainString
+     * @param rawText
      * @return
      */
-    public static String encryptWithPublicKey(String plainString) {
-        return encryptWithPublicKey(plainString, publicKey);
+    public static String encryptWithPublicKey(final String rawText) {
+        return encryptWithPublicKey(rawText, publicKey);
     }
 
     /**
@@ -452,7 +430,7 @@ public enum GuardUtils {
             LOGGER.error(ex.getMessage(), ex);
         } finally {
             if (closeStream) {
-                IOUtils.safeClose(inputStream);
+                IOUtils.closeSilently(inputStream);
             }
         }
 
@@ -807,7 +785,7 @@ public enum GuardUtils {
      * @throws Exception
      */
     public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes)
-        throws Exception {
+            throws Exception {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.startTimer();
         byte[] encryptedBytes = null;
@@ -828,7 +806,7 @@ public enum GuardUtils {
         }
         stopWatch.stopTimer();
         LOGGER.debug("encryptWithSymmetricKey() took {} to encrypt: {} bytets", stopWatch.took(),
-                     BeanUtils.getLength(encryptedBytes));
+                BeanUtils.getLength(encryptedBytes));
 
         return encryptedBytes;
     }
@@ -935,7 +913,7 @@ public enum GuardUtils {
         }
 
         LOGGER.debug("decryptWithSymmetricKey() took {} to encrypt: {} bytets", stopWatch.took(),
-                     BeanUtils.getLength(rawBytes));
+                BeanUtils.getLength(rawBytes));
         return rawBytes;
     }
 

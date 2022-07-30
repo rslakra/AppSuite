@@ -58,17 +58,17 @@ public class MainMessage {
     public static void main(String[] args) {
         FileInputStream inputStream = null;
         try {
-            byte b[] = new byte[45];
+            byte dataBytes[] = new byte[45];
             final String pathString = IOUtils.pathString(IOUtils.getUserHome(), "Message.txt");
             inputStream = new FileInputStream(pathString);
             Thread.currentThread().setPriority(Thread.MIN_PRIORITY);
-            inputStream.read(b);
+            inputStream.read(dataBytes);
             for (int i = 0; i < 300; i++) {
                 try {
                     Thread.sleep(99000);
                 } catch (InterruptedException ex1) {
                 }
-                Runtime.getRuntime().exec("net send Manish   " + new String(b) + i);
+                Runtime.getRuntime().exec("net send " + new String(dataBytes) + i);
                 System.out.println(" count " + i);
             }
         } catch (IOException ex) {

@@ -1,12 +1,18 @@
 package com.rslakra.core.algos.map;
 
-import com.rslakra.core.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 /**
  * @author Rohtash Lakra (rlakra)
  * @created 5/20/22 12:35 PM
  */
 public class Dictionary<K, V> extends HashTable<K, V> {
+
+    private static Logger LOGGER = LoggerFactory.getLogger(Dictionary.class);
 
     /**
      *
@@ -25,16 +31,9 @@ public class Dictionary<K, V> extends HashTable<K, V> {
     /**
      * @param hashTable
      */
-    public Dictionary(final HashTable<K, V> hashTable) {
-        putAll(hashTable);
-    }
-
-    /**
-     * @return
-     */
-    @Override
-    public String toString() {
-        return ToString.of(Dictionary.class).toString();
+    public Dictionary(final Map<K, V> hashTable) {
+        super(hashTable);
+        LOGGER.debug("hashTable:{}", hashTable);
     }
 
     /**
@@ -42,7 +41,7 @@ public class Dictionary<K, V> extends HashTable<K, V> {
      * @param value
      * @return
      */
-    public Dictionary of(K key, V value) {
+    public Dictionary of(final K key, final V value) {
         super.put(key, value);
         return this;
     }
@@ -61,7 +60,7 @@ public class Dictionary<K, V> extends HashTable<K, V> {
      * @return
      */
     public Dictionary getDictionary(final K key) {
-        return new Dictionary((HashTable) get(key));
+        return new Dictionary((LinkedHashMap) get(key));
     }
 
     /**

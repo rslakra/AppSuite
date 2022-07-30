@@ -1,7 +1,10 @@
 package com.rslakra.core.algos.map;
 
+import com.rslakra.core.BeanUtils;
 import com.rslakra.core.HashUtils;
 import com.rslakra.core.ToString;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -16,16 +19,17 @@ import java.util.stream.Collectors;
  */
 public class HashTable<K, V> implements Map<K, V> {
 
+    private static Logger LOGGER = LoggerFactory.getLogger(HashTable.class);
     /* The percentage of capacity representing the maximum number of entries before the table will grow. E.g., 0.80 */
     private static final float FILL_FACTOR = 0.80f;
     /* The multiple to increase the capacity of the hash table, when the fill factor has been exceeded. E.g., 1.50 */
     private static final float GROWTH_FACTOR = 1.5f;
     private static final int DEFAULT_SIZE = 16;
 
-    private HashEntry[] hashEntries;
-    // maximum elements of the hashMap.
+    // maximum elements of the <code>HashTable</code>.
     private int capacity;
-    // current elements of the hashMap.
+    private HashEntry[] hashEntries;
+    // current elements of the <code>HashTable</code>.
     private int size;
 
     /**
@@ -39,15 +43,33 @@ public class HashTable<K, V> implements Map<K, V> {
      * @param capacity
      */
     public HashTable(final int capacity) {
+        initHashTable(capacity);
+    }
+
+    /**
+     * @param hashTable
+     */
+    public HashTable(final Map<K, V> hashTable) {
+        this();
+        putAll(hashTable);
+    }
+
+    /**
+     * @param capacity
+     */
+    private void initHashTable(final int capacity) {
         this.capacity = capacity;
-        hashEntries = new HashEntry[this.capacity];
-        size = 0;
+        this.hashEntries = new HashEntry[capacity];
+        this.size = 0;
     }
 
     /**
      * Validates the hashmap has enough capacity.
      */
     private void checkCapacity() {
+        if (size() == capacity) {
+            //
+        }
     }
 
     /**
@@ -57,7 +79,6 @@ public class HashTable<K, V> implements Map<K, V> {
     private int getHashIndex(final Object key) {
         return HashUtils.getHashIndex(key, capacity);
     }
-
 
     /**
      * Returns the number of key-value mappings in this map.  If the map contains more than {@code Integer.MAX_VALUE}
@@ -87,12 +108,13 @@ public class HashTable<K, V> implements Map<K, V> {
      *
      * @param key key whose presence in this map is to be tested
      * @return {@code true} if this map contains a mapping for the specified key
-     * @throws ClassCastException   if the key is of an inappropriate type for this map (<a href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
+     * @throws ClassCastException   if the key is of an inappropriate type for this map (<a
+     *                              href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      * @throws NullPointerException if the specified key is null and this map does not permit null keys (<a
      *                              href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      */
     @Override
-    public boolean containsKey(Object key) {
+    public boolean containsKey(final Object key) {
         int hashIndex = getHashIndex(key);
         HashEntry hashEntry = hashEntries[hashIndex];
         while (hashEntry != null && !hashEntry.getKey().equals(key)) {
@@ -103,9 +125,9 @@ public class HashTable<K, V> implements Map<K, V> {
     }
 
     /**
-     * Returns {@code true} if this map maps one or more keys to the specified value.  More formally, returns {@code
-     * true} if and only if this map contains at least one mapping to a value {@code v} such that {@code
-     * Objects.equals(value, v)}.  This operation will probably require time linear in the map size for most
+     * Returns {@code true} if this map maps one or more keys to the specified value.  More formally, returns
+     * {@code true} if and only if this map contains at least one mapping to a value {@code v} such that
+     * {@code Objects.equals(value, v)}.  This operation will probably require time linear in the map size for most
      * implementations of the {@code Map} interface.
      *
      * @param value value whose presence in this map is to be tested
@@ -116,7 +138,7 @@ public class HashTable<K, V> implements Map<K, V> {
      *                              href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      */
     @Override
-    public boolean containsValue(Object value) {
+    public boolean containsValue(final Object value) {
         return false;
     }
 
@@ -136,7 +158,8 @@ public class HashTable<K, V> implements Map<K, V> {
      * @param key the key whose associated value is to be returned
      * @return the value to which the specified key is mapped, or {@code null} if this map contains no mapping for the
      * key
-     * @throws ClassCastException   if the key is of an inappropriate type for this map (<a href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
+     * @throws ClassCastException   if the key is of an inappropriate type for this map (<a
+     *                              href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      * @throws NullPointerException if the specified key is null and this map does not permit null keys (<a
      *                              href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      */
@@ -171,7 +194,8 @@ public class HashTable<K, V> implements Map<K, V> {
      *                                       stored in this map
      */
     @Override
-    public V put(K key, V value) {
+    public V put(final K key, final V value) {
+        LOGGER.debug("put({}, {})", key, value);
         int hashIndex = getHashIndex(key);
         HashEntry oldValue = hashEntries[hashIndex];
         while (oldValue != null && oldValue.hasNextEntry()) {
@@ -212,17 +236,17 @@ public class HashTable<K, V> implements Map<K, V> {
      *                                       href="{@docRoot}/java.base/java/util/Collection.html#optional-restrictions">optional</a>)
      */
     @Override
-    public V remove(Object key) {
+    public V remove(final Object key) {
         return null;
     }
 
     /**
-     * Copies all of the mappings from the specified map to this map (optional operation).  The effect of this call is
+     * Copies all mappings from the specified map to this map (optional operation).  The effect of this call is
      * equivalent to that of calling {@link #put(Object, Object) put(k, v)} on this map once for each mapping from key
      * {@code k} to value {@code v} in the specified map.  The behavior of this operation is undefined if the specified
      * map is modified while the operation is in progress.
      *
-     * @param m mappings to be stored in this map
+     * @param hashTable mappings to be stored in this map
      * @throws UnsupportedOperationException if the {@code putAll} operation is not supported by this map
      * @throws ClassCastException            if the class of a key or value in the specified map prevents it from being
      *                                       stored in this map
@@ -232,35 +256,38 @@ public class HashTable<K, V> implements Map<K, V> {
      *                                       being stored in this map
      */
     @Override
-    public void putAll(Map<? extends K, ? extends V> m) {
-
+    public void putAll(final Map<? extends K, ? extends V> hashTable) {
+        LOGGER.debug("putAll({})", hashTable);
+        if (BeanUtils.isNotNull(hashTable)) {
+            hashTable.forEach((key, value) -> this.put(key, value));
+        }
     }
 
     /**
-     * Removes all of the mappings from this map (optional operation). The map will be empty after this call returns.
-     *
-     * @throws UnsupportedOperationException if the {@code clear} operation is not supported by this map
+     * Removes all mappings from this map. The map will be empty after this call returns.
      */
     @Override
     public void clear() {
-        hashEntries = new HashEntry[capacity];
-        size = 0;
+        this.initHashTable(DEFAULT_SIZE);
     }
 
     /**
      * Returns a {@link Set} view of the keys contained in this map. The set is backed by the map, so changes to the map
      * are reflected in the set, and vice-versa.  If the map is modified while an iteration over the set is in progress
      * (except through the iterator's own {@code remove} operation), the results of the iteration are undefined.  The
-     * set supports element removal, which removes the corresponding mapping from the map, via the {@code
-     * Iterator.remove}, {@code Set.remove}, {@code removeAll}, {@code retainAll}, and {@code clear} operations.  It
-     * does not support the {@code add} or {@code addAll} operations.
+     * set supports element removal, which removes the corresponding mapping from the map, via the
+     * {@code Iterator.remove}, {@code Set.remove}, {@code removeAll}, {@code retainAll}, and {@code clear} operations.
+     * It does not support the {@code add} or {@code addAll} operations.
      *
      * @return a set view of the keys contained in this map
      */
     @Override
     public Set<K> keySet() {
-//        return Arrays.stream(hashEntries).map(linkedList -> (linkedList.stream().map(((HashEntry)hashEntry -> hashEntry.get).collect(Collectors.toSet())).getKey())
-//            .collect(Collectors.toSet());
+        if (hashEntries != null) {
+            return entrySet().stream()
+                .map(hashEntry -> (K) hashEntry.getKey())
+                .collect(Collectors.toSet());
+        }
 
         return null;
     }
@@ -277,7 +304,10 @@ public class HashTable<K, V> implements Map<K, V> {
      */
     @Override
     public Collection<V> values() {
-//        return Arrays.stream(hashEntries).map(hashEntry -> (V) hashEntry.getValue()).collect(Collectors.toList());
+        if (hashEntries != null) {
+            return entrySet().stream().map(hashEntry -> (V) hashEntry.getValue()).collect(Collectors.toList());
+        }
+
         return null;
     }
 
@@ -286,16 +316,18 @@ public class HashTable<K, V> implements Map<K, V> {
      * map are reflected in the set, and vice-versa.  If the map is modified while an iteration over the set is in
      * progress (except through the iterator's own {@code remove} operation, or through the {@code setValue} operation
      * on a map entry returned by the iterator) the results of the iteration are undefined.  The set supports element
-     * removal, which removes the corresponding mapping from the map, via the {@code Iterator.remove}, {@code
-     * Set.remove}, {@code removeAll}, {@code retainAll} and {@code clear} operations.  It does not support the {@code
-     * add} or {@code addAll} operations.
+     * removal, which removes the corresponding mapping from the map, via the {@code Iterator.remove},
+     * {@code Set.remove}, {@code removeAll}, {@code retainAll} and {@code clear} operations.  It does not support the
+     * {@code add} or {@code addAll} operations.
      *
      * @return a set view of the mappings contained in this map
      */
     @Override
     public Set<Entry<K, V>> entrySet() {
-//        return Arrays.stream(hashEntries).map(hashEntry -> hashEntry).collect(Collectors.toSet());
-        return null;
+        return Arrays.stream(hashEntries)
+            .filter(hashEntry -> hashEntry != null)
+            .map(hashEntry -> (Entry<K, V>) hashEntry)
+            .collect(Collectors.toSet());
     }
 
     /**
@@ -303,7 +335,16 @@ public class HashTable<K, V> implements Map<K, V> {
      */
     @Override
     public String toString() {
-        return Arrays.stream(hashEntries).filter(hashEntry -> hashEntry != null).collect(Collectors.toSet()).toString();
+        if (isEmpty()) {
+            return ToString.of().toString();
+        }
+
+        ToString toStringBuilder = ToString.of();
+        entrySet().stream()
+            .filter(hashEntry -> hashEntry != null)
+            .forEach(hashEntry -> toStringBuilder.add(hashEntry.toString()));
+
+        return toStringBuilder.toString();
     }
 
     /**
@@ -319,7 +360,7 @@ public class HashTable<K, V> implements Map<K, V> {
          * @param key
          * @param value
          */
-        HashEntry(K key, V value) {
+        HashEntry(final K key, final V value) {
             this(key, value, null);
         }
 
@@ -328,7 +369,7 @@ public class HashTable<K, V> implements Map<K, V> {
          * @param value
          * @param nextEntry
          */
-        HashEntry(K key, V value, HashEntry nextEntry) {
+        HashEntry(final K key, final V value, final HashEntry nextEntry) {
             this.key = key;
             this.value = value;
             this.nextEntry = nextEntry;
@@ -377,7 +418,7 @@ public class HashTable<K, V> implements Map<K, V> {
          *                                       the entry has been removed from the backing map.
          */
         @Override
-        public V setValue(V value) {
+        public V setValue(final V value) {
             return this.value = value;
         }
 
@@ -394,7 +435,7 @@ public class HashTable<K, V> implements Map<K, V> {
          * @return
          */
         @Override
-        public boolean equals(Object object) {
+        public boolean equals(final Object object) {
             if (this == object) {
                 return true;
             }
@@ -411,7 +452,7 @@ public class HashTable<K, V> implements Map<K, V> {
          */
         @Override
         public int hashCode() {
-            return Objects.hash(getKey());
+            return Objects.hashCode(getKey());
         }
 
         /**
@@ -419,9 +460,10 @@ public class HashTable<K, V> implements Map<K, V> {
          */
         @Override
         public String toString() {
-            return ToString.of(HashEntry.class)
-                .add("key=" + getKey())
-                .add("value=" + getValue())
+//            return ToString.of(HashEntry.class)
+            return ToString.of()
+                .add("key", getKey())
+                .add("value", getValue())
                 .toString();
         }
     }

@@ -34,6 +34,7 @@ import com.rslakra.core.IOUtils;
 import com.rslakra.core.StopWatch;
 import com.rslakra.core.security.GuardUtils;
 import org.apache.http.*;
+import org.apache.http.Header;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -137,7 +138,7 @@ public enum HTTPUtils {
     private static Map<String, String> mimeTypes;
 
     /* urlToDomainMap */
-    private static final Map<String, String> urlToDomainMap = new HashMap<>(3);
+    private static final Map<String, String> URL_TO_DOMAIN_MAP = new HashMap<>(3);
 
     /* headersIgnored */
     private static String[] headersIgnored;
@@ -292,12 +293,10 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the <code>java.util.ArrayList()</code> object that can be used to
-     * perform <code>add()</code>, <code>remove()</code> operations on that
-     * array list. if you use the <code>java.util.Arrays#asList(T... a)</code>,
-     * you will not be able to perform those operations as the latter returns a
-     * fixed-size list backed by the specified array. If the <code>args</code>
-     * are null, it returns null.
+     * Returns the <code>java.util.ArrayList()</code> object that can be used to perform <code>add()</code>,
+     * <code>remove()</code> operations on that array list. if you use the <code>java.util.Arrays#asList(T...
+     * a)</code>, you will not be able to perform those operations as the latter returns a fixed-size list backed by the
+     * specified array. If the <code>args</code> are null, it returns null.
      * <p>
      * For more details, see: <code>java.util.Arrays#asList(T... a)</code>.
      *
@@ -318,11 +317,10 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns an array containing all elements contained in this {@code List}.
-     * If the specified array is large enough to hold the elements, the
-     * specified array is used, otherwise an array of the same type is created.
-     * If the specified array is used and is larger than this {@code List}, the
-     * array element following the collection elements is set to null.
+     * Returns an array containing all elements contained in this {@code List}. If the specified array is large enough
+     * to hold the elements, the specified array is used, otherwise an array of the same type is created. If the
+     * specified array is used and is larger than this {@code List}, the array element following the collection elements
+     * is set to null.
      *
      * @param list
      * @param classType
@@ -340,8 +338,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the <code>java.util.ArrayList()</code> object which is of the
-     * specified type.
+     * Returns the <code>java.util.ArrayList()</code> object which is of the specified type.
      *
      * @param listStrings
      * @return
@@ -359,8 +356,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the <T> type is equals to any of the specified <T> types
-     * otherwise false.
+     * Returns true if the <T> type is equals to any of the specified <T> types otherwise false.
      *
      * @param type
      * @param types
@@ -511,8 +507,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the specified object is an instance of any of the
-     * specified classTypes otherwise false.
+     * Returns true if the specified object is an instance of any of the specified classTypes otherwise false.
      *
      * @param object
      * @param classTypes
@@ -546,9 +541,8 @@ public enum HTTPUtils {
     // /////////////////////////////////////////////////////////////////////////
 
     /**
-     * Causes the current thread which sent this message to sleep for the given
-     * interval of time (given in milliseconds). The precision is not guaranteed
-     * - the thread may sleep more or less than requested.
+     * Causes the current thread which sent this message to sleep for the given interval of time (given in
+     * milliseconds). The precision is not guaranteed - the thread may sleep more or less than requested.
      *
      * @param time
      */
@@ -570,8 +564,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the current thread signature (like name, id, priority and thread
-     * group etc.).
+     * Returns the current thread signature (like name, id, priority and thread group etc.).
      *
      * @return
      */
@@ -634,16 +627,14 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns an empty ArrayList if the specified list is null. Otherwise,
-     * returns the list itself.
+     * Returns an empty ArrayList if the specified list is null. Otherwise, returns the list itself.
      */
     public static <T> List<T> makeEmptyIfNull(List<T> list) {
         return (list == null ? new ArrayList<T>() : list);
     }
 
     /**
-     * Returns true if the specified object is an instance of any of the
-     * specified classes.
+     * Returns true if the specified object is an instance of any of the specified classes.
      */
     public static boolean instanceOfAny(Object object, Class<?>... classes) {
         boolean result = false;
@@ -687,12 +678,11 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the default 'User-Agent' value for these requests. This value is
-     * generated in the same way, used by IPad and Android devices. This is the
-     * mandatory property and must pass with each request.
+     * Returns the default 'User-Agent' value for these requests. This value is generated in the same way, used by IPad
+     * and Android devices. This is the mandatory property and must pass with each request.
      * <p>
-     * NOTE: - Please don't make change in this user agent string. It is used to
-     * send the client requests to server (like iPad and Android).
+     * NOTE: - Please don't make change in this user agent string. It is used to send the client requests to server
+     * (like iPad and Android).
      *
      * @param appBundleIdentifier
      * @param appType
@@ -725,9 +715,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the default 'User-Agent' value for these requests. This value is
-     * generated in the same way, used by IPad and Android devices. This is the
-     * mandatory property and must pass with each request.
+     * Returns the default 'User-Agent' value for these requests. This value is generated in the same way, used by IPad
+     * and Android devices. This is the mandatory property and must pass with each request.
      *
      * @return
      */
@@ -855,9 +844,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the server URL based on the values provided in the
-     * Config.properties file. If the urlSuffix is null or empty, the base URL
-     * of the server is returned.
+     * Returns the server URL based on the values provided in the Config.properties file. If the urlSuffix is null or
+     * empty, the base URL of the server is returned.
      *
      * @param baseServerUrl
      * @param urlSuffix
@@ -888,7 +876,7 @@ public enum HTTPUtils {
      */
     public static String getHostName(String urlString) {
         // check in cache first
-        String hostName = urlToDomainMap.get(urlString);
+        String hostName = URL_TO_DOMAIN_MAP.get(urlString);
         if (BeanUtils.isEmpty(hostName)) {
             if (USE_FULLY_QUALIFIED_HOSTNAME) {
                 hostName = getHostNameFromUrl(urlString);
@@ -897,7 +885,7 @@ public enum HTTPUtils {
             }
 
             // put in domain cache
-            urlToDomainMap.put(urlString, hostName);
+            URL_TO_DOMAIN_MAP.put(urlString, hostName);
         }
 
         return hostName;
@@ -935,8 +923,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the connection to the server is available and returns
-     * some results otherwise false.
+     * Returns true if the connection to the server is available and returns some results otherwise false.
      *
      * @param baseServerUrl
      * @param urlSuffix
@@ -955,7 +942,9 @@ public enum HTTPUtils {
             System.out.println("Checking server reachability for urlString:" + urlString);
             urlConnection = openHttpURLConnection(urlString, null);
             setConnectTimeoutProperties(urlConnection);
-            serverReachable = (urlConnection != null && (urlConnection.getResponseCode() == 200 || urlConnection.getContent() != null));
+            serverReachable =
+                    (urlConnection != null && (urlConnection.getResponseCode() == 200
+                            || urlConnection.getContent() != null));
         } catch (Exception ex) {
             serverReachable = false;
         } finally {
@@ -1078,7 +1067,9 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static HttpURLConnection openHttpURLConnection(URL url, Proxy proxy) throws IOException {
-        return (BeanUtils.isNotNull(url) ? (HttpURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+        return (BeanUtils.isNotNull(url) ? (HttpURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy)
+                : url.openConnection())
+                : null);
     }
 
     /**
@@ -1129,7 +1120,8 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static HttpsURLConnection openHttpsURLConnection(URL url, Proxy proxy) throws IOException {
-        return (BeanUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+        return (BeanUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (
+                BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
     }
 
     /**
@@ -1186,8 +1178,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Sets the default properties of the specified <code>urlConnection</code>
-     * object.
+     * Sets the default properties of the specified <code>urlConnection</code> object.
      *
      * @param urlConnection
      * @throws IOException
@@ -1200,14 +1191,14 @@ public enum HTTPUtils {
     }
 
     /**
-     * Sets the default properties of the given <code>HttpURLConnection</code>
-     * object.
+     * Sets the default properties of the given <code>HttpURLConnection</code> object.
      *
      * @param urlConnection
      * @param requestMethod
      * @throws IOException
      */
-    public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod) throws IOException {
+    public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod)
+            throws IOException {
         if (BeanUtils.isNotNull(urlConnection)) {
             // set connection timeout properties.
             setConnectTimeoutProperties(urlConnection);
@@ -1234,13 +1225,12 @@ public enum HTTPUtils {
     }
 
     /**
-     * Sets the default properties of the given <code>HttpURLConnection</code>
-     * object.
+     * Sets the default properties of the given <code>HttpURLConnection</code> object.
      *
      * @param urlConnection
      * @throws IOException
      */
-    public static void setConnectionInputAndOutput(final HttpURLConnection urlConnection) throws IOException {
+    public static void setConnectionInputAndOutput(final HttpURLConnection urlConnection) {
         if (BeanUtils.isNotNull(urlConnection)) {
             /*
              * Sets the flag indicating whether this URLConnection allows input.
@@ -1252,8 +1242,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Sets the <code>useCaches</code> and <code>defaultUseCaches</code>
-     * properties of the given <code>HttpURLConnection</code> object.
+     * Sets the <code>useCaches</code> and <code>defaultUseCaches</code> properties of the given
+     * <code>HttpURLConnection</code> object.
      *
      * @param urlConnection
      * @throws IOException
@@ -1418,7 +1408,8 @@ public enum HTTPUtils {
      * @param urlConnection
      * @param requestParameters
      */
-    public static void setRequestParameters(HttpURLConnection urlConnection, final Map<String, Object> requestParameters) throws IOException {
+    public static void setRequestParameters(HttpURLConnection urlConnection,
+                                            final Map<String, Object> requestParameters) throws IOException {
         setQueryString(urlConnection, toUrlQueryString(requestParameters));
     }
 
@@ -1563,8 +1554,7 @@ public enum HTTPUtils {
      * Executes the <code>httpMethod</code> request of the specified
      * <code>urlString</code> with <code>requestParameters</code> using
      * <code>HttpURLConnection</code>. The <code>OperationResponse</code> object
-     * is returned as response which contains the data/error, if any, including
-     * response headers information.
+     * is returned as response which contains the data/error, if any, including response headers information.
      *
      * @param urlString
      * @param httpMethod
@@ -1581,8 +1571,7 @@ public enum HTTPUtils {
      * Executes the GET request of the specified <code>urlString</code> with
      * <code>requestHeaders</code> and <code>requestParameters</code> using
      * <code>HttpURLConnection</code>. The <code>OperationResponse</code> object
-     * is returned as response which contains the data/error, if any, including
-     * response headers information.
+     * is returned as response which contains the data/error, if any, including response headers information.
      *
      * @param urlString
      * @param requestHeaders
@@ -1599,8 +1588,7 @@ public enum HTTPUtils {
      * Executes the GET request of the specified <code>urlString</code> with
      * <code>requestHeaders</code> and <code>requestParameters</code> using
      * <code>HttpURLConnection</code>. The <code>OperationResponse</code> object
-     * is returned as response which contains the data/error, if any, including
-     * response headers information.
+     * is returned as response which contains the data/error, if any, including response headers information.
      *
      * @param urlString
      * @param requestParameters
@@ -1616,8 +1604,7 @@ public enum HTTPUtils {
      * Executes the POST request of the specified <code>urlString</code> with
      * <code>requestHeaders</code> and <code>requestParameters</code> using
      * <code>HttpURLConnection</code>. The <code>OperationResponse</code> object
-     * is returned as response which contains the data/error, if any, including
-     * response headers information.
+     * is returned as response which contains the data/error, if any, including response headers information.
      *
      * @param urlString
      * @param requestHeaders
@@ -1634,8 +1621,7 @@ public enum HTTPUtils {
      * Executes the POST request of the specified <code>urlString</code> with
      * <code>requestHeaders</code> and <code>requestParameters</code> using
      * <code>HttpURLConnection</code>. The <code>OperationResponse</code> object
-     * is returned as response which contains the data/error, if any, including
-     * response headers information.
+     * is returned as response which contains the data/error, if any, including response headers information.
      *
      * @param urlString
      * @param requestParameters
@@ -1648,9 +1634,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the value of the specified key from the headers. It might be this
-     * method throw ClassCastException, if the return value is different than
-     * string.
+     * Returns the value of the specified key from the headers. It might be this method throw ClassCastException, if the
+     * return value is different than string.
      *
      * @param headers
      * @param key
@@ -1715,8 +1700,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the cookies extracted from the <code>responseHeaders</code>
-     * headers.
+     * Returns the cookies extracted from the <code>responseHeaders</code> headers.
      *
      * @param responseHeaders
      * @return
@@ -1743,9 +1727,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the value of the specified key from the headers. It might be this
-     * method throw ClassCastException, if the return value is different than
-     * string.
+     * Returns the value of the specified key from the headers. It might be this method throw ClassCastException, if the
+     * return value is different than string.
      *
      * @param httpResponse
      * @param key
@@ -1777,8 +1760,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Return the value of the key from the specified mapKeyValues. If no value
-     * is found, the default is returned.
+     * Return the value of the key from the specified mapKeyValues. If no value is found, the default is returned.
      *
      * @param mapKeyValues
      * @param key
@@ -1961,8 +1943,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the given paramName is part of an excludedParameters set
-     * otherwise false.
+     * Returns true if the given paramName is part of an excludedParameters set otherwise false.
      *
      * @param paramName
      * @return
@@ -2025,8 +2006,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the specified requestMethodName is an excludedMethods set
-     * otherwise false.
+     * Returns true if the specified requestMethodName is an excludedMethods set otherwise false.
      *
      * @param requestMethodName
      * @param excludedMethods
@@ -2066,7 +2046,8 @@ public enum HTTPUtils {
      * @param requestParameters
      * @param excludedMethodRequest
      */
-    public static void filterRequestParameters(SortedMap<String, Object> requestParameters, boolean excludedMethodRequest) {
+    public static void filterRequestParameters(SortedMap<String, Object> requestParameters,
+                                               boolean excludedMethodRequest) {
         if (excludedMethodRequest && !BeanUtils.isEmpty(requestParameters)) {
             SortedMap<String, Object> filteredParameters = new TreeMap<String, Object>(requestParameters);
             for (String key : filteredParameters.keySet()) {
@@ -2079,8 +2060,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the request parameters as the <code>List<NameValuePair></code>
-     * object after sorts based on the name.
+     * Returns the request parameters as the <code>List<NameValuePair></code> object after sorts based on the name.
      *
      * @param servletRequest
      * @return
@@ -2103,8 +2083,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the string generated using the specified parameters (only
-     * parameter values excluding keys).
+     * Returns the string generated using the specified parameters (only parameter values excluding keys).
      *
      * @param paramValues
      * @return
@@ -2128,8 +2107,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the string generated using the specified parameters (only
-     * parameter values excluding keys).
+     * Returns the string generated using the specified parameters (only parameter values excluding keys).
      *
      * @param paramValues
      * @return
@@ -2153,8 +2131,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns the string generated using the specified parameters (only
-     * parameter values excluding keys).
+     * Returns the string generated using the specified parameters (only parameter values excluding keys).
      *
      * @param requestParameters
      * @return
@@ -2195,8 +2172,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Converts the responseHeaders from <code>Map<String, List<String>></code>
-     * to <code>Map<String, String></code>.
+     * Converts the responseHeaders from <code>Map<String, List<String>></code> to <code>Map<String, String></code>.
      *
      * @param responseHeaders
      * @return
@@ -2251,8 +2227,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the string contains only digits. The $ avoids a partial
-     * match, i.e. 1b.
+     * Returns true if the string contains only digits. The $ avoids a partial match, i.e. 1b.
      *
      * @param string
      * @return
@@ -2279,7 +2254,9 @@ public enum HTTPUtils {
                     String hostDomainOnly = hostName.substring(0, dotIndex);
                     int lastDotIndex = hostDomainOnly.lastIndexOf(".");
                     if (lastDotIndex != -1) {
-                        hostName = hostName.substring(lastDotIndex + 1, hostDomainOnly.length()) + hostName.substring(dotIndex);
+                        hostName =
+                                hostName.substring(lastDotIndex + 1, hostDomainOnly.length()) + hostName.substring(
+                                        dotIndex);
                     }
                 }
             }
@@ -2291,8 +2268,7 @@ public enum HTTPUtils {
     }
 
     /**
-     * Returns true if the value starts with any of the specified prefixes
-     * otherwise false.
+     * Returns true if the value starts with any of the specified prefixes otherwise false.
      *
      * @param value
      * @param prefixes
@@ -2459,8 +2435,8 @@ public enum HTTPUtils {
     }
 
     /**
-     * Create an HostnameVerifier that hardwires the expected hostname. Note
-     * that is different than the URL's hostname: example.com versus example.org
+     * Create an HostnameVerifier that hardwires the expected hostname. Note that is different than the URL's hostname:
+     * example.com versus example.org
      *
      * @author Rohtash Singh Lakra
      * @date 04/17/2017 12:40:31 PM
@@ -2481,10 +2457,9 @@ public enum HTTPUtils {
     }
 
     /**
-     * A custom X509TrustManager implementation that trusts a specified server
-     * certificate in addition to those that are in the system TrustStore. Also
-     * handles an out-of-order certificate chain, as is often produced by
-     * Apache's mod_ssl
+     * A custom X509TrustManager implementation that trusts a specified server certificate in addition to those that are
+     * in the system TrustStore. Also handles an out-of-order certificate chain, as is often produced by Apache's
+     * mod_ssl
      *
      * @author Rohtash Singh Lakra
      * @date 04/17/2017 05:57:55 PM
@@ -2500,8 +2475,7 @@ public enum HTTPUtils {
         private final KeyStore trustStore;
 
         /**
-         * @param trustStore A KeyStore containing the server certificate that should
-         *                   be trusted
+         * @param trustStore A KeyStore containing the server certificate that should be trusted
          * @throws NoSuchAlgorithmException
          * @throws KeyStoreException
          */
@@ -2516,8 +2490,7 @@ public enum HTTPUtils {
         }
 
         /**
-         * No-op. Never invoked by client, only used in server-side
-         * implementations
+         * No-op. Never invoked by client, only used in server-side implementations
          *
          * @return
          */
@@ -2526,29 +2499,27 @@ public enum HTTPUtils {
         }
 
         /**
-         * No-op. Never invoked by client, only used in server-side
-         * implementations
+         * No-op. Never invoked by client, only used in server-side implementations
          *
          * @return
          */
-        public void checkClientTrusted(X509Certificate[] chain, String authType) throws java.security.cert.CertificateException {
+        public void checkClientTrusted(X509Certificate[] chain, String authType)
+                throws java.security.cert.CertificateException {
         }
 
         /**
-         * Given the partial or complete certificate chain provided by the peer,
-         * build a certificate path to a trusted root and return if it can be
-         * validated and is trusted for client SSL authentication based on the
-         * authentication type. The authentication type is determined by the
-         * actual certificate used. For instance, if RSAPublicKey is used, the
-         * authType should be "RSA". Checking is case-sensitive. Defers to the
-         * default trust manager first, checks the cert supplied in the ctor if
-         * that fails.
+         * Given the partial or complete certificate chain provided by the peer, build a certificate path to a trusted
+         * root and return if it can be validated and is trusted for client SSL authentication based on the
+         * authentication type. The authentication type is determined by the actual certificate used. For instance, if
+         * RSAPublicKey is used, the authType should be "RSA". Checking is case-sensitive. Defers to the default trust
+         * manager first, checks the cert supplied in the ctor if that fails.
          *
          * @param chain    the server's certificate chain
          * @param authType the authentication type based on the client certificate
          * @throws java.security.cert.CertificateException
          */
-        public void checkServerTrusted(X509Certificate[] chain, String authType) throws java.security.cert.CertificateException {
+        public void checkServerTrusted(X509Certificate[] chain, String authType)
+                throws java.security.cert.CertificateException {
             try {
                 originalX509TrustManager.checkServerTrusted(chain, authType);
             } catch (CertificateException originalException) {
@@ -2568,9 +2539,8 @@ public enum HTTPUtils {
         }
 
         /**
-         * Puts the certificate chain in the proper order, to deal with
-         * out-of-order certificate chains as are sometimes produced by Apache's
-         * mod_ssl
+         * Puts the certificate chain in the proper order, to deal with out-of-order certificate chains as are sometimes
+         * produced by Apache's mod_ssl
          *
          * @param chain the certificate chain, possibly with bad ordering
          * @return the re-ordered certificate chain
@@ -2592,12 +2562,11 @@ public enum HTTPUtils {
         }
 
         /**
-         * A helper method for certificate re-ordering. Finds the root
-         * certificate in a possibly out-of-order certificate chain.
+         * A helper method for certificate re-ordering. Finds the root certificate in a possibly out-of-order
+         * certificate chain.
          *
          * @param certificates the certificate change, possibly out-of-order
-         * @return the root certificate, if any, that was found in the list of
-         * certificates
+         * @return the root certificate, if any, that was found in the list of certificates
          */
         private X509Certificate findRootCert(List<X509Certificate> certificates) {
             X509Certificate rootCert = null;
@@ -2615,9 +2584,8 @@ public enum HTTPUtils {
         }
 
         /**
-         * A helper method for certificate re-ordering. Finds the first
-         * certificate in the list of certificates that is signed by the
-         * sigingCert.
+         * A helper method for certificate re-ordering. Finds the first certificate in the list of certificates that is
+         * signed by the sigingCert.
          */
         private X509Certificate findSignedCert(X509Certificate signingCert, List<X509Certificate> certificates) {
             X509Certificate signed = null;
@@ -2635,8 +2603,8 @@ public enum HTTPUtils {
         }
 
         /**
-         * A helper method for certificate re-ordering. Finds the certificate in
-         * the list of certificates that signed the signedCert.
+         * A helper method for certificate re-ordering. Finds the certificate in the list of certificates that signed
+         * the signedCert.
          */
         private X509Certificate findSigner(X509Certificate signedCert, List<X509Certificate> certificates) {
             X509Certificate signer = null;
@@ -2703,8 +2671,12 @@ public enum HTTPUtils {
          * @throws NoSuchAlgorithmException
          * @throws KeyManagementException
          */
-        public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers, SecureRandom secureRandom) throws NoSuchAlgorithmException, KeyManagementException {
-            System.out.println("+getSSLContext(" + tlsVersion + ", " + keyManagers + ", " + trustManagers + ", " + secureRandom + "):");
+        public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers,
+                                        SecureRandom secureRandom)
+                throws NoSuchAlgorithmException, KeyManagementException {
+            System.out.println(
+                    "+getSSLContext(" + tlsVersion + ", " + keyManagers + ", " + trustManagers + ", " + secureRandom
+                            + "):");
 
             SSLContext sslContext = SSLContext.getInstance(tlsVersion);
             sslContext.init(keyManagers, trustManagers, secureRandom);
@@ -2723,7 +2695,8 @@ public enum HTTPUtils {
          * @throws NoSuchAlgorithmException
          * @throws KeyManagementException
          */
-        public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers) throws NoSuchAlgorithmException, KeyManagementException {
+        public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers)
+                throws NoSuchAlgorithmException, KeyManagementException {
             return getSSLContext(tlsVersion, null, trustManagers, null);
         }
 
@@ -2737,7 +2710,8 @@ public enum HTTPUtils {
          * @throws NoSuchAlgorithmException
          * @throws KeyManagementException
          */
-        public SSLContext getSSLContext(String tlsVersion, TrustManager[] trustManagers, SecureRandom secureRandom) throws NoSuchAlgorithmException, KeyManagementException {
+        public SSLContext getSSLContext(String tlsVersion, TrustManager[] trustManagers, SecureRandom secureRandom)
+                throws NoSuchAlgorithmException, KeyManagementException {
             return getSSLContext(tlsVersion, null, trustManagers, secureRandom);
         }
 
@@ -2804,7 +2778,8 @@ public enum HTTPUtils {
          * @throws NoSuchAlgorithmException
          * @throws KeyStoreException
          */
-        public TrustManager[] getTrustManagers(final KeyStore trustKeyStore) throws NoSuchAlgorithmException, KeyStoreException {
+        public TrustManager[] getTrustManagers(final KeyStore trustKeyStore)
+                throws NoSuchAlgorithmException, KeyStoreException {
             System.out.println("+getTrustManagers(" + trustKeyStore + ")");
             TrustManager[] trustManagers = null;
 
@@ -2827,7 +2802,8 @@ public enum HTTPUtils {
          * @return
          * @throws Exception
          */
-        private SSLSocketFactory createTrustSSLSocketFactory(InputStream certInputStream, SecureRandom secureRandom) throws Exception {
+        private SSLSocketFactory createTrustSSLSocketFactory(InputStream certInputStream, SecureRandom secureRandom)
+                throws Exception {
             X509Certificate certificate = GuardUtils.newX509Certificate(certInputStream, true);
 
             // Create a KeyStore containing our trusted CAs
@@ -2910,8 +2886,7 @@ public enum HTTPUtils {
         }
 
         /**
-         * Produces a KeyStore from a PKCS12 (.p12) certificate file, typically
-         * the client certificate
+         * Produces a KeyStore from a PKCS12 (.p12) certificate file, typically the client certificate
          *
          * @param p12CertInputStream
          * @param p12CertPass
@@ -2920,19 +2895,19 @@ public enum HTTPUtils {
          * @throws GeneralSecurityException
          * @throws IOException
          */
-        public KeyStore loadPKCS12KeyStore(InputStream p12CertInputStream, char[] p12CertPass, boolean closeStream) throws GeneralSecurityException, IOException {
+        public KeyStore loadPKCS12KeyStore(InputStream p12CertInputStream, char[] p12CertPass, boolean closeStream)
+                throws GeneralSecurityException, IOException {
             KeyStore keyStore = KeyStore.getInstance(PKCS12);
             keyStore.load(p12CertInputStream, p12CertPass);
             if (closeStream) {
-                IOUtils.safeClose(p12CertInputStream);
+                IOUtils.closeSilently(p12CertInputStream);
             }
 
             return keyStore;
         }
 
         /**
-         * Produces a KeyStore from a PKCS12 (.p12) certificate file, typically
-         * the client certificate
+         * Produces a KeyStore from a PKCS12 (.p12) certificate file, typically the client certificate
          *
          * @param p12CertFileName
          * @param p12CertPassword
@@ -2940,13 +2915,15 @@ public enum HTTPUtils {
          * @throws GeneralSecurityException
          * @throws IOException
          */
-        public KeyStore loadPKCS12KeyStore(String p12CertFileName, String p12CertPassword) throws GeneralSecurityException, IOException {
-            return loadPKCS12KeyStore(IOUtils.toInputStream(IOUtils.readBytes(p12CertFileName)), p12CertPassword.toCharArray(), false);
+        public KeyStore loadPKCS12KeyStore(String p12CertFileName, String p12CertPassword)
+                throws GeneralSecurityException, IOException {
+            return loadPKCS12KeyStore(IOUtils.toInputStream(IOUtils.readBytes(p12CertFileName)),
+                    p12CertPassword.toCharArray(), false);
         }
 
         /**
-         * Reads and decodes a base-64 encoded DER certificate (a .pem
-         * certificate), typically the server's CA certificate.
+         * Reads and decodes a base-64 encoded DER certificate (a .pem certificate), typically the server's CA
+         * certificate.
          *
          * @param pemCertificateStream
          * @return
@@ -2968,7 +2945,7 @@ public enum HTTPUtils {
 
                 pemDecodedBytes = Base64.getDecoder().decode(pemBuilder.toString());
             } finally {
-                IOUtils.safeClose(bufferedReader);
+                IOUtils.closeSilently(bufferedReader);
             }
 
             return pemDecodedBytes;
@@ -2983,7 +2960,8 @@ public enum HTTPUtils {
          * @return An initialized SSLContext
          * @throws Exception
          */
-        private SSLContext createSSLContext(String p12CertFileName, String p12CertPassword, String caCertString) throws Exception {
+        private SSLContext createSSLContext(String p12CertFileName, String p12CertPassword, String caCertString)
+                throws Exception {
             final KeyStore keyStore = loadPKCS12KeyStore(p12CertFileName, p12CertPassword);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("X509");
             kmf.init(keyStore, p12CertPassword.toCharArray());
@@ -2999,12 +2977,10 @@ public enum HTTPUtils {
         }
 
         /**
-         * Produces a KeyStore from a String containing a PEM certificate
-         * (typically, the server's CA certificate)
+         * Produces a KeyStore from a String containing a PEM certificate (typically, the server's CA certificate)
          *
          * @param certificateString A String containing the PEM-encoded certificate
-         * @return a KeyStore (to be used as a trust store) that contains the
-         * certificate
+         * @return a KeyStore (to be used as a trust store) that contains the certificate
          * @throws Exception
          */
         private KeyStore loadPEMTrustStore(String certificateString) throws Exception {
@@ -3154,7 +3130,7 @@ public enum HTTPUtils {
      * @param acceptEncodingHeaders
      * @return
      */
-    public static StringBuilder acceptEncodingHeader(final Header[] acceptEncodingHeaders) {
+    public static StringBuilder acceptEncodingHeader(final org.apache.http.Header[] acceptEncodingHeaders) {
         final StringBuilder encodingHeaders = new StringBuilder();
         if (BeanUtils.isNotEmpty(acceptEncodingHeaders)) {
             for (int i = 0; i < acceptEncodingHeaders.length; i++) {
@@ -3222,7 +3198,8 @@ public enum HTTPUtils {
      * @return
      */
     public static boolean hasHeader(final HttpMessage httpMessage, final String headerName) {
-        return (BeanUtils.isNotNull(httpMessage) && BeanUtils.isNotEmpty(headerName) && httpMessage.containsHeader(headerName));
+        return (BeanUtils.isNotNull(httpMessage) && BeanUtils.isNotEmpty(headerName) && httpMessage.containsHeader(
+                headerName));
     }
 
     /**

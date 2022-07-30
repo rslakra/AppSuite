@@ -367,7 +367,7 @@ public enum IOUtils {
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(randomAccessFile);
+                closeSilently(randomAccessFile);
             }
         }
 
@@ -490,7 +490,7 @@ public enum IOUtils {
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(outputStream);
+                closeSilently(outputStream);
             }
         }
     }
@@ -619,8 +619,7 @@ public enum IOUtils {
             } finally {
                 /* close streams. */
                 if (closeStreams) {
-                    safeClose(sourceStream);
-                    safeClose(targetStream);
+                    closeSilently(sourceStream, targetStream);
                 }
             }
         }
@@ -653,7 +652,7 @@ public enum IOUtils {
             } finally {
                 /* close streams. */
                 if (closeStream) {
-                    safeClose(outputStream);
+                    closeSilently(outputStream);
                 }
             }
         }
@@ -688,8 +687,7 @@ public enum IOUtils {
             throw ex;
         } finally {
             /* close streams. */
-            safeClose(inputStream);
-            safeClose(outputStream);
+            closeSilently(inputStream, outputStream);
         }
 
         System.out.println("-sendLocalFile()");
@@ -725,8 +723,7 @@ public enum IOUtils {
             } finally {
                 /* close streams. */
                 if (closeStreams) {
-                    safeClose(sourceFile);
-                    safeClose(targetFile);
+                    closeSilently(sourceFile, targetFile);
                 }
             }
         }
@@ -769,8 +766,7 @@ public enum IOUtils {
             } catch (Exception ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(inputStream);
-                safeClose(outputStream);
+                closeSilently(inputStream, outputStream);
             }
         }
     }
@@ -809,7 +805,7 @@ public enum IOUtils {
                 System.err.println(ex);
                 throw ex;
             } finally {
-                safeClose(outputStream);
+                closeSilently(outputStream);
             }
         }
 
@@ -827,29 +823,6 @@ public enum IOUtils {
      */
     public static boolean saveFile(byte[] input, String filePath) throws IOException {
         return saveFile(input, new File(filePath));
-    }
-
-    /**
-     * Closes the specified <code>objectCloseable</code>.
-     *
-     * @param objectCloseable
-     */
-    public static final void safeClose(Object objectCloseable) {
-        if (objectCloseable != null) {
-            try {
-                if (objectCloseable instanceof Closeable) {
-                    ((Closeable) objectCloseable).close();
-                } else if (objectCloseable instanceof Socket) {
-                    ((Socket) objectCloseable).close();
-                } else if (objectCloseable instanceof ServerSocket) {
-                    ((ServerSocket) objectCloseable).close();
-                } else {
-                    throw new IllegalArgumentException("Unknown object to close!");
-                }
-            } catch (IOException ex) {
-                System.err.println(ex);
-            }
-        }
     }
 
     /**
@@ -1080,9 +1053,9 @@ public enum IOUtils {
                 System.err.println(ex);
             } finally {
                 /* close streams. */
-                safeClose(byteStream);
+                closeSilently(byteStream);
                 if (closeStream) {
-                    safeClose(inputStream);
+                    closeSilently(inputStream);
                 }
             }
         }
@@ -1148,16 +1121,16 @@ public enum IOUtils {
      * @return
      */
     public static byte[] toBytes(final String string, final CharSets charSets) {
-        byte[] stringAsBytes = null;
+        byte[] dataBytes = null;
         if (BeanUtils.isNotNull(string)) {
             try {
-                stringAsBytes = BeanUtils.isNull(charSets) ? string.getBytes() : string.getBytes(charSets.toCharset());
+                dataBytes = BeanUtils.isNull(charSets) ? string.getBytes() : string.getBytes(charSets.toCharset());
             } catch (Exception ex) {
                 LOGGER.error(ex.getLocalizedMessage(), ex);
             }
         }
 
-        return stringAsBytes;
+        return dataBytes;
     }
 
     /**
@@ -1333,7 +1306,7 @@ public enum IOUtils {
                 System.err.println(ex);
                 throw ex;
             } finally {
-                safeClose(dataOutputStream);
+                closeSilently(dataOutputStream);
             }
         }
     }
@@ -1357,7 +1330,7 @@ public enum IOUtils {
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(bufferedReader);
+                closeSilently(bufferedReader);
             }
         }
 
@@ -1415,7 +1388,7 @@ public enum IOUtils {
                 System.err.println(ex);
                 throw ex;
             } finally {
-                safeClose(objOutputStream);
+                closeSilently(objOutputStream);
             }
         }
     }
@@ -1452,7 +1425,7 @@ public enum IOUtils {
                 System.err.println(ex);
                 throw ex;
             } finally {
-                safeClose(objInputStream);
+                closeSilently(objInputStream);
             }
         }
 
@@ -1486,7 +1459,7 @@ public enum IOUtils {
             }
 
             if (closeStreams) {
-                safeClose(bufferedReader);
+                closeSilently(bufferedReader);
             }
         }
 
@@ -1515,7 +1488,7 @@ public enum IOUtils {
             }
 
             if (closeStreams) {
-                safeClose(bufferedReader);
+                closeSilently(bufferedReader);
             }
         }
 
@@ -1826,8 +1799,7 @@ public enum IOUtils {
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(objectOutputStream);
-                safeClose(byteArrayOutputStream);
+                closeSilently(objectOutputStream, byteArrayOutputStream);
             }
         }
 
@@ -1855,8 +1827,7 @@ public enum IOUtils {
             } catch (IOException ex) {
                 System.err.println(ex);
             } finally {
-                safeClose(byteArrayInputStream);
-                safeClose(objectInputStream);
+                closeSilently(byteArrayInputStream, objectInputStream);
             }
         }
 
@@ -2045,7 +2016,6 @@ public enum IOUtils {
         }
     }
 
-
     /**
      * Applies the file permission on the given path.
      *
@@ -2079,17 +2049,27 @@ public enum IOUtils {
     }
 
     /**
-     * Closes the <code>AutoCloseable</code> silently.
+     * Closes the <code>objects</code> silently.
      *
-     * @param autoCloseable
+     * @param objects
      */
-    public static void closeSilently(final AutoCloseable autoCloseable) {
-        if (autoCloseable != null) {
-            try {
-                autoCloseable.close();
-            } catch (Exception ex) {
-                //ignore me
-                LOGGER.error("Error while closing autoCloseable: {}", autoCloseable, ex);
+    public static void closeSilently(final Object... objects) {
+        if (BeanUtils.isNotEmpty(objects)) {
+            for (Object object : objects) {
+                try {
+                    if (object instanceof AutoCloseable) {
+                        ((AutoCloseable) object).close();
+                    } else if (object instanceof Socket) {
+                        ((Socket) object).close();
+                    } else if (object instanceof ServerSocket) {
+                        ((ServerSocket) object).close();
+                    } else {
+                        throw new IllegalArgumentException("Unknown object to close!");
+                    }
+                } catch (Exception ex) {
+                    LOGGER.error("Error while closing object: {}", object, ex);
+                    IOUtils.error(ex);
+                }
             }
         }
     }
@@ -2145,8 +2125,7 @@ public enum IOUtils {
         while ((inputLine = in.readLine()) != null) {
             sBuilder.append(inputLine);
         }
-        IOUtils.closeSilently(in);
-
+        closeSilently(in);
         LOGGER.debug("-readStream(), sBuilder:{}", sBuilder);
         return sBuilder;
     }

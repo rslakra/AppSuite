@@ -31,27 +31,11 @@ package com.rslakra.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedInputStream;
-import java.io.Closeable;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import javax.net.ssl.*;
+import java.io.*;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
-
-import javax.net.ssl.HostnameVerifier;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.KeyManager;
-import javax.net.ssl.KeyManagerFactory;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLServerSocketFactory;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.TrustManagerFactory;
 
 /**
  * @author Rohtash Singh Lakra
@@ -60,7 +44,7 @@ public enum SSLUtils {
     INSTANCE;
 
     // LOGGER
-    private static Logger LOGGER = LoggerFactory.getLogger(SSLUtils.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(SSLUtils.class);
 
     /**
      * Converts the exception into IOException.
@@ -70,6 +54,14 @@ public enum SSLUtils {
      */
     public static IOException newIOException(final Exception exception) {
         return new IOException(exception);
+    }
+
+    /**
+     * @param filePath
+     * @return
+     */
+    public static InputStream readStream(final String filePath) {
+        return SSLUtils.class.getResourceAsStream(filePath);
     }
 
     /**
@@ -154,9 +146,8 @@ public enum SSLUtils {
     public static SSLServerSocketFactory makeSSLSocketFactory(String keyAndTrustStoreFilePath, char[] passphrase) throws IOException {
         try {
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
-            InputStream keyStoreStream = SSLUtils.class.getResourceAsStream(keyAndTrustStoreFilePath);
-
-            if (keyStoreStream == null) {
+            InputStream keyStoreStream = readStream(keyAndTrustStoreFilePath);
+            if (BeanUtils.isNotNull(keyStoreStream)) {
                 throw new IOException("Unable to load keystore from classpath:" + keyAndTrustStoreFilePath);
             }
 
@@ -187,7 +178,7 @@ public enum SSLUtils {
                 mCertificate = mCertFactory.generateCertificate(caInputStream);
                 IOUtils.debug("CA=" + ((X509Certificate) mCertificate).getSubjectDN());
             } finally {
-                safeClose(caInputStream);
+                IOUtils.closeSilently(caInputStream);
             }
 
             // Create a KeyStore containing our trusted CAs
@@ -205,29 +196,6 @@ public enum SSLUtils {
             return sslContext.getServerSocketFactory();
         } catch (Exception ex) {
             throw newIOException(ex);
-        }
-    }
-
-    /**
-     * Closes the connection.
-     *
-     * @param closeable
-     */
-    public static final void safeClose(Object closeable) {
-        try {
-            if (closeable != null) {
-                if (closeable instanceof Closeable) {
-                    ((Closeable) closeable).close();
-                } else if (closeable instanceof Socket) {
-                    ((Socket) closeable).close();
-                } else if (closeable instanceof ServerSocket) {
-                    ((ServerSocket) closeable).close();
-                } else {
-                    throw new IllegalArgumentException("Unknown object to close");
-                }
-            }
-        } catch (IOException ex) {
-            IOUtils.error(ex);
         }
     }
 
@@ -251,7 +219,7 @@ public enum SSLUtils {
 
     /**
      * Returns true if the <cod>hostName</cod> contains any of the
-     * <code>allowedhostNames</code>
+     * <code>allowedHostNames</code>
      * otherwise false.
      *
      * @param hostName
@@ -315,7 +283,11 @@ public enum SSLUtils {
 
     /**
      * @param certFilePath
+     * @param keyStorePassword
+     * @param keyPassword
+     * @param port
      * @return
+     * @throws Exception
      */
     public static SSLServerSocket makeSSLServerSocket(final String certFilePath, final char[] keyStorePassword, final char[] keyPassword, final int port) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("JKS");
@@ -328,13 +300,6 @@ public enum SSLUtils {
         SSLServerSocketFactory serverSocketFactory = sslContext.getServerSocketFactory();
         SSLServerSocket serverSocket = (SSLServerSocket) serverSocketFactory.createServerSocket(port);
         return serverSocket;
-    }
-
-    /**
-     * @param args
-     */
-    public static void main(String[] args) {
-
     }
 
 }

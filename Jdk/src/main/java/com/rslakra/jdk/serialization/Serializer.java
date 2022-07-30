@@ -75,7 +75,7 @@ public class Serializer {
         // Create a connected pair of "piped" streams.
         // We'll write bytes to one, and them from the other one.
         final PipedOutputStream pipeout = new PipedOutputStream();
-        PipedInputStream pipein = new PipedInputStream(pipeout);
+        PipedInputStream pipedInputStream = new PipedInputStream(pipeout);
 
         // Now define an independent thread to serialize the object and write
         // its bytes to the PipedOutputStream
@@ -96,7 +96,7 @@ public class Serializer {
 
         // Meanwhile, in this thread, read and deserialize from the piped
         // input stream. The resulting object is a deep clone of the original.
-        ObjectInputStream in = new ObjectInputStream(pipein);
+        ObjectInputStream in = new ObjectInputStream(pipedInputStream);
         clonedObject = in.readObject();
         IOUtils.closeSilently(in);
 
