@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/4/22 4:28 PM
  */
 public class HashTest {

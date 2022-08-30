@@ -4,7 +4,7 @@ import java.util.Iterator;
 import java.util.Objects;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/13/22 5:18 PM
  */
 public class BinaryTree<V extends Comparable> extends AbstractTree implements Iterable, Comparable {

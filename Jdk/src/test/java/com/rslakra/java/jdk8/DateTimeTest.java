@@ -13,7 +13,7 @@ import java.util.Date;
 import java.util.TimeZone;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/24/22 4:10 PM
  */
 public class DateTimeTest {

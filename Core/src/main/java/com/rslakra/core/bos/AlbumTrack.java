@@ -8,7 +8,7 @@ package com.rslakra.core.bos;
  * Disjoint types BookSeries Composition Movie Lyrics CompositionPart Book MovieSeries Song VideoGame Album Software
  * TvEpisode TvSeries TvSpecial
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:50 AM
  */
 public class AlbumTrack {

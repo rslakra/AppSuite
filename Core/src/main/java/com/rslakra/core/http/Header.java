@@ -5,7 +5,7 @@ import com.rslakra.core.BeanUtils;
 import java.util.Arrays;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/21/22 5:07 PM
  */
 public enum Header {
@@ -57,6 +57,6 @@ public enum Header {
      */
     public static Header forName(final String headerName) {
         return (BeanUtils.isEmpty(headerName) ? null : Arrays.stream(values())
-                .filter(header -> header.getName().equalsIgnoreCase(headerName)).findAny().get());
+            .filter(header -> header.getName().equalsIgnoreCase(headerName)).findAny().get());
     }
 }

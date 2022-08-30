@@ -9,7 +9,7 @@ import java.util.Objects;
 import java.util.UUID;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 11/4/21 12:52 PM
  */
 public class EnumMapper<E extends Enum<E>> {

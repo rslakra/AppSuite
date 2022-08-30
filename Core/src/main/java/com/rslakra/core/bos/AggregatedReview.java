@@ -5,7 +5,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Thing Entity Review CreativeWork
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:45 AM
  */
 public class AggregatedReview {

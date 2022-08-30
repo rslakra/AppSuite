@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Objects;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 10/13/21 1:12 PM
  */
 public class BigDecimalTest {

@@ -3,7 +3,7 @@ package com.rslakra.core.stactrace;
 import java.lang.reflect.Method;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/9/21 11:21 AM
  */
 public interface Caller {

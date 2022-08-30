@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.function.Function;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 5:33 PM
  */
 public class StringResponseHandler extends AbstractResponseHandler<String> {

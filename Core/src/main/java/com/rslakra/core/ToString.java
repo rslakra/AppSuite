@@ -4,7 +4,8 @@ import java.util.Arrays;
 import java.util.Objects;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
+ * @version 1.0.0
  * @created 12/13/21 5:41 PM
  */
 public final class ToString {
@@ -15,8 +16,8 @@ public final class ToString {
     public static final String SUFFIX = ">";
     public static final String SEPARATOR = "=";
 
-    private final String prefix;
     private final String delimiter;
+    private final String prefix;
     private final String suffix;
 
     /**
@@ -41,38 +42,32 @@ public final class ToString {
     private String emptyValue;
 
     /**
-     * Constructs a {@code StringJoiner} with no characters in it, with no {@code prefix} or {@code suffix}, and a copy
-     * of the supplied {@code delimiter}. If no characters are added to the {@code StringJoiner} and methods accessing
-     * the value of it are invoked, it will not return a {@code prefix} or {@code suffix} (or properties thereof) in the
+     * Constructs a {@code ToString} with no characters in it using copies of the supplied {@code prefix},
+     * {@code delimiter} and {@code suffix}. If no characters are added to the {@code ToString} and methods accessing
+     * the string value of it are invoked, it will return the {@code prefix + suffix} (or properties thereof) in the
      * result, unless {@code setEmptyValue} has first been called.
      *
-     * @param delimiter the sequence of characters to be used between each element added to the {@code StringJoiner}
-     *                  value
-     * @throws NullPointerException if {@code delimiter} is {@code null}
+     * @param delimiter the sequence of characters to be used between each element added to the {@code ToString}
+     * @param prefix    the sequence of characters to be used at the beginning
+     * @param suffix    the sequence of characters to be used at the end
      */
-    public ToString(final CharSequence delimiter) {
-        this(delimiter, EMPTY_STR, EMPTY_STR);
+    public ToString(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix) {
+        // make defensive copies of arguments
+        Objects.requireNonNull(delimiter, "The delimiter must not be null!");
+        Objects.requireNonNull(prefix, "The prefix must not be null!");
+        Objects.requireNonNull(suffix, "The suffix must not be null!");
+        this.delimiter = delimiter.toString();
+        this.prefix = prefix.toString();
+        this.suffix = suffix.toString();
     }
 
     /**
-     * Constructs a {@code StringJoiner} with no characters in it using copies of the supplied {@code prefix}, {@code
-     * delimiter} and {@code suffix}. If no characters are added to the {@code StringJoiner} and methods accessing the
-     * string value of it are invoked, it will return the {@code prefix + suffix} (or properties thereof) in the result,
-     * unless {@code setEmptyValue} has first been called.
+     * ToString Constructor.
      *
-     * @param delimiter the sequence of characters to be used between each element added to the {@code StringJoiner}
-     * @param prefix    the sequence of characters to be used at the beginning
-     * @param suffix    the sequence of characters to be used at the end
-     * @throws NullPointerException if {@code prefix}, {@code delimiter}, or {@code suffix} is {@code null}
+     * @param delimiter
      */
-    public ToString(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix) {
-        Objects.requireNonNull(prefix, "The prefix must not be null");
-        Objects.requireNonNull(delimiter, "The delimiter must not be null");
-        Objects.requireNonNull(suffix, "The suffix must not be null");
-        // make defensive copies of arguments
-        this.prefix = prefix.toString();
-        this.delimiter = delimiter.toString();
-        this.suffix = suffix.toString();
+    public ToString(final CharSequence delimiter) {
+        this(delimiter, EMPTY_STR, EMPTY_STR);
     }
 
     /**
@@ -81,10 +76,107 @@ public final class ToString {
      * @param start
      * @return
      */
-    private static int getChars(final String self, char[] chars, int start) {
+    private int getChars(final String self, char[] chars, int start) {
         int length = self.length();
         self.getChars(0, length, chars, start);
         return length;
+    }
+
+    /**
+     * @param classType
+     * @param excludeClassName
+     * @param excludePackageName
+     * @param delimiter
+     * @param prefix
+     * @param suffix
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final boolean excludeClassName,
+                                  final boolean excludePackageName, final CharSequence delimiter,
+                                  final CharSequence prefix, final CharSequence suffix) {
+        if (Objects.isNull(classType)) {
+            return new ToString(delimiter, prefix, suffix);
+        } else {
+            if (excludeClassName) {
+                return new ToString(delimiter, prefix, suffix);
+            } else if (excludePackageName) {
+                return new ToString(delimiter, classType.getSimpleName() + " " + prefix, suffix);
+            } else {
+                return new ToString(delimiter, classType.getName() + " " + prefix, suffix);
+            }
+        }
+    }
+
+    /**
+     * @param classType
+     * @param excludePackageName
+     * @param delimiter
+     * @param prefix
+     * @param suffix
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final boolean excludePackageName,
+                                  final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix) {
+        return of(classType, classType == null, excludePackageName, delimiter, prefix, suffix);
+    }
+
+    /**
+     * @param classType
+     * @param delimiter
+     * @param prefix
+     * @param suffix
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final CharSequence delimiter, final CharSequence prefix,
+                                  final CharSequence suffix) {
+        return of(classType, classType == null, delimiter, prefix, suffix);
+    }
+
+    /**
+     * @param classType
+     * @param excludePackageName
+     * @param delimiter
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final boolean excludePackageName,
+                                  final CharSequence delimiter) {
+        return of(classType, excludePackageName, delimiter, PREFIX, SUFFIX);
+    }
+
+    /**
+     * @param classType
+     * @param prefix
+     * @param suffix
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final CharSequence prefix, final CharSequence suffix) {
+        return of(classType, DELIMITER, prefix, suffix);
+    }
+
+    /**
+     * @param classType
+     * @param delimiter
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final Class<T> classType, final CharSequence delimiter) {
+        return of(classType, delimiter, PREFIX, SUFFIX);
+    }
+
+    /**
+     * @param delimiter
+     * @param prefix
+     * @param suffix
+     * @param <T>
+     * @return
+     */
+    public static <T> ToString of(final CharSequence delimiter, final CharSequence prefix, final CharSequence suffix) {
+        return of(null, delimiter, prefix, suffix);
     }
 
     /**
@@ -93,7 +185,7 @@ public final class ToString {
      * @return
      */
     public static <T> ToString of(final Class<T> classType) {
-        return new ToString(DELIMITER, classType != null ? classType.getSimpleName() + " " + PREFIX : PREFIX, SUFFIX);
+        return of(classType, DELIMITER);
     }
 
     /**
@@ -105,13 +197,13 @@ public final class ToString {
     }
 
     /**
-     * Sets the sequence of characters to be used when determining the string representation of this {@code
-     * StringJoiner} and no elements have been added yet, that is, when it is empty.  A copy of the {@code emptyValue}
-     * parameter is made for this purpose. Note that once an add method has been called, the {@code StringJoiner} is no
-     * longer considered empty, even if the element(s) added correspond to the empty {@code String}.
+     * Sets the sequence of characters to be used when determining the string representation of this {@code ToString}
+     * and no elements have been added yet, that is, when it is empty.  A copy of the {@code emptyValue} parameter is
+     * made for this purpose. Note that once an add method has been called, the {@code ToString} is no longer considered
+     * empty, even if the element(s) added correspond to the empty {@code String}.
      *
-     * @param emptyValue the characters to return as the value of an empty {@code StringJoiner}
-     * @return this {@code StringJoiner} itself so the calls may be chained
+     * @param emptyValue the characters to return as the value of an empty {@code ToString}
+     * @return this {@code ToString} itself so the calls may be chained
      * @throws NullPointerException when the {@code emptyValue} parameter is {@code null}
      */
     public ToString setEmptyValue(final CharSequence emptyValue) {
@@ -120,11 +212,11 @@ public final class ToString {
     }
 
     /**
-     * Returns the current value, consisting of the {@code prefix}, the values added so far separated by the {@code
-     * delimiter}, and the {@code suffix}, unless no elements have been added in which case, the {@code prefix + suffix}
-     * or the {@code emptyValue} characters are returned.
+     * Returns the current value, consisting of the {@code prefix}, the values added so far separated by the
+     * {@code delimiter}, and the {@code suffix}, unless no elements have been added in which case, the
+     * {@code prefix + suffix} or the {@code emptyValue} characters are returned.
      *
-     * @return the string representation of this {@code StringJoiner}
+     * @return the string representation of this {@code ToString}
      */
     @Override
     public String toString() {
@@ -183,7 +275,7 @@ public final class ToString {
      */
     public ToString add(final CharSequence key, final Object value) {
         if (key != null && value != null) {
-            return add(key + "=" + Objects.toString(value));
+            return add(key + SEPARATOR + value);
         } else if (key == null && value != null) {
             return add(Objects.toString(value));
         } else {
@@ -192,20 +284,19 @@ public final class ToString {
     }
 
     /**
-     * Adds the contents of the given {@code StringJoiner} without prefix and suffix as the next element if it is
-     * non-empty. If the given {@code StringJoiner} is empty, the call has no effect.
+     * Adds the contents of the given {@code ToString} without prefix and suffix as the next element if it is non-empty.
+     * If the given {@code ToString} is empty, the call has no effect.
      *
-     * <p>A {@code StringJoiner} is empty if {@link #add(CharSequence) add()}
-     * has never been called, and if {@code merge()} has never been called with a non-empty {@code StringJoiner}
-     * argument.
+     * <p>A {@code ToString} is empty if {@link #add(CharSequence) add()}
+     * has never been called, and if {@code merge()} has never been called with a non-empty {@code ToString} argument.
      *
-     * <p>If the other {@code StringJoiner} is using a different delimiter,
-     * then elements from the other {@code StringJoiner} are concatenated with that delimiter and the result is appended
-     * to this {@code StringJoiner} as a single element.
+     * <p>If the other {@code ToString} is using a different delimiter,
+     * then elements from the other {@code ToString} are concatenated with that delimiter and the result is appended to
+     * this {@code ToString} as a single element.
      *
-     * @param other The {@code StringJoiner} whose contents should be merged into this one
-     * @return This {@code StringJoiner}
-     * @throws NullPointerException if the other {@code StringJoiner} is null
+     * @param other The {@code ToString} whose contents should be merged into this one
+     * @return This {@code ToString}
+     * @throws NullPointerException if the other {@code ToString} is null
      */
     public ToString merge(final ToString other) {
         Objects.requireNonNull(other);
@@ -234,15 +325,14 @@ public final class ToString {
     }
 
     /**
-     * Returns the length of the {@code String} representation of this {@code StringJoiner}. Note that if no add methods
-     * have been called, then the length of the {@code String} representation (either {@code prefix + suffix} or {@code
-     * emptyValue}) will be returned. The value should be equivalent to {@code toString().length()}.
+     * Returns the length of the {@code String} representation of this {@code ToString}. Note that if no add methods
+     * have been called, then the length of the {@code String} representation (either {@code prefix + suffix} or
+     * {@code emptyValue}) will be returned. The value should be equivalent to {@code toString().length()}.
      *
-     * @return the length of the current value of {@code StringJoiner}
+     * @return the length of the current value of {@code ToString}
      */
     public int length() {
         return (size == 0 && emptyValue != null) ? emptyValue.length() :
-                length + prefix.length() + suffix.length();
+               length + prefix.length() + suffix.length();
     }
-
 }

@@ -7,7 +7,7 @@ import java.time.Duration;
 import java.time.Instant;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/11/22 6:10 PM
  */
 public class StopWatch {
@@ -43,7 +43,7 @@ public class StopWatch {
      */
     private String timeTaken() {
         return String.format("%dD, %02d:%02d:%02d.%04d", duration.toDays(), duration.toHours(), duration.toMinutes(),
-                duration.getSeconds(), duration.toMillis());
+                             duration.getSeconds(), duration.toMillis());
     }
 
     /**
@@ -59,10 +59,10 @@ public class StopWatch {
     @Override
     public String toString() {
         return ToString.of(StopWatch.class)
-                .add("startTime", startTime)
-                .add("endTime", stopTime)
-                .add("duration", timeTaken())
-                .toString();
+            .add("startTime", startTime)
+            .add("endTime", stopTime)
+            .add("duration", timeTaken())
+            .toString();
     }
 
 }

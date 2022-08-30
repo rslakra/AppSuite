@@ -1,8 +1,8 @@
 package com.rslakra.jdk.annotations.serialize;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 10/3/19 9:04 AM
+ * @author Rohtash Lakra
+ * @created 10/3/19 9:04 AM
  */
 public class JsonSerializationException extends RuntimeException {
 

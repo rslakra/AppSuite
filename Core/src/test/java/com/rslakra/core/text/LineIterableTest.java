@@ -8,7 +8,7 @@ import org.testng.annotations.Test;
 import java.util.Iterator;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/15/22 10:57 AM
  */
 public class LineIterableTest {

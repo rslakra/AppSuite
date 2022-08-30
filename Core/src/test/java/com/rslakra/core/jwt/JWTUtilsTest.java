@@ -21,8 +21,8 @@ import java.util.UUID;
 import javax.crypto.Cipher;
 
 /**
- * @Author Rohtash Lakra
- * @Since 3/10/20 10:59 AM
+ * @author Rohtash Lakra
+ * @created 3/10/20 10:59 AM
  */
 public class JWTUtilsTest {
 

@@ -11,7 +11,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/31/22 4:37 PM
  */
 public class SetTest {

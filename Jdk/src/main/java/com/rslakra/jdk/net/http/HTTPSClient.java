@@ -77,7 +77,7 @@ public class HTTPSClient {
      */
     public ServerSocket getServer() throws Exception {
 
-        String filePath = IOUtils.filePath(HTTPSClient.class);
+        String filePath = IOUtils.getClassFilePath(HTTPSClient.class);
         String certFilePath = IOUtils.pathString(filePath, NetConstants.SERVER_KEYS);
         SSLServerSocket serversocket = SSLUtils.makeSSLServerSocket(certFilePath, NetConstants.KEY_PASSWORD.toCharArray(), NetConstants.KEY_PASSWORD.toCharArray(), port);
         return serversocket;

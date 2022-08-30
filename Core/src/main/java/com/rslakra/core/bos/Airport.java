@@ -6,7 +6,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Place Thing Entity TransportHub Structure
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:47 AM
  */
 public class Airport {

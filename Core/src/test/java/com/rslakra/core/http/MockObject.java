@@ -3,7 +3,7 @@ package com.rslakra.core.http;
 import java.math.BigDecimal;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/29/21 12:00 PM
  */
 public class MockObject {

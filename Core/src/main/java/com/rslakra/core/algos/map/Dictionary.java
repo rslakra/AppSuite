@@ -7,7 +7,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/20/22 12:35 PM
  */
 public class Dictionary<K, V> extends HashTable<K, V> {

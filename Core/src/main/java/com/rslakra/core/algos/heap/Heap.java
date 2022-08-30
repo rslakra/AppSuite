@@ -3,7 +3,7 @@ package com.rslakra.core.algos.heap;
 import java.util.Comparator;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/17/22 2:16 PM
  */
 public class Heap<T extends Comparable> implements Comparable {

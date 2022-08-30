@@ -9,7 +9,7 @@ import java.math.BigDecimal;
  * <p>
  * Disjoint types Place ContactInfo OnlineAccount Event FictionalPlace
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:27 AM
  */
 public class Address {

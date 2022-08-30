@@ -4,7 +4,7 @@ import com.rslakra.core.algos.search.MatchedSearch;
 import com.rslakra.core.algos.search.Searchable;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/11/22 1:24 PM
  */
 public class NaiveAbstractSearchable extends AbstractSearchable implements Searchable {

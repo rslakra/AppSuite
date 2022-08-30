@@ -5,12 +5,12 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Person Thing Entity
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:26 AM
  */
 public class Actor {
 
-    //    The credit property connects individuals involved with the production of a media work to the reified Crew class.
-//    ActingRole or CompanyRole
+    // The credit property connects individuals involved with the production of a media work to the reified Crew class.
+// ActingRole or CompanyRole
     private Object credit;
 }

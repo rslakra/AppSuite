@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.TimeZone;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 8/2/21 10:51 AM
  */
 public class TimeUtilsTest {

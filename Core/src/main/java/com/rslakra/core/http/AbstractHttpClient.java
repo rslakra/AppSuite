@@ -22,7 +22,7 @@ import java.util.Map;
  * Decorates Apache HTTP Client with resilence4j to handle circuit breaking and retry logic for synchronous rest(s)
  * invocations. Provides standardized logging for better insights into outbound rest(s) traffic.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 5:42 PM
  */
 public abstract class AbstractHttpClient implements AutoCloseable {

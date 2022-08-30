@@ -1,7 +1,7 @@
 package com.rslakra.core.http;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 3:29 PM
  */
 public class HttpClientException extends RuntimeException {

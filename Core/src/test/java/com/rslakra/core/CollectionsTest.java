@@ -8,8 +8,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * @Author: rlakra
- * @Since: 9/11/19 12:24 PM
+ * @author Rohtash Lakra
+ * @created 9/11/19 12:24 PM
  */
 public class CollectionsTest {
 

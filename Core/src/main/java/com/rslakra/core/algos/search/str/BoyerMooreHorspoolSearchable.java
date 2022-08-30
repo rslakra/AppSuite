@@ -7,7 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/11/22 3:51 PM
  */
 public class BoyerMooreHorspoolSearchable extends AbstractSearchable implements Searchable {

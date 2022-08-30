@@ -7,12 +7,12 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Thing Entity EntertainmentVenue Organization LocalBusiness
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 11:00 AM
  */
 public class AmusementPark {
 
-    //    Captures the number of attractions at an amusement park.
+    // Captures the number of attractions at an amusement park.
     private Integer numberAttractions;
 
 }

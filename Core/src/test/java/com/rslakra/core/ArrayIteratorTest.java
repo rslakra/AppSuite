@@ -9,7 +9,7 @@ import org.testng.annotations.Test;
 import java.util.Iterator;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/15/22 10:11 AM
  */
 public class ArrayIteratorTest {
@@ -43,6 +43,15 @@ public class ArrayIteratorTest {
         Integer[] values = new Integer[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
         Iterator<Integer> itr = new ArrayIterator(values, 2, 7);
         TextUtils.logIterator(itr);
+    }
+
+    @Test
+    public void testToString() {
+        LOGGER.debug("\n");
+        // content-types
+        String[] values = new String[]{"Rohtash", "Singh", "Lakra"};
+        String str = new ArrayIterator(values).toString();
+        LOGGER.debug("str:{}", str);
     }
 
 }

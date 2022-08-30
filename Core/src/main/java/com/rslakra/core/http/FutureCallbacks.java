@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 import java.util.function.Consumer;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 5:27 PM
  */
 public class FutureCallbacks {

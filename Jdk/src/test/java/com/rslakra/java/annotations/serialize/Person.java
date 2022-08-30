@@ -6,8 +6,8 @@ import com.rslakra.jdk.annotations.serialize.JsonInit;
 import com.rslakra.jdk.annotations.serialize.JsonSerializable;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 10/3/19 8:38 AM
+ * @author Rohtash Lakra
+ * @created 10/3/19 8:38 AM
  */
 @JsonSerializable
 public class Person {

@@ -7,8 +7,8 @@ import org.junit.Test;
 import java.util.List;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 9/16/19 11:53 AM
+ * @author Rohtash Lakra
+ * @created 9/16/19 11:53 AM
  */
 public class ExceptionTest {
 

@@ -5,7 +5,7 @@ package com.rslakra.core.bos;
  * <p>
  * More specific types CreateAction DeleteAction SearchAction UpdateAction
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:21 AM
  */
 public class Action {

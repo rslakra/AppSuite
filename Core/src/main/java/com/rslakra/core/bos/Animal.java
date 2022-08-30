@@ -7,7 +7,7 @@ package com.rslakra.core.bos;
  * <p>
  * Disjoint types Plant
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 11:01 AM
  */
 public class Animal {

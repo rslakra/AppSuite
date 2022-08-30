@@ -8,8 +8,8 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 10/3/19 9:00 AM
+ * @author Rohtash Lakra
+ * @created 10/3/19 9:00 AM
  */
 public final class JsonSerializer {
 

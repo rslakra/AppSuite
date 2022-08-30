@@ -1,7 +1,7 @@
 package com.rslakra.core;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/25/21 3:51 PM
  */
 

@@ -4,7 +4,7 @@ import com.rslakra.core.algos.search.MatchedSearch;
 import com.rslakra.core.ToString;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/11/22 1:07 PM
  */
 public class MatchedSearchImpl implements MatchedSearch {

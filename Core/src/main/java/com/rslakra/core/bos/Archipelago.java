@@ -6,7 +6,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Place Thing Entity GeographicalFeature
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 5:55 PM
  */
 public class Archipelago {

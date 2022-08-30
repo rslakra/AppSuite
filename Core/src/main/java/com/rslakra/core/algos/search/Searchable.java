@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.search;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/11/22 12:57 PM
  */
 public interface Searchable {

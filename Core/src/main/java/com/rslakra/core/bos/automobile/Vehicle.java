@@ -5,7 +5,7 @@ package com.rslakra.core.bos.automobile;
  * a bound surface such as concrete and tarmac. This includes minivans and sport utility vehicles that are designed to
  * accommodate less than nine (9) passengers.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/19/22 12:52 PM
  */
 public class Vehicle {

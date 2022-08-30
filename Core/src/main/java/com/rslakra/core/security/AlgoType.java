@@ -5,7 +5,7 @@ import com.rslakra.core.BeanUtils;
 import java.util.Arrays;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/21/22 5:28 PM
  */
 public enum AlgoType {

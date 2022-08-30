@@ -114,4 +114,18 @@ public final class ArrayIterator<T> implements Iterator {
     public void reset() {
         this.index = this.startIndex;
     }
+
+    /**
+     * ToString
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        final ToString strBuilder = ToString.of(ToString.DELIMITER, "[", "]");
+        while (hasNext()) {
+            strBuilder.add(next().toString());
+        }
+        return strBuilder.toString();
+    }
 }

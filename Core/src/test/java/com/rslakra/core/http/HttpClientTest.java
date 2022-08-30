@@ -18,8 +18,8 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 
 /**
- * @Author Rohtash Lakra
- * @Since 2/28/20 10:14 AM
+ * @author Rohtash Lakra
+ * @created 2/28/20 10:14 AM
  */
 public class HttpClientTest {
 

@@ -31,14 +31,27 @@ package com.rslakra.core;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.*;
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.security.KeyStore;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLServerSocketFactory;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManagerFactory;
+
 /**
- * @author Rohtash Singh Lakra
+ * @author Rohtash Lakra
  */
 public enum SSLUtils {
     INSTANCE;
@@ -65,8 +78,7 @@ public enum SSLUtils {
     }
 
     /**
-     * Creates and returns the <code>TrustManagerFactory</code> that trusts the
-     * CAs in the given
+     * Creates and returns the <code>TrustManagerFactory</code> that trusts the CAs in the given
      * <code>KeyStore</code>.
      *
      * @param loadedKeyStore
@@ -88,17 +100,16 @@ public enum SSLUtils {
     }
 
     /**
-     * Creates an SSLSocketFactory for HTTPS. Pass a loaded KeyStore and an
-     * array of loaded
-     * KeyManagers. These objects must properly loaded/initialized by the
-     * caller.
+     * Creates an SSLSocketFactory for HTTPS. Pass a loaded KeyStore and an array of loaded KeyManagers. These objects
+     * must properly loaded/initialized by the caller.
      *
      * @param loadedKeyStore
      * @param keyManagers
      * @return
      * @throws IOException
      */
-    public static SSLServerSocketFactory makeSSLSocketFactory(KeyStore loadedKeyStore, KeyManager[] keyManagers) throws IOException {
+    public static SSLServerSocketFactory makeSSLSocketFactory(KeyStore loadedKeyStore, KeyManager[] keyManagers)
+        throws IOException {
         SSLServerSocketFactory serverSocketFactory;
         try {
             // Create a TrustManager that trusts the CAs in our KeyStore
@@ -116,16 +127,16 @@ public enum SSLUtils {
     }
 
     /**
-     * Creates an SSLSocketFactory for HTTPS. Pass a loaded KeyStore and a
-     * loaded KeyManagerFactory.
-     * These objects must properly load/initialized by the caller.
+     * Creates an SSLSocketFactory for HTTPS. Pass a loaded KeyStore and a loaded KeyManagerFactory. These objects must
+     * properly load/initialized by the caller.
      *
      * @param loadedKeyStore
      * @param loadedKeyFactory
      * @return
      * @throws IOException
      */
-    public static SSLServerSocketFactory makeSSLSocketFactory(KeyStore loadedKeyStore, KeyManagerFactory loadedKeyFactory) throws IOException {
+    public static SSLServerSocketFactory makeSSLSocketFactory(KeyStore loadedKeyStore,
+                                                              KeyManagerFactory loadedKeyFactory) throws IOException {
         try {
             return makeSSLSocketFactory(loadedKeyStore, loadedKeyFactory.getKeyManagers());
         } catch (Exception ex) {
@@ -134,16 +145,15 @@ public enum SSLUtils {
     }
 
     /**
-     * Creates an SSLSocketFactory for HTTPS. Pass a KeyStore resource with your
-     * certificate and
-     * passphrase
+     * Creates an SSLSocketFactory for HTTPS. Pass a KeyStore resource with your certificate and passphrase
      *
      * @param keyAndTrustStoreFilePath
      * @param passphrase
      * @return
      * @throws IOException
      */
-    public static SSLServerSocketFactory makeSSLSocketFactory(String keyAndTrustStoreFilePath, char[] passphrase) throws IOException {
+    public static SSLServerSocketFactory makeSSLSocketFactory(String keyAndTrustStoreFilePath, char[] passphrase)
+        throws IOException {
         try {
             KeyStore keystore = KeyStore.getInstance(KeyStore.getDefaultType());
             InputStream keyStoreStream = readStream(keyAndTrustStoreFilePath);
@@ -152,7 +162,9 @@ public enum SSLUtils {
             }
 
             keystore.load(keyStoreStream, passphrase);
-            KeyManagerFactory keyManagerFactory = KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
+            KeyManagerFactory
+                keyManagerFactory =
+                KeyManagerFactory.getInstance(KeyManagerFactory.getDefaultAlgorithm());
             keyManagerFactory.init(keystore, passphrase);
             return makeSSLSocketFactory(keystore, keyManagerFactory);
         } catch (Exception ex) {
@@ -161,8 +173,7 @@ public enum SSLUtils {
     }
 
     /**
-     * Creates a SSLSocketFactory for HTTPS connection with the given '.crt'
-     * (certificate) file.
+     * Creates a SSLSocketFactory for HTTPS connection with the given '.crt' (certificate) file.
      *
      * @param certInputStream
      * @return
@@ -241,9 +252,7 @@ public enum SSLUtils {
     /**
      * It must be called before setting the SSL factory. The
      * <code>hostName</code> is real host
-     * name, which handles the SSL requests. If the <code>hostName</code> is
-     * null, by default
-     * 'localhost' is used.
+     * name, which handles the SSL requests. If the <code>hostName</code> is null, by default 'localhost' is used.
      *
      * @param hostName
      * @param allowedHostNames
@@ -289,7 +298,8 @@ public enum SSLUtils {
      * @return
      * @throws Exception
      */
-    public static SSLServerSocket makeSSLServerSocket(final String certFilePath, final char[] keyStorePassword, final char[] keyPassword, final int port) throws Exception {
+    public static SSLServerSocket makeSSLServerSocket(final String certFilePath, final char[] keyStorePassword,
+                                                      final char[] keyPassword, final int port) throws Exception {
         KeyStore keyStore = KeyStore.getInstance("JKS");
         keyStore.load(new FileInputStream(certFilePath), keyStorePassword);
         System.out.println(keyStore.getProvider());

@@ -5,9 +5,9 @@ package com.rslakra.core.algos;
 
 /**
  * Base 12.
- * 
- * @author Rohtash Singh Lakra (rslakra.work@gmail.com)
- * @since 12-19-2019 8:42:23 AM
+ *
+ * @author Rohtash Lakra
+ * @created 12-19-2019 8:42:23 AM
  * 
  */
 public class DuodecimalNumbers {

@@ -6,8 +6,8 @@ import org.apache.http.impl.client.DefaultServiceUnavailableRetryStrategy;
 import org.apache.http.protocol.HttpContext;
 
 /**
- * @Author Rohtash Lakra
- * @Since 2/28/20 10:42 AM
+ * @author Rohtash Lakra
+ * @created 2/28/20 10:42 AM
  */
 public final class ServiceUnavailableRetryStrategy extends DefaultServiceUnavailableRetryStrategy {
 

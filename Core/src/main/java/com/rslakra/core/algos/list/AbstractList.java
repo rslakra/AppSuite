@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.ListIterator;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/20/22 11:53 AM
  */
 public abstract class AbstractList<T extends Comparable> {

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/4/22 5:38 PM
  */
 public class HashTableTest {

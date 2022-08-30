@@ -36,19 +36,27 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.crypto.*;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.PBEKeySpec;
-import javax.crypto.spec.SecretKeySpec;
-import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.TrustManagerFactory;
-import javax.net.ssl.X509TrustManager;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
-import java.security.*;
+import java.security.InvalidKeyException;
+import java.security.Key;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.KeyPairGenerator;
+import java.security.KeyStore;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.security.NoSuchProviderException;
+import java.security.PublicKey;
+import java.security.SecureRandom;
+import java.security.Security;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -59,12 +67,26 @@ import java.util.Base64;
 import java.util.Random;
 import java.util.UUID;
 
+import javax.crypto.BadPaddingException;
+import javax.crypto.Cipher;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.KeyGenerator;
+import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SecretKey;
+import javax.crypto.SecretKeyFactory;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.PBEKeySpec;
+import javax.crypto.spec.SecretKeySpec;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+
 /**
  * This class handles the security.
  *
- * @author Rohtash Singh
+ * @author Rohtash Lakra
  * @version 1.0.0
- * @since Jul 17, 2015 10:31:46 AM
+ * @created Jul 17, 2015 10:31:46 AM
  */
 public enum GuardUtils {
     INSTANCE;
@@ -127,7 +149,9 @@ public enum GuardUtils {
         }
 
         try {
-            TrustManagerFactory trustManagerFactory = TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
+            TrustManagerFactory
+                trustManagerFactory =
+                TrustManagerFactory.getInstance(TrustManagerFactory.getDefaultAlgorithm());
             trustManagerFactory.init((KeyStore) null);
             mX509TrustManager = (X509TrustManager) trustManagerFactory.getTrustManagers()[0];
         } catch (Exception ex) {
@@ -143,7 +167,9 @@ public enum GuardUtils {
             synchronized (GuardUtils.class) {
                 if (pbkdf2Generator == null) {
                     /* pbkdf2Params */
-                    pbkdf2Params = new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."), PBKDF2Generator.ITERATIONS);
+                    pbkdf2Params =
+                        new PBKDF2Params(PBKDF2Generator.PBKDF2_WITH_HMAC_SHA1, uniqueDeviceIdBytes("."),
+                                         PBKDF2Generator.ITERATIONS);
                     /* pbkdf2Generator */
                     pbkdf2Generator = new PBKDF2Generator(pbkdf2Params);
                 }
@@ -421,7 +447,8 @@ public enum GuardUtils {
      * @return
      * @throws CertificateException
      */
-    public static X509Certificate newX509Certificate(CertificateFactory certificateFactory, InputStream inputStream, boolean closeStream) throws CertificateException {
+    public static X509Certificate newX509Certificate(CertificateFactory certificateFactory, InputStream inputStream,
+                                                     boolean closeStream) throws CertificateException {
         X509Certificate x509Cert = null;
         try {
             x509Cert = (X509Certificate) certificateFactory.generateCertificate(inputStream);
@@ -443,7 +470,8 @@ public enum GuardUtils {
      * @return
      * @throws CertificateException
      */
-    public static X509Certificate newX509Certificate(InputStream inputStream, boolean closeStream) throws CertificateException {
+    public static X509Certificate newX509Certificate(InputStream inputStream, boolean closeStream)
+        throws CertificateException {
         return newX509Certificate(newCertificateFactory(), inputStream, closeStream);
     }
 
@@ -664,8 +692,7 @@ public enum GuardUtils {
     }
 
     /**
-     * Returns the PBKDF2 key as string for the given salt and the given
-     * plainPassword.
+     * Returns the PBKDF2 key as string for the given salt and the given plainPassword.
      *
      * @param salt
      * @param rawText
@@ -730,8 +757,7 @@ public enum GuardUtils {
     /**
      * Checks padding. If the content length is less then 16 and
      * <code>addSpaces</code> is set to be true, then add spaces at the end
-     * (before encryption), otherwise remove extra spaces (after decryption
-     * happens).
+     * (before encryption), otherwise remove extra spaces (after decryption happens).
      *
      * @param input
      * @return
@@ -785,7 +811,7 @@ public enum GuardUtils {
      * @throws Exception
      */
     public static byte[] encryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes)
-            throws Exception {
+        throws Exception {
         final StopWatch stopWatch = new StopWatch();
         stopWatch.startTimer();
         byte[] encryptedBytes = null;
@@ -806,7 +832,7 @@ public enum GuardUtils {
         }
         stopWatch.stopTimer();
         LOGGER.debug("encryptWithSymmetricKey() took {} to encrypt: {} bytets", stopWatch.took(),
-                BeanUtils.getLength(encryptedBytes));
+                     BeanUtils.getLength(encryptedBytes));
 
         return encryptedBytes;
     }
@@ -860,10 +886,8 @@ public enum GuardUtils {
      * Encrypts the specified <code>stringToEncrypt</code> using the specified
      * <code>key</code>.
      *
-     * @param plainString The string you wish to encrypt. Assume that it is in UTF-8
-     *                    format.
-     * @param key         The string representation of the key to encrypt with. This
-     *                    should be of sufficient entropy.
+     * @param plainString The string you wish to encrypt. Assume that it is in UTF-8 format.
+     * @param key         The string representation of the key to encrypt with. This should be of sufficient entropy.
      * @param plainString
      * @param key
      * @return An encrypted String in UTF-8 format.
@@ -893,7 +917,8 @@ public enum GuardUtils {
      * @return
      * @throws Exception
      */
-    public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes) throws Exception {
+    public static byte[] decryptWithSymmetricKey(final byte[] dataBytes, final byte[] keyBytes, final byte[] ivBytes)
+        throws Exception {
         byte[] rawBytes = null;
         final StopWatch stopWatch = new StopWatch();
         stopWatch.startTimer();
@@ -913,7 +938,7 @@ public enum GuardUtils {
         }
 
         LOGGER.debug("decryptWithSymmetricKey() took {} to encrypt: {} bytets", stopWatch.took(),
-                BeanUtils.getLength(rawBytes));
+                     BeanUtils.getLength(rawBytes));
         return rawBytes;
     }
 
@@ -1037,8 +1062,7 @@ public enum GuardUtils {
     /**
      * Decrypting the server URLs.
      * <p>
-     * (Placeholders, for now, but I'm actually using them when the user chooses
-     * a new server.)
+     * (Placeholders, for now, but I'm actually using them when the user chooses a new server.)
      *
      * @param encryptedUrl
      * @return
@@ -1119,7 +1143,8 @@ public enum GuardUtils {
      * @return
      * @throws NoSuchAlgorithmException
      */
-    public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm) throws NoSuchAlgorithmException {
+    public static KeyPair generateKeyPair(String keyPairAlgorithm, String secureRandomAlgorithm)
+        throws NoSuchAlgorithmException {
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance(keyPairAlgorithm);
         SecureRandom secureRandom = null;
         if (BeanUtils.isEmpty(secureRandomAlgorithm)) {
@@ -1456,7 +1481,7 @@ public enum GuardUtils {
     /**
      * The parameters for the PBKDF2 generation.
      *
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 11/21/2016 04:04:53 PM
      */
     public static final class PBKDF2Params {
@@ -1509,7 +1534,7 @@ public enum GuardUtils {
      * <p>
      * https://www.ietf.org/rfc/rfc2898.txt
      *
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 11/21/2016 04:04:10 PM
      */
     public static final class PBKDF2Generator {
@@ -1558,7 +1583,8 @@ public enum GuardUtils {
          * @return
          * @throws NoSuchAlgorithmException
          */
-        private byte[] pbkdf2(char[] password, byte[] salt, int iterations, int keyLength) throws NoSuchAlgorithmException {
+        private byte[] pbkdf2(char[] password, byte[] salt, int iterations, int keyLength)
+            throws NoSuchAlgorithmException {
             try {
                 PBEKeySpec keySpec = new PBEKeySpec(password, salt, iterations, keyLength * 8);
                 SecretKeyFactory keyFactory = SecretKeyFactory.getInstance(parameters.getAlgorithm());
@@ -1621,7 +1647,8 @@ public enum GuardUtils {
          * @throws NoSuchAlgorithmException
          * @throws InvalidKeySpecException
          */
-        public boolean validatePassword(String password, String hashedPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        public boolean validatePassword(String password, String hashedPassword)
+            throws NoSuchAlgorithmException, InvalidKeySpecException {
             boolean validPassword = false;
             if (!BeanUtils.isEmpty(password)) {
                 String[] parts = hashedPassword.split(":");

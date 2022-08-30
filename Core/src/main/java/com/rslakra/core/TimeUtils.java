@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 8/2/21 10:38 AM
  */
 public enum TimeUtils {
@@ -218,7 +218,7 @@ public enum TimeUtils {
      */
     public static int weekOfYear(final int year, int month, int day) {
         // The ChronoField.ALIGNED_WEEK_OF_YEAR is not the accurate.
-//        return LocalDate.of(year, month, day).get(ChronoField.ALIGNED_WEEK_OF_YEAR);
+// return LocalDate.of(year, month, day).get(ChronoField.ALIGNED_WEEK_OF_YEAR);
         return LocalDate.of(year, month, day).get(WeekFields.of(Locale.getDefault()).weekOfYear());
     }
 
@@ -259,31 +259,31 @@ public enum TimeUtils {
             .collect(Collectors.toList());
     }
 
-//    private static List<LocalDate> countBusinessDaysBetweenDatesJava9(final LocalDate startDate,
+// private static List<LocalDate> countBusinessDaysBetweenDatesJava9(final LocalDate startDate,
 //                                                                      final LocalDate endDate,
 //                                                                      final Optional<List<LocalDate>> holidays) {
-//        // Validate method arguments
-//        if (startDate == null || endDate == null) {
+// // Validate method arguments
+// if (startDate == null || endDate == null) {
 //            throw new IllegalArgumentException(
 //                "Invalid method argument(s) to countBusinessDaysBetween (" + startDate + "," + endDate + "," + holidays
 //                + ")");
-//        }
+// }
 //
-//        // Predicate 1: Is a given date is a holiday
-//        Predicate<LocalDate> isHoliday = date -> holidays.isPresent()
+// // Predicate 1: Is a given date is a holiday
+// Predicate<LocalDate> isHoliday = date -> holidays.isPresent()
 //                                                 && holidays.get().contains(date);
 //
-//        // Predicate 2: Is a given date is a weekday
-//        Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
+// // Predicate 2: Is a given date is a weekday
+// Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
 //                                                 || date.getDayOfWeek() == DayOfWeek.SUNDAY;
 //
-//        // Iterate over stream of all dates and check each day against any weekday or
-//        // holiday
-//        List<LocalDate> businessDays = startDate.datesUntil(endDate)
+// // Iterate over stream of all dates and check each day against any weekday or
+// // holiday
+// List<LocalDate> businessDays = startDate.datesUntil(endDate)
 //            .filter(isWeekend.or(isHoliday).negate())
 //            .collect(Collectors.toList());
 //
-//        return businessDays;
-//    }
+// return businessDays;
+// }
 
 }

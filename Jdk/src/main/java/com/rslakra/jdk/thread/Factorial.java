@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 10/25/19 10:50 PM
+ * @author Rohtash Lakra
+ * @created 10/25/19 10:50 PM
  */
 public class Factorial implements Runnable {
 

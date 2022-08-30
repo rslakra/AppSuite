@@ -10,27 +10,27 @@ package com.rslakra.core.bos;
  * <p>
  * Disjoint types VideoGame Book
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 5:55 PM
  */
 public class Article {
 
-    //    Short description of a text document or webpage.
-//    Literal
+    // Short description of a text document or webpage.
+// Literal
     private String shortDescription;
 
-    //    List of all the URLs present in the document.
+    // List of all the URLs present in the document.
     private AnyUri allUrl;
 
-    //    The actual text body of the article. Plaintext version of a wikipedia article.
-//    Literal
+    // The actual text body of the article. Plaintext version of a wikipedia article.
+// Literal
     private String articleBody;
 
-    //    Inter-language links are links to the same content in other languages.
+    // Inter-language links are links to the same content in other languages.
     private AnyUri otherLanguageUrl;
 
-    //    Full text or body of a wiki or other article, including wikitext, html, xml formatting.
-//    Literal
+    // Full text or body of a wiki or other article, including wikitext, html, xml formatting.
+// Literal
     private String richContent;
 
 }

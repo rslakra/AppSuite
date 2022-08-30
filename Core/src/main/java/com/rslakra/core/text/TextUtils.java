@@ -41,16 +41,21 @@ import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.net.URLDecoder;
-import java.util.*;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
+import java.util.StringTokenizer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
- * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+ * @author Rohtash Lakra
  * @version 1.0.0
  * @created 2012-04-20 07:30:07 PM
- * @since 1.0.0
+ * @created 1.0.0
  */
 public enum TextUtils {
     INSTANCE;
@@ -82,7 +87,9 @@ public enum TextUtils {
     public static final String EMPTY_STR = "";
 
     /* valid email expression. */
-    private static String VALID_EMAIL_EXPRESSION = "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
+    private static String
+        VALID_EMAIL_EXPRESSION =
+        "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b";
 
     // LOGGER.
     private static Logger LOGGER = LoggerFactory.getLogger(TextUtils.class);
@@ -108,8 +115,7 @@ public enum TextUtils {
     }
 
     /**
-     * Replaces multiple whitespace between words with single whitespace using
-     * expressions.
+     * Replaces multiple whitespace between words with single whitespace using expressions.
      *
      * @param str
      * @return
@@ -119,8 +125,7 @@ public enum TextUtils {
     }
 
     /**
-     * Removes all redundant (leading, trailing and centric) whitespace of the
-     * specified string using expressions.
+     * Removes all redundant (leading, trailing and centric) whitespace of the specified string using expressions.
      *
      * @param str
      * @return String
@@ -130,8 +135,7 @@ public enum TextUtils {
     }
 
     /**
-     * Removes all redundant (leading, trailing and centric) delimiter
-     * characters from the specified string.
+     * Removes all redundant (leading, trailing and centric) delimiter characters from the specified string.
      *
      * @param str
      * @param delimiter
@@ -207,12 +211,11 @@ public enum TextUtils {
     }
 
     /**
-     * Check whether the specified string only contains digits including dot(.).
-     * If the specified string is null or empty, it will return false.
+     * Check whether the specified string only contains digits including dot(.). If the specified string is null or
+     * empty, it will return false.
      *
      * @param str - to be checked.
-     * @return true if the string contains all the digits including dot,
-     * otherwise false.
+     * @return true if the string contains all the digits including dot, otherwise false.
      */
     public static boolean isNumeric(String str) {
         if (BeanUtils.isEmpty(str)) {
@@ -229,8 +232,7 @@ public enum TextUtils {
     }
 
     /**
-     * Check whether entered string is only contains digits including dot(.) not
-     * any alphabets is null
+     * Check whether entered string is only contains digits including dot(.) not any alphabets is null
      */
     public boolean isDigitsWithDot(String str) {
         boolean isNumber = true;
@@ -248,8 +250,7 @@ public enum TextUtils {
     }
 
     /**
-     * Returns true if the string contains only digits. The $ avoids a partial
-     * match, i.e. 1b.
+     * Returns true if the string contains only digits. The $ avoids a partial match, i.e. 1b.
      *
      * @param string
      * @return
@@ -296,8 +297,8 @@ public enum TextUtils {
     }
 
     /**
-     * Replaces the find string to the with string. It is a multi-purpose method
-     * which can replace a single or multiple characters.
+     * Replaces the find string to the with string. It is a multi-purpose method which can replace a single or multiple
+     * characters.
      *
      * @param str
      * @param find
@@ -318,13 +319,11 @@ public enum TextUtils {
     }
 
     /**
-     * Returns true if a valid email address is passed. The email address
-     * criteria is: This means an email can start with any combination of
-     * letters and numbers that is followed by any number of periods and letters
-     * and numbers. It must have a @ character followed by a valid host name.
+     * Returns true if a valid email address is passed. The email address criteria is: This means an email can start
+     * with any combination of letters and numbers that is followed by any number of periods and letters and numbers. It
+     * must have a @ character followed by a valid host name.
      * <p>
-     * Expression Pattern Used:
-     * "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-
+     * Expression Pattern Used: "\\b(^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@([A-Za-z0-9-])+(\\.[A-Za-z0-9-
      * ]+)*((\\.[A-Za-z0-9]{2,})|(\\.[A-Za-z0-9]{2,}\\.[A-Za-z0-9]{2,}))$)\\b"
      *
      * @param eMailAddress
@@ -337,8 +336,7 @@ public enum TextUtils {
     }
 
     /**
-     * It returns true if the string matches exactly either "true"/"True" or
-     * "yes"/"Yes".
+     * It returns true if the string matches exactly either "true"/"True" or "yes"/"Yes".
      *
      * @param str
      * @return
@@ -359,9 +357,8 @@ public enum TextUtils {
 
 
     /**
-     * Returns the padded string. It fills your string with up to repeat
-     * characters with a whitespace and then all whitespace are replaced with
-     * the provided padding string.
+     * Returns the padded string. It fills your string with up to repeat characters with a whitespace and then all
+     * whitespace are replaced with the provided padding string.
      *
      * @param str
      * @param repeat
@@ -373,9 +370,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the padded string. It fills your string with up to repeat
-     * characters with a whitespace and then all whitespace are replaced with
-     * the provided padding string.
+     * Returns the padded string. It fills your string with up to repeat characters with a whitespace and then all
+     * whitespace are replaced with the provided padding string.
      *
      * @param str
      * @param repeat
@@ -387,9 +383,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the padded string. It fills your string with up to repeat
-     * characters with a whitespace and then all whitespace are replaced with
-     * the provided padding string.
+     * Returns the padded string. It fills your string with up to repeat characters with a whitespace and then all
+     * whitespace are replaced with the provided padding string.
      *
      * @param str
      * @param repeat
@@ -529,10 +524,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the string created by joining the specified elements, separated
-     * by using the specified delimiter. if the delimiter is null or empty
-     * default delimiter space is used. if the passed elements array is null,
-     * return null;
+     * Returns the string created by joining the specified elements, separated by using the specified delimiter. if the
+     * delimiter is null or empty default delimiter space is used. if the passed elements array is null, return null;
      *
      * @param elements
      * @return
@@ -556,9 +549,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the string created by joining the specified elements using the
-     * default space delimiter. if the passed elements array is null, return
-     * null;
+     * Returns the string created by joining the specified elements using the default space delimiter. if the passed
+     * elements array is null, return null;
      *
      * @param elements
      * @return
@@ -568,9 +560,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the elements of string separated by using the specified
-     * delimiter. if delimiter is null or empty, space is used as default
-     * delimiter
+     * Returns the elements of string separated by using the specified delimiter. if delimiter is null or empty, space
+     * is used as default delimiter
      *
      * @param str
      * @return
@@ -633,8 +624,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the string after replacing \\(double back-slashes) with single
-     * back-slash and //(double slashes) with single slash.
+     * Returns the string after replacing \\(double back-slashes) with single back-slash and //(double slashes) with
+     * single slash.
      *
      * @param str
      * @return
@@ -665,8 +656,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns a <code>String</code> object that is filled with the number of
-     * specified character. if <code>times <= 0</code>, an empty
+     * Returns a <code>String</code> object that is filled with the number of specified character. if <code>times <=
+     * 0</code>, an empty
      * <code>String</code> object is returned.
      *
      * @param times
@@ -684,9 +675,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns a <code>String</code> object that is filled with the number of
-     * spaces. if <code>times <= 0</code>, an empty <code>String</code> object
-     * is returned.
+     * Returns a <code>String</code> object that is filled with the number of spaces. if <code>times <= 0</code>, an
+     * empty <code>String</code> object is returned.
      *
      * @param times
      * @return
@@ -838,8 +828,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the string of unique words. if the ignoreCase is true, the word
-     * is considered unique, if any of the letter of the word in different case.
+     * Returns the string of unique words. if the ignoreCase is true, the word is considered unique, if any of the
+     * letter of the word in different case.
      *
      * @param elements
      * @param ignoreCase
@@ -863,9 +853,8 @@ public enum TextUtils {
     }
 
     /**
-     * Returns the string of duplicate words. if the ignoreCase is true, the
-     * word is considered unique, if any of the letter of the word in different
-     * case.
+     * Returns the string of duplicate words. if the ignoreCase is true, the word is considered unique, if any of the
+     * letter of the word in different case.
      *
      * @param elements
      * @param ignoreCase
@@ -887,8 +876,7 @@ public enum TextUtils {
     }
 
     /**
-     * Converts the specified string into boolean value. if the specified string
-     * is null or empty, it returns false.
+     * Converts the specified string into boolean value. if the specified string is null or empty, it returns false.
      *
      * @param value
      * @return
@@ -898,8 +886,7 @@ public enum TextUtils {
     }
 
     /**
-     * Converts the specified string into integer value. if the specified string
-     * is null or empty, it returns -1.
+     * Converts the specified string into integer value. if the specified string is null or empty, it returns -1.
      *
      * @param value
      * @return
@@ -917,8 +904,7 @@ public enum TextUtils {
     }
 
     /**
-     * Converts the specified string into long value. if the specified string is
-     * null or empty, it returns -1.
+     * Converts the specified string into long value. if the specified string is null or empty, it returns -1.
      *
      * @param value
      * @return
@@ -966,7 +952,10 @@ public enum TextUtils {
      */
     public static String onesConverter(int num) {
         String[] Units = {" ", "One", "Two", "Three", "Four", "Five", "Six", "Seven", "Eight", "Nine"};
-        String[] Tens = {" ", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen", "Nineteen"};
+        String[]
+            Tens =
+            {" ", "Eleven", "Twelve", "Thirteen", "Fourteen", "Fifteen", "Sixteen", "Seventeen", "Eighteen",
+             "Nineteen"};
         String[] Hundreds = {" ", "Ten", "Twenty", "Thirty", "Fourty", "Fifty", "Sixty", "Seventy", "Eighty", "Ninety"};
         System.out.println("onesConverter Num : " + num);
         String str = " ";
@@ -1103,13 +1092,14 @@ public enum TextUtils {
     }
 
     /**
-     * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
-     * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
+     * ToString
+     *
      * @version 1.0.0
      * @created 2012-04-20 07:30:07 PM
-     * @since 1.0.0
+     * @created 1.0.0
      */
     private final class ToString {
+
         /**
          * excludePackageName
          */

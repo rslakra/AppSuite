@@ -34,7 +34,13 @@ import org.slf4j.LoggerFactory;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -42,7 +48,22 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -65,8 +86,8 @@ public enum BeanUtils {
     public static final String ID = "id";
     // IMMUTABLE_PROPERTIES
     public static final Set<String>
-            IMMUTABLE_PROPERTIES =
-            Sets.asSet("createdOn", "createdAt", "createdBy", "createdBy", "updatedOn", "updatedAt", "updatedBy");
+        IMMUTABLE_PROPERTIES =
+        Sets.asSet("createdOn", "createdAt", "createdBy", "createdBy", "updatedOn", "updatedAt", "updatedBy");
     // PRIMITIVE_WRAPPER_TYPES
     private final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_TYPES = new HashMap(8);
     // IMMUTABLE_ATTRIBUTES
@@ -453,7 +474,7 @@ public enum BeanUtils {
      */
     public static String toTitleCase(final CharSequence self) {
         return isEmpty(self) ? EMPTY_STR
-                : EMPTY_STR + Character.toUpperCase(self.charAt(0)) + self.subSequence(1, self.length());
+                             : EMPTY_STR + Character.toUpperCase(self.charAt(0)) + self.subSequence(1, self.length());
     }
 
 
@@ -522,7 +543,7 @@ public enum BeanUtils {
                 char cChar = charSequence.charAt(i);
                 if (cChar > 0xff) {
                     throw new IllegalArgumentException(
-                            "Invalid Character: " + (cChar) + " at index:" + (i + 1) + " in string: " + charSequence);
+                        "Invalid Character: " + (cChar) + " at index:" + (i + 1) + " in string: " + charSequence);
                 }
                 dataBytes[i] = (byte) cChar;
             }
@@ -532,26 +553,62 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns the package path of the given class.
+     *
      * @param classType
+     * @param withClassName
+     * @param <T>
      * @return
      */
-    public static String getClassPath(final Class<?> classType) {
-        assert classType != null;
-        return classType.getPackage().getName().replace(".", "/");
+    public static <T> String getClassPath(final Class<T> classType, final boolean withClassName) {
+        if (BeanUtils.isNotNull(classType)) {
+            String pkgPath = classType.getPackage().getName().replace(".", File.separator);
+            if (withClassName) {
+                pkgPath += File.separator + classType.getSimpleName();
+            }
+
+            return pkgPath;
+        }
+
+        return null;
     }
 
     /**
-     * @param klass
-     * @param pathString
+     * @param classType
+     * @param withClassName
+     * @param pathComponents
      * @return
      */
-    public static String getClassPath(final Class<?> klass, final String pathString) {
-        String classPath = getClassPath(klass);
-        if (BeanUtils.isNotEmpty(pathString)) {
-            classPath += (pathString.startsWith(File.separator) ? "" : File.separator) + pathString;
+    public static <T> String getClassPath(final Class<T> classType, final boolean withClassName,
+                                          final String... pathComponents) {
+        if (isNotNull(classType)) {
+            final StringBuilder pathBuilder = new StringBuilder(getClassPath(classType, withClassName));
+            if (BeanUtils.isNotEmpty(pathComponents)) {
+                for (String pathString : pathComponents) {
+                    LOGGER.debug("pathString: {}", pathString);
+                    if (BeanUtils.isNotEmpty(pathString)) {
+                        if (!pathString.startsWith(File.separator)) {
+                            pathBuilder.append(File.separator);
+                        }
+                        pathBuilder.append(pathString);
+                    }
+                }
+            }
+
+            LOGGER.debug("pathBuilder: {}", pathBuilder);
+            return pathBuilder.toString();
         }
 
-        return classPath;
+        return null;
+    }
+
+    /**
+     * @param classType
+     * @param pathComponents
+     * @return
+     */
+    public static String getClassPath(final Class<?> classType, final String... pathComponents) {
+        return getClassPath(classType, false, pathComponents);
     }
 
     /**
@@ -568,8 +625,8 @@ public enum BeanUtils {
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
             return new ArrayList<>(
-                    inputValues.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize))
-                            .values());
+                inputValues.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize))
+                    .values());
         }
     }
 
@@ -587,8 +644,8 @@ public enum BeanUtils {
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
             final Collection<Set<T>> partitions = inputValues.stream()
-                    .collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize, Collectors.toSet()))
-                    .values();
+                .collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize, Collectors.toSet()))
+                .values();
             return new HashSet<>(partitions);
         }
     }
@@ -601,7 +658,7 @@ public enum BeanUtils {
      */
     public static <T> T findEnumByClass(final Class<T> typeClass, final String name) {
         return Arrays.stream(typeClass.getEnumConstants())
-                .filter(e -> ((Enum) e).name().equalsIgnoreCase(name)).findAny().orElse(null);
+            .filter(e -> ((Enum) e).name().equalsIgnoreCase(name)).findAny().orElse(null);
     }
 
     /**
@@ -676,8 +733,8 @@ public enum BeanUtils {
         for (int index = 0; index < 6; index++) {
             StackTraceElement element = stack[index];
             LOGGER.debug(String.format("index=%d, lineNumber=%d, className=%s, methodName=%s", index,
-                    element.getLineNumber(), element.getClassName(),
-                    element.getMethodName()));
+                                       element.getLineNumber(), element.getClassName(),
+                                       element.getMethodName()));
         }
 
         if (stack != null && stack.length > 2) {
@@ -825,8 +882,8 @@ public enum BeanUtils {
      */
     public static String capitalize(final CharSequence self) {
         return BeanUtils.isEmpty(self) ? BeanUtils.EMPTY_STR
-                : BeanUtils.EMPTY_STR + Character.toUpperCase(self.charAt(0))
-                + self.subSequence(1, self.length());
+                                       : BeanUtils.EMPTY_STR + Character.toUpperCase(self.charAt(0))
+                                         + self.subSequence(1, self.length());
     }
 
     /**
@@ -854,13 +911,13 @@ public enum BeanUtils {
      * @throws IntrospectionException
      */
     private final void findWriteMethod(final Class<?> classType, final PropertyDescriptor propertyDescriptor)
-            throws IntrospectionException {
+        throws IntrospectionException {
         if (!isClassPropertyDescriptor(propertyDescriptor) && propertyDescriptor.getReadMethod() != null) {
             final String setterMethod = getSetterMethod(propertyDescriptor);
             final Class<?> propType = getReturnType(propertyDescriptor);
             for (Method method : classType.getMethods()) {
                 if (setterMethod.equals(method.getName()) && method.getParameterTypes().length == 1 && method
-                        .getParameterTypes()[0].isAssignableFrom(propType)) {
+                    .getParameterTypes()[0].isAssignableFrom(propType)) {
                     propertyDescriptor.setWriteMethod(method);
                     return;
                 }
@@ -974,7 +1031,8 @@ public enum BeanUtils {
      * @return
      */
     public static boolean isGetter(final Method method) {
-        return (isNotNull(method) && method.getParameterTypes().length == 0 && (INSTANCE.hasIsPrefix(method) || INSTANCE.hasGetPrefix(method)));
+        return (isNotNull(method) && method.getParameterTypes().length == 0 && (INSTANCE.hasIsPrefix(method)
+                                                                                || INSTANCE.hasGetPrefix(method)));
     }
 
     /**
@@ -1081,9 +1139,9 @@ public enum BeanUtils {
      */
     public boolean isSimpleValueType(final Class<?> classType) {
         return isPrimitiveOrWrapper(classType) || classType.isEnum() || CharSequence.class
-                .isAssignableFrom(classType) || Number.class.isAssignableFrom(classType) || Date.class
-                .isAssignableFrom(classType) || classType.equals(URI.class) || classType.equals(URL.class)
-                || classType.equals(Locale.class) || classType.equals(Class.class);
+            .isAssignableFrom(classType) || Number.class.isAssignableFrom(classType) || Date.class
+                   .isAssignableFrom(classType) || classType.equals(URI.class) || classType.equals(URL.class)
+               || classType.equals(Locale.class) || classType.equals(Class.class);
     }
 
     /**
@@ -1093,7 +1151,7 @@ public enum BeanUtils {
     public boolean isSimpleProperty(final Class<?> classType) {
         Objects.requireNonNull(classType, "Class must not be null!");
         return isSimpleValueType(classType) || classType.isArray() && isSimpleValueType(
-                classType.getComponentType());
+            classType.getComponentType());
     }
 
     /**
@@ -1180,7 +1238,7 @@ public enum BeanUtils {
                 ensurePublic(propertyDescriptor.getWriteMethod());
                 if (propertyDescriptor.getReadMethod() != null) {
                     this.readProperties
-                            .put(propertyDescriptor.getName(), new BeanPropertyDescriptor(propertyDescriptor));
+                        .put(propertyDescriptor.getName(), new BeanPropertyDescriptor(propertyDescriptor));
                 }
 
                 if (propertyDescriptor.getWriteMethod() != null) {
@@ -1199,7 +1257,7 @@ public enum BeanUtils {
      * @throws IllegalStateException
      */
     public static void copyProperties(final Object source, final Object target, final String... ignoredProperties)
-            throws IllegalStateException {
+        throws IllegalStateException {
         Objects.requireNonNull(source, "Source must not be null!");
         Objects.requireNonNull(target, "Target must not be null!");
         Object name = null;
@@ -1236,7 +1294,7 @@ public enum BeanUtils {
      * @throws IllegalStateException
      */
     public static void deepCopyProperties(final Object source, final Object target, final String... ignoredProperties)
-            throws IllegalStateException {
+        throws IllegalStateException {
         Objects.requireNonNull(source, "Source must not be null!");
         Objects.requireNonNull(target, "Target must not be null!");
         Object name = null;
@@ -1356,8 +1414,8 @@ public enum BeanUtils {
             final String fullString = text.toString();
             char upperCaseLetter = Character.toUpperCase(firstLetter);
             return (firstLetterIndex == 0 ? upperCaseLetter + fullString.substring(1)
-                    : fullString.substring(0, firstLetterIndex) + upperCaseLetter
-                    + fullString.substring(firstLetterIndex + 1));
+                                          : fullString.substring(0, firstLetterIndex) + upperCaseLetter
+                                            + fullString.substring(firstLetterIndex + 1));
         }
     }
 

@@ -5,7 +5,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Thing Entity Product Aircraft Vehicle
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:46 AM
  */
 public class AircraftModel {

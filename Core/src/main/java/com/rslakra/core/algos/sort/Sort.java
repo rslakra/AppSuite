@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.sort;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/16/22 3:27 PM
  */
 public interface Sort {

@@ -10,8 +10,8 @@ import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
 
 /**
- * @Author Rohtash Lakra
- * @Since 2/25/20 5:20 PM
+ * @author Rohtash Lakra
+ * @created 2/25/20 5:20 PM
  */
 public class EnumSetTest {
 

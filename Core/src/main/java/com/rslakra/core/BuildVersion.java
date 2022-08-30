@@ -5,7 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 12/10/21 12:22 PM
  */
 @Getter
@@ -21,7 +21,7 @@ public class BuildVersion {
     private String buildVersion;
 
     public void loadBuildProperties() {
-//        IOUtils.readStream(IOUtils.newInputStream(Paths.get("build.properties")));
+// IOUtils.readStream(IOUtils.newInputStream(Paths.get("build.properties")));
     }
 
 }

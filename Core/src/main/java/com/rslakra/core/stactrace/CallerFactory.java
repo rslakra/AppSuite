@@ -1,7 +1,7 @@
 package com.rslakra.core.stactrace;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/9/21 11:25 AM
  */
 public class CallerFactory {

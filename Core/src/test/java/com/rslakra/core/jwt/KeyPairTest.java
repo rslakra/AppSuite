@@ -19,8 +19,8 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.Base64;
 
 /**
- * @Author Rohtash Lakra
- * @Since 3/13/20 9:16 AM
+ * @author Rohtash Lakra
+ * @created 3/13/20 9:16 AM
  */
 public class KeyPairTest {
 

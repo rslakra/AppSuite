@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/4/22 4:29 PM
  */
 public enum HashUtils {

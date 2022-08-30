@@ -8,8 +8,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @Author Rohtash Lakra
- * @since 12/24/19 3:57 PM
+ * @author Rohtash Lakra
+ * @created 12/24/19 3:57 PM
  */
 public class TestJsonSerializer {
 

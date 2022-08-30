@@ -18,7 +18,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 7:47 PM
  */
 public abstract class AbstractHttpClientTest {

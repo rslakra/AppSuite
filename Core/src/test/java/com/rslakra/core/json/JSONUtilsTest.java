@@ -79,7 +79,8 @@ public class JSONUtilsTest {
 
     @Test
     public void testJson() {
-        Dictionary<String, Dictionary> dictionary = Dictionary.newDictionary().of("name", Dictionary.newDictionary()
+        Dictionary<String, Dictionary> dictionary = Dictionary.newDictionary()
+            .of("name", Dictionary.newDictionary()
                 .of("firstName", "Rohtash Singh")
                 .of("lastName", "Lakra"));
         String json;

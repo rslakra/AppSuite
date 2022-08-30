@@ -4,8 +4,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @Author Rohtash Lakra
- * @Since 1/14/20 4:39 PM
+ * @author Rohtash Lakra
+ * @created 1/14/20 4:39 PM
  */
 public class TowerOfHanoi {
 

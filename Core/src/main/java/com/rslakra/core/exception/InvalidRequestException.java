@@ -1,7 +1,7 @@
 package com.rslakra.core.exception;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 8/2/21 10:44 AM
  */
 public class InvalidRequestException extends IllegalArgumentException {

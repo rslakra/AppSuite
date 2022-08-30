@@ -14,7 +14,7 @@ import java.util.concurrent.*;
 import java.util.function.Supplier;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 6:31 PM
  */
 public class AsyncHttpClient extends AbstractHttpClient implements AutoCloseable {

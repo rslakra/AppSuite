@@ -8,8 +8,8 @@ import org.testng.annotations.Test;
 import java.util.Arrays;
 
 /**
- * @Author Rohtash Lakra
- * @since 12/23/19 4:10 PM
+ * @author Rohtash Lakra
+ * @created 12/23/19 4:10 PM
  */
 public class RandomNumbersAverageTest {
 

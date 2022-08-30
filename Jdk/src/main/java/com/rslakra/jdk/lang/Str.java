@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 2/9/21 11:51 AM rlakra 2/9/21 11:51 AM
  */
 public class Str {

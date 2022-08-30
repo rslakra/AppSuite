@@ -8,7 +8,7 @@ package com.rslakra.core.bos;
  * <p>
  * More specific types AircraftModel
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:45 AM
  */
 public class Aircraft {

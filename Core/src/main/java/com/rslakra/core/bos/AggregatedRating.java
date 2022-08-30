@@ -6,7 +6,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types Intangible Thing Rating
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:43 AM
  */
 public class AggregatedRating {

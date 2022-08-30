@@ -8,8 +8,8 @@ import java.util.Calendar;
 import java.util.Objects;
 
 /**
- * @Author: rlakra
- * @Since: 9/11/19 3:45 PM
+ * @author Rohtash Lakra
+ * @created 9/11/19 3:45 PM
  */
 public class DateTime {
 

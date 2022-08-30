@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.tree;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/17/22 2:05 PM
  */
 public abstract class AbstractTree<V extends Comparable> implements Iterable, Comparable {

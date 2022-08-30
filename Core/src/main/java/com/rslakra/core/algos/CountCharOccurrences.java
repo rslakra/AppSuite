@@ -7,8 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * @Author Rohtash Lakra
- * @Since 3/18/20 10:09 AM
+ * @author Rohtash Lakra
+ * @created 3/18/20 10:09 AM
  */
 public class CountCharOccurrences {
 

@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Standard charsets
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/21/22 4:08 PM
  */
 public enum CharSets {
@@ -51,8 +51,8 @@ public enum CharSets {
         CharSets charSets = UTF_8;
         if (BeanUtils.isNotEmpty(charSetName)) {
             charSets =
-                    Arrays.stream(values()).filter(charSet -> charSet.toCharset().equalsIgnoreCase(charSetName)).findAny()
-                            .orElse(UTF_8);
+                Arrays.stream(values()).filter(charSet -> charSet.toCharset().equalsIgnoreCase(charSetName)).findAny()
+                    .orElse(UTF_8);
         }
 
         return charSets;

@@ -31,7 +31,14 @@ package com.rslakra.core.json;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.google.gson.*;
+import com.google.gson.FieldNamingPolicy;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.rslakra.core.BeanUtils;
 import com.rslakra.core.IOUtils;
@@ -48,9 +55,9 @@ import java.util.Objects;
 /**
  * JSON utility class.
  *
- * @author Rohtash Singh
+ * @author Rohtash Lakra
  * @version 1.0.0
- * @since May 18, 2015 2:39:11 PM
+ * @created May 18, 2015 2:39:11 PM
  */
 public enum JSONUtils {
     INSTANCE;

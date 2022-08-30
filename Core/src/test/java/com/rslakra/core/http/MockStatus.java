@@ -1,7 +1,7 @@
 package com.rslakra.core.http;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/29/21 12:02 PM
  */
 public enum MockStatus {

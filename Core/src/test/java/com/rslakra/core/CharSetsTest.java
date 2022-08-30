@@ -1,5 +1,7 @@
 package com.rslakra.core;
 
+import static org.testng.Assert.assertEquals;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.DataProvider;
@@ -9,10 +11,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.testng.Assert.assertEquals;
-
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 7/21/22 4:38 PM
  */
 public class CharSetsTest {

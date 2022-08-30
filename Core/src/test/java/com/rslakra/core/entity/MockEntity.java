@@ -1,7 +1,7 @@
 package com.rslakra.core.entity;
 
 /**
- * @author Rohtash Lakra (rslakra.work@gmail.com)
+ * @author Rohtash Lakra
  * @version 1.0.0
  * @Created Jul 04, 2022 19:52:06
  */

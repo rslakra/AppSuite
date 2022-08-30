@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 import java.util.EnumSet;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 11/4/21 12:53 PM
  */
 public class EnumMapperTest {

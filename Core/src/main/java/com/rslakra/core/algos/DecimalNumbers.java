@@ -14,8 +14,8 @@ import java.util.Map;
  * Base 10 https://en.wikipedia.org/wiki/Decimal
  *
  *
- * @author Rohtash Singh Lakra (rslakra.work@gmail.com)
- * @since 12-19-2019 8:41:57 AM
+ * @author Rohtash Lakra
+ * @created 12-19-2019 8:41:57 AM
  */
 public class DecimalNumbers {
 

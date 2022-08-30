@@ -6,8 +6,8 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- * @author: Rohtash Lakra (rlakra)
- * @since: 10/2/19 10:15 AM
+ * @author Rohtash Lakra
+ * @created 10/2/19 10:15 AM
  */
 public class ObjectTest {
 

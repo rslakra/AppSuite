@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 /**
- * @author Rohtash Lakra (rslakra.work@gmail.com)
+ * @author Rohtash Lakra
  * @version 1.0.0
  * @Created Jun 18, 2022 17:50:52
  */

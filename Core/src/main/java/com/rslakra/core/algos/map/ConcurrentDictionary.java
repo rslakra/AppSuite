@@ -8,7 +8,7 @@ import java.util.LinkedHashMap;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/28/21 2:57 PM
  */
 public class ConcurrentDictionary<K, V> extends ConcurrentHashMap<K, V> implements Serializable {

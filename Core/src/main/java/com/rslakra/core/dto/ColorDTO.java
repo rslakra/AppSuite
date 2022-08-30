@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
- * @Author: rlakra
- * @Since: 9/11/19 1:36 PM
+ * @author Rohtash Lakra
+ * @created 9/11/19 1:36 PM
  */
 @Getter
 @Setter

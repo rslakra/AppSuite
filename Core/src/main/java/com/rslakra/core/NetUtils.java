@@ -38,7 +38,7 @@ import java.io.PrintWriter;
 import java.net.Socket;
 
 /**
- * @author rohtash.singh
+ * @author Rohtash Lakra
  * @version Apr 11, 2006
  */
 
@@ -68,7 +68,8 @@ public enum NetUtils {
      * @return
      */
     public static String toIPAddress(int ipNumber) {
-        return (ipNumber & 0xFF) + "." + ((ipNumber >> 8) & 0xFF) + "." + ((ipNumber >> 16) & 0xFF) + "." + ((ipNumber >> 24) & 0xFF);
+        return (ipNumber & 0xFF) + "." + ((ipNumber >> 8) & 0xFF) + "." + ((ipNumber >> 16) & 0xFF) + "." + (
+            (ipNumber >> 24) & 0xFF);
     }
 
     /**
@@ -160,8 +161,8 @@ public enum NetUtils {
     }
 
     /**
-     * Make a PrintWriter to send outgoing data. This PrintWriter will
-     * automatically flush stream when <code>println(...)</code> is called.
+     * Make a PrintWriter to send outgoing data. This PrintWriter will automatically flush stream when
+     * <code>println(...)</code> is called.
      *
      * @param socket
      * @return

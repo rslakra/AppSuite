@@ -7,7 +7,7 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/9/21 11:25 AM
  */
 public class CallerByStackTrace extends AbstractCaller implements Caller {

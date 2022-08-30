@@ -7,7 +7,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/25/21 3:44 PM
  */
 public final class UniqueIterator<E> implements Iterator<E> {

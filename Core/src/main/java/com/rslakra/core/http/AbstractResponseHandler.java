@@ -13,7 +13,7 @@ import java.util.function.Function;
  * By default, we accept the response with HTTP status code between 200~299. You could define your own acceptCriteria,
  * In addition, if you would like to handle the error, you could Overwrite the method handleErrorResponse.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 4:05 PM
  */
 public abstract class AbstractResponseHandler<T> implements ResponseHandler<T> {

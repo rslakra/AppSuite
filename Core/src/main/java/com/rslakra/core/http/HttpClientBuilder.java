@@ -32,7 +32,7 @@ import javax.net.ssl.SSLContext;
  * <p>
  * Allows customization of rest client, resilience4j, and SSL configuration.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 3/26/21 5:40 PM
  */
 @Getter

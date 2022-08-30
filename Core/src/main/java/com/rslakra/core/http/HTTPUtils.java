@@ -33,8 +33,12 @@ import com.rslakra.core.CharSets;
 import com.rslakra.core.IOUtils;
 import com.rslakra.core.StopWatch;
 import com.rslakra.core.security.GuardUtils;
-import org.apache.http.*;
 import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpHeaders;
+import org.apache.http.HttpMessage;
+import org.apache.http.HttpRequest;
+import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.config.RequestConfig;
 import org.apache.http.client.methods.HttpUriRequest;
@@ -50,22 +54,73 @@ import org.apache.http.ssl.SSLContexts;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ServerSocketFactory;
-import javax.net.ssl.*;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Serializable;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
-import java.net.*;
-import java.security.*;
-import java.security.cert.*;
-import java.util.*;
+import java.net.CookieHandler;
+import java.net.CookieManager;
+import java.net.HttpURLConnection;
+import java.net.InetSocketAddress;
+import java.net.MalformedURLException;
+import java.net.Proxy;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URL;
+import java.security.GeneralSecurityException;
+import java.security.KeyManagementException;
+import java.security.KeyStore;
+import java.security.KeyStoreException;
+import java.security.NoSuchAlgorithmException;
+import java.security.Principal;
+import java.security.SecureRandom;
+import java.security.cert.CertPath;
+import java.security.cert.CertPathValidator;
+import java.security.cert.CertificateException;
+import java.security.cert.CertificateFactory;
+import java.security.cert.PKIXParameters;
+import java.security.cert.X509Certificate;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Base64;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import java.util.stream.Collectors;
 
+import javax.net.ServerSocketFactory;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.KeyManager;
+import javax.net.ssl.KeyManagerFactory;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.TrustManagerFactory;
+import javax.net.ssl.X509TrustManager;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 /**
- * @Author Rohtash Lakra
- * @Since 2/28/20 10:16 AM
+ * @author Rohtash Lakra
+ * @created 2/28/20 10:16 AM
  */
 public enum HTTPUtils {
     INSTANCE;
@@ -83,9 +138,9 @@ public enum HTTPUtils {
     public static final int RETRY_INTERVAL = 1000;
 
     public static final List<BasicHeader> DEFAULT_HEADERS = Arrays.asList(
-            new BasicHeader(HttpHeaders.ACCEPT, WILDCARD),
-            new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, ACCEPT_LANGUAGE_VALUE),
-            new BasicHeader(HttpHeaders.CONNECTION, KEEP_ALIVE)
+        new BasicHeader(HttpHeaders.ACCEPT, WILDCARD),
+        new BasicHeader(HttpHeaders.ACCEPT_LANGUAGE, ACCEPT_LANGUAGE_VALUE),
+        new BasicHeader(HttpHeaders.CONNECTION, KEEP_ALIVE)
     );
 
     interface Values {
@@ -583,11 +638,11 @@ public enum HTTPUtils {
     /**
      * Returns the class simple name.
      *
-     * @param klass
+     * @param classType
      * @return
      */
-    public static String getClassSimpleName(Class<?> klass) {
-        return (BeanUtils.isNull(klass) ? null : klass.getSimpleName());
+    public static String getClassSimpleName(Class<?> classType) {
+        return (BeanUtils.isNull(classType) ? null : classType.getSimpleName());
     }
 
     /**
@@ -599,11 +654,11 @@ public enum HTTPUtils {
     public static String getClassSimpleName(Object object) {
         String classSimpleName = null;
         if (BeanUtils.isNotNull(object)) {
-            Class<?> klass = object.getClass().getEnclosingClass();
-            if (BeanUtils.isNull(klass)) {
-                klass = object.getClass();
+            Class<?> classType = object.getClass().getEnclosingClass();
+            if (BeanUtils.isNull(classType)) {
+                classType = object.getClass();
             }
-            classSimpleName = getClassSimpleName(klass);
+            classSimpleName = getClassSimpleName(classType);
         }
 
         return classSimpleName;
@@ -639,8 +694,8 @@ public enum HTTPUtils {
     public static boolean instanceOfAny(Object object, Class<?>... classes) {
         boolean result = false;
         if (object != null) {
-            for (Class<?> klass : classes) {
-                if (klass != null && klass.isInstance(object)) {
+            for (Class<?> classType : classes) {
+                if (classType != null && classType.isInstance(object)) {
                     result = true;
                     break;
                 }
@@ -881,7 +936,7 @@ public enum HTTPUtils {
             if (USE_FULLY_QUALIFIED_HOSTNAME) {
                 hostName = getHostNameFromUrl(urlString);
             } else {
-                hostName = getHostNameFromUrlWithoutSubdomain(urlString);
+                hostName = getHostNameExcludeSubdomain(urlString);
             }
 
             // put in domain cache
@@ -943,8 +998,8 @@ public enum HTTPUtils {
             urlConnection = openHttpURLConnection(urlString, null);
             setConnectTimeoutProperties(urlConnection);
             serverReachable =
-                    (urlConnection != null && (urlConnection.getResponseCode() == 200
-                            || urlConnection.getContent() != null));
+                (urlConnection != null && (urlConnection.getResponseCode() == 200
+                                           || urlConnection.getContent() != null));
         } catch (Exception ex) {
             serverReachable = false;
         } finally {
@@ -1068,8 +1123,8 @@ public enum HTTPUtils {
      */
     public static HttpURLConnection openHttpURLConnection(URL url, Proxy proxy) throws IOException {
         return (BeanUtils.isNotNull(url) ? (HttpURLConnection) (BeanUtils.isNotNull(proxy) ? url.openConnection(proxy)
-                : url.openConnection())
-                : null);
+                                                                                           : url.openConnection())
+                                         : null);
     }
 
     /**
@@ -1121,7 +1176,7 @@ public enum HTTPUtils {
      */
     public static HttpsURLConnection openHttpsURLConnection(URL url, Proxy proxy) throws IOException {
         return (BeanUtils.isNotNull(url) && url.getProtocol().equals("https") ? (HttpsURLConnection) (
-                BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
+            BeanUtils.isNotNull(proxy) ? url.openConnection(proxy) : url.openConnection()) : null);
     }
 
     /**
@@ -1198,7 +1253,7 @@ public enum HTTPUtils {
      * @throws IOException
      */
     public static void setConnectionDefaultProperties(final HttpURLConnection urlConnection, final String requestMethod)
-            throws IOException {
+        throws IOException {
         if (BeanUtils.isNotNull(urlConnection)) {
             // set connection timeout properties.
             setConnectTimeoutProperties(urlConnection);
@@ -1481,7 +1536,7 @@ public enum HTTPUtils {
                                           final Map<String, String> requestHeaders,
                                           final Map<String, Object> requestParameters, final boolean closeStream) {
         LOGGER.debug("+executeRequest({}, {}, {}, {}, {})", urlString, httpMethod, requestHeaders, requestParameters,
-                closeStream);
+                     closeStream);
         final StopWatch stopWatch = new StopWatch();
         Response httpResponse = null;
         HttpURLConnection urlConnection = null;
@@ -2242,7 +2297,7 @@ public enum HTTPUtils {
      * @param urlString
      * @return
      */
-    public static String getHostNameFromUrlWithoutSubdomain(String urlString) {
+    public static String getHostNameExcludeSubdomain(String urlString) {
         String hostName = null;
         try {
             hostName = new URL(urlString).getHost();
@@ -2255,8 +2310,8 @@ public enum HTTPUtils {
                     int lastDotIndex = hostDomainOnly.lastIndexOf(".");
                     if (lastDotIndex != -1) {
                         hostName =
-                                hostName.substring(lastDotIndex + 1, hostDomainOnly.length()) + hostName.substring(
-                                        dotIndex);
+                            hostName.substring(lastDotIndex + 1, hostDomainOnly.length()) + hostName.substring(
+                                dotIndex);
                     }
                 }
             }
@@ -2333,7 +2388,7 @@ public enum HTTPUtils {
      *
      * @param <K>
      * @param <V>
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 04/19/2017 11:12:00 AM
      */
     public static class Pairs<K, V> implements Serializable {
@@ -2438,7 +2493,7 @@ public enum HTTPUtils {
      * Create an HostnameVerifier that hardwires the expected hostname. Note that is different than the URL's hostname:
      * example.com versus example.org
      *
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 04/17/2017 12:40:31 PM
      */
     public static final class AllHostVerifier implements HostnameVerifier {
@@ -2461,7 +2516,7 @@ public enum HTTPUtils {
      * in the system TrustStore. Also handles an out-of-order certificate chain, as is often produced by Apache's
      * mod_ssl
      *
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 04/17/2017 05:57:55 PM
      * @see "http://chariotsolutions.com/blog/post/https-with-client-certificates-on"
      * https://github.com/rfreedman/android-ssl
@@ -2504,7 +2559,7 @@ public enum HTTPUtils {
          * @return
          */
         public void checkClientTrusted(X509Certificate[] chain, String authType)
-                throws java.security.cert.CertificateException {
+            throws java.security.cert.CertificateException {
         }
 
         /**
@@ -2519,7 +2574,7 @@ public enum HTTPUtils {
          * @throws java.security.cert.CertificateException
          */
         public void checkServerTrusted(X509Certificate[] chain, String authType)
-                throws java.security.cert.CertificateException {
+            throws java.security.cert.CertificateException {
             try {
                 originalX509TrustManager.checkServerTrusted(chain, authType);
             } catch (CertificateException originalException) {
@@ -2625,7 +2680,7 @@ public enum HTTPUtils {
     /**
      * Creates the generic SSL factory.
      *
-     * @author Rohtash Singh Lakra
+     * @author Rohtash Lakra
      * @date 04/12/2017 05:17:15 PM
      */
     public static final class SSLFactory {
@@ -2673,10 +2728,10 @@ public enum HTTPUtils {
          */
         public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers,
                                         SecureRandom secureRandom)
-                throws NoSuchAlgorithmException, KeyManagementException {
+            throws NoSuchAlgorithmException, KeyManagementException {
             System.out.println(
-                    "+getSSLContext(" + tlsVersion + ", " + keyManagers + ", " + trustManagers + ", " + secureRandom
-                            + "):");
+                "+getSSLContext(" + tlsVersion + ", " + keyManagers + ", " + trustManagers + ", " + secureRandom
+                + "):");
 
             SSLContext sslContext = SSLContext.getInstance(tlsVersion);
             sslContext.init(keyManagers, trustManagers, secureRandom);
@@ -2696,7 +2751,7 @@ public enum HTTPUtils {
          * @throws KeyManagementException
          */
         public SSLContext getSSLContext(String tlsVersion, KeyManager[] keyManagers, TrustManager[] trustManagers)
-                throws NoSuchAlgorithmException, KeyManagementException {
+            throws NoSuchAlgorithmException, KeyManagementException {
             return getSSLContext(tlsVersion, null, trustManagers, null);
         }
 
@@ -2711,7 +2766,7 @@ public enum HTTPUtils {
          * @throws KeyManagementException
          */
         public SSLContext getSSLContext(String tlsVersion, TrustManager[] trustManagers, SecureRandom secureRandom)
-                throws NoSuchAlgorithmException, KeyManagementException {
+            throws NoSuchAlgorithmException, KeyManagementException {
             return getSSLContext(tlsVersion, null, trustManagers, secureRandom);
         }
 
@@ -2779,7 +2834,7 @@ public enum HTTPUtils {
          * @throws KeyStoreException
          */
         public TrustManager[] getTrustManagers(final KeyStore trustKeyStore)
-                throws NoSuchAlgorithmException, KeyStoreException {
+            throws NoSuchAlgorithmException, KeyStoreException {
             System.out.println("+getTrustManagers(" + trustKeyStore + ")");
             TrustManager[] trustManagers = null;
 
@@ -2803,7 +2858,7 @@ public enum HTTPUtils {
          * @throws Exception
          */
         private SSLSocketFactory createTrustSSLSocketFactory(InputStream certInputStream, SecureRandom secureRandom)
-                throws Exception {
+            throws Exception {
             X509Certificate certificate = GuardUtils.newX509Certificate(certInputStream, true);
 
             // Create a KeyStore containing our trusted CAs
@@ -2896,7 +2951,7 @@ public enum HTTPUtils {
          * @throws IOException
          */
         public KeyStore loadPKCS12KeyStore(InputStream p12CertInputStream, char[] p12CertPass, boolean closeStream)
-                throws GeneralSecurityException, IOException {
+            throws GeneralSecurityException, IOException {
             KeyStore keyStore = KeyStore.getInstance(PKCS12);
             keyStore.load(p12CertInputStream, p12CertPass);
             if (closeStream) {
@@ -2916,9 +2971,9 @@ public enum HTTPUtils {
          * @throws IOException
          */
         public KeyStore loadPKCS12KeyStore(String p12CertFileName, String p12CertPassword)
-                throws GeneralSecurityException, IOException {
+            throws GeneralSecurityException, IOException {
             return loadPKCS12KeyStore(IOUtils.toInputStream(IOUtils.readBytes(p12CertFileName)),
-                    p12CertPassword.toCharArray(), false);
+                                      p12CertPassword.toCharArray(), false);
         }
 
         /**
@@ -2961,7 +3016,7 @@ public enum HTTPUtils {
          * @throws Exception
          */
         private SSLContext createSSLContext(String p12CertFileName, String p12CertPassword, String caCertString)
-                throws Exception {
+            throws Exception {
             final KeyStore keyStore = loadPKCS12KeyStore(p12CertFileName, p12CertPassword);
             KeyManagerFactory kmf = KeyManagerFactory.getInstance("X509");
             kmf.init(keyStore, p12CertPassword.toCharArray());
@@ -3072,22 +3127,22 @@ public enum HTTPUtils {
     public HttpClient getHttpClient(final int maxConnections, final int connectTimeout, final int socketTimeout,
                                     final int maxRetries, final int retryInterval) {
         final HttpClient httpClient =
-                HttpClients.custom()
-                        .setUserAgent("HttpClient")
-                        .setConnectionReuseStrategy(new DefaultConnectionReuseStrategy())
-                        .setSSLSocketFactory(new SSLConnectionSocketFactory(SSLContexts.createDefault(),
-                                NoopHostnameVerifier.INSTANCE))
-                        .setDefaultHeaders(DEFAULT_HEADERS)
-                        .setMaxConnPerRoute(maxConnections)
-                        .setMaxConnTotal(Integer.MAX_VALUE)
-                        .setServiceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy(maxRetries, retryInterval))
-                        .setRetryHandler(new DefaultHttpRequestRetryHandler())
-                        .setRedirectStrategy(new DefaultRedirectStrategy())
-                        .setDefaultRequestConfig(RequestConfig.custom()
-                                .setConnectTimeout(connectTimeout)
-                                .setSocketTimeout(socketTimeout)
-                                .build())
-                        .build();
+            HttpClients.custom()
+                .setUserAgent("HttpClient")
+                .setConnectionReuseStrategy(new DefaultConnectionReuseStrategy())
+                .setSSLSocketFactory(new SSLConnectionSocketFactory(SSLContexts.createDefault(),
+                                                                    NoopHostnameVerifier.INSTANCE))
+                .setDefaultHeaders(DEFAULT_HEADERS)
+                .setMaxConnPerRoute(maxConnections)
+                .setMaxConnTotal(Integer.MAX_VALUE)
+                .setServiceUnavailableRetryStrategy(new ServiceUnavailableRetryStrategy(maxRetries, retryInterval))
+                .setRetryHandler(new DefaultHttpRequestRetryHandler())
+                .setRedirectStrategy(new DefaultRedirectStrategy())
+                .setDefaultRequestConfig(RequestConfig.custom()
+                                             .setConnectTimeout(connectTimeout)
+                                             .setSocketTimeout(socketTimeout)
+                                             .build())
+                .build();
         return httpClient;
     }
 
@@ -3109,8 +3164,8 @@ public enum HTTPUtils {
      */
     public static String getContentType(final HttpMessage httpMessage) {
         return (BeanUtils.isNull(httpMessage) ? null
-                : httpMessage.getFirstHeader(Headers.CONTENT_TYPE.toLowerCase())
-                .getValue());
+                                              : httpMessage.getFirstHeader(Headers.CONTENT_TYPE.toLowerCase())
+                    .getValue());
     }
 
     /**
@@ -3181,7 +3236,7 @@ public enum HTTPUtils {
      */
     public static String nextRequestTracer(final String requestTracerPrefix) {
         return String.format("%s-%d", (requestTracerPrefix == null ? "requestTracer" : requestTracerPrefix),
-                System.currentTimeMillis());
+                             System.currentTimeMillis());
     }
 
     /**
@@ -3199,7 +3254,7 @@ public enum HTTPUtils {
      */
     public static boolean hasHeader(final HttpMessage httpMessage, final String headerName) {
         return (BeanUtils.isNotNull(httpMessage) && BeanUtils.isNotEmpty(headerName) && httpMessage.containsHeader(
-                headerName));
+            headerName));
     }
 
     /**

@@ -12,7 +12,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 4/29/22 12:38 PM
  */
 public class HashMap<K, V> implements Map<K, V> {

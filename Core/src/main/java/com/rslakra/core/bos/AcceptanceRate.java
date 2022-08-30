@@ -7,7 +7,7 @@ import java.util.Date;
  * Captures the acceptance rate or selectivity: i.e. the percentage of students who are admitted. The lower the
  * percentage, the more selective the school is.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/26/22 4:55 PM
  */
 public class AcceptanceRate {

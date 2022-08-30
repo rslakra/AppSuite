@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 6/9/21 11:25 AM
  */
 public class CallerBySecurityManager extends AbstractCaller implements Caller {

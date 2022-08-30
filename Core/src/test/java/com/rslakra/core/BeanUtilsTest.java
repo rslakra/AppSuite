@@ -1,5 +1,12 @@
 package com.rslakra.core;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertNotNull;
+import static org.testng.Assert.assertNull;
+import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.fail;
+
 import com.rslakra.core.dto.StateDTO;
 import com.rslakra.core.dto.UserDTO;
 import com.rslakra.core.entity.MockEntity;
@@ -13,10 +20,23 @@ import org.testng.annotations.Test;
 
 import java.lang.reflect.Method;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.AbstractCollection;
+import java.util.AbstractList;
+import java.util.AbstractMap;
+import java.util.AbstractSet;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Vector;
 import java.util.concurrent.ConcurrentHashMap;
-
-import static org.testng.Assert.*;
 
 /**
  * @author Rohtash Lakra
@@ -267,7 +287,9 @@ public class BeanUtilsTest {
 
     @Test
     public void testNextUuid() {
-        assertNotNull(BeanUtils.nextUuid());
+        String nextUuid = BeanUtils.nextUuid();
+        LOGGER.debug("nextUuid:{}", nextUuid);
+        assertNotNull(nextUuid);
     }
 
     @Test
@@ -323,9 +345,118 @@ public class BeanUtilsTest {
         assertNotNull(BeanUtils.toBytes("null"));
     }
 
-    @Test
-    public void testGetClassPath() {
-        assertNotNull(BeanUtils.getClassPath(BeanUtilsTest.class));
+    /**
+     * @return
+     */
+    @DataProvider
+    public Iterator<Object[]> classPathWithClassNameData() {
+        List<Object[]> data = new ArrayList<>();
+        //same key/value
+        data.add(new Object[]{null, false, null});
+        data.add(new Object[]{null, true, null});
+        data.add(new Object[]{BeanUtilsTest.class, false, "com/rslakra/core"});
+        data.add(new Object[]{BeanUtilsTest.class, true, "com/rslakra/core/BeanUtilsTest"});
+
+        return data.iterator();
+    }
+
+    /**
+     * @param classType
+     * @param withClassName
+     * @param expectedPath
+     * @param <T>
+     */
+    @Test(dataProvider = "classPathWithClassNameData")
+    public <T> void testGetClassPathWithClassName(Class<T> classType, boolean withClassName, String expectedPath) {
+        String classPath = BeanUtils.getClassPath(classType, withClassName);
+        if (BeanUtils.isNull(expectedPath)) {
+            assertNull(classPath);
+        } else {
+            assertNotNull(classPath);
+            assertTrue(classPath.endsWith(expectedPath));
+        }
+    }
+
+    /**
+     * @return
+     */
+    @DataProvider
+    public Iterator<Object[]> classPathWithClassNameAndPathsData() {
+        List<Object[]> data = new ArrayList<>();
+        //same key/value
+        data.add(new Object[]{null, false, null, null});
+        data.add(new Object[]{null, false, new String[]{}, null});
+        data.add(new Object[]{null, false, new String[]{"data"}, null});
+
+        data.add(new Object[]{null, true, null, null});
+        data.add(new Object[]{null, true, new String[]{}, null});
+        data.add(new Object[]{null, true, new String[]{"data"}, null});
+
+        data.add(new Object[]{BeanUtilsTest.class, false, null, "com/rslakra/core"});
+        data.add(new Object[]{BeanUtilsTest.class, false, new String[]{}, "com/rslakra/core"});
+        data.add(new Object[]{BeanUtilsTest.class, false, new String[]{"data"}, "com/rslakra/core/data"});
+
+        data.add(new Object[]{BeanUtilsTest.class, true, null, "com/rslakra/core/BeanUtilsTest"});
+        data.add(new Object[]{BeanUtilsTest.class, true, new String[]{}, "com/rslakra/core/BeanUtilsTest"});
+        data.add(new Object[]{BeanUtilsTest.class, true, new String[]{"data"}, "com/rslakra/core/BeanUtilsTest/data"});
+
+        return data.iterator();
+    }
+
+    /**
+     * @param classType
+     * @param withClassName
+     * @param pathComponents
+     * @param expectedPath
+     * @param <T>
+     */
+    @Test(dataProvider = "classPathWithClassNameAndPathsData")
+    public <T> void testGetClassPathWithClassNameAndPaths(Class<T> classType, boolean withClassName,
+                                                          String[] pathComponents, String expectedPath) {
+        String classPath = BeanUtils.getClassPath(classType, withClassName, pathComponents);
+        if (BeanUtils.isNull(expectedPath)) {
+            assertNull(classPath);
+        } else {
+            assertNotNull(classPath);
+            assertTrue(classPath.endsWith(expectedPath));
+        }
+    }
+
+    /**
+     * @return
+     */
+    @DataProvider
+    public Iterator<Object[]> classPathWithPathComponentsData() {
+        List<Object[]> data = new ArrayList<>();
+        //same key/value
+        data.add(new Object[]{null, null, null});
+        data.add(new Object[]{null, new String[]{}, null});
+        data.add(new Object[]{null, new String[]{"data"}, null});
+
+        data.add(new Object[]{BeanUtilsTest.class, null, "com/rslakra/core"});
+        data.add(new Object[]{BeanUtilsTest.class, new String[]{}, "com/rslakra/core"});
+        data.add(new Object[]{BeanUtilsTest.class, new String[]{"data"}, "com/rslakra/core/data"});
+        data.add(new Object[]{BeanUtilsTest.class, new String[]{"first", "last"}, "com/rslakra/core/first/last"});
+
+        return data.iterator();
+    }
+
+    /**
+     * @param classType
+     * @param pathComponents
+     * @param expectedPath
+     * @param <T>
+     */
+    @Test(dataProvider = "classPathWithPathComponentsData")
+    public <T> void testGetClassPathWithPathComponents(Class<T> classType, String[] pathComponents,
+                                                       String expectedPath) {
+        String classPath = BeanUtils.getClassPath(classType, pathComponents);
+        if (BeanUtils.isNull(expectedPath)) {
+            assertNull(classPath);
+        } else {
+            assertNotNull(classPath);
+            assertTrue(classPath.endsWith(expectedPath));
+        }
     }
 
     @DataProvider

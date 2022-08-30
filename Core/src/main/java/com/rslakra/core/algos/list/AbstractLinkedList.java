@@ -1,7 +1,7 @@
 package com.rslakra.core.algos.list;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/20/22 11:53 AM
  */
 public abstract class AbstractLinkedList<T> implements Comparable<T> {

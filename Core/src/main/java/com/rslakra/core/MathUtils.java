@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * @author Rohtash Lakra (work.lakra@gmail.com)
- * @since 09/16/2019 11:56:31 AM
+ * @author Rohtash Lakra
+ * @created 09/16/2019 11:56:31 AM
  */
 public enum MathUtils {
     INSTANCE;

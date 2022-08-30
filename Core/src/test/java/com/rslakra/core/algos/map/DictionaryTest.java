@@ -8,7 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 5/20/22 12:42 PM
  */
 public class DictionaryTest {

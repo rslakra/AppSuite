@@ -1,7 +1,7 @@
 package com.rslakra.java;
 
 /**
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 4/22/21 11:09 AM
  */
 public class JavaTest {

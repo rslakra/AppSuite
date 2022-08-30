@@ -35,11 +35,32 @@ import com.google.gson.JsonPrimitive;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.net.ssl.SSLServerSocket;
-import javax.net.ssl.SSLSession;
-import javax.net.ssl.SSLSocket;
-import java.io.*;
-import java.net.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileFilter;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.PrintWriter;
+import java.io.RandomAccessFile;
+import java.net.HttpURLConnection;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
@@ -48,16 +69,29 @@ import java.nio.file.Path;
 import java.nio.file.attribute.FileAttribute;
 import java.nio.file.attribute.PosixFilePermission;
 import java.nio.file.attribute.PosixFilePermissions;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Objects;
+import java.util.Properties;
+import java.util.Set;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.net.ssl.SSLServerSocket;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.SSLSocket;
 
 /**
  * This class handles the file handling operations.
  *
- * @author Rohtash Singh
+ * @author Rohtash Lakra
  * @version 1.0.0
- * @since Apr 22, 2015 4:52:15 PM
+ * @created Apr 22, 2015 4:52:15 PM
  */
 public enum IOUtils {
     INSTANCE;
@@ -106,13 +140,21 @@ public enum IOUtils {
 
 
     // ALL_PERMISSIONS
-    public static FileAttribute<Set<PosixFilePermission>> ALL_PERMISSIONS = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE, PosixFilePermission.OWNER_EXECUTE));
+    public static FileAttribute<Set<PosixFilePermission>>
+        ALL_PERMISSIONS =
+        PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE,
+                                                        PosixFilePermission.OWNER_EXECUTE));
 
     // WRITE_PERMISSION
-    public static FileAttribute<Set<PosixFilePermission>> WRITE_PERMISSION = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
+    public static FileAttribute<Set<PosixFilePermission>>
+        WRITE_PERMISSION =
+        PosixFilePermissions.asFileAttribute(
+            EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
 
     // READ_PERMISSION
-    public static FileAttribute<Set<PosixFilePermission>> READ_PERMISSION = PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ));
+    public static FileAttribute<Set<PosixFilePermission>>
+        READ_PERMISSION =
+        PosixFilePermissions.asFileAttribute(EnumSet.of(PosixFilePermission.OWNER_READ));
 
     /**
      * Returns the OS name.
@@ -199,36 +241,15 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the package path of the given class.
-     *
-     * @param classType
-     * @param withClassName
-     * @param <T>
-     * @return
-     */
-    public static <T> String getPackagePath(Class<T> classType, boolean withClassName) {
-        if (BeanUtils.isNotNull(classType)) {
-            String pkgPath = classType.getPackage().getName().replace(".", File.separator);
-            if (withClassName) {
-                pkgPath += File.separator + classType.getSimpleName();
-            }
-
-            return pkgPath;
-        }
-
-        return null;
-    }
-
-    /**
      * Returns the path of the given class.
      *
      * @param classType
      * @param <T>
      * @return
      */
-    public static <T> String filePath(final Class<T> classType) {
+    public static <T> String getClassFilePath(final Class<T> classType) {
         if (BeanUtils.isNotNull(classType)) {
-            String filePath = getPackagePath(classType, false);
+            String filePath = BeanUtils.getClassPath(classType, false);
             if (BeanUtils.isNotNull(filePath)) {
                 URL url = classType.getClassLoader().getResource(filePath);
                 if (url != null) {
@@ -273,7 +294,6 @@ public enum IOUtils {
      */
     public static String pathString(String parentFolder, String childName) {
         String pathString = null;
-
         if (BeanUtils.isEmpty(parentFolder)) {
             throw new IllegalArgumentException("Parent directory should not be null/empty!");
         } else {
@@ -298,8 +318,7 @@ public enum IOUtils {
     }
 
     /**
-     * Writes the file on the specified path and populated with the provided
-     * data.
+     * Writes the file on the specified path and populated with the provided data.
      *
      * @param path
      * @param data
@@ -436,9 +455,8 @@ public enum IOUtils {
     }
 
     /**
-     * Loads the specified properties file. All the android specific properties
-     * should be kept in the assets folder and just pass the name of the
-     * properties file
+     * Loads the specified properties file. All the android specific properties should be kept in the assets folder and
+     * just pass the name of the properties file
      *
      * @param filePath
      * @return
@@ -560,8 +578,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns true if the specified file exists and is a directory, otherwise
-     * false.
+     * Returns true if the specified file exists and is a directory, otherwise false.
      *
      * @param file
      */
@@ -570,8 +587,7 @@ public enum IOUtils {
     }
 
     /**
-     * Creates the buffer with the available size if its greater than the
-     * defaultSize.
+     * Creates the buffer with the available size if its greater than the defaultSize.
      *
      * @param available
      * @param defaultSize
@@ -599,7 +615,8 @@ public enum IOUtils {
      * @return
      * @throws IOException
      */
-    public static int copyStream(InputStream sourceStream, OutputStream targetStream, boolean closeStreams) throws IOException {
+    public static int copyStream(InputStream sourceStream, OutputStream targetStream, boolean closeStreams)
+        throws IOException {
         System.out.println("+copyStream(" + sourceStream + ", " + targetStream + ", " + closeStreams + ")");
         int fileSize = 0;
         if (sourceStream != null && targetStream != null) {
@@ -636,7 +653,8 @@ public enum IOUtils {
      * @param closeStream
      * @throws IOException
      */
-    public static boolean writeBytes(byte[] dataBytes, OutputStream outputStream, boolean closeStream) throws IOException {
+    public static boolean writeBytes(byte[] dataBytes, OutputStream outputStream, boolean closeStream)
+        throws IOException {
         // System.out.println("+writeBytes(" + dataBytes + ", " + outputStream +
         // ", " + closeStream + ")");
         boolean result = false;
@@ -703,7 +721,8 @@ public enum IOUtils {
      * @return
      * @throws IOException
      */
-    public static int copyFile(FileInputStream sourceFile, FileOutputStream targetFile, boolean closeStreams) throws IOException {
+    public static int copyFile(FileInputStream sourceFile, FileOutputStream targetFile, boolean closeStreams)
+        throws IOException {
         System.out.println("+copyFile(" + sourceFile + ", " + targetFile + ", " + closeStreams + ")");
         int fileSize = 0;
         if (sourceFile != null && targetFile != null) {
@@ -843,8 +862,8 @@ public enum IOUtils {
     }
 
     /**
-     * Creates the directory if its not exists. If <code>override</code> is set
-     * to true, delete the existing directory and creates the new one.
+     * Creates the directory if its not exists. If <code>override</code> is set to true, delete the existing directory
+     * and creates the new one.
      *
      * @param directory
      * @param override
@@ -873,8 +892,8 @@ public enum IOUtils {
     }
 
     /**
-     * Creates the directory if not exists. If <code>override</code> is set to
-     * true, delete the existing directory and creates the new one.
+     * Creates the directory if not exists. If <code>override</code> is set to true, delete the existing directory and
+     * creates the new one.
      *
      * @param dirPath
      * @param override
@@ -885,8 +904,8 @@ public enum IOUtils {
     }
 
     /**
-     * Creates the directory if not exists. If <code>override</code> is set to
-     * true, delete the existing directory and creates the new one.
+     * Creates the directory if not exists. If <code>override</code> is set to true, delete the existing directory and
+     * creates the new one.
      *
      * @param dirPath
      */
@@ -895,8 +914,7 @@ public enum IOUtils {
     }
 
     /**
-     * Deletes the contents of the specified <code>path</code> irrespective of
-     * its contents, if its not null or empty.
+     * Deletes the contents of the specified <code>path</code> irrespective of its contents, if its not null or empty.
      *
      * @param path
      * @param force
@@ -933,8 +951,7 @@ public enum IOUtils {
     }
 
     /**
-     * Deletes the contents of the specified <code>path</code> irrespective of
-     * its contents, if its not null or empty.
+     * Deletes the contents of the specified <code>path</code> irrespective of its contents, if its not null or empty.
      *
      * @param path
      * @param force
@@ -949,8 +966,7 @@ public enum IOUtils {
     }
 
     /**
-     * Deletes the contents of the specified <code>path</code> irrespective of
-     * its contents, if its not null or empty.
+     * Deletes the contents of the specified <code>path</code> irrespective of its contents, if its not null or empty.
      *
      * @param path
      */
@@ -1001,8 +1017,8 @@ public enum IOUtils {
     }
 
     /**
-     * Make a PrintWriter to send outgoing data. This PrintWriter will
-     * automatically flush stream when <code>println(...)</code> is called.
+     * Make a PrintWriter to send outgoing data. This PrintWriter will automatically flush stream when
+     * <code>println(...)</code> is called.
      *
      * @param socket
      * @return
@@ -1175,8 +1191,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the defaultCharset, if the given charsetName is either null or
-     * empty otherwise the same.
+     * Returns the defaultCharset, if the given charsetName is either null or empty otherwise the same.
      *
      * @param charsetName
      * @return
@@ -1198,7 +1213,7 @@ public enum IOUtils {
         if (BeanUtils.isNotEmpty(bytes)) {
             try {
                 bytesAsString =
-                        BeanUtils.isNull(charSets) ? new String(bytes) : new String(bytes, charSets.toCharset());
+                    BeanUtils.isNull(charSets) ? new String(bytes) : new String(bytes, charSets.toCharset());
             } catch (Exception ex) {
                 LOGGER.error(ex.getLocalizedMessage(), ex);
                 bytesAsString = Objects.toString(bytes);
@@ -1448,7 +1463,8 @@ public enum IOUtils {
      * @param closeStreams
      * @throws IOException
      */
-    public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams) throws IOException {
+    public static StringBuilder streamAsStringBuilder(InputStream inputStream, boolean closeStreams)
+        throws IOException {
         System.out.println("+streamAsStringBuilder(" + inputStream + ", " + closeStreams + ")");
         StringBuilder streamString = new StringBuilder();
         if (inputStream != null) {
@@ -1477,8 +1493,11 @@ public enum IOUtils {
      * @return
      * @throws IOException
      */
-    public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile, String hashCodeFilePath) throws IOException {
-        System.out.println("+writeResponse(" + inputStream + ", " + closeStreams + ", " + useExistingFile + ", " + hashCodeFilePath + ")");
+    public static StringBuilder writeResponse(InputStream inputStream, boolean closeStreams, boolean useExistingFile,
+                                              String hashCodeFilePath) throws IOException {
+        System.out.println(
+            "+writeResponse(" + inputStream + ", " + closeStreams + ", " + useExistingFile + ", " + hashCodeFilePath
+            + ")");
         StringBuilder response = new StringBuilder();
         if (inputStream != null) {
             BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -1497,8 +1516,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the validated file or folder/directory name as per the file
-     * management naming conventions.
+     * Returns the validated file or folder/directory name as per the file management naming conventions.
      *
      * @param fileName
      * @return
@@ -1561,8 +1579,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns true if the fileName extension ends with any of the given
-     * extensions otherwise false.
+     * Returns true if the fileName extension ends with any of the given extensions otherwise false.
      *
      * @param fileName
      * @param extensions
@@ -1583,10 +1600,9 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all files of the given <code>extensions</code> from
-     * the given <code>directory</code> (and optionally its sub-directories, if
-     * recursive is true). If the given <code>extensions</code> is null or
-     * empty, all files are returned.
+     * Returns the list of all files of the given <code>extensions</code> from the given <code>directory</code> (and
+     * optionally its sub-directories, if recursive is true). If the given <code>extensions</code> is null or empty, all
+     * files are returned.
      *
      * @param directory
      * @param extensions
@@ -1620,9 +1636,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all files of the given <code>extensions</code> from
-     * the given <code>directory</code>. If the given <code>extensions</code> is
-     * null or empty, all files are returned.
+     * Returns the list of all files of the given <code>extensions</code> from the given <code>directory</code>. If the
+     * given <code>extensions</code> is null or empty, all files are returned.
      *
      * @param directory
      * @param extensions
@@ -1633,9 +1648,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all files of the given <code>extensions</code> from
-     * the given <code>directory</code>. If the given <code>extensions</code> is
-     * null or empty, all files are returned.
+     * Returns the list of all files of the given <code>extensions</code> from the given <code>directory</code>. If the
+     * given <code>extensions</code> is null or empty, all files are returned.
      *
      * @param directory
      * @return
@@ -1645,10 +1659,9 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of file names of the given <code>extensions</code> from
-     * the given <code>directory</code> (and optionally its sub-directories, if
-     * recursive is true). If the given <code>extensions</code> is null or
-     * empty, all files are returned.
+     * Returns the list of file names of the given <code>extensions</code> from the given <code>directory</code> (and
+     * optionally its sub-directories, if recursive is true). If the given <code>extensions</code> is null or empty, all
+     * files are returned.
      *
      * @param directory
      * @param extensions
@@ -1680,8 +1693,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all file names of the given <code>extensions</code>
-     * from the given <code>directory</code>. If the given
+     * Returns the list of all file names of the given <code>extensions</code> from the given <code>directory</code>. If
+     * the given
      * <code>extensions</code> is null or empty, all files are returned.
      *
      * @param directory
@@ -1693,9 +1706,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all files of the given <code>extension</code> from
-     * the given <code>directory</code>. If the given <code>extension</code> is
-     * null or empty, all files are returned.
+     * Returns the list of all files of the given <code>extension</code> from the given <code>directory</code>. If the
+     * given <code>extension</code> is null or empty, all files are returned.
      *
      * @param directory
      * @return
@@ -1705,9 +1717,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of all files of the given <code>extension</code> from
-     * the given <code>directory</code>. If the given <code>extension</code> is
-     * null or empty, all files are returned.
+     * Returns the list of all files of the given <code>extension</code> from the given <code>directory</code>. If the
+     * given <code>extension</code> is null or empty, all files are returned.
      *
      * @param directory
      * @param extension
@@ -1748,11 +1759,11 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the latest version from the version list. For example: if your
-     * versions list contains the following values:
+     * Returns the latest version from the version list. For example: if your versions list contains the following
+     * values:
      * <code>[1.0, 2.0, 3.0, 1.0.0, 1.1.1, 1.0.0.1, 2.0.1, 1.0.1]</code>, then
-     * it will return the <code>3.0</code> as latest version. If the version
-     * list is null or empty, it returns empty string;
+     * it will return the <code>3.0</code> as latest version. If the version list is null or empty, it returns empty
+     * string;
      *
      * @param listOfVersions
      * @return
@@ -1849,7 +1860,8 @@ public enum IOUtils {
                 try {
                     if (file.lastModified() < purgeTimeMillis) {
                         if (!file.delete()) {
-                            System.out.println("Unable to delete file:" + file + "file.lastModified:" + file.lastModified());
+                            System.out.println(
+                                "Unable to delete file:" + file + "file.lastModified:" + file.lastModified());
                         }
                     }
                 } catch (Exception ex) {
@@ -1870,9 +1882,8 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the list of file names of the given <code>prefix</code> from the
-     * given <code>directory</code>. If the given <code>extensions</code> is
-     * null or empty, all files are returned.
+     * Returns the list of file names of the given <code>prefix</code> from the given <code>directory</code>. If the
+     * given <code>extensions</code> is null or empty, all files are returned.
      *
      * @param directory
      * @param prefix
@@ -1889,8 +1900,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the fileName which starts with the given prefix from the given
-     * parentFolder.
+     * Returns the fileName which starts with the given prefix from the given parentFolder.
      *
      * @param filePath
      * @return
@@ -1911,8 +1921,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the extension from the specified fullPath, if its not null or
-     * empty otherwise null.
+     * Returns the extension from the specified fullPath, if its not null or empty otherwise null.
      *
      * @param fullPath
      * @return
@@ -1928,8 +1937,7 @@ public enum IOUtils {
     }
 
     /**
-     * Returns the filename from the specified fullPath, if its not null or
-     * empty otherwise null.
+     * Returns the filename from the specified fullPath, if its not null or empty otherwise null.
      *
      * @param fullPath
      * @return
@@ -1942,7 +1950,9 @@ public enum IOUtils {
                 fileName = fullPath.substring(pathSeparatorIndex + 1);
                 if (!withExtension) {
                     int dotIndex = fileName.lastIndexOf(".");
-                    fileName = ((dotIndex > -1 && dotIndex < fileName.length() - 1) ? fileName.substring(0, dotIndex) : fileName);
+                    fileName =
+                        ((dotIndex > -1 && dotIndex < fileName.length() - 1) ? fileName.substring(0, dotIndex)
+                                                                             : fileName);
                 }
             }
         }
@@ -1988,9 +1998,9 @@ public enum IOUtils {
     }
 
     /**
-     * @author Rohtash Singh
+     * @author Rohtash Lakra
      * @version 1.0.0
-     * @since Dec 9, 2015 4:42:16 PM
+     * @created Dec 9, 2015 4:42:16 PM
      */
     public static final class RequestHashCodeFileFilter implements FileFilter {
 
@@ -2005,8 +2015,7 @@ public enum IOUtils {
         }
 
         /**
-         * Returns true, if the filename starts with the requestHashCode
-         * otherwise false.
+         * Returns true, if the filename starts with the requestHashCode otherwise false.
          *
          * @see java.io.FileFilter#accept(java.io.File)
          */
@@ -2042,7 +2051,7 @@ public enum IOUtils {
             throw new IOException(String.format("The file should only be a regular file: %s!", path));
         } else {
             Files.setPosixFilePermissions(path,
-                    EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
+                                          EnumSet.of(PosixFilePermission.OWNER_READ, PosixFilePermission.OWNER_WRITE));
             Files.setOwner(path, path.getFileSystem().getUserPrincipalLookupService().lookupPrincipalByName(userName));
         }
         LOGGER.debug("-applyFilePermissions()");
@@ -2194,7 +2203,7 @@ public enum IOUtils {
      */
     public HttpURLConnection postRequest(final String hostName, final int port, final String pathSegment,
                                          String contentType)
-            throws IOException {
+        throws IOException {
         HttpURLConnection connection = null;
         // 1. URL with specific pathSegment
         final URL url = new URL(String.format("%s:%d/%s", hostName, port, pathSegment));
@@ -2232,7 +2241,7 @@ public enum IOUtils {
             // 6. Get the response
             int responseCode = connection.getResponseCode();
             LOGGER.debug(String.format("\nSending '%s' request to URL:%s", connection.getRequestMethod(),
-                    connection.getURL().toExternalForm()));
+                                       connection.getURL().toExternalForm()));
             LOGGER.debug("responseCode:" + responseCode);
             // 7. Read result
             response = readStream(connection.getInputStream());

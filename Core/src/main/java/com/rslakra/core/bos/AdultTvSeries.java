@@ -5,7 +5,7 @@ package com.rslakra.core.bos;
  * <p>
  * More general types MediaWork Thing Entity TvSeries CreativeWork
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 10:43 AM
  */
 public class AdultTvSeries extends TvSeries {

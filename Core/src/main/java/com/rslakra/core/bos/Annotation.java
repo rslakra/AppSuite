@@ -7,7 +7,7 @@ package com.rslakra.core.bos;
  * <p>
  * More specific types VideoAnnotation
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 1/27/22 5:52 PM
  */
 public class Annotation {
@@ -16,8 +16,8 @@ public class Annotation {
     // CreativeWork
     private CreativeWork annotationOf;
 
-    //    Connects the creative work, event or annotation to its main topic(s). E.g., a travel guide about New York City to New York City or a video annotation about LeBron James and Anthony Davis to both of them.
-//    Entity or Concept
+    // Connects the creative work, event or annotation to its main topic(s). E.g., a travel guide about New York City to New York City or a video annotation about LeBron James and Anthony Davis to both of them.
+// Entity or Concept
     private Entity mainTopic;
 
 }

@@ -1,14 +1,19 @@
 package com.rslakra.core.text;
 
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotNull;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.Test;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertNotNull;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
- * @author Rohtash Lakra (rslakra.work@gmail.com)
+ * @author Rohtash Lakra
  * @version 1.0.0
  * @Created Jul 22, 2022 21:20:40
  */
@@ -24,5 +29,37 @@ public class TextUtilsTest {
         LOGGER.debug("result:{}", result);
         assertNotNull(result);
         assertEquals(result, "Rohtash Singh Lakra");
+    }
+
+    @Test
+    public void testToStringWithString() {
+        String[] values = new String[]{"Rohtash", "Singh", "Lakra"};
+        String result = TextUtils.toString(values);
+        LOGGER.debug("result:{}", result);
+        assertNotNull(result);
+        assertEquals(result, "[]{Rohtash, Singh, Lakra}");
+    }
+
+    @Test
+    public void testToStringWithList() {
+        List<String> valueList = Arrays.asList("Rohtash", "Singh", "Lakra");
+        LOGGER.debug("valueList:{}", valueList);
+//        String result = TextUtils.toString(valueList);
+//        LOGGER.debug("result:{}", result);
+//        assertNotNull(result);
+//        assertEquals(result, "[]{Rohtash, Singh, Lakra}");
+    }
+
+    @Test
+    public void testToStringWithMap() {
+        Map<String, Object> valueMap = new HashMap();
+        valueMap.put("firstName", "Rohtash");
+        valueMap.put("middleName", "Singh");
+        valueMap.put("lastName", "Lakra");
+        LOGGER.debug("valueMap:{}", valueMap);
+//        String result = TextUtils.toString(valueMap);
+//        LOGGER.debug("result:{}", result);
+//        assertNotNull(result);
+//        assertEquals(result, "[keySet=null, values=null]");
     }
 }
