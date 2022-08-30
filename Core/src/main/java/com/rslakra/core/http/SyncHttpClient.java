@@ -55,8 +55,8 @@ public final class SyncHttpClient extends AbstractHttpClient implements AutoClos
      * @return
      */
     public <T> Response<T> execute(final Request request, final ResponseHandler<T> responseHandler) {
-        BeanUtils.notNull(request, "request is null!");
-        BeanUtils.notNull(responseHandler, "responseHandler is null!");
+        BeanUtils.nullCheck(request, "request is null!");
+        BeanUtils.nullCheck(responseHandler, "responseHandler is null!");
 
         Supplier<Response<T>> supplier = () -> {
             logHttpRequest(request);

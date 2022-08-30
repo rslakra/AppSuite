@@ -262,13 +262,13 @@ public class BeanUtilsTest {
     @Test
     public void testNotNull() {
         try {
-            BeanUtils.notNull(null, "Object should not be null!");
+            BeanUtils.nullCheck(null, "Object should not be null!");
             fail("GOTCHA!!! HOW DID YOU REACH HERE!");
         } catch (IllegalStateException ex) {
             assertTrue(true);
         }
 
-        BeanUtils.notNull(new Object(), "Object should not be null!");
+        BeanUtils.nullCheck(new Object(), "Object should not be null!");
     }
 
     @Test

@@ -61,7 +61,7 @@ public final class HttpClientBuilder {
      * @param clientName used as the resilience4j registry key.
      */
     public HttpClientBuilder(final String clientName) {
-        BeanUtils.notNull(clientName, "clientName must provide!");
+        BeanUtils.nullCheck(clientName, "clientName must provide!");
         this.clientName = clientName;
     }
 

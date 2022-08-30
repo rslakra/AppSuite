@@ -1,6 +1,6 @@
 /******************************************************************************
  * Copyright (C) Devamatre 2009 - 2022. All rights reserved.
- *
+ * <p/>
  * This code is licensed to Devamatre under one or more contributor license
  * agreements. The reproduction, transmission or use of this code, in source
  * and binary forms, with or without modification, are permitted provided
@@ -10,7 +10,7 @@
  * 2. Redistributions in binary form must reproduce the above copyright
  *    notice, this list of conditions and the following disclaimer in the
  *    documentation and/or other materials provided with the distribution.
- *
+ * <p/>
  * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
  * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
@@ -22,7 +22,7 @@
  * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
  * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
  * SUCH DAMAGE.
- *
+ * <p/>
  * Devamatre reserves the right to modify the technical specifications and or
  * features without any prior notice.
  *****************************************************************************/
@@ -34,13 +34,7 @@ import org.slf4j.LoggerFactory;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
+import java.io.*;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -48,22 +42,7 @@ import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
 import java.net.URI;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
-import java.util.Enumeration;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -86,18 +65,18 @@ public enum BeanUtils {
     public static final String ID = "id";
     // IMMUTABLE_PROPERTIES
     public static final Set<String>
-        IMMUTABLE_PROPERTIES =
-        Sets.asSet("createdOn", "createdAt", "createdBy", "createdBy", "updatedOn", "updatedAt", "updatedBy");
+            IMMUTABLE_PROPERTIES =
+            Sets.asSet("createdOn", "createdAt", "createdBy", "createdBy", "updatedOn", "updatedAt", "updatedBy");
     // PRIMITIVE_WRAPPER_TYPES
-    private final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_TYPES = new HashMap(8);
+    private final Map<Class<?>, Class<?>> PRIMITIVE_WRAPPER_TYPES = new HashMap<>(8);
     // IMMUTABLE_ATTRIBUTES
-    private final Set<String> IMMUTABLE_ATTRIBUTES = new HashSet(Arrays.asList(ID));
+    private final Set<String> IMMUTABLE_ATTRIBUTES = new HashSet<>(Arrays.asList(ID));
     // CLASS_PROPERTY_DESCRIPTORS
-    private final Map<Class<?>, Map<String, PropertyDescriptor>> CLASS_PROPERTY_DESCRIPTORS = new ConcurrentHashMap();
+    private final Map<Class<?>, Map<String, PropertyDescriptor>> CLASS_PROPERTY_DESCRIPTORS = new ConcurrentHashMap<>();
     // CLASS_PROPERTIES
-    private final ConcurrentMap<Class<?>, ClassProperties> CLASS_PROPERTIES = new ConcurrentHashMap(256);
+    private final ConcurrentMap<Class<?>, ClassProperties> CLASS_PROPERTIES = new ConcurrentHashMap<>(256);
 
-    private BeanUtils() {
+    BeanUtils() {
         PRIMITIVE_WRAPPER_TYPES.put(Boolean.class, Boolean.TYPE);
         PRIMITIVE_WRAPPER_TYPES.put(Byte.class, Byte.TYPE);
         PRIMITIVE_WRAPPER_TYPES.put(Character.class, Character.TYPE);
@@ -198,7 +177,7 @@ public enum BeanUtils {
                 return true;
             } else if (isTypeOf(object, Class.class)) {
                 LOGGER.debug("object:{}", object);
-                final Class classType = (Class) object;
+                final Class<?> classType = (Class<?>) object;
                 return (classType.isArray() || Array.class.isAssignableFrom(classType));
             }
         }
@@ -232,7 +211,7 @@ public enum BeanUtils {
      * @return
      */
     public static <T> boolean isAssignableFrom(final Object classObject, final Class<T> classType) {
-        return (isTypeOf(classObject, Class.class) && classType.isAssignableFrom((Class) classObject));
+        return (isTypeOf(classObject, Class.class) && classType.isAssignableFrom((Class<?>) classObject));
     }
 
     /**
@@ -388,13 +367,13 @@ public enum BeanUtils {
             if (isArray(object)) {
                 return ((Object[]) object).length;
             } else if (isTypeOfMap(object)) {
-                return ((Map) object).size();
+                return ((Map<?, ?>) object).size();
             } else if (isTypeOfCollection(object)) {
-                return ((Collection) object).size();
+                return ((Collection<?>) object).size();
             } else if (isTypeOfIterator(object)) {
                 return sizeIterator((Iterator<?>) object);
             } else if (isTypeOfIterable(object)) {
-                return sizeIterable((Iterable) object);
+                return sizeIterable((Iterable<?>) object);
             } else if (isTypeOfEnumeration(object)) {
                 return sizeEnumeration((Enumeration<?>) object);
             } else if (isTypeOfCharSequence(object)) {
@@ -460,7 +439,7 @@ public enum BeanUtils {
      * @param object
      * @param message
      */
-    public static void notNull(final Object object, final String message) {
+    public static void nullCheck(final Object object, final String message) {
         if (isNull(object)) {
             throw new IllegalStateException(message);
         }
@@ -474,7 +453,7 @@ public enum BeanUtils {
      */
     public static String toTitleCase(final CharSequence self) {
         return isEmpty(self) ? EMPTY_STR
-                             : EMPTY_STR + Character.toUpperCase(self.charAt(0)) + self.subSequence(1, self.length());
+                : EMPTY_STR + Character.toUpperCase(self.charAt(0)) + self.subSequence(1, self.length());
     }
 
 
@@ -483,7 +462,7 @@ public enum BeanUtils {
      * @return
      */
     public static String pathSegments(final String... pathSegments) {
-        Objects.nonNull(pathSegments);
+        nullCheck(pathSegments, "pathSegments should not be null!");
         return String.join(File.separator, pathSegments);
     }
 
@@ -537,13 +516,13 @@ public enum BeanUtils {
      */
     public static byte[] toBytes(final CharSequence charSequence) {
         byte[] dataBytes = null;
-        if (BeanUtils.isNotEmpty(charSequence)) {
+        if (isNotEmpty(charSequence)) {
             dataBytes = new byte[charSequence.length()];
             for (int i = 0; i < charSequence.length(); i++) {
                 char cChar = charSequence.charAt(i);
                 if (cChar > 0xff) {
                     throw new IllegalArgumentException(
-                        "Invalid Character: " + (cChar) + " at index:" + (i + 1) + " in string: " + charSequence);
+                            "Invalid Character: " + (cChar) + " at index:" + (i + 1) + " in string: " + charSequence);
                 }
                 dataBytes[i] = (byte) cChar;
             }
@@ -561,7 +540,7 @@ public enum BeanUtils {
      * @return
      */
     public static <T> String getClassPath(final Class<T> classType, final boolean withClassName) {
-        if (BeanUtils.isNotNull(classType)) {
+        if (isNotNull(classType)) {
             String pkgPath = classType.getPackage().getName().replace(".", File.separator);
             if (withClassName) {
                 pkgPath += File.separator + classType.getSimpleName();
@@ -582,11 +561,15 @@ public enum BeanUtils {
     public static <T> String getClassPath(final Class<T> classType, final boolean withClassName,
                                           final String... pathComponents) {
         if (isNotNull(classType)) {
-            final StringBuilder pathBuilder = new StringBuilder(getClassPath(classType, withClassName));
-            if (BeanUtils.isNotEmpty(pathComponents)) {
+            final StringBuilder pathBuilder = new StringBuilder();
+            String classPath = getClassPath(classType, withClassName);
+            if (isNotEmpty(classPath)) {
+                pathBuilder.append(classPath);
+            }
+            if (isNotEmpty(pathComponents)) {
                 for (String pathString : pathComponents) {
                     LOGGER.debug("pathString: {}", pathString);
-                    if (BeanUtils.isNotEmpty(pathString)) {
+                    if (isNotEmpty(pathString)) {
                         if (!pathString.startsWith(File.separator)) {
                             pathBuilder.append(File.separator);
                         }
@@ -625,8 +608,8 @@ public enum BeanUtils {
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
             return new ArrayList<>(
-                inputValues.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize))
-                    .values());
+                    inputValues.stream().collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize))
+                            .values());
         }
     }
 
@@ -644,8 +627,8 @@ public enum BeanUtils {
         } else {
             final AtomicInteger counter = new AtomicInteger(0);
             final Collection<Set<T>> partitions = inputValues.stream()
-                .collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize, Collectors.toSet()))
-                .values();
+                    .collect(Collectors.groupingBy(item -> counter.getAndIncrement() / partitionSize, Collectors.toSet()))
+                    .values();
             return new HashSet<>(partitions);
         }
     }
@@ -658,7 +641,7 @@ public enum BeanUtils {
      */
     public static <T> T findEnumByClass(final Class<T> typeClass, final String name) {
         return Arrays.stream(typeClass.getEnumConstants())
-            .filter(e -> ((Enum) e).name().equalsIgnoreCase(name)).findAny().orElse(null);
+                .filter(e -> ((Enum<?>) e).name().equalsIgnoreCase(name)).findAny().orElse(null);
     }
 
     /**
@@ -669,7 +652,7 @@ public enum BeanUtils {
     public static String readContents(final InputStream inputStream) throws IOException {
         final StringBuilder sBuilder = new StringBuilder();
         try (BufferedReader bReader = new BufferedReader(new InputStreamReader(inputStream))) {
-            String line = null;
+            String line;
             while ((line = bReader.readLine()) != null) {
                 sBuilder.append(line);
             }
@@ -684,7 +667,7 @@ public enum BeanUtils {
      */
     public static String readFile(final String fileName) {
         try {
-            return readContents(BeanUtils.class.getClassLoader().getResourceAsStream(fileName));
+            return readContents(INSTANCE.getClass().getClassLoader().getResourceAsStream(fileName));
         } catch (IOException ex) {
             ex.printStackTrace();
             return null;
@@ -726,18 +709,18 @@ public enum BeanUtils {
      *
      */
     public static void logCallerClassNameAndMethodName() {
-        StackTraceElement[] stack = Thread.currentThread().getStackTrace();
+        final StackTraceElement[] stack = Thread.currentThread().getStackTrace();
         String callerClass = "unknown";
         String callerMethod = "unknown";
 
         for (int index = 0; index < 6; index++) {
             StackTraceElement element = stack[index];
             LOGGER.debug(String.format("index=%d, lineNumber=%d, className=%s, methodName=%s", index,
-                                       element.getLineNumber(), element.getClassName(),
-                                       element.getMethodName()));
+                    element.getLineNumber(), element.getClassName(),
+                    element.getMethodName()));
         }
 
-        if (stack != null && stack.length > 2) {
+        if (stack.length > 2) {
             callerClass = stack[2].getClassName();
             callerMethod = stack[2].getMethodName();
         }
@@ -755,7 +738,7 @@ public enum BeanUtils {
         LOGGER.debug("+arrayFromObject({}, {})", source, responseType);
         final int length = getLength(source);
         LOGGER.debug("length:{}", length);
-        Object[] toObject = null;
+        Object[] toObject;
         if (responseType.isAssignableFrom(String[].class)) {
             toObject = new String[length];
         } else if (responseType.isAssignableFrom(Character[].class)) {
@@ -793,7 +776,7 @@ public enum BeanUtils {
      */
     private <T> T arrayFromCollection(final Collection<T> response, Class<T> responseType) {
         LOGGER.debug("+arrayFromCollection({}, {})", response, responseType);
-        if (BeanUtils.isArray(responseType)) {
+        if (isArray(responseType)) {
             if (responseType.isAssignableFrom(String[].class)) {
                 return (T) response.toArray(new String[response.size()]);
             } else if (responseType.isAssignableFrom(Character[].class)) {
@@ -881,9 +864,9 @@ public enum BeanUtils {
      * @return
      */
     public static String capitalize(final CharSequence self) {
-        return BeanUtils.isEmpty(self) ? BeanUtils.EMPTY_STR
-                                       : BeanUtils.EMPTY_STR + Character.toUpperCase(self.charAt(0))
-                                         + self.subSequence(1, self.length());
+        return isEmpty(self) ? EMPTY_STR
+                : EMPTY_STR + Character.toUpperCase(self.charAt(0))
+                + self.subSequence(1, self.length());
     }
 
     /**
@@ -911,13 +894,13 @@ public enum BeanUtils {
      * @throws IntrospectionException
      */
     private final void findWriteMethod(final Class<?> classType, final PropertyDescriptor propertyDescriptor)
-        throws IntrospectionException {
+            throws IntrospectionException {
         if (!isClassPropertyDescriptor(propertyDescriptor) && propertyDescriptor.getReadMethod() != null) {
             final String setterMethod = getSetterMethod(propertyDescriptor);
             final Class<?> propType = getReturnType(propertyDescriptor);
             for (Method method : classType.getMethods()) {
                 if (setterMethod.equals(method.getName()) && method.getParameterTypes().length == 1 && method
-                    .getParameterTypes()[0].isAssignableFrom(propType)) {
+                        .getParameterTypes()[0].isAssignableFrom(propType)) {
                     propertyDescriptor.setWriteMethod(method);
                     return;
                 }
@@ -1032,7 +1015,7 @@ public enum BeanUtils {
      */
     public static boolean isGetter(final Method method) {
         return (isNotNull(method) && method.getParameterTypes().length == 0 && (INSTANCE.hasIsPrefix(method)
-                                                                                || INSTANCE.hasGetPrefix(method)));
+                || INSTANCE.hasGetPrefix(method)));
     }
 
     /**
@@ -1139,9 +1122,9 @@ public enum BeanUtils {
      */
     public boolean isSimpleValueType(final Class<?> classType) {
         return isPrimitiveOrWrapper(classType) || classType.isEnum() || CharSequence.class
-            .isAssignableFrom(classType) || Number.class.isAssignableFrom(classType) || Date.class
-                   .isAssignableFrom(classType) || classType.equals(URI.class) || classType.equals(URL.class)
-               || classType.equals(Locale.class) || classType.equals(Class.class);
+                .isAssignableFrom(classType) || Number.class.isAssignableFrom(classType) || Date.class
+                .isAssignableFrom(classType) || classType.equals(URI.class) || classType.equals(URL.class)
+                || classType.equals(Locale.class) || classType.equals(Class.class);
     }
 
     /**
@@ -1151,7 +1134,7 @@ public enum BeanUtils {
     public boolean isSimpleProperty(final Class<?> classType) {
         Objects.requireNonNull(classType, "Class must not be null!");
         return isSimpleValueType(classType) || classType.isArray() && isSimpleValueType(
-            classType.getComponentType());
+                classType.getComponentType());
     }
 
     /**
@@ -1211,7 +1194,7 @@ public enum BeanUtils {
             } else if (classType.equals(List.class)) {
                 return new ArrayList<>();
             } else {
-                return BeanUtils.newInstance(classType);
+                return INSTANCE.newInstance(classType);
             }
         }
     }
@@ -1238,7 +1221,7 @@ public enum BeanUtils {
                 ensurePublic(propertyDescriptor.getWriteMethod());
                 if (propertyDescriptor.getReadMethod() != null) {
                     this.readProperties
-                        .put(propertyDescriptor.getName(), new BeanPropertyDescriptor(propertyDescriptor));
+                            .put(propertyDescriptor.getName(), new BeanPropertyDescriptor(propertyDescriptor));
                 }
 
                 if (propertyDescriptor.getWriteMethod() != null) {
@@ -1257,7 +1240,7 @@ public enum BeanUtils {
      * @throws IllegalStateException
      */
     public static void copyProperties(final Object source, final Object target, final String... ignoredProperties)
-        throws IllegalStateException {
+            throws IllegalStateException {
         Objects.requireNonNull(source, "Source must not be null!");
         Objects.requireNonNull(target, "Target must not be null!");
         Object name = null;
@@ -1294,7 +1277,7 @@ public enum BeanUtils {
      * @throws IllegalStateException
      */
     public static void deepCopyProperties(final Object source, final Object target, final String... ignoredProperties)
-        throws IllegalStateException {
+            throws IllegalStateException {
         Objects.requireNonNull(source, "Source must not be null!");
         Objects.requireNonNull(target, "Target must not be null!");
         Object name = null;
@@ -1319,7 +1302,7 @@ public enum BeanUtils {
                         } else {
                             try {
                                 final Object sourceObject = sourceProperty.readMethod.invoke(source);
-                                final Object targetObject = BeanUtils.newInstance(targetProperty.classType);
+                                final Object targetObject = newInstance(targetProperty.classType);
                                 deepCopyProperties(sourceObject, targetObject);
                                 try {
                                     targetProperty.writeMethod.invoke(target, targetObject);
@@ -1350,7 +1333,7 @@ public enum BeanUtils {
                                                 final Set<String> ignoredProperties) throws Exception {
         final List<PropertyDescriptor> updatedProperties = new ArrayList<>();
         // Iterate over all the attributes
-        for (PropertyDescriptor propertyDescriptor : BeanUtils.getBeanInfo(target.getClass())) {
+        for (PropertyDescriptor propertyDescriptor : getBeanInfo(target.getClass())) {
             // Only copy writable attributes
             if (propertyDescriptor.getWriteMethod() != null) {
                 final String propName = propertyDescriptor.getName();
@@ -1414,15 +1397,15 @@ public enum BeanUtils {
             final String fullString = text.toString();
             char upperCaseLetter = Character.toUpperCase(firstLetter);
             return (firstLetterIndex == 0 ? upperCaseLetter + fullString.substring(1)
-                                          : fullString.substring(0, firstLetterIndex) + upperCaseLetter
-                                            + fullString.substring(firstLetterIndex + 1));
+                    : fullString.substring(0, firstLetterIndex) + upperCaseLetter
+                    + fullString.substring(firstLetterIndex + 1));
         }
     }
 
     /**
      * Returns empty if null otherwise string.
      *
-     * @param object
+     * @param throwable
      * @return
      */
     public static String toString(final Throwable throwable) {

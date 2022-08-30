@@ -349,7 +349,7 @@ public enum TextUtils {
      * @param itr
      */
     public static void logIterator(final Iterator<?> itr) {
-        BeanUtils.notNull(itr, "Iterator should not be null!");
+        BeanUtils.nullCheck(itr, "Iterator should not be null!");
         while (itr.hasNext()) {
             LOGGER.debug(itr.next().toString());
         }
