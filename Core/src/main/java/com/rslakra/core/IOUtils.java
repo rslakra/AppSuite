@@ -192,6 +192,7 @@ public enum IOUtils {
      * @param pathSegments
      * @return
      */
+    @SuppressWarnings("unchecked")
     public static String getBuildDir(final String... pathSegments) {
         final StringBuilder pathBuilder = new StringBuilder(getUserDir());
         if (BeanUtils.isNotEmpty(pathSegments)) {
