@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,7 +17,6 @@ public enum MathUtils {
 
     // LOGGER
     private static Logger LOGGER = LoggerFactory.getLogger(MathUtils.class);
-
 
     /**
      * Returns the <code>number</code> after right shifting the <code>number</code> to the given <code>rightShift</code>
@@ -40,6 +40,27 @@ public enum MathUtils {
      */
     public static final int leftShift(int number, int leftShift) {
         return (number * Double.valueOf(Math.pow(2, leftShift)).intValue());
+    }
+
+    /**
+     * Sets the scale to 2 decimal places with rounding half-up.
+     *
+     * @param newScale
+     * @param bigDecimal
+     * @return
+     */
+    public static final BigDecimal setRoundingScale(final int newScale, final BigDecimal bigDecimal) {
+        return (bigDecimal == null ? bigDecimal : bigDecimal.setScale(newScale, RoundingMode.HALF_UP));
+    }
+
+    /**
+     * Sets the scale to 2 decimal places with rounding half-up.
+     *
+     * @param bigDecimal
+     * @return
+     */
+    public static final BigDecimal setRounding2Scale(final BigDecimal bigDecimal) {
+        return setRoundingScale(2, bigDecimal);
     }
 
     /**

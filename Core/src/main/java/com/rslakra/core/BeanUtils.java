@@ -76,7 +76,7 @@ public enum BeanUtils {
     // CLASS_PROPERTIES
     private final ConcurrentMap<Class<?>, ClassProperties> CLASS_PROPERTIES = new ConcurrentHashMap<>(256);
 
-    BeanUtils() {
+    private BeanUtils() {
         PRIMITIVE_WRAPPER_TYPES.put(Boolean.class, Boolean.TYPE);
         PRIMITIVE_WRAPPER_TYPES.put(Byte.class, Byte.TYPE);
         PRIMITIVE_WRAPPER_TYPES.put(Character.class, Character.TYPE);

@@ -13,11 +13,7 @@ import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
 import java.time.temporal.ValueRange;
 import java.time.temporal.WeekFields;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-import java.util.Locale;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -34,7 +30,8 @@ public enum TimeUtils {
     private static Logger LOGGER = LoggerFactory.getLogger(TimeUtils.class);
     public static final String DATE_ONLY_FORMAT = "dd-MMM-yy";
     public static final String DATE_FORMAT = "dd-MMM-yy hh:mm:ss a";
-
+    public static final String UTC_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
+    public static final TimeZone UTC_TIME_ZONE = TimeZone.getTimeZone("UTC");
 
     /**
      * @param period
@@ -59,8 +56,22 @@ public enum TimeUtils {
      * @param date
      * @return
      */
+    public static String toString(final TimeZone timeZone, final String pattern, final Date date) {
+        final SimpleDateFormat dateFormat = newDateFormat(pattern);
+        if (BeanUtils.isNotNull(timeZone)) {
+            dateFormat.setTimeZone(timeZone);
+        }
+
+        return dateFormat.format(date);
+    }
+
+    /**
+     * @param pattern
+     * @param date
+     * @return
+     */
     public static String toString(final String pattern, final Date date) {
-        return newDateFormat(pattern).format(date);
+        return toString(UTC_TIME_ZONE, pattern, date);
     }
 
     /**
@@ -92,7 +103,7 @@ public enum TimeUtils {
      * @param day
      * @return
      */
-    public static Date getDateByDayOfMonth(int day) {
+    public static Date getDateByDayOfMonth(final int day) {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.DAY_OF_MONTH, day);
         return calendar.getTime();
@@ -237,6 +248,7 @@ public enum TimeUtils {
      */
     public static List<LocalDate> countBusinessDaysBetweenDatesJava8(final LocalDate startDate, final LocalDate endDate,
                                                                      final Optional<List<LocalDate>> holidays) {
+        LOGGER.debug("+countBusinessDaysBetweenDatesJava8({}, {}, {})", startDate, endDate, holidays);
         // Validate method arguments
         if (startDate == null || endDate == null) {
             throw new InvalidRequestException("Invalid Dates! startDate=%s, endDate=%s", startDate, endDate);
@@ -244,19 +256,29 @@ public enum TimeUtils {
 
         // Predicate 1: Is a given date is a holiday
         Predicate<LocalDate> isHoliday = date -> holidays.isPresent() && holidays.get().contains(date);
+        LOGGER.debug("isHoliday: {}", isHoliday);
 
         // Predicate 2: Is a given date is a weekday
         Predicate<LocalDate> isWeekend = date -> date.getDayOfWeek() == DayOfWeek.SATURDAY
-                                                 || date.getDayOfWeek() == DayOfWeek.SUNDAY;
+                || date.getDayOfWeek() == DayOfWeek.SUNDAY;
+        LOGGER.debug("isWeekend: {}", isWeekend);
 
         // Get all days between two dates
         long daysBetween = ChronoUnit.DAYS.between(startDate, endDate);
+        LOGGER.debug("daysBetween: {}", daysBetween);
 
-        // Iterate over stream of all dates and check each day against any weekday or  holiday
-        return Stream.iterate(startDate, date -> date.plusDays(1))
-            .limit(daysBetween)
-            .filter(isHoliday.or(isWeekend).negate())
-            .collect(Collectors.toList());
+        List<LocalDate> localDatesBetween = Stream.iterate(startDate, date -> date.plusDays(1))
+                .limit(daysBetween + 1)
+                .collect(Collectors.toList());
+        LOGGER.debug("localDatesBetween: {}", localDatesBetween);
+
+        // Iterate over stream of all dates and check each day against any weekday or holiday
+        List<LocalDate> localDates = Stream.iterate(startDate, date -> date.plusDays(1))
+                .limit(daysBetween + 1)
+                .filter(isHoliday.or(isWeekend).negate())
+                .collect(Collectors.toList());
+        LOGGER.debug("-countBusinessDaysBetweenDatesJava8(), localDates: {}", localDates);
+        return localDates;
     }
 
 // private static List<LocalDate> countBusinessDaysBetweenDatesJava9(final LocalDate startDate,

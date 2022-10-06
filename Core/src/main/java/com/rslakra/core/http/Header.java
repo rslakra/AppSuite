@@ -33,6 +33,21 @@ public enum Header {
     REQUEST_TRACER("Request-Tracer"),
     DEVICE_ID("Device-Id"),
     CLIENT_ID("Client-Id"),
+
+    /**
+     * Rate limiting - To prevent abuse, it is standard practice to add some sort of rate limiting to an API.
+     * (https://www.vinaysahni.com/best-practices-for-a-pragmatic-restful-api)
+     * <p>
+     * At a minimum, include the following headers:
+     * <p>
+     * X-Rate-Limit-Limit - The number of allowed requests in the current period X-Rate-Limit-Remaining - The number of
+     * remaining requests in the current period X-Rate-Limit-Reset - The number of seconds left in the current period
+     * <p>
+     * https://www.baeldung.com/spring-bucket4j
+     */
+    X_RATE_LIMIT_LIMIT("X-Rate-Limit-Limit"),
+    X_RATE_LIMIT_REMAINING("X-Rate-Limit-Remaining"),
+    X_RATE_LIMIT_RESET("X-Rate-Limit-Reset"),
     ;
 
     private final String headerName;

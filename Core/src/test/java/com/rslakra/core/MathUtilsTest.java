@@ -42,6 +42,23 @@ public class MathUtilsTest {
     }
 
     @Test
+    public void testSetRoundingScale() {
+        BigDecimal number = BigDecimal.valueOf(3893.3850983);
+        LOGGER.debug("number:{}", number);
+        Assert.assertEquals(BigDecimal.valueOf(3893.3851), MathUtils.setRoundingScale(4, number));
+        Assert.assertEquals(BigDecimal.valueOf(3893.385), MathUtils.setRoundingScale(3, number));
+        Assert.assertEquals(BigDecimal.valueOf(3893.39), MathUtils.setRoundingScale(2, number));
+        Assert.assertEquals(BigDecimal.valueOf(3893.4), MathUtils.setRoundingScale(1, number));
+    }
+
+    @Test
+    public void testSetRounding2Scale() {
+        BigDecimal number = BigDecimal.valueOf(3893.3850983);
+        LOGGER.debug("number:{}", number);
+        Assert.assertEquals(BigDecimal.valueOf(3893.39), MathUtils.setRounding2Scale(number));
+    }
+
+    @Test
     public void testCountDigitsNaiveApproach1() {
         int digits = MathUtils.countDigitsNaiveApproach1(1601);
         LOGGER.debug("digits: {}", digits);

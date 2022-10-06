@@ -58,7 +58,7 @@ public class HttpResponseDecorator implements HttpResponse {
      * @return
      */
     public boolean isSuccess() {
-        return Status.find(this.getStatus()) == Status.SUCCESS;
+        return RestStatus.find(this.getStatus()) == RestStatus.SUCCESS;
     }
 
     /**

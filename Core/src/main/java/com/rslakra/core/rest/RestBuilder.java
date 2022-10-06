@@ -119,7 +119,7 @@ public class RestBuilder {
                 new RequestDelegate(this, new HttpGet(), getContentType(), getHeaders(), getResponseHandlers());
         delegate.setPropertiesFromMap(args);
         if (responseClosure != null) {
-            delegate.getResponse().put(Status.SUCCESS, responseClosure);
+            delegate.getResponse().put(RestStatus.SUCCESS, responseClosure);
         }
 
         return this.execute(delegate);
@@ -152,7 +152,7 @@ public class RestBuilder {
 //        requestDelegate.setRequestContentType(ContentType.URLENC.toString());
         requestDelegate.setPropertiesFromMap(args);
         if (responseClosure != null) {
-            requestDelegate.getResponse().put(Status.SUCCESS.toString(), responseClosure);
+            requestDelegate.getResponse().put(RestStatus.SUCCESS.toString(), responseClosure);
         }
 
         return this.execute(requestDelegate);
@@ -676,7 +676,7 @@ public class RestBuilder {
             this(restBuilder, request, RestBuilder.this.getContentType(), RestBuilder.this.getHeaders(),
                     RestBuilder.this.getResponseHandlers());
             if (successHandler != null) {
-                this.responseHandlers.put(Status.SUCCESS.toString(), successHandler);
+                this.responseHandlers.put(RestStatus.SUCCESS.toString(), successHandler);
             }
 
             this.setPropertiesFromMap(args);
@@ -871,7 +871,7 @@ public class RestBuilder {
         protected Closure findResponseHandler(int statusCode) {
             Closure handler = this.getResponse().get(Integer.toString(statusCode));
             if (handler == null) {
-                handler = this.getResponse().get(Status.find(statusCode).toString());
+                handler = this.getResponse().get(RestStatus.find(statusCode).toString());
             }
 
             return handler;
