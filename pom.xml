@@ -31,7 +31,7 @@
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <logback-classic.version>1.4.5</logback-classic.version>
         <lombok-version>1.18.24</lombok-version>
-        <commons-lang3.version>${commons-lang3.version}</commons-lang3.version>
+        <commons-lang3.version>3.12.0</commons-lang3.version>
 
         <junit.version>4.13.2</junit.version>
         <testng.version>7.6.1</testng.version>
@@ -72,7 +72,7 @@
         <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
-            <version>3.12.0</version>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
