@@ -34,7 +34,13 @@ import org.slf4j.LoggerFactory;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -317,26 +323,22 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns the size of the <code>Iterator</code> iterator.
+     *
      * @param iterator
      * @return
      */
-    public static int sizeIterator(final Iterator<?> iterator) {
-        int size = 0;
-        if (iterator != null) {
-            while (iterator.hasNext()) {
-                iterator.next();
-                size++;
-            }
-        }
-
-        return size;
+    public static long sizeIterator(final Iterator<?> iterator) {
+        return sizeIterable(() -> (Iterator<Object>) iterator);
     }
 
     /**
+     * Returns the size of the <code>Iterable</code> iterable.
+     *
      * @param iterable
      * @return
      */
-    public static int sizeIterable(final Iterable<?> iterable) {
+    public static long sizeIterable(final Iterable<?> iterable) {
         return (isNotNull(iterable) ? sizeIterator(iterable.iterator()) : 0);
     }
 
@@ -345,15 +347,7 @@ public enum BeanUtils {
      * @return
      */
     public static int sizeEnumeration(final Enumeration<?> enumeration) {
-        int size = 0;
-        if (enumeration != null) {
-            while (enumeration.hasMoreElements()) {
-                enumeration.nextElement();
-                size++;
-            }
-        }
-
-        return size;
+        return isNotNull(enumeration) ? Collections.list((Enumeration<?>) enumeration).size() : 0;
     }
 
     /**
@@ -362,7 +356,7 @@ public enum BeanUtils {
      * @param object
      * @return
      */
-    public static int getLength(final Object object) {
+    public static long getLength(final Object object) {
         if (isNotNull(object)) {
             if (isArray(object)) {
                 return ((Object[]) object).length;
@@ -736,7 +730,7 @@ public enum BeanUtils {
      */
     private <T> T arrayFromObject(final Object source, Class<T> responseType) {
         LOGGER.debug("+arrayFromObject({}, {})", source, responseType);
-        final int length = getLength(source);
+        final int length = Long.valueOf(getLength(source)).intValue();
         LOGGER.debug("length:{}", length);
         Object[] toObject;
         if (responseType.isAssignableFrom(String[].class)) {

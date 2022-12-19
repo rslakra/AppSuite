@@ -19,6 +19,7 @@
     <properties>
         <core.version>1.0-SNAPSHOT</core.version>
         <commons-text.version>1.10.0</commons-text.version>
+        <guava.version>31.1-jre</guava.version>
     </properties>
 
     <!-- Dependencies -->
@@ -29,13 +30,6 @@
             <artifactId>Core</artifactId>
             <version>${core.version}</version>
         </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-<!--        <dependency>-->
-<!--            <groupId>org.apache.commons</groupId>-->
-<!--            <artifactId>commons-lang3</artifactId>-->
-<!--            <version>3.12.0</version>-->
-<!--        </dependency>-->
 
         <!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
         <dependency>
@@ -49,6 +43,13 @@
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-text</artifactId>
             <version>${commons-text.version}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
 
     </dependencies>
