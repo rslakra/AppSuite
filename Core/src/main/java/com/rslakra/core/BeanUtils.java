@@ -295,6 +295,16 @@ public enum BeanUtils {
     }
 
     /**
+     * Returns true if the <code>object</code> is a type of <code>String</code> otherwise false.
+     *
+     * @param object
+     * @return
+     */
+    public static boolean isTypeOfString(final Object object) {
+        return (isTypeOf(object, String.class) || isAssignableFrom(object, String.class));
+    }
+
+    /**
      * Returns true if the <code>object</code> is a type of <code>BigDecimal</code> otherwise false.
      *
      * @param object
@@ -714,7 +724,8 @@ public enum BeanUtils {
                     element.getMethodName()));
         }
 
-        if (stack.length > 2) {
+        // validate the stack has the min length of 2
+        if (isNotNull(stack) && stack.length > 2) {
             callerClass = stack[2].getClassName();
             callerMethod = stack[2].getMethodName();
         }
@@ -732,7 +743,7 @@ public enum BeanUtils {
         LOGGER.debug("+arrayFromObject({}, {})", source, responseType);
         final int length = Long.valueOf(getLength(source)).intValue();
         LOGGER.debug("length:{}", length);
-        Object[] toObject;
+        Object[] toObject = null;
         if (responseType.isAssignableFrom(String[].class)) {
             toObject = new String[length];
         } else if (responseType.isAssignableFrom(Character[].class)) {

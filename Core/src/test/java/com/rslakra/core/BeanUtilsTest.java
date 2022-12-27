@@ -190,9 +190,21 @@ public class BeanUtilsTest {
         assertFalse(BeanUtils.isTypeOfCharSequence(new Object()));
         assertTrue(BeanUtils.isTypeOfCharSequence(""));
         assertTrue(BeanUtils.isTypeOfCharSequence(new String()));
+        assertTrue(BeanUtils.isTypeOfCharSequence(CharSequence.class));
         assertTrue(BeanUtils.isTypeOfCharSequence(String.class));
         assertTrue(BeanUtils.isTypeOfCharSequence(new StringBuilder()));
         assertTrue(BeanUtils.isTypeOfCharSequence(new StringBuffer()));
+    }
+
+    @Test
+    public void testIsTypeOfString() {
+        assertFalse(BeanUtils.isTypeOfString(null));
+        assertFalse(BeanUtils.isTypeOfString(new Object()));
+        assertTrue(BeanUtils.isTypeOfString(""));
+        assertTrue(BeanUtils.isTypeOfString(new String()));
+        assertTrue(BeanUtils.isTypeOfString(String.class));
+        assertFalse(BeanUtils.isTypeOfString(new StringBuilder()));
+        assertFalse(BeanUtils.isTypeOfString(new StringBuffer()));
     }
 
     @Test

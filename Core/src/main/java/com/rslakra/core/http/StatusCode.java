@@ -28,7 +28,7 @@ import java.util.Arrays;
  * <p>
  * https://en.wikipedia.org/wiki/List_of_HTTP_status_codes
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 9/16/22 1:59 PM
  */
 public enum StatusCode {

@@ -8,6 +8,7 @@ import java.text.SimpleDateFormat;
 import java.time.DayOfWeek;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.temporal.ChronoField;
 import java.time.temporal.ChronoUnit;
@@ -92,11 +93,27 @@ public enum TimeUtils {
     }
 
     /**
+     * @param date
+     * @return
+     */
+    public static LocalDateTime toLocalDateTime(final Date date) {
+        return LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+    }
+
+    /**
      * @param localDate
      * @return
      */
     public static Date toDate(final LocalDate localDate) {
         return Date.from(localDate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+    }
+
+    /**
+     * @param localDateTime
+     * @return
+     */
+    public static Date toDate(final LocalDateTime localDateTime) {
+        return Date.from(localDateTime.atZone(ZoneId.systemDefault()).toInstant());
     }
 
     /**

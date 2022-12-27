@@ -10,7 +10,7 @@ package com.rslakra.core.http;
  * }
  * </pre>
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 9/16/22 2:57 PM
  */
 public class Error {

@@ -9,7 +9,7 @@ package com.rslakra.core.enums;
  * live in production. Keep in mind that an issue can pass through different statuses multiple times until it reaches
  * its final status, which is “Closed”.
  *
- * @author Rohtash Lakra (rlakra)
+ * @author Rohtash Lakra
  * @created 9/20/22 3:21 PM
  */
 public enum WorkflowStatus {
