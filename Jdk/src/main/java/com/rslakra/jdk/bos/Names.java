@@ -31,8 +31,7 @@ package com.rslakra.jdk.bos;
 import java.util.ArrayList;
 
 /**
- * 
- * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
+ *
  * @author Rohtash Singh Lakra (rohtash.singh@gmail.com)
  * @created 2018-02-10 01:20:27 PM
  * @version 1.0.0

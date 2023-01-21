@@ -333,6 +333,15 @@ public enum BeanUtils {
     }
 
     /**
+     * 
+     * @param charSequence
+     * @return
+     */
+    public static CharSequence maskObjects(final CharSequence charSequence) {
+        return charSequence;
+    }
+
+    /**
      * Returns the size of the <code>Iterator</code> iterator.
      *
      * @param iterator

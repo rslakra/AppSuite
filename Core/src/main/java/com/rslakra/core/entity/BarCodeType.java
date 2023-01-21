@@ -13,7 +13,7 @@ package com.rslakra.core.entity;
  * https://www.gtin.info/
  * https://en.wikipedia.org/wiki/Global_Trade_Item_Number
  *
- * @author Rohtash Lakra (rslakra.work@gmail.com)
+ * @author Rohtash Lakra
  * @version 1.0.0
  * @since Dec 18, 2022 21:20:43
  */

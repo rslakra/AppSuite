@@ -38,11 +38,12 @@ import java.util.jar.JarOutputStream;
 import java.util.jar.Manifest;
 
 /**
- * This makes an executable jar from the simele jar file. Usage: MakeJarRunnable
+ * This makes an executable jar from the simple jar file. Usage: MakeJarRunnable
  * <jar file> <Main-Class> <output>
  * 
- * Usage Example: java com.openacircle.utils.MakeJarRunnable WebAnalytics.jar
- * com.openacircle.core.WebAnalytics WebAnalytics_r.jar
+ * Usage Example:
+ * java com.rslakra.jdk.jar.MakeJarRunnable WebAnalytics.jar
+ * com.rslakra.jdk.jar.WebAnalytics WebAnalytics_r.jar
  * 
  * @author Rohtash Singh (rohtash.singh@devamatre.com)
  * @created 27/06/2008 (dd/mm/yyyy)

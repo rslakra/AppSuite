@@ -45,6 +45,26 @@ public class TimeUtilsTest {
         LOGGER.debug("timeZoneById:" + timeZoneById);
     }
 
+    @Test
+    public void testString() {
+        final Date date = new Date();
+        LOGGER.debug("Date: {}", date);
+        TimeZone timeZone = TimeZone.getTimeZone("GMT");
+        LOGGER.debug("GMT Date: {}", TimeUtils.toString(timeZone, TimeUtils.UTC_DATE_FORMAT, date));
+
+        timeZone = TimeZone.getTimeZone("PST");
+        LOGGER.debug("PST Date: {}", TimeUtils.toString(timeZone, TimeUtils.UTC_DATE_FORMAT, date));
+
+        timeZone = TimeZone.getTimeZone("EST");
+        LOGGER.debug("EST Date: {}", TimeUtils.toString(timeZone, TimeUtils.UTC_DATE_FORMAT, date));
+
+        timeZone = TimeZone.getTimeZone("IST");
+        LOGGER.debug("IST Date: {}", TimeUtils.toString(timeZone, TimeUtils.UTC_DATE_FORMAT, date));
+
+        timeZone = null;
+        LOGGER.debug("Default Date: {}", TimeUtils.toString(timeZone, TimeUtils.UTC_DATE_FORMAT, date));
+    }
+
 
     @Test
     public void testDateString() {
@@ -125,18 +145,21 @@ public class TimeUtilsTest {
      */
     @Test
     public void testCountBusinessDaysBetweenDatesJava8() {
-        LocalDate d1 = LocalDate.of(2018, 8, 1);
-        LocalDate d2 = LocalDate.of(2018, 8, 2);
-        LocalDate d3 = LocalDate.of(2018, 8, 3);
-        LocalDate d4 = LocalDate.of(2018, 8, 4);
-        LocalDate d5 = LocalDate.of(2018, 8, 5);
-        LocalDate d6 = LocalDate.of(2018, 8, 6);
-        LocalDate d7 = LocalDate.of(2018, 8, 7);
-        LocalDate d8 = LocalDate.of(2018, 8, 8);
-        LocalDate d9 = LocalDate.of(2018, 8, 9);
-        LocalDate d10 = LocalDate.of(2018, 8, 10);
-        LocalDate d15 = LocalDate.of(2018, 8, 15);
-        LocalDate dsep = LocalDate.of(2018, 9, 5);
+        LocalDate AUG_1ST = LocalDate.of(2021, 8, 1);
+        LocalDate AUG_2ND = LocalDate.of(2021, 8, 2);
+        LocalDate AUG_3RD = LocalDate.of(2021, 8, 3);
+        LocalDate AUG_4TH = LocalDate.of(2021, 8, 4);
+        LocalDate AUG_5TH = LocalDate.of(2021, 8, 5);
+        LocalDate AUG_6TH = LocalDate.of(2021, 8, 6);
+        LocalDate AUG_7TH = LocalDate.of(2021, 8, 7);
+        LocalDate AUG_8TH = LocalDate.of(2021, 8, 8);
+        LocalDate AUG_9TH = LocalDate.of(2021, 8, 9);
+        LocalDate AUG_10TH = LocalDate.of(2021, 8, 10);
+        LocalDate AUG_15TH = LocalDate.of(2021, 8, 15);
+        LocalDate AUG_20TH = LocalDate.of(2021, 8, 20);
+        LocalDate AUG_25TH = LocalDate.of(2021, 8, 25);
+        LocalDate SEP_5TH = LocalDate.of(2021, 9, 5);
+        LocalDate SEP_10TH = LocalDate.of(2021, 9, 10);
 
         final Optional<List<LocalDate>> holidays = Optional.of(Arrays.asList(
             // 2020
@@ -157,32 +180,36 @@ public class TimeUtilsTest {
         ));
 
         // same day : 0 days between
-        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d1, holidays).size());
-        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d2, holidays).size());
-        Assert.assertEquals(2, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d3, holidays).size());
+        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_1ST, holidays).size());
+        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_2ND, holidays).size());
+        Assert.assertEquals(3, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_4TH, holidays).size());
         // end on week-end
-        Assert.assertEquals(2, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d4, holidays).size());
-        Assert.assertEquals(2, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d5, holidays).size());
+        Assert.assertEquals(5, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_7TH, holidays).size());
+        Assert.assertEquals(5, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_8TH, holidays).size());
+
         // next week
-        Assert.assertEquals(3, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d6, holidays).size());
-        Assert.assertEquals(4, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d7, holidays).size());
-        Assert.assertEquals(5, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d8, holidays).size());
-        Assert.assertEquals(6, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d9, holidays).size());
-        Assert.assertEquals(7, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d10, holidays).size());
+        Assert.assertEquals(3, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, AUG_7TH, holidays).size());
+        Assert.assertEquals(4, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, AUG_9TH, holidays).size());
+        Assert.assertEquals(5, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, AUG_10TH, holidays).size());
+        Assert.assertEquals(8, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, AUG_15TH, holidays).size());
+        Assert.assertEquals(13, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, AUG_20TH, holidays).size());
         // start on saturday
-        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(d4, d5, holidays).size());
-        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(d4, d6, holidays).size());
-        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(d4, d7, holidays).size());
+        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_7TH, AUG_7TH, holidays).size());
+        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_7TH, AUG_8TH, holidays).size());
+        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_7TH, AUG_9TH, holidays).size());
         // start on sunday
-        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(d5, d5, holidays).size());
-        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(d5, d6, holidays).size());
-        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(d5, d7, holidays).size());
+        Assert.assertEquals(0, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_8TH, AUG_8TH, holidays).size());
+        Assert.assertEquals(1, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_8TH, AUG_9TH, holidays).size());
+        Assert.assertEquals(2, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_8TH, AUG_10TH, holidays).size());
         // go to next week
-        Assert.assertEquals(10, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, d15, holidays).size());
+        Assert.assertEquals(10, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, AUG_15TH, holidays).size());
         // next month
-        Assert.assertEquals(25, TimeUtils.countBusinessDaysBetweenDatesJava8(d1, dsep, holidays).size());
+        Assert.assertEquals(25, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_1ST, SEP_5TH, holidays).size());
+        Assert.assertEquals(18, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_15TH, SEP_10TH, holidays).size());
+        Assert.assertEquals(14, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_20TH, SEP_10TH, holidays).size());
+        Assert.assertEquals(11, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_25TH, SEP_10TH, holidays).size());
         // start sat, go to next month
-        Assert.assertEquals(22, TimeUtils.countBusinessDaysBetweenDatesJava8(d4, dsep, holidays).size());
+        Assert.assertEquals(26, TimeUtils.countBusinessDaysBetweenDatesJava8(AUG_4TH, SEP_10TH, holidays).size());
     }
 
 }
