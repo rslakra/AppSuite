@@ -3,19 +3,27 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.rslakra</groupId>
-    <artifactId>dAppSuite</artifactId>
+    <groupId>com.rslakra.appsuite</groupId>
+    <artifactId>AppSuite</artifactId>
     <packaging>pom</packaging>
-    <version>1.0-SNAPSHOT</version>
-    <name>The ${project.artifactId} Project</name>
+    <version>1.0.0-SNAPSHOT</version>
+<!--    <name>The ${project.artifactId} Project</name>-->
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
     <modules>
         <module>Core</module>
-        <module>MimeCraft</module>
+        <module>Algorithm</module>
         <module>HttpServer</module>
+        <module>Identity</module>
+        <!--        <module>Metrics</module>-->
+        <module>MimeCraft</module>
+        <module>Example</module>
+        <module>HBase</module>
         <module>Jdk</module>
+        <!--        <module>Patterns</module>-->
+        <module>pdf-tools</module>
+        <!--        <module>Questions</module>-->
     </modules>
 
     <!-- Properties -->
@@ -26,12 +34,19 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <maven.compiler.release>11</maven.compiler.release>
-        <dLogger.version>1.1-SNAPSHOT</dLogger.version>
+        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
+        <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+        <checkstyle.threshold>0</checkstyle.threshold>
+        <swagger.skip>false</swagger.skip>
 
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <logback-classic.version>1.4.5</logback-classic.version>
         <lombok.version>1.18.24</lombok.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>
+
+        <!-- junit-jupiter-params -->
+        <junit-jupiter-params.version>5.9.2</junit-jupiter-params.version>
+        <surefire-junit3.version>2.12.4</surefire-junit3.version>
 
         <junit.version>4.13.2</junit.version>
         <testng.version>7.6.1</testng.version>
@@ -39,13 +54,6 @@
 
     <!-- Dependencies -->
     <dependencies>
-        <!-- dLogger -->
-        <dependency>
-            <groupId>com.devamatre</groupId>
-            <artifactId>dLogger</artifactId>
-            <version>${dLogger.version}</version>
-        </dependency>
-
         <!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-api -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -75,6 +83,21 @@
             <version>${commons-lang3.version}</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <version>${junit-jupiter-params.version}</version>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.apache.maven.surefire/surefire-junit3 -->
+        <dependency>
+            <groupId>org.apache.maven.surefire</groupId>
+            <artifactId>surefire-junit3</artifactId>
+            <version>${surefire-junit3.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
         <dependency>
             <groupId>org.testng</groupId>
@@ -95,30 +118,61 @@
 
     <!-- Build -->
     <build>
-        <!-- To define the plugin version in your parent POM -->
-        <pluginManagement>
-            <plugins>
-                <!--                <plugin>-->
-                <!--                    <groupId>org.apache.maven.plugins</groupId>-->
-                <!--                    <artifactId>maven-compiler-plugin</artifactId>-->
-                <!--                    <configuration>-->
-                <!--                        <source>${maven.compiler.source}</source>-->
-                <!--                        <target>${maven.compiler.target}</target>-->
-                <!--                    </configuration>-->
-                <!--                </plugin>-->
+        <!-- plugins -->
+        <plugins>
+            <!-- maven-compiler-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                </configuration>
+            </plugin>
 
-                <plugin>
-                    <artifactId>maven-assembly-plugin</artifactId>
-                    <configuration>
-                        <descriptorRefs>
-                            <descriptorRef>jar-with-dependencies</descriptorRef>
-                        </descriptorRefs>
-                    </configuration>
-                </plugin>
-
-            </plugins>
-        </pluginManagement>
+            <!-- maven-checkstyle-plugin -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <configLocation>styles.xml</configLocation>
+                    <propertiesLocation>checkstyle.properties</propertiesLocation>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>process-classes</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <configLocation>styles.xml</configLocation>
+                            <logViolationsToConsole>true</logViolationsToConsole>
+                            <maxAllowedViolations>${checkstyle.threshold}</maxAllowedViolations>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
     </build>
+
+
+    <!-- reporting -->
+    <reporting>
+        <!-- maven-checkstyle-plugin -->
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-checkstyle-plugin</artifactId>
+                <version>${maven-checkstyle-plugin.version}</version>
+                <configuration>
+                    <configLocation>styles.xml</configLocation>
+                    <propertiesLocation>checkstyle.properties</propertiesLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 
     <!--    <repositories>-->
     <!--        <repository>-->

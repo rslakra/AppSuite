@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class StringUtilsExampleV1 {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
 
         System.err.println(StringUtils.abbreviate("Take time off working", 0, 10));
         System.err.println(StringUtils.capitalize("vanderLust"));

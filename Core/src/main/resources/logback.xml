@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
+    <!-- console appender -->
     <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
@@ -11,14 +12,34 @@
         <appender-ref ref="CONSOLE"/>
     </root>
 
-    <!-- ch.qos.logback -->
-    <!--    <logger name="ch.qos.logback" level="error" additivity="false">-->
-    <!--        <appender-ref ref="CONSOLE"/>-->
-    <!--    </logger>-->
+    <!-- slf4j -->
+    <logger name="ch.qos.logback.core.joran" level="WARN"/>
+    <!-- rslakra -->
+    <logger name="com.rslakra" level="DEBUG"/>
 
-    <!-- com.rslakra -->
-    <logger name="com.rslakra" level="info" additivity="false">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
+    <!-- zaxxer -->
+    <logger name="com.zaxxer" level="WARN"/>
+        <!-- apache -->
+    <logger name="org.apache" level="WARN"/>
+
+    <logger name="org.apache.tomcat" level="WARN"/>
+
+    <!-- hibernate -->
+    <logger name="org.hibernate" level="WARN"/>
+
+    <!-- springframework -->
+    <logger name="org.springframework" level="WARN"/>
+    <logger name="org.springframework.boot" level="WARN"/>
+    <logger name="org.springframework.transaction" level="WARN"/>
+    <!-- in order to debug some marshalling issues, this needs to be TRACE -->
+    <logger name="org.springframework.web.servlet.mvc" level="WARN"/>
+
+    <!-- thymeleaf -->
+    <logger name="org.thymeleaf" level="WARN"/>
+
+    <!-- zaxxer -->
+    <logger name="org.zaxxer" level="WARN"/>
+    <!-- <logger name="org.zaxxer.hikari" level="WARN"/>-->
+    <!-- <logger name="org.zaxxer.hikari.*" level="WARN"/>-->
 
 </configuration>

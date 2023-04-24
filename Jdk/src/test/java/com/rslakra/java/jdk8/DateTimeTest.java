@@ -1,7 +1,7 @@
 package com.rslakra.java.jdk8;
 
-import com.rslakra.core.TimeUtils;
-import com.rslakra.jdk.jdk8.DateTime;
+import com.rslakra.appsuite.core.TimeUtils;
+import com.rslakra.appsuite.jdk.jdk8.DateTime;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -97,7 +97,7 @@ public class DateTimeTest {
         latest.setTimeInMillis(TimeUtils.getDateByDay(6));
 
         message =
-            "earliest is same as campaign's startDate and latest is after campaign's endDate - ";
+                "earliest is same as campaign's startDate and latest is after campaign's endDate - ";
         if (dateTime.needToUpdateTimes(cStartDate, cEndDate, earliest, latest)) {
             LOGGER.debug(message + "Update Campaign");
         } else {
@@ -111,7 +111,7 @@ public class DateTimeTest {
         latest.setTimeInMillis(0);
 
         message =
-            "Both earliest and latest are before 1970 and campaign's startDate and endDate are valid - ";
+                "Both earliest and latest are before 1970 and campaign's startDate and endDate are valid - ";
         if (dateTime.needToUpdateTimes(cStartDate, cEndDate, earliest, latest)) {
             LOGGER.debug(message + "Update Campaign");
         } else {

@@ -1,7 +1,6 @@
 package com.rslakra.java.annotations.serialize;
 
-import com.rslakra.java.openjdk.MainClass;
-import com.rslakra.jdk.annotations.serialize.JsonSerializer;
+import com.rslakra.appsuite.jdk.annotations.serialize.JsonSerializer;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

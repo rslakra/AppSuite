@@ -1,8 +1,8 @@
 package com.rslakra.java.enums;
 
-import com.rslakra.core.Sets;
-import com.rslakra.jdk.enums.Color;
-import com.rslakra.jdk.enums.EnumMapper;
+import com.rslakra.appsuite.core.Sets;
+import com.rslakra.appsuite.jdk.enums.Color;
+import com.rslakra.appsuite.jdk.enums.EnumMapper;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

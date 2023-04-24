@@ -1,6 +1,6 @@
 package com.rslakra.java.enums;
 
-import com.rslakra.jdk.enums.Color;
+import com.rslakra.appsuite.jdk.enums.Color;
 import org.junit.Assert;
 import org.junit.Test;
 

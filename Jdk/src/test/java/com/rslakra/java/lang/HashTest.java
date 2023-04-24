@@ -1,6 +1,6 @@
 package com.rslakra.java.lang;
 
-import com.rslakra.core.HashUtils;
+import com.rslakra.appsuite.core.HashUtils;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

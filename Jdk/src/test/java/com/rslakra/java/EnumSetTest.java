@@ -1,7 +1,6 @@
 package com.rslakra.java;
 
-import com.rslakra.java.annotations.serialize.TestJsonSerializer;
-import com.rslakra.jdk.enums.Units;
+import com.rslakra.appsuite.jdk.enums.Units;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

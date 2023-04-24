@@ -8,4 +8,6 @@ echo "${JAVA_HOME}"
 echo
 
 #mvn -X clean install
-mvn clean package
+mvn clean install
+echo
+

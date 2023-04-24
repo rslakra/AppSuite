@@ -1,6 +1,6 @@
 package com.rslakra.java.lang;
 
-import com.rslakra.jdk.lang.Address;
+import com.rslakra.appsuite.jdk.lang.Address;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

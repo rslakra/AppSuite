@@ -1,0 +1,33 @@
+# javap -p -c LambdaExample.class
+Compiled from "LambdaExample.java"
+public class com.rslakra.appsuite.lambda.jdk8.LambdaExample {
+  private static final java.lang.String MESSAGE;
+
+  public com.rslakra.appsuite.lambda.jdk8.LambdaExample();
+    Code:
+       0: aload_0
+       1: invokespecial #1                  // Method java/lang/Object."<init>":()V
+       4: return
+
+  public static void main(java.lang.String[]) throws java.lang.InterruptedException;
+    Code:
+       0: invokedynamic #2,  0              // InvokeDynamic #0:run:()Ljava/lang/Runnable;
+       5: astore_1
+       6: new           #3                  // class java/lang/Thread
+       9: dup
+      10: aload_1
+      11: invokespecial #4                  // Method java/lang/Thread."<init>":(Ljava/lang/Runnable;)V
+      14: astore_2
+      15: aload_2
+      16: invokevirtual #5                  // Method java/lang/Thread.start:()V
+      19: aload_2
+      20: invokevirtual #6                  // Method java/lang/Thread.join:()V
+      23: return
+
+  private static void lambda$main$0();
+    Code:
+       0: getstatic     #7                  // Field java/lang/System.out:Ljava/io/PrintStream;
+       3: ldc           #9                  // String Hello, Lambda
+       5: invokevirtual #10                 // Method java/io/PrintStream.println:(Ljava/lang/String;)V
+       8: return
+}

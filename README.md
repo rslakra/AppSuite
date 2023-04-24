@@ -50,6 +50,32 @@ git clone https://github.com/rslakra/AppSuite.git
 ```
 
 
+
+### How to set up
+****
+
+#### 1. Clone the repository in your GIT account or local machine
+
+> ```
+>   git clone https://github.com/rslakra/AppSuite.git
+> ```
+
+#### 2. Build the project
+
+> ```
+>   cd AppSuite
+>   ./build.sh
+> ```
+>
+
+#### 3. Run the program
+
+Run the program with the following command
+  
+>   ```./run.sh```
+
+
+
 If you are missing any of the above mentioned software, please following the 
 ``Installing`` section below.
 
@@ -112,7 +138,7 @@ conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
-* [Rohtash Singh Lakra](https://github.com/rslakra)
+* [Rohtash Lakra](https://github.com/rslakra)
 
 See also the list of [contributors](https://github.com/rslakra/AppSuite/contributors) who participated in this project.
 

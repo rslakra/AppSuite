@@ -1,6 +1,6 @@
 package com.rslakra.jdk;
 
-import com.rslakra.core.BeanUtils;
+import com.rslakra.appsuite.core.BeanUtils;
 import com.rslakra.jdk.domain.User;
 import com.rslakra.jdk.dto.AddressDTO;
 import com.rslakra.jdk.dto.StateDTO;

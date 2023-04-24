@@ -1,7 +1,8 @@
 package com.rslakra.java.jdk8;
 
-import com.rslakra.core.entity.User;
-import com.rslakra.jdk.jdk8.JDK8Stream;
+import com.rslakra.appsuite.core.entity.User;
+import com.rslakra.appsuite.core.enums.EntityStatus;
+import com.rslakra.appsuite.jdk.jdk8.JDK8Stream;
 import org.apache.commons.lang3.StringUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -9,11 +10,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * @author Rohtash Lakra
@@ -62,7 +64,7 @@ public class JDK8StreamTest {
         entry.putIfAbsent(JDK8Stream.Property.KEY.toString(), JDK8Stream.Property.VALUE.toString());
         customDataList.add(entry);
 
-        LOGGER.debug("{}",customDataList);
+        LOGGER.debug("{}", customDataList);
         JDK8Stream jdk8Stream = new JDK8Stream();
         String customDataValue = jdk8Stream.getCustomDataValue(customDataList, "3");
         Assert.assertNotNull(customDataValue);
@@ -75,13 +77,35 @@ public class JDK8StreamTest {
         Assert.assertNull(customDataValue);
     }
 
+    /**
+     * @param email
+     * @return
+     */
+    private User buildUser(String email) {
+        User user = new User();
+        user.setEmail(email);
+        user.setFirstName("Rohtash");
+        user.setLastName("Lakra");
+        user.setEntityStatus(EntityStatus.INACTIVE);
+        return user;
+    }
+
     @Test
     public void testEmails() {
-        List<User> emailUsers = Arrays.asList(new User());
+        List<User> emailUsers = new ArrayList<>();
+        emailUsers.add(buildUser("rslakra@gmail.com"));
+        emailUsers.add(buildUser("rlakra@gmail.com"));
+        emailUsers.add(buildUser("lakra@gmail.com"));
+        emailUsers.add(buildUser("singh@gmail.com"));
+
         List<String>
-            emails =
-            emailUsers.stream().filter(user -> StringUtils.isNotBlank(user.getEmail())).map(user -> user.getEmail())
-                .collect(Collectors.toList());
+                emails =
+                emailUsers.stream()
+                        .filter(user -> StringUtils.isNotBlank(user.getEmail()))
+                        .map(user -> user.getEmail())
+                        .collect(Collectors.toList());
+        assertNotNull(emails);
+        assertEquals(4, emails.size());
     }
 
 }

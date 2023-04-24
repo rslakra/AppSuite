@@ -28,9 +28,9 @@
  *****************************************************************************/
 package com.rslakra.jdk;
 
-import com.rslakra.core.BeanUtils;
-import com.rslakra.core.http.HTTPUtils;
-import com.rslakra.core.http.Response;
+import com.rslakra.appsuite.core.BeanUtils;
+import com.rslakra.appsuite.core.http.HTTPUtils;
+import com.rslakra.appsuite.core.http.Response;
 import org.apache.commons.text.StringEscapeUtils;
 
 import java.io.BufferedReader;

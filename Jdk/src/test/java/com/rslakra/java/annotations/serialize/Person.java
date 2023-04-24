@@ -1,9 +1,9 @@
 package com.rslakra.java.annotations.serialize;
 
 
-import com.rslakra.jdk.annotations.serialize.JsonElement;
-import com.rslakra.jdk.annotations.serialize.JsonInit;
-import com.rslakra.jdk.annotations.serialize.JsonSerializable;
+import com.rslakra.appsuite.jdk.annotations.serialize.JsonElement;
+import com.rslakra.appsuite.jdk.annotations.serialize.JsonInit;
+import com.rslakra.appsuite.jdk.annotations.serialize.JsonSerializable;
 
 /**
  * @author Rohtash Lakra

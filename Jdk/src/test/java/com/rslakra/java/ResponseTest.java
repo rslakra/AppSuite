@@ -1,6 +1,6 @@
 package com.rslakra.java;
 
-import com.rslakra.core.BeanUtils;
+import com.rslakra.appsuite.core.BeanUtils;
 import org.junit.Assert;
 import org.junit.Test;
 

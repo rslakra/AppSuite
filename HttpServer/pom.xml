@@ -5,27 +5,30 @@
     <modelVersion>4.0.0</modelVersion>
     <!-- Parent -->
     <parent>
-        <groupId>com.rslakra</groupId>
-        <artifactId>dAppSuite</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <groupId>com.rslakra.appsuite</groupId>
+        <artifactId>AppSuite</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
     </parent>
+
+    <!-- Module: HttpServer -->
     <artifactId>HttpServer</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <!--    <version>1.0-SNAPSHOT</version>-->
     <packaging>jar</packaging>
-    <name>The ${project.artifactId} Project</name>
+    <!--    <name>The ${project.artifactId} Project</name>-->
 
     <!-- Properties -->
     <properties>
-        <core.version>1.0-SNAPSHOT</core.version>
+        <appsuite-core.version>1.0.0-SNAPSHOT</appsuite-core.version>
+        <appsuite-algorithm.version>1.0.0-SNAPSHOT</appsuite-algorithm.version>
     </properties>
 
     <!-- Dependencies -->
     <dependencies>
         <!-- Core -->
         <dependency>
-            <groupId>com.rslakra</groupId>
+            <groupId>com.rslakra.appsuite</groupId>
             <artifactId>Core</artifactId>
-            <version>${core.version}</version>
+            <version>1.0.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 

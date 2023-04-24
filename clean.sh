@@ -4,8 +4,8 @@ echo
 HOME_DIR="${PWD}"
 #echo "Working at ${HOME_DIR}"
 echo
-MODULES=("Core" "Gemini" "HBase" "Identity" "Jdk" "Metrics" "Patterns" "Questions")
-for entry in "${MODULES[@]}" 
+MODULES=("Core" "HBase" "Identity" "Jdk" "Metrics" "Patterns" "Questions")
+for entry in "${MODULES[@]}"
 do
   curEntry="${HOME_DIR}/${entry}/target"
   echo "Cleaning ... ${curEntry}"

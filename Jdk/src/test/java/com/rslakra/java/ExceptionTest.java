@@ -1,6 +1,6 @@
 package com.rslakra.java;
 
-import com.rslakra.core.MathUtils;
+import com.rslakra.appsuite.core.MathUtils;
 import org.junit.Assert;
 import org.junit.Test;
 
