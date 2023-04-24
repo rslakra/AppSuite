@@ -7,7 +7,7 @@
     <artifactId>AppSuite</artifactId>
     <packaging>pom</packaging>
     <version>1.0.0-SNAPSHOT</version>
-<!--    <name>The ${project.artifactId} Project</name>-->
+    <!--    <name>The ${project.artifactId} Project</name>-->
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
@@ -16,14 +16,14 @@
         <module>Algorithm</module>
         <module>HttpServer</module>
         <module>Identity</module>
-        <!--        <module>Metrics</module>-->
+        <module>Metrics</module>
         <module>MimeCraft</module>
         <module>Example</module>
         <module>HBase</module>
         <module>Jdk</module>
-        <!--        <module>Patterns</module>-->
+        <module>Patterns</module>
         <module>pdf-tools</module>
-        <!--        <module>Questions</module>-->
+        <module>Questions</module>
     </modules>
 
     <!-- Properties -->
