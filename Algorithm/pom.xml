@@ -27,7 +27,7 @@
         <nimbus-jose-jwt.version>9.25.6</nimbus-jose-jwt.version>
         <gson.version>2.10</gson.version>
         <bcprov-jdk15on.version>1.70</bcprov-jdk15on.version>
-        <jose4j.version>0.9.2</jose4j.version>
+        <jose4j.version>0.9.3</jose4j.version>
         <servlet-api.version>2.3</servlet-api.version>
         <commons-collections.version>4.4</commons-collections.version>
         <restito.version>1.1.0</restito.version>
