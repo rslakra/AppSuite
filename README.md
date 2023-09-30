@@ -1,28 +1,46 @@
 AppSuite
 =========
+---
 
-This repository contains all the projects categorized based on the programming languages and usability.
+This repository contains all the projects categorized based on the modules and learning purposes.
+
+```shell
+"Thoughts lead on to purposes; purposes go forth in action; actions form habits; habits decide character; and character fixes our destiny."
+
+- Tryon Edwards
+```
 
 These projects should have the basic and core implementations which can be used by other projects.
 It might be some of them use any third party library, so the source code available in this repository will be available 
 for AS IT IS usage.
 
 ## Folder Structure Conventions
+
+---
+
+```
     .
     ├── Core                    # Core project files
-    ├── HttpClient              # Http-Client project files
+├── Algorithm               # Algorithm project files
+├── Example                 # Example project files
+├── HBase                   # HBase project files
     ├── HttpServer              # Http-Server project files
-    ├── Jdk                     # Java project files
-    ├── mime-craft               # MimeCraft project files
-    ├── Tutors                  # TestCases project files
+├── Identity                # Identity project files
+├── Jdk                     # Jdk project files
+├── Metrics                 # Metrics project files
+├── MimeCraft               # MimeCraft project files
+├── pdf-tools               # pdf-tools project files
+├── Questions               # Questions project files
     └── README.md
+```
 
+## Prerequisites
 
-### Prerequisites
+---
 
 What things you need to install the software and how to install them
 
-Check if you already have java or not. If not, install java ``1.8`` version.
+Check if you already have java or not. If not, install java ``11`` version.
 
 ```
 java -version
@@ -35,118 +53,99 @@ latest version.
 mvn --version
 ```
 
-Next, make sure you have Eclipse Version ``2019-09 R (4.13.0)`` or later version.
+Next, make sure you have an IDE either Eclipse or IntelliJ.
 
-And now check you have the ``apache-tomcat-9.x`` or later version on your 
-machine.
+## How to set up
 
+---
 
-And finally, make sure you have permission to check-out the code from the GIT 
-repository. Open terminal and go to your workspace. Then run the following 
-command to check-out the source code on your machine.
+You should have GIT account to check out the code.
 
-```
-git clone https://github.com/rslakra/AppSuite.git
-```
+### 1. Clone the repository in your GIT account or local machine
 
-
-
-### How to set up
-****
-
-#### 1. Clone the repository in your GIT account or local machine
+Open terminal and go to your workspace. Then run the following command to check out the source code.
 
 > ```
 >   git clone https://github.com/rslakra/AppSuite.git
 > ```
 
-#### 2. Build the project
+### 2. Build the project
 
 > ```
 >   cd AppSuite
->   ./build.sh
+> ./buildMaven.sh
 > ```
->
 
-#### 3. Run the program
+### 3. Run the program
 
 Run the program with the following command
   
 >   ```./run.sh```
 
 
+If you are missing either any of the above-mentioned steps or software,
+please following the following ``Installing`` section.
 
-If you are missing any of the above mentioned software, please following the 
-``Installing`` section below.
-
-
-### Installing
+## Installing
 
 A step by step series of examples that tell you how to get a development 
-environment running
+environment running on your local machine.
 
-These URLs will help you to download and install the required softwares.
+The following URLs will help you to download and install the required software.
 Please follow the instructions and download the latest stable version, as 
 supported by your OS version.
 
-* [Java](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) - Java SE Development Kit 8 Downloads
+* [Open JDK 11](https://openjdk.org/projects/jdk/11/) - Open JDK 11 Development Kit
+* [Brew JDK 11](https://formulae.brew.sh/formula/openjdk@11) - Brew Formula Open JDK 11 Development Kit
+* [Oracle JDK 11](https://www.oracle.com/java/technologies/downloads/#java11-mac) - Oracle JDK 11 Development Kit
 * [Maven](https://maven.apache.org/download.cgi) - Apache Maven
+* [IntelliJ IDEA](https://www.jetbrains.com/idea/download/#section=mac) - Download IntelliJ IDEA
 * [Eclipse](https://www.eclipse.org/downloads/) - Eclipse IDE 2019‑09
 * [Tomcat](https://tomcat.apache.org/download-90.cgi) - Apache Tomcat® 9.x
 
-
 ### Deployment
 
-Once you have installed all above mentioned software, then you are ready 
-to run the server on your local machine and play with UI.
+---
 
-* Run Eclipse
-* File -> Import -> Existing Maven Projects -> Next
-* Choose Root folder, where the GIT source exists.
-* Follow further instructions to configure the project into Eclipse.
+Once you have installed all the above-mentioned software, then you are ready to run the code on your local machine.
 
-Once the source code is imported, make sure it compiles.
+## Pipeline
 
-Now, configure the ``Apache Tomcat`` into your Eclipse, if not already configured.
-
-* Window -> Show View -> Server
-
-It will display the Server View. Select ``Servers`` Tab, if not already selected.
-
-* Right Click with your mouse on the ``Server`` Tab.
-* Select New -> Server
-* Choose Apache -> Apache v9.0 Server -> Next
-* Select ``Java`` from Left and press ``Add`` and then Finish.
-
-It will configure the ``Apache Tomcat® 9.x`` in your eclipse.
-Now you are ready to run the application on your local machine.
-
-* From ``Project Explorer`` right click on ``Java`` and then Choose ``Run As => Run on Server``
+---
 
 
-If everything went well, your application will start locally on your machine.
-It's not surprising that first time, you face some issue, if you are not familiar 
-with all the above mentioned tools and those are not configured property.
-Please feel free to reach the project owner team for further help.
+[![Pipeline Status][status-image]][status-url]
 
+[status-image]: AppSuite/badges/master/pipeline.svg
+
+[status-url]: AppSuite/badges/master/pipeline.svg
 
 ## Contributing
 
-Please read [CONTRIBUTING.md](https://github.com/rslakra/AppSuite/blob/master/CONTRIBUTING.md) for details on our code of 
-conduct, and the process for submitting pull requests to us.
+---
 
+Please read [CONTRIBUTING.md](https://github.com/rslakra/AppSuite/blob/master/CONTRIBUTING.md) for details on our code
+of conduct, and the process for submitting pull requests to us.
 
 ## Authors
 
+---
+
 * [Rohtash Lakra](https://github.com/rslakra)
+* [AppSuite](https://github.com/rslakra/AppSuite.git)
 
 See also the list of [contributors](https://github.com/rslakra/AppSuite/contributors) who participated in this project.
 
 ## License
 
-This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/AppSuite/LICENSE.md) file for details
+---
+
+This project is licensed under the Apache License - see the [LICENSE.md](https://github.com/rslakra/AppSuite/LICENSE.md)
+file for details
 
 ## Acknowledgments
+
+---
 
 * Passion
 * Inspiration

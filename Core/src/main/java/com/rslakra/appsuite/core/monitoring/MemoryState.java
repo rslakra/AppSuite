@@ -107,7 +107,7 @@ public class MemoryState implements Delayed {
     }
 
     /**
-     * Returns the remaing time.
+     * Returns the remaining time.
      *
      * @return
      */

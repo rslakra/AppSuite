@@ -1,6 +1,8 @@
 package com.rslakra.appsuite.questions.leetcode;
 
 /**
+ * https://leetcode.com/problems/add-two-numbers/
+ *
  * @author Rohtash Lakra
  * @created 5/1/21 8:59 AM
  */
@@ -8,19 +10,27 @@ public class LC2AddTwoNumbers {
 
     public static class ListNode {
 
-        int val;
-        ListNode next;
+        private int value;
+        private ListNode next;
 
         ListNode() {
         }
 
-        ListNode(int val) {
-            this.val = val;
+        ListNode(int value) {
+            this.value = value;
         }
 
-        ListNode(int val, ListNode next) {
-            this.val = val;
+        ListNode(int value, ListNode next) {
+            this.value = value;
             this.next = next;
+        }
+
+        public int getValue() {
+            return value;
+        }
+
+        public ListNode getNext() {
+            return next;
         }
 
         @Override
@@ -28,7 +38,7 @@ public class LC2AddTwoNumbers {
             final StringBuilder sBuilder = new StringBuilder();
             ListNode temp = this;
             while (temp != null) {
-                sBuilder.append(temp.val);
+                sBuilder.append(temp.value);
                 if (temp.next != null) {
                     sBuilder.append(", ");
                 }
@@ -50,7 +60,7 @@ public class LC2AddTwoNumbers {
     }
 
     private static int getValue(ListNode listNode) {
-        return (listNode == null ? 0 : listNode.val);
+        return (listNode == null ? 0 : listNode.value);
     }
 
     private static ListNode addLast(ListNode rootNode, int value) {
@@ -62,6 +72,11 @@ public class LC2AddTwoNumbers {
         }
     }
 
+    private static ListNode addTail(ListNode parentNode, int value) {
+        parentNode.next = new ListNode(value);
+        return parentNode.next;
+    }
+
     /**
      * https://leetcode.com/problems/add-two-numbers/
      *
@@ -70,13 +85,19 @@ public class LC2AddTwoNumbers {
      * @return
      */
     public static ListNode addTwoNumbers(ListNode left, ListNode right) {
-        ListNode listNode = null;
+        ListNode headNode = null;
+        ListNode tailNode = null;
         int carry = 0;
         while (left != null || right != null) {
             int sum = getValue(left) + getValue(right) + carry;
             carry = sum / 10;
             sum = sum % 10;
-            listNode = addLast(listNode, sum);
+            if (headNode == null) {
+                headNode = new ListNode(sum);
+                tailNode = headNode;
+            } else {
+                tailNode = addTail(tailNode, sum);
+            }
             if (left != null) {
                 left = left.next;
             }
@@ -86,9 +107,9 @@ public class LC2AddTwoNumbers {
         }
 
         if (carry > 0) {
-            listNode = addLast(listNode, carry);
+            tailNode = addTail(tailNode, carry);
         }
 
-        return listNode;
+        return headNode;
     }
 }

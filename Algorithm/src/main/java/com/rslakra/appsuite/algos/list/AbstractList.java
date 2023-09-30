@@ -8,7 +8,7 @@ import java.util.ListIterator;
  * @author Rohtash Lakra
  * @created 5/20/22 11:53 AM
  */
-public abstract class AbstractList<T extends Comparable> {
+public abstract class AbstractList<T> implements Comparable<T> {
 
     private int size;
 
@@ -23,14 +23,14 @@ public abstract class AbstractList<T extends Comparable> {
     }
 
     /**
-     *
+     * Increments the size of the list by 1.
      */
     protected void incrementSize() {
         size++;
     }
 
     /**
-     *
+     * Decrements the size of the list by 1.
      */
     protected void decrementSize() {
         size--;
@@ -84,10 +84,11 @@ public abstract class AbstractList<T extends Comparable> {
     /**
      * Removes the first occurrence of the specified element from this list, if it is present (optional operation).  If
      * this list does not contain the element, it is unchanged.  More formally, removes the element with the lowest
-     * index {@code i} such that {@code Objects.equals(o, get(i))} (if such an element exists).  Returns {@code true} if
-     * this list contained the specified element (or equivalently, if this list changed as a result of the call).
+     * index {@code i} such that {@code Objects.equals(object, get(i))} (if such an element exists).  Returns
+     * {@code true} if this list contained the specified element (or equivalently, if this list changed as a result of
+     * the call).
      *
-     * @param o element to be removed from this list, if present
+     * @param object element to be removed from this list, if present
      * @return {@code true} if this list contained the specified element
      * @throws ClassCastException            if the type of the specified element is incompatible with this list (<a
      *                                       href="Collection.html#optional-restrictions">optional</a>)
@@ -95,33 +96,34 @@ public abstract class AbstractList<T extends Comparable> {
      *                                       elements (<a href="Collection.html#optional-restrictions">optional</a>)
      * @throws UnsupportedOperationException if the {@code remove} operation is not supported by this list
      */
-    public boolean remove(Object o) {
+    public boolean remove(Object object) {
         return false;
     }
 
     /**
      * Returns {@code true} if this list contains all of the elements of the specified collection.
      *
-     * @param c collection to be checked for containment in this list
+     * @param objects collection to be checked for containment in this list
      * @return {@code true} if this list contains all of the elements of the specified collection
      * @throws ClassCastException   if the types of one or more elements in the specified collection are incompatible
      *                              with this list (<a href="Collection.html#optional-restrictions">optional</a>)
      * @throws NullPointerException if the specified collection contains one or more null elements and this list does
-     *                              not permit null elements (<a href="Collection.html#optional-restrictions">optional</a>),
-     *                              or if the specified collection is null
+     *                              not permit null elements (<a
+     *                              href="Collection.html#optional-restrictions">optional</a>), or if the specified
+     *                              collection is null
      * @see #contains(Object)
      */
-    public boolean containsAll(Collection<?> c) {
+    public boolean containsAll(Collection<?> objects) {
         return false;
     }
 
     /**
-     * Appends all of the elements in the specified collection to the end of this list, in the order that they are
-     * returned by the specified collection's iterator (optional operation).  The behavior of this operation is
-     * undefined if the specified collection is modified while the operation is in progress.  (Note that this will occur
-     * if the specified collection is this list, and it's nonempty.)
+     * Appends all the elements in the specified collection to the end of this list, in the order that they are returned
+     * by the specified collection's iterator (optional operation).  The behavior of this operation is undefined if the
+     * specified collection is modified while the operation is in progress.  (Note that this will occur if the specified
+     * collection is this list, and it's nonempty.)
      *
-     * @param c collection containing elements to be added to this list
+     * @param collection collection containing elements to be added to this list
      * @return {@code true} if this list changed as a result of the call
      * @throws UnsupportedOperationException if the {@code addAll} operation is not supported by this list
      * @throws ClassCastException            if the class of an element of the specified collection prevents it from
@@ -130,14 +132,14 @@ public abstract class AbstractList<T extends Comparable> {
      *                                       list does not permit null elements, or if the specified collection is null
      * @throws IllegalArgumentException      if some property of an element of the specified collection prevents it from
      *                                       being added to this list
-     * @see #add(Object)
+     * @see #addAll(Collection)
      */
-    public boolean addAll(Collection<? extends T> c) {
+    public boolean addAll(Collection<? extends T> collection) {
         return false;
     }
 
     /**
-     * Inserts all of the elements in the specified collection into this list at the specified position (optional
+     * Inserts all the elements in the specified collection into this list at the specified position (optional
      * operation).  Shifts the element currently at that position (if any) and any subsequent elements to the right
      * (increases their indices).  The new elements will appear in this list in the order that they are returned by the
      * specified collection's iterator.  The behavior of this operation is undefined if the specified collection is
@@ -169,8 +171,9 @@ public abstract class AbstractList<T extends Comparable> {
      * @throws ClassCastException            if the class of an element of this list is incompatible with the specified
      *                                       collection (<a href="Collection.html#optional-restrictions">optional</a>)
      * @throws NullPointerException          if this list contains a null element and the specified collection does not
-     *                                       permit null elements (<a href="Collection.html#optional-restrictions">optional</a>),
-     *                                       or if the specified collection is null
+     *                                       permit null elements (<a
+     *                                       href="Collection.html#optional-restrictions">optional</a>), or if the
+     *                                       specified collection is null
      * @see #remove(Object)
      * @see #contains(Object)
      */
@@ -179,7 +182,7 @@ public abstract class AbstractList<T extends Comparable> {
     }
 
     /**
-     * Removes all of the elements from this list (optional operation). The list will be empty after this call returns.
+     * Removes all the elements from this list (optional operation). The list will be empty after this call returns.
      *
      * @throws UnsupportedOperationException if the {@code clear} operation is not supported by this list
      */
@@ -251,8 +254,8 @@ public abstract class AbstractList<T extends Comparable> {
 
     /**
      * Returns the index of the first occurrence of the specified element in this list, or -1 if this list does not
-     * contain the element. More formally, returns the lowest index {@code i} such that {@code Objects.equals(o,
-     * get(i))}, or -1 if there is no such index.
+     * contain the element. More formally, returns the lowest index {@code i} such that
+     * {@code Objects.equals(o, get(i))}, or -1 if there is no such index.
      *
      * @param o element to search for
      * @return the index of the first occurrence of the specified element in this list, or -1 if this list does not
@@ -268,8 +271,8 @@ public abstract class AbstractList<T extends Comparable> {
 
     /**
      * Returns the index of the last occurrence of the specified element in this list, or -1 if this list does not
-     * contain the element. More formally, returns the highest index {@code i} such that {@code Objects.equals(o,
-     * get(i))}, or -1 if there is no such index.
+     * contain the element. More formally, returns the highest index {@code i} such that
+     * {@code Objects.equals(o, get(i))}, or -1 if there is no such index.
      *
      * @param o element to search for
      * @return the index of the last occurrence of the specified element in this list, or -1 if this list does not
@@ -294,12 +297,12 @@ public abstract class AbstractList<T extends Comparable> {
 
     /**
      * Returns a list iterator over the elements in this list (in proper sequence), starting at the specified position
-     * in the list. The specified index indicates the first element that would be returned by an initial call to {@link
-     * ListIterator#next next}. An initial call to {@link ListIterator#previous previous} would return the element with
-     * the specified index minus one.
+     * in the list. The specified index indicates the first element that would be returned by an initial call to
+     * {@link ListIterator#next next}. An initial call to {@link ListIterator#previous previous} would return the
+     * element with the specified index minus one.
      *
-     * @param index index of the first element to be returned from the list iterator (by a call to {@link
-     *              ListIterator#next next})
+     * @param index index of the first element to be returned from the list iterator (by a call to
+     *              {@link ListIterator#next next})
      * @return a list iterator over the elements in this list (in proper sequence), starting at the specified position
      * in the list
      * @throws IndexOutOfBoundsException if the index is out of range ({@code index < 0 || index > size()})
@@ -309,10 +312,10 @@ public abstract class AbstractList<T extends Comparable> {
     }
 
     /**
-     * Returns a view of the portion of this list between the specified {@code fromIndex}, inclusive, and {@code
-     * toIndex}, exclusive.  (If {@code fromIndex} and {@code toIndex} are equal, the returned list is empty.)  The
-     * returned list is backed by this list, so non-structural changes in the returned list are reflected in this list,
-     * and vice-versa. The returned list supports all of the optional list operations supported by this list.<p>
+     * Returns a view of the portion of this list between the specified {@code fromIndex}, inclusive, and
+     * {@code toIndex}, exclusive.  (If {@code fromIndex} and {@code toIndex} are equal, the returned list is empty.)
+     * The returned list is backed by this list, so non-structural changes in the returned list are reflected in this
+     * list, and vice-versa. The returned list supports all of the optional list operations supported by this list.<p>
      * <p>
      * This method eliminates the need for explicit range operations (of the sort that commonly exist for arrays).  Any
      * operation that expects a list can be used as a range operation by passing a subList view instead of a whole list.
@@ -331,10 +334,47 @@ public abstract class AbstractList<T extends Comparable> {
      * @param fromIndex low endpoint (inclusive) of the subList
      * @param toIndex   high endpoint (exclusive) of the subList
      * @return a view of the specified range within this list
-     * @throws IndexOutOfBoundsException for an illegal endpoint index value ({@code fromIndex < 0 || toIndex > size ||
-     *                                   fromIndex > toIndex})
+     * @throws IndexOutOfBoundsException for an illegal endpoint index value
+     *                                   ({@code fromIndex < 0 || toIndex > size || fromIndex > toIndex})
      */
     public List<T> subList(int fromIndex, int toIndex) {
         return null;
+    }
+
+
+    /**
+     * Compares this object with the specified object for order.  Returns a negative integer, zero, or a positive
+     * integer as this object is less than, equal to, or greater than the specified object.
+     *
+     * <p>The implementor must ensure
+     * {@code sgn(x.compareTo(y)) == -sgn(y.compareTo(x))} for all {@code x} and {@code y}.  (This implies that
+     * {@code x.compareTo(y)} must throw an exception iff {@code y.compareTo(x)} throws an exception.)
+     *
+     * <p>The implementor must also ensure that the relation is transitive:
+     * {@code (x.compareTo(y) > 0 && y.compareTo(z) > 0)} implies {@code x.compareTo(z) > 0}.
+     *
+     * <p>Finally, the implementor must ensure that {@code x.compareTo(y)==0}
+     * implies that {@code sgn(x.compareTo(z)) == sgn(y.compareTo(z))}, for all {@code z}.
+     *
+     * <p>It is strongly recommended, but <i>not</i> strictly required that
+     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any class that implements the
+     * {@code Comparable} interface and violates this condition should clearly indicate this fact.  The recommended
+     * language is "Note: this class has a natural ordering that is inconsistent with equals."
+     *
+     * <p>In the foregoing description, the notation
+     * {@code sgn(}<i>expression</i>{@code )} designates the mathematical
+     * <i>signum</i> function, which is defined to return one of {@code -1},
+     * {@code 0}, or {@code 1} according to whether the value of
+     * <i>expression</i> is negative, zero, or positive, respectively.
+     *
+     * @param object the object to be compared.
+     * @return a negative integer, zero, or a positive integer as this object is less than, equal to, or greater than
+     * the specified object.
+     * @throws NullPointerException if the specified object is null
+     * @throws ClassCastException   if the specified object's type prevents it from being compared to this object.
+     */
+    @Override
+    public int compareTo(Object object) {
+        return 0;
     }
 }

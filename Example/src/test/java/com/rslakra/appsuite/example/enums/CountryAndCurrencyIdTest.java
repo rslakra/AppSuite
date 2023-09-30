@@ -1,5 +1,6 @@
 package com.rslakra.appsuite.example.enums;
 
+import com.rslakra.appsuite.gemini.entity.CountryAndCurrencyId;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

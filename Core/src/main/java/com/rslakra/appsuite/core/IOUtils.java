@@ -58,7 +58,6 @@ import java.net.MalformedURLException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.nio.charset.Charset;
@@ -253,15 +252,14 @@ public enum IOUtils {
     public static <T> String getClassFilePath(final Class<T> classType) {
         if (BeanUtils.isNotNull(classType)) {
             String filePath = BeanUtils.getClassPath(classType, false);
-            if (BeanUtils.isNotNull(filePath)) {
+            if (BeanUtils.isNotEmpty(filePath)) {
                 URL url = classType.getClassLoader().getResource(filePath);
-                if (url != null) {
+                if (BeanUtils.isNotNull(url)) {
                     filePath = url.toExternalForm();
                     filePath = filePath.replace(" ", "%20");
-                    URI uri = null;
                     try {
-                        uri = new URI(filePath);
-                        if (uri.getPath() == null) {
+                        URI uri = URI.create(filePath);
+                        if (BeanUtils.isEmpty(uri.getPath())) {
                             filePath = uri.toString();
                             if (filePath.startsWith("jar:file:")) {
                                 // Update path and define ZIP file
@@ -271,12 +269,12 @@ public enum IOUtils {
                                 if (filePath.startsWith("file://")) {
                                     filePath = filePath.substring(filePath.indexOf("file:/") + 6);
                                 }
-                                filePath = new URI(filePath).getPath();
+                                filePath = URI.create(filePath).getPath();
                             }
                         } else {
                             filePath = uri.getPath();
                         }
-                    } catch (URISyntaxException ex) {
+                    } catch (IllegalArgumentException ex) {
                         LOGGER.error(ex.getLocalizedMessage(), ex);
                     }
                 }
@@ -340,7 +338,7 @@ public enum IOUtils {
         try {
             result = saveFile(data, path);
         } catch (IOException ex) {
-            System.err.println(ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
         return result;
@@ -482,8 +480,9 @@ public enum IOUtils {
         try {
             properties.load(inputStream);
         } catch (Exception ex) {
-            System.err.println(ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
+
         return properties;
     }
 
@@ -499,7 +498,7 @@ public enum IOUtils {
         try {
             properties = loadProperties(new FileInputStream(filePath));
         } catch (Exception ex) {
-            System.err.println(ex);
+            LOGGER.error(ex.getMessage(), ex);
         }
 
         return properties;
@@ -529,17 +528,15 @@ public enum IOUtils {
                 if (!file.exists()) {
                     boolean fileCreated = file.createNewFile();
                     if (!fileCreated) {
-                        System.out.println("Unable to create the properties file:" + filePath);
+                        LOGGER.warn("Unable to create the properties file:{}", filePath);
                     }
                 }
                 outputStream = new FileOutputStream(file);
                 properties.store(outputStream, null);
                 outputStream.flush();
-                System.out.println("Properties saved at:" + filePath);
-            } catch (FileNotFoundException ex) {
-                System.err.println(ex);
+                LOGGER.info("Saved properties file:{}", filePath);
             } catch (IOException ex) {
-                System.err.println(ex);
+                LOGGER.error(ex.getMessage(), ex);
             } finally {
                 closeSilently(outputStream);
             }
@@ -650,9 +647,9 @@ public enum IOUtils {
      */
     public static int copyStream(InputStream sourceStream, OutputStream targetStream, boolean closeStreams)
         throws IOException {
-        System.out.println("+copyStream(" + sourceStream + ", " + targetStream + ", " + closeStreams + ")");
+        LOGGER.debug("+copyStream({}, {}, {})", sourceStream, targetStream, closeStreams);
         int fileSize = 0;
-        if (sourceStream != null && targetStream != null) {
+        if (BeanUtils.isNotNull(sourceStream) && BeanUtils.isNotNull(targetStream)) {
             try {
                 byte[] buffer = getBuffer(sourceStream.available());
                 int byteCount = 0;
@@ -664,7 +661,7 @@ public enum IOUtils {
                 /* flush output streams. */
                 targetStream.flush();
             } catch (IOException ex) {
-                System.err.println(ex);
+                LOGGER.error(ex.getMessage(), ex);
                 throw ex;
             } finally {
                 /* close streams. */
@@ -674,7 +671,7 @@ public enum IOUtils {
             }
         }
 
-        System.out.println("-copyStream(), fileSize:" + fileSize);
+        LOGGER.debug("-copyStream(), fileSize:{}", fileSize);
         return fileSize;
     }
 
@@ -688,8 +685,7 @@ public enum IOUtils {
      */
     public static boolean writeBytes(byte[] dataBytes, OutputStream outputStream, boolean closeStream)
         throws IOException {
-        // System.out.println("+writeBytes(" + dataBytes + ", " + outputStream +
-        // ", " + closeStream + ")");
+        LOGGER.debug("+writeBytes({}, {}, {})", dataBytes, outputStream, closeStream);
         boolean result = false;
         if (!BeanUtils.isEmpty(dataBytes) && BeanUtils.isNotNull(outputStream)) {
             try {
@@ -698,7 +694,7 @@ public enum IOUtils {
                 outputStream.flush();
                 result = true;
             } catch (IOException ex) {
-                System.err.println(ex);
+                LOGGER.error(ex.getMessage(), ex);
                 throw ex;
             } finally {
                 /* close streams. */
@@ -708,7 +704,7 @@ public enum IOUtils {
             }
         }
 
-        // System.out.println("-writeBytes(), result:" + result);
+        LOGGER.debug("-writeBytes(), result:{}", result);
         return result;
     }
 
@@ -839,7 +835,7 @@ public enum IOUtils {
             try {
                 System.out.println("Writing file:" + file.getAbsolutePath());
                 // make sure the parent directories exists.
-                makeDirectory(file.getParentFile());
+                makeFolder(file.getParentFile());
 
                 /* create the file if it does not exist. */
                 if (!file.exists()) {
@@ -878,50 +874,50 @@ public enum IOUtils {
     }
 
     /**
-     * Creates the directory if not exists.
+     * Creates the folder if it does not exist.
      *
-     * @param directory
+     * @param folder
      */
-    public static File makeDirectory(File directory) {
-        if (BeanUtils.isNotNull(directory)) {
-            if (!directory.exists()) {
-                if (!directory.mkdirs()) {
-                    System.out.println("Unable to create '" + directory.getAbsolutePath() + "' directory.");
+    public static File makeFolder(File folder) {
+        if (BeanUtils.isNotNull(folder)) {
+            if (!folder.exists()) {
+                if (!folder.mkdirs()) {
+                    LOGGER.info("Unable to create '{}' folder!", folder.getAbsolutePath());
                 }
             }
         }
 
-        return directory;
+        return folder;
     }
 
     /**
-     * Creates the directory if its not exists. If <code>override</code> is set to true, delete the existing directory
-     * and creates the new one.
+     * Creates the folder if it's not exists. If <code>override</code> is set to true, delete the existing folder and
+     * creates the new one.
      *
-     * @param directory
+     * @param folder
      * @param override
      */
-    public static File makeDirectory(File directory, boolean override) {
-        System.out.println("+makeDirectory(" + directory + ", " + override + ")");
-        if (BeanUtils.isNotNull(directory)) {
-            if (directory.exists()) {
-                System.out.println("Directory '" + directory.getAbsolutePath() + "' already exists.");
-                if (directory.isDirectory() && override) {
-                    if (!delete(directory, override)) {
-                        System.out.println("Unable to delete '" + directory.getAbsolutePath() + "' directory.");
+    public static File makeFolder(File folder, boolean override) {
+        LOGGER.debug("+makeFolder({}, {})", folder, override);
+        if (BeanUtils.isNotNull(folder)) {
+            if (folder.exists()) {
+                LOGGER.warn("Folder '" + folder.getAbsolutePath() + "' already exists.");
+                if (folder.isDirectory() && override) {
+                    if (!delete(folder, override)) {
+                        LOGGER.error("Unable to delete '{}' folder!", folder.getAbsolutePath());
                     }
 
-                    // recreate the directory
-                    directory = makeDirectory(directory);
+                    // recreate the folder
+                    folder = makeFolder(folder);
                 }
             } else {
-                // create the directory
-                directory = makeDirectory(directory);
+                // create the folder
+                folder = makeFolder(folder);
             }
         }
 
-        System.out.println("-makeDirectory(), " + (directory == null ? "" : directory.getAbsolutePath()));
-        return directory;
+        LOGGER.debug("-makeFolder(), folder:{}", (folder == null ? "" : folder.getAbsolutePath()));
+        return folder;
     }
 
     /**
@@ -932,8 +928,8 @@ public enum IOUtils {
      * @param override
      * @return
      */
-    public static File makeDirectory(String dirPath, boolean override) {
-        return makeDirectory(new File(dirPath), override);
+    public static File makeFolder(String dirPath, boolean override) {
+        return makeFolder(new File(dirPath), override);
     }
 
     /**
@@ -942,8 +938,8 @@ public enum IOUtils {
      *
      * @param dirPath
      */
-    public static File makeDirectory(String dirPath) {
-        return makeDirectory(dirPath, false);
+    public static File makeFolder(String dirPath) {
+        return makeFolder(dirPath, false);
     }
 
     /**
@@ -2182,7 +2178,6 @@ public enum IOUtils {
         LOGGER.debug("+newInputStream({})", path);
         return new BufferedInputStream(new FileInputStream(new File(path)));
     }
-
 
     /**
      * @param hostName

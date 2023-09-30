@@ -13,13 +13,12 @@ import java.util.concurrent.ConcurrentHashMap;
  */
 public final class Payload<K, V> extends ConcurrentHashMap<K, V> {
 
+    // LOGGER
+    private static final Logger LOGGER = LoggerFactory.getLogger(Payload.class);
     public static final String STATUS = "status";
     public static final String MESSAGE = "message";
     public static final String ERROR = "error";
     public static final String DELETED = "deleted";
-
-    // LOGGER
-    private static final Logger LOGGER = LoggerFactory.getLogger(Payload.class);
 
     /**
      * @param payload

@@ -16,15 +16,29 @@
         <maven.compiler.source>11</maven.compiler.source>
         <maven.compiler.target>11</maven.compiler.target>
         <appsuite-core.version>1.0.0-SNAPSHOT</appsuite-core.version>
+        <appsuite-algorithm.version>1.0.0-SNAPSHOT</appsuite-algorithm.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>com.rslakra.appsuite</groupId>
             <artifactId>Core</artifactId>
+            <version>${appsuite-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.rslakra.appsuite</groupId>
+            <artifactId>Algorithm</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.testng/testng -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.0.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
 </project>

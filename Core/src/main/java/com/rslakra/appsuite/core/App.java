@@ -1,4 +1,4 @@
-package com.rslakra.frameworks.common;
+package com.rslakra.appsuite.core;
 
 /**
  * @author Rohtash Lakra

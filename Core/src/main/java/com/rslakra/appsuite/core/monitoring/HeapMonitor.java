@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class HeapMonitor extends SingleThreadExecutor {
 
     // LOGGER
-    private static Logger LOGGER = LoggerFactory.getLogger(HeapMonitor.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(HeapMonitor.class);
 
     private final Runtime runtime = Runtime.getRuntime();
     private long interval;

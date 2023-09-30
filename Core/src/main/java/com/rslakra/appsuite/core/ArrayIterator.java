@@ -77,11 +77,11 @@ public final class ArrayIterator<T> implements Iterator {
      * @return
      */
     public Object next() {
-        if (!this.hasNext()) {
-            throw new NoSuchElementException();
-        } else {
+        if (this.hasNext()) {
             return Array.get(this.data, this.index++);
         }
+
+        throw new NoSuchElementException();
     }
 
     /**

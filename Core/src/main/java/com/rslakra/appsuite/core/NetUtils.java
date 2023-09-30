@@ -38,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Random;
 
 /**
  * @author Rohtash Lakra
@@ -52,6 +53,24 @@ public enum NetUtils {
     public static final String OCTET_ZERO = "0";
     public static final String OCTET_255 = "255";
     public static final String LOCAL_HOST = "localhost";
+    private static final Random RND_IP = new Random();
+
+    /**
+     * @param ipRange
+     * @return
+     */
+    public static String randomIPAddress(int ipRange) {
+        return (RND_IP.nextInt(ipRange) + "." + RND_IP.nextInt(ipRange) + "." + RND_IP.nextInt(ipRange) + "."
+                + RND_IP.nextInt(ipRange));
+    }
+
+    /**
+     * @return
+     */
+    public static String randomIPAddress() {
+        return randomIPAddress(256);
+    }
+
 
     /**
      * @param args

@@ -50,9 +50,10 @@ public enum CharSets {
     public static CharSets forName(final String charSetName) {
         CharSets charSets = UTF_8;
         if (BeanUtils.isNotEmpty(charSetName)) {
-            charSets =
-                Arrays.stream(values()).filter(charSet -> charSet.toCharset().equalsIgnoreCase(charSetName)).findAny()
-                    .orElse(UTF_8);
+            charSets = Arrays.stream(values())
+                .filter(charSet -> charSet.toCharset().equalsIgnoreCase(charSetName))
+                .findAny()
+                .orElse(UTF_8);
         }
 
         return charSets;

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.rslakra.appsuite.gemini.entity.GeoInfo;
+import com.rslakra.appsuite.gemini.entity.WoeIdType;
 
 import java.io.IOException;
 
@@ -42,6 +44,13 @@ public enum Country {
 
     static class CountryDeserializer extends JsonDeserializer<Country> {
 
+        /**
+         * @param jsonParser
+         * @param deserializationContext
+         * @return
+         * @throws IOException
+         * @throws JsonProcessingException
+         */
         @Override
         public Country deserialize(JsonParser jsonParser, DeserializationContext deserializationContext)
             throws IOException, JsonProcessingException {

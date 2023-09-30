@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import com.rslakra.appsuite.core.entity.Color;
 import com.rslakra.appsuite.core.entity.Instance;
 import com.rslakra.appsuite.core.enums.EntityStatus;
+import com.rslakra.appsuite.core.enums.RoleType;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -537,8 +538,8 @@ public class BeanUtilsTest {
         assertNotNull(BeanUtils.findEnumByClass(EntityStatus.class, "inactive"));
         assertNotNull(BeanUtils.findEnumByClass(EntityStatus.class, "deleted"));
         assertNull(BeanUtils.findEnumByClass(EntityStatus.class, "fake"));
-//        assertNotNull(BeanUtils.findEnumByClass(RoleType.class, "admin"));
-//        assertNotNull(BeanUtils.findEnumByClass(RoleType.class, "user"));
+        assertNotNull(BeanUtils.findEnumByClass(RoleType.class, "admin"));
+        assertNotNull(BeanUtils.findEnumByClass(RoleType.class, "user"));
     }
 
     @Test

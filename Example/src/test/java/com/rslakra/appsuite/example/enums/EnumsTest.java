@@ -2,7 +2,7 @@ package com.rslakra.appsuite.example.enums;
 
 import com.rslakra.appsuite.core.IOUtils;
 import com.rslakra.appsuite.core.json.JSONUtils;
-import com.rslakra.appsuite.example.entity.AllCountryAndCurrencyResponse;
+import com.rslakra.appsuite.gemini.entity.AllCountryAndCurrencyResponse;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;

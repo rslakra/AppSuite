@@ -228,8 +228,8 @@ public class AuthConfig {
 //                return this.request.getRequestLine().getMethod();
 //            }
 //
-//            public void setHeader(String key, String val) {
-//                this.request.setHeader(key, val);
+//            public void setHeader(String key, String value) {
+//                this.request.setHeader(key, value);
 //            }
 //
 //            public Object unwrap() {

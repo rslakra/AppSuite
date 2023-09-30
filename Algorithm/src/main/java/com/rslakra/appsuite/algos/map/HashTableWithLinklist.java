@@ -17,12 +17,17 @@ public class HashTableWithLinklist<Key, Value> {
         private Object value;
         private Node next;
 
-        Node(Object key, Object value, Node parent) {
+        /**
+         * @param key
+         * @param value
+         * @param next
+         */
+        Node(Object key, Object value, Node next) {
             this.key = key;
             this.value = value;
-            if (parent != null) {
-                this.next = parent;
-                parent.next = null;
+            if (next != null) {
+                this.next = next;
+                next.next = null;
             } else {
                 this.next = null;
             }
@@ -71,4 +76,31 @@ public class HashTableWithLinklist<Key, Value> {
         linkList[index] = new Node(key, value, linkList[index]);
     }
 
+    /**
+     * Returns the string representation of this object.
+     *
+     * @return
+     */
+    @Override
+    public String toString() {
+        final StringBuilder strBuilder = new StringBuilder("{");
+        for (int index = 0; index < linkList.length; index++) {
+            Node node = linkList[index];
+            if (node != null) {
+                if (strBuilder.length() > 1) {
+                    strBuilder.append(", ");
+                }
+                strBuilder.append(node.key).append("=").append(node.value);
+                Node current = node.next;
+                while (current != null) {
+                    strBuilder.append(", ").append(current.key).append("=").append(current.value);
+                    current = current.next;
+                }
+            }
+        }
+
+        strBuilder.append("}");
+
+        return strBuilder.toString();
+    }
 }

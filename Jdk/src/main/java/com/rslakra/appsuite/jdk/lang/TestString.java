@@ -7,6 +7,8 @@ import java.util.StringTokenizer;
  */
 public class TestString {
 
+    private static final String VALUE = "value";
+
     private static void testStringArray() {
         String[] ss = new String[3];
         String[] translateTable = new String[]{"16x9PB", "4x3", "4x3LB", "16x9"};
@@ -105,6 +107,11 @@ public class TestString {
 
         // testStrComparision();
         testStringTokenizer();
+
+        String value = null;
+//        boolean result = value.equals(VALUE);
+        boolean result = VALUE.equals(value);
+        System.out.println("result:" + result);
     }
 
 }

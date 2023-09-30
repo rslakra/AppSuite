@@ -23,6 +23,14 @@ public class Node<T extends Comparable> implements Comparable<Node> {
     }
 
     /**
+     * @param value
+     * @param next
+     */
+    public Node(T value, Node next) {
+        this(null, value, next);
+    }
+
+    /**
      * @param previous
      * @param value
      * @param next
@@ -52,8 +60,8 @@ public class Node<T extends Comparable> implements Comparable<Node> {
      * integer as this object is less than, equal to, or greater than the specified object.
      *
      * <p>The implementor must ensure
-     * {@code sgn(x.compareTo(y)) == -sgn(y.compareTo(x))} for all {@code x} and {@code y}.  (This implies that {@code
-     * x.compareTo(y)} must throw an exception iff {@code y.compareTo(x)} throws an exception.)
+     * {@code sgn(x.compareTo(y)) == -sgn(y.compareTo(x))} for all {@code x} and {@code y}.  (This implies that
+     * {@code x.compareTo(y)} must throw an exception iff {@code y.compareTo(x)} throws an exception.)
      *
      * <p>The implementor must also ensure that the relation is transitive:
      * {@code (x.compareTo(y) > 0 && y.compareTo(z) > 0)} implies {@code x.compareTo(z) > 0}.
@@ -62,9 +70,9 @@ public class Node<T extends Comparable> implements Comparable<Node> {
      * implies that {@code sgn(x.compareTo(z)) == sgn(y.compareTo(z))}, for all {@code z}.
      *
      * <p>It is strongly recommended, but <i>not</i> strictly required that
-     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any class that implements the {@code
-     * Comparable} interface and violates this condition should clearly indicate this fact.  The recommended language is
-     * "Note: this class has a natural ordering that is inconsistent with equals."
+     * {@code (x.compareTo(y)==0) == (x.equals(y))}.  Generally speaking, any class that implements the
+     * {@code Comparable} interface and violates this condition should clearly indicate this fact.  The recommended
+     * language is "Note: this class has a natural ordering that is inconsistent with equals."
      *
      * <p>In the foregoing description, the notation
      * {@code sgn(}<i>expression</i>{@code )} designates the mathematical
@@ -80,7 +88,7 @@ public class Node<T extends Comparable> implements Comparable<Node> {
      */
     @Override
     public int compareTo(Node other) {
-        return getValue().compareTo(other.getValue());
+        return (getValue().compareTo(other.getValue()));
     }
 
     /**
@@ -111,5 +119,35 @@ public class Node<T extends Comparable> implements Comparable<Node> {
      */
     public boolean isEquals(Node other) {
         return (this.compareTo(other) == 0);
+    }
+
+    /**
+     * @return
+     */
+    @Override
+    public int hashCode() {
+        return Objects.hash(getValue(), next);
+    }
+
+    /**
+     * @param object
+     * @return
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) {
+            return true;
+        }
+
+        if (!(object instanceof Node)) {
+            return false;
+        }
+
+        Node node = (Node) object;
+        if (!isEquals(node)) {
+            return false;
+        }
+
+        return Objects.equals(next, node.next);
     }
 }

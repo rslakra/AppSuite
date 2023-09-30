@@ -2,7 +2,6 @@ package com.rslakra.appsuite.questions.leetcode;
 
 import static org.testng.Assert.assertEquals;
 
-import com.rslakra.appsuite.questions.leetcode.LC2AddTwoNumbers;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -47,9 +46,9 @@ public class LC2AddTwoNumbersTest {
      */
     private void assertListNodeEquals(LC2AddTwoNumbers.ListNode expectedNode, LC2AddTwoNumbers.ListNode resultNode) {
         while (expectedNode != null && resultNode != null) {
-            assertEquals(expectedNode.val, resultNode.val);
-            expectedNode = expectedNode.next;
-            resultNode = resultNode.next;
+            assertEquals(expectedNode.getValue(), resultNode.getValue());
+            expectedNode = expectedNode.getNext();
+            resultNode = resultNode.getNext();
         }
     }
 

@@ -18,6 +18,7 @@ import java.util.Arrays;
 //@JsonSerialize(using = WeekDaySerializer.class)
 @JsonSerialize(using = LowerCaseSerializer.class)
 public enum WeekDays {
+
     SUNDAY,
     MONDAY,
     TUESDAY,

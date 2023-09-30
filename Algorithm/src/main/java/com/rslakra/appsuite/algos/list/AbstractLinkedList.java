@@ -4,58 +4,61 @@ package com.rslakra.appsuite.algos.list;
  * @author Rohtash Lakra
  * @created 5/20/22 11:53 AM
  */
-public abstract class AbstractLinkedList<T> implements Comparable<T> {
-
-    private int size;
+public abstract class AbstractLinkedList<T> extends AbstractList<T> implements Comparable<T> {
 
     /**
-     * Returns the number of elements in this list.  If this list contains more than {@code Integer.MAX_VALUE} elements,
-     * returns {@code Integer.MAX_VALUE}.
-     *
-     * @return the number of elements in this list
+     * @param value
+     * @return
      */
-    public int size() {
-        return size;
-    }
-
-    /**
-     *
-     */
-    protected void incrementSize() {
-        size++;
-    }
-
-    /**
-     *
-     */
-    protected void decrementSize() {
-        size--;
-    }
-
-    /**
-     * Returns {@code true} if this list contains no elements.
-     *
-     * @return {@code true} if this list contains no elements
-     */
-    public boolean isEmpty() {
-        return (size() == 0);
-    }
-
-
     public abstract boolean addHead(T value);
 
+    /**
+     * @param value
+     * @return
+     */
     public abstract boolean addTail(T value);
 
+    /**
+     * @param value
+     * @return
+     */
     public abstract boolean addNode(T value);
 
+    /**
+     * @param value
+     * @return
+     */
     public abstract T find(T value);
 
-    public abstract boolean contains(T value);
-
+    /**
+     * @param value
+     * @return
+     */
     public abstract boolean removeHead(T value);
 
+    /**
+     * @param value
+     * @return
+     */
     public abstract boolean removeTail(T value);
 
+    /**
+     * @param value
+     * @return
+     */
     public abstract boolean removeNode(T value);
 
+//    public abstract boolean addHead(Object value);
+//
+//    public abstract boolean addTail(Object value);
+//
+//    public abstract boolean addNode(Object value);
+//
+//    public abstract Object find(Object value);
+//
+//    public abstract boolean removeHead(Object value);
+//
+//    public abstract boolean removeTail(Object value);
+//
+//    public abstract boolean removeNode(Object value);
 }

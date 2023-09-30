@@ -1,9 +1,10 @@
 package com.rslakra.appsuite.core.entity;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testng.Assert;
-import org.testng.annotations.Test;
 
 /**
  * @author Rohtash Lakra
@@ -18,7 +19,7 @@ public class BuildVersionTest {
     public void testBuildVersion() {
         BuildVersion buildVersion = new BuildVersion();
         LOGGER.debug("buildVersion:{}", buildVersion);
-        Assert.assertNotNull(buildVersion);
+        assertNotNull(buildVersion);
         buildVersion.loadBuildProperties();
     }
 }

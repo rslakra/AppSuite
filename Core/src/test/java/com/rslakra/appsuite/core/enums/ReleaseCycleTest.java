@@ -1,7 +1,10 @@
 package com.rslakra.appsuite.core.enums;
 
-import org.junit.Assert;
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+
+import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,30 +21,30 @@ public class ReleaseCycleTest {
     public void testReleaseCycle() {
         ReleaseCycle releaseCycle = ReleaseCycle.of(null);
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNull(releaseCycle);
+        assertNull(releaseCycle);
 
         releaseCycle = ReleaseCycle.of(ReleaseCycle.ALPHA.name());
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNotNull(releaseCycle);
-        Assert.assertEquals(ReleaseCycle.ALPHA, releaseCycle);
+        assertNotNull(releaseCycle);
+        assertEquals(ReleaseCycle.ALPHA, releaseCycle);
 
         releaseCycle = ReleaseCycle.of("ALPHA");
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNotNull(releaseCycle);
-        Assert.assertEquals(ReleaseCycle.ALPHA, releaseCycle);
+        assertNotNull(releaseCycle);
+        assertEquals(ReleaseCycle.ALPHA, releaseCycle);
 
         releaseCycle = ReleaseCycle.of("Alpha");
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNotNull(releaseCycle);
-        Assert.assertEquals(ReleaseCycle.ALPHA, releaseCycle);
+        assertNotNull(releaseCycle);
+        assertEquals(ReleaseCycle.ALPHA, releaseCycle);
 
         releaseCycle = ReleaseCycle.of("alpha");
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNotNull(releaseCycle);
-        Assert.assertEquals(ReleaseCycle.ALPHA, releaseCycle);
+        assertNotNull(releaseCycle);
+        assertEquals(ReleaseCycle.ALPHA, releaseCycle);
 
         releaseCycle = ReleaseCycle.of("gamma");
         LOGGER.debug("releaseCycle:{}", releaseCycle);
-        Assert.assertNull(releaseCycle);
+        assertNull(releaseCycle);
     }
 }

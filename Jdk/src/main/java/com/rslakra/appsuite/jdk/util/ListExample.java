@@ -34,13 +34,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 
 /**
  * @author Rohtash Lakra (rohtash.lakra@devamatre.com)
-* @author Rohtash Lakra (rohtash.singh@gmail.com)
+ * @author Rohtash Lakra (rohtash.singh@gmail.com)
  * @version 1.0.0
  * @created 2017-09-23 10:30:16 AM
  * @since 1.0.0
@@ -50,25 +51,44 @@ public class ListExample {
     private static final Logger LOGGER = LoggerFactory.getLogger(ListExample.class);
 
     /**
-     * @param args
+     * @return
      */
-    public static void main(String[] args) {
+    public List ofObjects() {
         List listObjects = new ArrayList();
         listObjects.add("Bernadine");
         listObjects.add("Elizabeth");
         listObjects.add("Gene");
         listObjects.add("Elizabeth");
         listObjects.add("Clara");
-        LOGGER.info("listObjects:{}", listObjects);
-        LOGGER.info("listObjects[0]:{}", listObjects.get(0));
-        LOGGER.info("listObjects[2]:{}", listObjects.get(2));
 
+        return listObjects;
+    }
+
+    /**
+     * @return
+     */
+    public LinkedList ofLinkedList() {
         LinkedList linkedList = new LinkedList();
         linkedList.addFirst("Bernadine");
         linkedList.addFirst("Elizabeth");
         linkedList.addFirst("Gene");
         linkedList.addFirst("Elizabeth");
         linkedList.addFirst("Clara");
+
+        return linkedList;
+    }
+
+    /**
+     * @param args
+     */
+    public static void main(String[] args) {
+        ListExample listExample = new ListExample();
+        List listObjects = listExample.ofObjects();
+        LOGGER.info("listObjects:{}", listObjects);
+        LOGGER.info("listObjects[0]:{}", listObjects.get(0));
+        LOGGER.info("listObjects[2]:{}", listObjects.get(2));
+
+        LinkedList linkedList = listExample.ofLinkedList();
         LOGGER.info("linkedList:{}", linkedList);
         linkedList.removeLast();
         linkedList.removeLast();
@@ -87,5 +107,10 @@ public class ListExample {
         ArrayList list = new ArrayList<String>();
         list.add("Java");
         LOGGER.info("list:{}", list);
+
+        List<String> names = new ArrayList<>();
+        names.add("Rohtash");
+        names.add("Lakra");
+        LOGGER.info("names:{}", names);
     }
 }
