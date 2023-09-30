@@ -22,7 +22,7 @@
         <appsuite-core.version>1.0.0-SNAPSHOT</appsuite-core.version>
         <appsuite-algorithm.version>1.0.0-SNAPSHOT</appsuite-algorithm.version>
         <commons-text.version>1.10.0</commons-text.version>
-        <guava.version>31.1-jre</guava.version>
+        <guava.version>32.1.2-jre</guava.version>
     </properties>
 
     <!-- Dependencies -->
