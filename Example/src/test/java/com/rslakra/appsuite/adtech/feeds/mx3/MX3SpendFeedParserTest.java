@@ -1,7 +1,6 @@
-package com.rslakra.appsuite.example.feeds.mx3;
+package com.rslakra.appsuite.adtech.feeds.mx3;
 
 import com.rslakra.appsuite.core.IOUtils;
-import com.rslakra.appsuite.adtech.feeds.mx3.MX3SpendFeedParser;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

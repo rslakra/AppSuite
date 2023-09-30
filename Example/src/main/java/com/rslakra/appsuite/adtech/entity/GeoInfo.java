@@ -1,4 +1,4 @@
-package com.rslakra.appsuite.gemini.entity;
+package com.rslakra.appsuite.adtech.entity;
 
 /**
  * @author Rohtash Lakra

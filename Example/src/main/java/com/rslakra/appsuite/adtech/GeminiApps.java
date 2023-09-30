@@ -1,4 +1,4 @@
-package com.rslakra.appsuite.gemini;
+package com.rslakra.appsuite.adtech;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -17,7 +17,7 @@ public enum GeminiApps {
                          "dj0yJmk9cG1VblNhTWpMS2gxJmQ9WVdrOU5VTnNkWFZRTkRRbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTRk",
                          "474f5943d9d448bdfa5cb001e692bd6cd9991568",
                          "https://id-uat.b2b.yahooinc.com",
-                         "gemini",
+                         "adtech",
                          "https://api.gemini.yahoo.com"
     ),
 
@@ -27,7 +27,7 @@ public enum GeminiApps {
                     "dj0yJmk9U3RzYk9tY0lyNFZkJmQ9WVdrOVpsSmlRWFZUTlRJbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTk4",
                     "63afcef938e0164c1781e1f13ab6c970adb6f122",
                     "https://id-uat.b2b.yahooinc.com",
-                    "gemini",
+                    "adtech",
                     "https://developer.yahoo.com"
     ),
 
@@ -37,7 +37,7 @@ public enum GeminiApps {
                                      "dj0yJmk9cmFKR2EyUmxhWjJ0JmQ9WVdrOVFtdzRNakJVTjJFbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTg1",
                                      "1c92e1e945d1fee62e58acefa4e23d2a21ce0788",
                                      "https://id-uat.b2b.yahooinc.com",
-                                     "gemini",
+                                     "adtech",
                                      "https://ciprod.api.gemini.yahoo.com"
     ),
 
@@ -48,7 +48,7 @@ public enum GeminiApps {
                             "dj0yJmk9bGthRld5ZUVQR0lnJmQ9WVdrOWNrdHpVWFJRTkdzbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmc3Y9MCZ4PTA1",
                             "42afc3a3aa9b0ec80d969f2e9be2e3aa6a97afdb",
                             "https://id-uat.b2b.yahooinc.com",
-                            "gemini",
+                            "adtech",
                             "https://ciprod.api.gemini.yahoo.com"
     ),
 
@@ -62,7 +62,6 @@ public enum GeminiApps {
                       "https://ciprod.api.gemini.yahoo.com"
     ),
     ;
-
 
     private final String appName;
     private final String appId;

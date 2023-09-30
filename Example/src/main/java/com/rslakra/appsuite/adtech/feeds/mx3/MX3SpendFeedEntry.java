@@ -1,10 +1,15 @@
-package com.rslakra.appsuite.gemini.feeds.mx3;
+package com.rslakra.appsuite.adtech.feeds.mx3;
 
 import com.rslakra.appsuite.core.ToString;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.util.Objects;
 import java.util.function.Function;
 
+@Getter
+@Setter
 public class MX3SpendFeedEntry extends MX3SpendData {
 
     private BigDecimal searchMonthlySpend;
@@ -12,48 +17,9 @@ public class MX3SpendFeedEntry extends MX3SpendData {
     private BigDecimal searchLifetimeSpend;
     private BigDecimal nativeLifetimeSpend;
 
-    public BigDecimal getSearchMonthlySpend() {
-        return searchMonthlySpend;
-    }
-
-    public void setSearchMonthlySpend(BigDecimal searchMonthlySpend) {
-        this.searchMonthlySpend = searchMonthlySpend;
-    }
-
-    public BigDecimal getNativeMonthlySpend() {
-        return nativeMonthlySpend;
-    }
-
-    public void setNativeMonthlySpend(BigDecimal nativeMonthlySpend) {
-        this.nativeMonthlySpend = nativeMonthlySpend;
-    }
-
-    public BigDecimal getSearchLifetimeSpend() {
-        return searchLifetimeSpend;
-    }
-
-    public void setSearchLifetimeSpend(BigDecimal searchLifetimeSpend) {
-        this.searchLifetimeSpend = searchLifetimeSpend;
-    }
-
-    public BigDecimal getNativeLifetimeSpend() {
-        return nativeLifetimeSpend;
-    }
-
-    public void setNativeLifetimeSpend(BigDecimal nativeLifetimeSpend) {
-        this.nativeLifetimeSpend = nativeLifetimeSpend;
-    }
-
     @Override
     public int hashCode() {
-        final int prime = 31;
-        int result = 1;
-        result = prime * result + ((getAdvertiserId() == null) ? 0 : getAdvertiserId().hashCode());
-        result = prime * result + ((nativeLifetimeSpend == null) ? 0 : nativeLifetimeSpend.hashCode());
-        result = prime * result + ((nativeMonthlySpend == null) ? 0 : nativeMonthlySpend.hashCode());
-        result = prime * result + ((searchLifetimeSpend == null) ? 0 : searchLifetimeSpend.hashCode());
-        result = prime * result + ((searchMonthlySpend == null) ? 0 : searchMonthlySpend.hashCode());
-        return result;
+        return Objects.hash(getAdvertiserId(), getNativeLifetimeSpend(), getNativeMonthlySpend(), getSearchLifetimeSpend(), getSearchMonthlySpend());
     }
 
     @Override
@@ -108,14 +74,14 @@ public class MX3SpendFeedEntry extends MX3SpendData {
 
     public String toString() {
         return ToString.of(MX3SpendFeedEntry.class)
-            .add("feedInterval", getFeedInterval())
-            .add("advertiserId", getAdvertiserId())
-            .add("timezone", getTimezone())
-            .add("searchMonthlySpend", getSearchMonthlySpend())
-            .add("nativeMonthlySpend", getNativeMonthlySpend())
-            .add("searchLifetimeSpend", getSearchLifetimeSpend())
-            .add("nativeLifetimeSpend", getNativeLifetimeSpend())
-            .toString();
+                .add("feedInterval", getFeedInterval())
+                .add("advertiserId", getAdvertiserId())
+                .add("timezone", getTimezone())
+                .add("searchMonthlySpend", getSearchMonthlySpend())
+                .add("nativeMonthlySpend", getNativeMonthlySpend())
+                .add("searchLifetimeSpend", getSearchLifetimeSpend())
+                .add("nativeLifetimeSpend", getNativeLifetimeSpend())
+                .toString();
     }
 
     public static final Function<MX3SpendFeedEntry, Long> ADVERTISER_ID = new Function<MX3SpendFeedEntry, Long>() {

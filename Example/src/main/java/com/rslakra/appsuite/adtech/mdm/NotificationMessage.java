@@ -1,4 +1,4 @@
-package com.rslakra.appsuite.gemini.mdm;
+package com.rslakra.appsuite.adtech.mdm;
 
 import com.rslakra.appsuite.core.ToString;
 import lombok.Getter;
@@ -23,11 +23,11 @@ public class NotificationMessage {
     @Override
     public String toString() {
         return ToString.of(NotificationMessage.class)
-            .add("oldMDMId=" + oldMDMId)
-            .add("newMDMId=" + newMDMId)
-            .add("name='" + name + "'")
-            .add("yamId=" + yamId)
-            .add("eventType='" + eventType + "'")
-            .toString();
+                .add("oldMDMId", oldMDMId)
+                .add("newMDMId", newMDMId)
+                .add("name", name)
+                .add("yamId", yamId)
+                .add("eventType", eventType)
+                .toString();
     }
 }

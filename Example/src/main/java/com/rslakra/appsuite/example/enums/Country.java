@@ -5,8 +5,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.rslakra.appsuite.gemini.entity.GeoInfo;
-import com.rslakra.appsuite.gemini.entity.WoeIdType;
+import com.rslakra.appsuite.adtech.entity.GeoInfo;
+import com.rslakra.appsuite.adtech.entity.WoeIdType;
 
 import java.io.IOException;
 

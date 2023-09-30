@@ -1,4 +1,4 @@
-package com.rslakra.appsuite.gemini.entity;
+package com.rslakra.appsuite.adtech.entity;
 
 import com.rslakra.appsuite.example.enums.Country;
 import com.rslakra.appsuite.example.enums.Currency;

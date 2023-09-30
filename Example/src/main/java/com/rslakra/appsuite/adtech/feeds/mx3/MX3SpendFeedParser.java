@@ -1,6 +1,8 @@
-package com.rslakra.appsuite.gemini.feeds.mx3;
+package com.rslakra.appsuite.adtech.feeds.mx3;
 
 import com.rslakra.appsuite.core.IOUtils;
+import lombok.Getter;
+import lombok.Setter;
 import org.apache.commons.lang3.CharEncoding;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -15,6 +17,8 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
+@Getter
+@Setter
 public class MX3SpendFeedParser {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MX3SpendFeedParser.class);

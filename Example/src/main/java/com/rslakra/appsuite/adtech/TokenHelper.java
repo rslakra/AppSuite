@@ -1,4 +1,4 @@
-package com.rslakra.appsuite.gemini;
+package com.rslakra.appsuite.adtech;
 
 import com.rslakra.appsuite.core.jwt.JWTUtils;
 import com.rslakra.appsuite.core.jwt.JwtRequest;
