@@ -13,7 +13,7 @@
     <!-- Modules -->
     <modules>
         <module>Core</module>
-        <module>Algorithm</module>
+        <module>DataStructure</module>
         <module>HttpServer</module>
         <module>Identity</module>
         <module>Metrics</module>

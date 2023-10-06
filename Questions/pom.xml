@@ -28,7 +28,7 @@
 
         <dependency>
             <groupId>com.rslakra.appsuite</groupId>
-            <artifactId>Algorithm</artifactId>
+            <artifactId>DataStructure</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 

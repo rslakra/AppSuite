@@ -36,7 +36,7 @@
 
         <dependency>
             <groupId>com.rslakra.appsuite</groupId>
-            <artifactId>Algorithm</artifactId>
+            <artifactId>DataStructure</artifactId>
             <version>${appsuite-algorithm.version}</version>
         </dependency>
 

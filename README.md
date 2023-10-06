@@ -19,18 +19,19 @@ for AS IT IS usage.
 ---
 
 ```
-    .
-    ├── Core                    # Core project files
-├── Algorithm               # Algorithm project files
-├── Example                 # Example project files
-├── HBase                   # HBase project files
-    ├── HttpServer              # Http-Server project files
-├── Identity                # Identity project files
-├── Jdk                     # Jdk project files
-├── Metrics                 # Metrics project files
-├── MimeCraft               # MimeCraft project files
-├── pdf-tools               # pdf-tools project files
-├── Questions               # Questions project files
+    /
+    ├── Core                    # The Core Project
+    ├── DataStructure           # The DataStructure Project
+    ├── Example                 # The Example Project
+    ├── HBase                   # The HBase Project
+    ├── HttpServer              # The Http-Server Project
+    ├── Identity                # The Identity Project
+    ├── Jdk                     # The Jdk Project
+    ├── Metrics                 # The Metrics Project
+    ├── MimeCraft               # The MimeCraft Project
+    ├── Patterns                # The Patterns Project
+    ├── pdf-tools               # The pdf-tools Project
+    ├── Questions               # The Questions Project
     └── README.md
 ```
 
