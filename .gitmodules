@@ -1,0 +1,39 @@
+[submodule "appsuite-core"]
+	path = appsuite-core
+	url = https://github.com/rslakra/appsuite-core.git
+[submodule "appsuite-example"]
+	path = appsuite-example
+	url = https://github.com/rslakra/appsuite-example.git
+[submodule "appsuite-hbase"]
+	path = appsuite-hbase
+	url = https://github.com/rslakra/appsuite-hbase.git
+[submodule "appsuite-http-client"]
+	path = appsuite-http-client
+	url = https://github.com/rslakra/appsuite-http-client.git
+[submodule "appsuite-http-server"]
+	path = appsuite-http-server
+	url = https://github.com/rslakra/appsuite-http-server.git
+[submodule "appsuite-identity"]
+	path = appsuite-identity
+	url = https://github.com/rslakra/appsuite-identity.git
+[submodule "appsuite-jdk"]
+	path = appsuite-jdk
+	url = https://github.com/rslakra/appsuite-jdk.git
+[submodule "appsuite-metrics"]
+	path = appsuite-metrics
+	url = https://github.com/rslakra/appsuite-metrics.git
+[submodule "appsuite-mime-craft"]
+	path = appsuite-mime-craft
+	url = https://github.com/rslakra/appsuite-mime-craft.git
+[submodule "appsuite-pdf-tools"]
+	path = appsuite-pdf-tools
+	url = https://github.com/rslakra/appsuite-pdf-tools.git
+[submodule "appsuite-questions"]
+	path = appsuite-questions
+	url = https://github.com/rslakra/appsuite-questions.git
+[submodule "appsuite-spring"]
+	path = appsuite-spring
+	url = https://github.com/rslakra/appsuite-spring.git
+[submodule "appsuite-tutors"]
+	path = appsuite-tutors
+	url = https://github.com/rslakra/appsuite-tutors.git
