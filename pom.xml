@@ -6,49 +6,56 @@
     <groupId>com.rslakra.appsuite</groupId>
     <artifactId>AppSuite</artifactId>
     <packaging>pom</packaging>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>${revision}</version>
     <!--    <name>The ${project.artifactId} Project</name>-->
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
     <modules>
-        <module>Core</module>
-        <module>DataStructure</module>
-        <module>HttpServer</module>
-        <module>Identity</module>
-        <module>Metrics</module>
-        <module>MimeCraft</module>
-        <module>Example</module>
-        <module>HBase</module>
-        <module>Jdk</module>
-        <module>Patterns</module>
-        <module>pdf-tools</module>
-        <module>Questions</module>
     </modules>
 
     <!-- Properties -->
     <properties>
+        <!-- revision -->
+        <revision>0.0.0</revision>
+        <appsuite.version>${revision}</appsuite.version>
+
+        <!-- sourceEncoding & outputEncoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <!-- java version -->
         <java.version>11</java.version>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
-        <maven.compiler.release>11</maven.compiler.release>
+        <!-- maven -->
+        <maven.compiler.source>${java.version}</maven.compiler.source>
+        <maven.compiler.target>${java.version}</maven.compiler.target>
+        <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+        <!-- checkstyle -->
+        <code-styles.dir>https://raw.githubusercontent.com/rslakra/code-styles/master</code-styles.dir>
         <checkstyle.threshold>0</checkstyle.threshold>
+        <!-- swagger -->
         <swagger.skip>false</swagger.skip>
 
+        <!-- appsuite-core -->
+        <appsuite-core.version>0.0.2</appsuite-core.version>
+
+        <!-- lombok -->
+        <lombok.version>1.18.28</lombok.version>
+
+        <!-- slf4j -->
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <logback-classic.version>1.4.5</logback-classic.version>
-        <lombok.version>1.18.24</lombok.version>
+        <!-- apache commons -->
         <commons-lang3.version>3.12.0</commons-lang3.version>
 
         <!-- junit-jupiter-params -->
         <junit-jupiter-params.version>5.9.2</junit-jupiter-params.version>
         <surefire-junit3.version>2.12.4</surefire-junit3.version>
 
+        <!-- junit -->
         <junit.version>4.13.2</junit.version>
+        <!-- testng -->
         <testng.version>7.7.1</testng.version>
     </properties>
 
@@ -68,12 +75,19 @@
             <version>${logback-classic.version}</version>
         </dependency>
 
+        <!--appsuite-core-->
+        <dependency>
+            <groupId>com.devamatre.appsuite</groupId>
+            <artifactId>appsuite-core</artifactId>
+            <version>${appsuite-core.version}</version>
+        </dependency>
+
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
-            <scope>provided</scope>
+            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
@@ -136,18 +150,16 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
-                <configuration>
-                    <configLocation>styles.xml</configLocation>
-                    <propertiesLocation>checkstyle.properties</propertiesLocation>
-                </configuration>
                 <executions>
                     <execution>
+                        <id>default</id>
                         <phase>process-classes</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
                         <configuration>
-                            <configLocation>styles.xml</configLocation>
+                            <configLocation>${code-styles.dir}/styles.xml</configLocation>
+                            <propertiesLocation>${code-styles.dir}/checkstyle.properties</propertiesLocation>
                             <logViolationsToConsole>true</logViolationsToConsole>
                             <maxAllowedViolations>${checkstyle.threshold}</maxAllowedViolations>
                         </configuration>
@@ -167,7 +179,7 @@
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${maven-checkstyle-plugin.version}</version>
                 <configuration>
-                    <configLocation>styles.xml</configLocation>
+                    <configLocation>${code-styles.dir}/styles.xml</configLocation>
                     <propertiesLocation>checkstyle.properties</propertiesLocation>
                 </configuration>
             </plugin>
