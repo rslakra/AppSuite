@@ -38,7 +38,7 @@
         <swagger.skip>false</swagger.skip>
 
         <!-- appsuite-core -->
-        <appsuite-core.version>0.0.2</appsuite-core.version>
+        <appsuite-core.version>0.0.4</appsuite-core.version>
 
         <!-- lombok -->
         <lombok.version>1.18.28</lombok.version>
