@@ -31,6 +31,6 @@
 [submodule "appsuite-spring"]
 	path = appsuite-spring
 	url = git@github.com:rslakra/appsuite-spring.git
-[submodule "appsuite-tutors"]
-	path = appsuite-tutors
-	url = git@github.com:rslakra/appsuite-tutors.git
+[submodule "appsuite-tutor"]
+	path = appsuite-tutor
+	url = git@github.com:rslakra/appsuite-tutor.git
