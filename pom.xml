@@ -7,11 +7,23 @@
     <artifactId>AppSuite</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
-    <!--    <name>The ${project.artifactId} Project</name>-->
+    <!-- <name>The ${project.artifactId} Project</name>-->
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
     <modules>
+        <module>appsuite-core</module>
+        <module>appsuite-example</module>
+        <module>appsuite-hbase</module>
+        <module>appsuite-http-client</module>
+        <module>appsuite-http-server</module>
+        <module>appsuite-identity</module>
+        <module>appsuite-jdk</module>
+        <module>appsuite-metrics</module>
+        <module>appsuite-mime-craft</module>
+        <module>appsuite-pdf-tools</module>
+        <module>appsuite-spring</module>
+        <module>appsuite-tutors</module>
     </modules>
 
     <!-- Properties -->
@@ -23,17 +35,21 @@
         <!-- sourceEncoding & outputEncoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
         <!-- java version -->
         <java.version>11</java.version>
+
         <!-- maven -->
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+
         <!-- checkstyle -->
         <code-styles.dir>https://raw.githubusercontent.com/rslakra/code-styles/master</code-styles.dir>
         <checkstyle.threshold>0</checkstyle.threshold>
+
         <!-- swagger -->
         <swagger.skip>false</swagger.skip>
 
@@ -46,6 +62,7 @@
         <!-- slf4j -->
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <logback-classic.version>1.4.12</logback-classic.version>
+        
         <!-- apache commons -->
         <commons-lang3.version>3.12.0</commons-lang3.version>
 

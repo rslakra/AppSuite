@@ -28,9 +28,6 @@
 [submodule "appsuite-pdf-tools"]
 	path = appsuite-pdf-tools
 	url = git@github.com:rslakra/appsuite-pdf-tools.git
-[submodule "appsuite-questions"]
-	path = appsuite-questions
-	url = git@github.com:rslakra/appsuite-questions.git
 [submodule "appsuite-spring"]
 	path = appsuite-spring
 	url = git@github.com:rslakra/appsuite-spring.git
