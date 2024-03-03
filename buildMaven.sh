@@ -2,11 +2,15 @@
 # Author: Rohtash Lakra
 clear
 VERSION="0.0"
-# Version Function
+# Build Version Function
 function buildVersion() {
   GIT_COMMIT_COUNT=$(git rev-list HEAD --count)
-  VERSION="${VERSION}.${GIT_COMMIT_COUNT}"
-  SNAPSHOT="${SNAPSHOT:-$1}"
+  if [ $? -ne 0 ]; then
+    VERSION="${VERSION}.0"
+  else
+    VERSION="${VERSION}.${GIT_COMMIT_COUNT}"
+  fi
+  SNAPSHOT="${SNAPSHOT:-$!}"
   if [[ ! -z ${SNAPSHOT} ]]; then
       VERSION="${VERSION}-SNAPSHOT"
   fi
