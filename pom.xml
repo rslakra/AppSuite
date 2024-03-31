@@ -7,7 +7,7 @@
     <artifactId>AppSuite</artifactId>
     <packaging>pom</packaging>
     <version>${revision}</version>
-    <!-- <name>The ${project.artifactId} Project</name>-->
+    <!-- AppSuite -->
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
@@ -54,7 +54,7 @@
         <swagger.skip>false</swagger.skip>
 
         <!-- appsuite-core -->
-        <appsuite-core.version>0.0.28</appsuite-core.version>
+        <appsuite-core.version>0.0.30</appsuite-core.version>
 
         <!-- lombok -->
         <lombok.version>1.18.28</lombok.version>
