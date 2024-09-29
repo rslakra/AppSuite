@@ -1,5 +1,5 @@
 #!/bin/bash
-export GROUP_ID=com.devamatre
+export GROUP_ID=com.rslakra
 export ARTIFACT_ID=dCore
 export VERSION=1.0.5
 export PACKAGING=jar
