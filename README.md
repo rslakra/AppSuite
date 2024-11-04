@@ -128,12 +128,16 @@ Once you have installed all the above-mentioned software, then you are ready to 
 Please read [CONTRIBUTING.md](https://github.com/rslakra/AppSuite/blob/master/CONTRIBUTING.md) for details on our code
 of conduct, and the process for submitting pull requests to us.
 
+## Reference
+
+- [Workflow syntax for GitHub Actions](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#about-yaml-syntax-for-workflows)
+
+
 ## Authors
 
 ---
 
 * [Rohtash Lakra](https://github.com/rslakra)
-* [AppSuite](https://github.com/rslakra/AppSuite.git)
 
 See also the list of [contributors](https://github.com/rslakra/AppSuite/contributors) who participated in this project.
 
