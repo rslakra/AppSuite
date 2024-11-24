@@ -43,8 +43,8 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <maven.compiler.target>${java.version}</maven.compiler.target>
         <maven.compiler.release>${java.version}</maven.compiler.release>
-        <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
-        <maven-checkstyle-plugin.version>3.0.0</maven-checkstyle-plugin.version>
+        <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
+        <maven-checkstyle-plugin.version>3.5.0</maven-checkstyle-plugin.version>
 
         <!-- checkstyle -->
         <code-styles.dir>https://raw.githubusercontent.com/rslakra/code-styles/master</code-styles.dir>
@@ -54,10 +54,10 @@
         <swagger.skip>false</swagger.skip>
 
         <!-- appsuite-core -->
-        <appsuite-core.version>0.0.34</appsuite-core.version>
+        <appsuite-core.version>0.0.58</appsuite-core.version>
 
         <!-- lombok -->
-        <lombok.version>1.18.28</lombok.version>
+        <lombok.version>1.18.34</lombok.version>
 
         <!-- slf4j -->
         <slf4j-api.version>2.0.5</slf4j-api.version>
@@ -90,13 +90,6 @@
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
             <version>${logback-classic.version}</version>
-        </dependency>
-
-        <!--appsuite-core-->
-        <dependency>
-            <groupId>com.rslakra.appsuite</groupId>
-            <artifactId>appsuite-core</artifactId>
-            <version>${appsuite-core.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
