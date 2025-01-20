@@ -15,11 +15,9 @@
         <module>appsuite-core</module>
         <module>appsuite-example</module>
         <module>appsuite-hbase</module>
-        <module>appsuite-http-server</module>
         <module>appsuite-identity</module>
         <module>appsuite-jdk</module>
         <module>appsuite-metrics</module>
-        <module>appsuite-mime-craft</module>
         <module>appsuite-pdf-tools</module>
         <module>appsuite-protocols</module>
         <module>appsuite-spring</module>
@@ -54,7 +52,7 @@
         <swagger.skip>false</swagger.skip>
 
         <!-- appsuite-core -->
-        <appsuite-core.version>0.0.58</appsuite-core.version>
+        <appsuite-core.version>0.0.70</appsuite-core.version>
 
         <!-- lombok -->
         <lombok.version>1.18.34</lombok.version>

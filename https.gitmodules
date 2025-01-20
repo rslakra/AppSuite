@@ -1,39 +1,30 @@
 [submodule "appsuite-core"]
 	path = appsuite-core
-	url = git@github.com:rslakra/appsuite-core.git
+	url = https://github.com/rslakra/appsuite-core.git
 [submodule "appsuite-example"]
 	path = appsuite-example
-	url = git@github.com:rslakra/appsuite-example.git
+	url = https://github.com/rslakra/appsuite-example.git
 [submodule "appsuite-hbase"]
 	path = appsuite-hbase
-	url = git@github.com:rslakra/appsuite-hbase.git
-[submodule "appsuite-http-client"]
-	path = appsuite-http-client
-	url = git@github.com:rslakra/appsuite-http-client.git
-[submodule "appsuite-http-server"]
-	path = appsuite-http-server
-	url = git@github.com:rslakra/appsuite-http-server.git
+	url = https://github.com/rslakra/appsuite-hbase.git
 [submodule "appsuite-identity"]
 	path = appsuite-identity
-	url = git@github.com:rslakra/appsuite-identity.git
+	url = https://github.com/rslakra/appsuite-identity.git
 [submodule "appsuite-jdk"]
 	path = appsuite-jdk
-	url = git@github.com:rslakra/appsuite-jdk.git
+	url = https://github.com/rslakra/appsuite-jdk.git
 [submodule "appsuite-metrics"]
 	path = appsuite-metrics
-	url = git@github.com:rslakra/appsuite-metrics.git
-[submodule "appsuite-mime-craft"]
-	path = appsuite-mime-craft
-	url = git@github.com:rslakra/appsuite-mime-craft.git
+	url = https://github.com/rslakra/appsuite-metrics.git
 [submodule "appsuite-pdf-tools"]
 	path = appsuite-pdf-tools
-	url = git@github.com:rslakra/appsuite-pdf-tools.git
+	url = https://github.com/rslakra/appsuite-pdf-tools.git
 [submodule "appsuite-protocols"]
 	path = appsuite-protocols
-	url = git@github.com:rslakra/appsuite-protocols.git
+	url = https://github.com/rslakra/appsuite-protocols.git
 [submodule "appsuite-spring"]
 	path = appsuite-spring
-	url = git@github.com:rslakra/appsuite-spring.git
+	url = https://github.com/rslakra/appsuite-spring.git
 [submodule "appsuite-tutor"]
 	path = appsuite-tutor
-	url = git@github.com:rslakra/appsuite-tutor.git
+	url = https://github.com/rslakra/appsuite-tutor.git
