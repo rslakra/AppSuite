@@ -15,13 +15,13 @@
         <module>appsuite-core</module>
         <module>appsuite-example</module>
         <module>appsuite-hbase</module>
-        <module>appsuite-http-client</module>
         <module>appsuite-http-server</module>
         <module>appsuite-identity</module>
         <module>appsuite-jdk</module>
         <module>appsuite-metrics</module>
         <module>appsuite-mime-craft</module>
         <module>appsuite-pdf-tools</module>
+        <module>appsuite-protocols</module>
         <module>appsuite-spring</module>
         <module>appsuite-tutor</module>
     </modules>
