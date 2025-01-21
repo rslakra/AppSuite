@@ -123,6 +123,7 @@ of conduct, and the process for submitting pull requests to us.
 ## Reference
 
 - [Workflow syntax for GitHub Actions](https://docs.github.com/en/actions/writing-workflows/workflow-syntax-for-github-actions#about-yaml-syntax-for-workflows)
+- [Github action build chain. Cross-repo builds](https://github.com/marketplace/actions/github-action-build-chain-cross-repo-builds)
 
 
 ## Authors
