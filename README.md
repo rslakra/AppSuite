@@ -4,12 +4,6 @@ AppSuite
 
 This repository contains all the projects categorized based on the modules and learning purposes.
 
-```shell
-"Thoughts lead on to purposes; purposes go forth in action; actions form habits; habits decide character; and character fixes our destiny."
-
-- Tryon Edwards
-```
-
 These projects should have the basic and core implementations which can be used by other projects.
 It might be some of them use any third party library, so the source code available in this repository will be available 
 for AS IT IS usage.
@@ -21,17 +15,15 @@ for AS IT IS usage.
 ```
     /
     ├── Core                    # The Core Project
-    ├── DataStructure           # The DataStructure Project
     ├── Example                 # The Example Project
     ├── HBase                   # The HBase Project
-    ├── HttpServer              # The Http-Server Project
     ├── Identity                # The Identity Project
     ├── Jdk                     # The Jdk Project
     ├── Metrics                 # The Metrics Project
-    ├── MimeCraft               # The MimeCraft Project
-    ├── Patterns                # The Patterns Project
     ├── pdf-tools               # The pdf-tools Project
-    ├── Questions               # The Questions Project
+    ├── protocols               # The protocols Project
+    ├── spring                  # The spring Project
+    ├── tutot                   # The tutor Project
     └── README.md
 ```
 
@@ -155,3 +147,12 @@ file for details
 * Passion
 * Inspiration
 * Motivation
+
+
+## Thoughts
+
+```shell
+"Thoughts lead on to purposes; purposes go forth in action; actions form habits; habits decide character; and character fixes our destiny."
+
+- Tryon Edwards
+```
