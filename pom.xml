@@ -18,9 +18,9 @@
         <module>appsuite-identity</module>
         <module>appsuite-jdk</module>
         <module>appsuite-metrics</module>
-        <module>appsuite-pdf-tools</module>
         <module>appsuite-protocols</module>
         <module>appsuite-spring</module>
+        <module>appsuite-tools</module>
         <module>appsuite-tutor</module>
     </modules>
 
