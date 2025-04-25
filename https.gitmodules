@@ -16,9 +16,9 @@
 [submodule "appsuite-metrics"]
 	path = appsuite-metrics
 	url = https://github.com/rslakra/appsuite-metrics.git
-[submodule "appsuite-pdf-tools"]
-	path = appsuite-pdf-tools
-	url = https://github.com/rslakra/appsuite-pdf-tools.git
+[submodule "appsuite-tools"]
+	path = appsuite-tools
+	url = https://github.com/rslakra/appsuite-tools.git
 [submodule "appsuite-protocols"]
 	path = appsuite-protocols
 	url = https://github.com/rslakra/appsuite-protocols.git
