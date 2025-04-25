@@ -21,7 +21,6 @@
         <module>appsuite-protocols</module>
         <module>appsuite-spring</module>
         <module>appsuite-tools</module>
-        <module>appsuite-tutor</module>
     </modules>
 
     <!-- Properties -->
