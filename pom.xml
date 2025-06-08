@@ -3,11 +3,12 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+    <!-- AppSuite -->
     <groupId>com.rslakra.appsuite</groupId>
     <artifactId>AppSuite</artifactId>
-    <packaging>pom</packaging>
     <version>${revision}</version>
-    <!-- AppSuite -->
+    <packaging>pom</packaging>
+    <description>The ${project.artifactId} Application</description>
     <url>https://github.com/rslakra/AppSuite</url>
 
     <!-- Modules -->
@@ -51,7 +52,7 @@
         <swagger.skip>false</swagger.skip>
 
         <!-- appsuite-core -->
-        <appsuite-core.version>0.0.70</appsuite-core.version>
+        <appsuite-core.version>0.0.74</appsuite-core.version>
 
         <!-- lombok -->
         <lombok.version>1.18.34</lombok.version>
@@ -70,7 +71,7 @@
         <!-- junit -->
         <junit.version>4.13.2</junit.version>
         <!-- testng -->
-        <testng.version>7.7.1</testng.version>
+        <testng.version>7.10.2</testng.version>
     </properties>
 
     <!-- Dependencies -->
@@ -179,8 +180,9 @@
 
     <!-- reporting -->
     <reporting>
-        <!-- maven-checkstyle-plugin -->
+        <!-- plugins -->
         <plugins>
+            <!-- maven-checkstyle-plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>

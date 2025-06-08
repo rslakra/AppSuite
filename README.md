@@ -73,7 +73,7 @@ Open terminal and go to your workspace. Then run the following command to check 
 
 Run the program with the following command
   
->   ```./run.sh```
+> ```./runMaven.sh```
 
 
 If you are missing either any of the above-mentioned steps or software,
