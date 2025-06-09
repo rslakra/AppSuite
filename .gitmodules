@@ -1,30 +1,30 @@
 [submodule "appsuite-core"]
 	path = appsuite-core
-	url = git@rslakra.github.com:rslakra/appsuite-core.git
+	url = git@github.com:rslakra/appsuite-core.git
 [submodule "appsuite-example"]
 	path = appsuite-example
-	url = git@rslakra.github.com:rslakra/appsuite-example.git
+	url = git@github.com:rslakra/appsuite-example.git
 [submodule "appsuite-hbase"]
 	path = appsuite-hbase
-	url = git@rslakra.github.com:rslakra/appsuite-hbase.git
+	url = git@github.com:rslakra/appsuite-hbase.git
 [submodule "appsuite-identity"]
 	path = appsuite-identity
-	url = git@rslakra.github.com:rslakra/appsuite-identity.git
+	url = git@github.com:rslakra/appsuite-identity.git
 [submodule "appsuite-jdk"]
 	path = appsuite-jdk
-	url = git@rslakra.github.com:rslakra/appsuite-jdk.git
+	url = git@github.com:rslakra/appsuite-jdk.git
 [submodule "appsuite-metrics"]
 	path = appsuite-metrics
-	url = git@rslakra.github.com:rslakra/appsuite-metrics.git
+	url = git@github.com:rslakra/appsuite-metrics.git
 [submodule "appsuite-tools"]
 	path = appsuite-tools
-	url = git@rslakra.github.com:rslakra/appsuite-tools.git
+	url = git@github.com:rslakra/appsuite-tools.git
 [submodule "appsuite-protocols"]
 	path = appsuite-protocols
-	url = git@rslakra.github.com:rslakra/appsuite-protocols.git
+	url = git@github.com:rslakra/appsuite-protocols.git
 [submodule "appsuite-spring"]
 	path = appsuite-spring
-	url = git@rslakra.github.com:rslakra/appsuite-spring.git
+	url = git@github.com:rslakra/appsuite-spring.git
 [submodule "appsuite-tutor"]
 	path = appsuite-tutor
-	url = git@rslakra.github.com:rslakra/appsuite-tutor.git
+	url = git@github.com:rslakra/appsuite-tutor.git
