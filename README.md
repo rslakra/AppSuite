@@ -8,6 +8,15 @@ These projects should have the basic and core implementations which can be used 
 It might be some of them use any third party library, so the source code available in this repository will be available 
 for AS IT IS usage.
 
+## Build Status
+
+
+| Build | Tests | Pages                                                                                                                                                                                                         |
+|:------|:------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|       |       | [![pages-build-deployment](https://github.com/rslakra/AppSuite/actions/workflows/pages/pages-build-deployment/badge.svg)](https://github.com/rslakra/AppSuite/actions/workflows/pages/pages-build-deployment) |
+
+
+
 ## Folder Structure Conventions
 
 ---
