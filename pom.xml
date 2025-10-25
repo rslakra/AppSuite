@@ -61,13 +61,6 @@
         <slf4j-api.version>2.0.5</slf4j-api.version>
         <logback-classic.version>1.4.12</logback-classic.version>
 
-        <!-- apache commons -->
-        <commons-lang3.version>3.12.0</commons-lang3.version>
-
-        <!-- junit-jupiter-params -->
-        <junit-jupiter-params.version>5.9.2</junit-jupiter-params.version>
-        <surefire-junit3.version>2.12.4</surefire-junit3.version>
-
         <!-- junit -->
         <junit.version>4.13.2</junit.version>
         <!-- testng -->
@@ -96,28 +89,6 @@
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
             <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>${commons-lang3.version}</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-params -->
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit-jupiter-params.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.apache.maven.surefire/surefire-junit3 -->
-        <dependency>
-            <groupId>org.apache.maven.surefire</groupId>
-            <artifactId>surefire-junit3</artifactId>
-            <version>${surefire-junit3.version}</version>
         </dependency>
 
         <!-- https://mvnrepository.com/artifact/org.testng/testng -->
